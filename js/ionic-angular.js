@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-670
+ * Ionic, v0.9.24-alpha-671
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2685,7 +2685,7 @@ angular.module('ionic.ui.touch', [])
 
 /**
  * @description
- * The NavController is a navigation stack View Controller modelled off of 
+ * The NavController is a navigation stack View Controller modelled off of
  * UINavigationController from Cocoa Touch. With the Nav Controller, you can
  * "push" new "pages" on to the navigation stack, and then pop them off to go
  * back. The NavController controls a navigation bar with a back button and title
@@ -2699,12 +2699,12 @@ angular.module('ionic.ui.touch', [])
  *
  */
 
-angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gesture']) 
+angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gesture'])
 
 /**
  * Our Nav Bar directive which updates as the controller state changes.
  */
-.directive('navBar', ['$ionicViewService', '$rootScope', '$animate', '$compile', 
+.directive('navBar', ['$ionicViewService', '$rootScope', '$animate', '$compile',
              function( $ionicViewService,   $rootScope,   $animate,   $compile) {
 
   /**
@@ -2749,14 +2749,14 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       backButtonIcon: '@',
       alignTitle: '@'
     },
-    template: '<header class="bar bar-header nav-bar invisible">' + 
+    template: '<header class="bar bar-header nav-bar invisible">' +
         '<div class="buttons"> ' +
           '<button view-back class="button" ng-if="enableBackButton"></button>' +
-          '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' + 
+          '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' +
         '</div>' +
-        '<h1 class="title" ng-bind-html="currentTitle"></h1>' + 
+        '<h1 class="title" ng-bind-html="currentTitle"></h1>' +
         '<div class="buttons" ng-if="rightButtons.length"> ' +
-          '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' + 
+          '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' +
         '</div>' +
       '</header>',
 
@@ -2844,7 +2844,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
 }])
 
 
-.directive('view', ['$ionicViewService', '$rootScope', '$animate', 
+.directive('view', ['$ionicViewService', '$rootScope', '$animate',
            function( $ionicViewService,   $rootScope,   $animate) {
   return {
     restrict: 'EA',
@@ -2949,10 +2949,10 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
 }])
 
 
-.directive('navView', ['$ionicViewService', '$state', '$compile', '$controller', 
-              function( $ionicViewService,   $state,   $compile,   $controller) {
+.directive('navView', ['$ionicViewService', '$state', '$compile', '$controller', '$animate',
+              function( $ionicViewService,   $state,   $compile,   $controller,   $animate) {
   // IONIC's fork of Angular UI Router, v0.2.7
-  // the navView handles registering views in the history, which animation to use, and which 
+  // the navView handles registering views in the history, which animation to use, and which
   var viewIsUpdating = false;
 
   var directive = {
@@ -2995,6 +2995,11 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         updateView(false);
 
         function updateView(doAnimate) {
+          //===false because $animate.enabled() is a noop without angular-animate included
+          if ($animate.enabled() === false) {
+            doAnimate = false;
+          }
+
           var locals = $state.$current && $state.$current.locals[name];
           if (locals === viewLocals) return; // nothing to do
           var renderer = $ionicViewService.getRenderer(element, attr, scope);
