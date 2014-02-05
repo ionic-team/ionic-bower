@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "oxen-trajectory",
-  "version": "0.9.23-662",
+  "version": "0.9.23-663",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
