@@ -1,7 +1,7 @@
 {
   "name": "ionic",
-  "codename": "maine-coon",
-  "version": "0.9.23-alpha-648-24c382b",
+  "codename": "oxen-trajectory",
+  "version": "0.9.23-alpha-652",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
