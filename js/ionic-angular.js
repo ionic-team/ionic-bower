@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.23-alpha-653
+ * Ionic, v0.9.23-alpha-654
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -767,6 +767,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
         // they went back one, set the old current view as a forward view
         rsp.viewId = backView.viewId;
         rsp.navAction = 'moveBack';
+        currentView.scrollValues = {}; //when going back, erase scrollValues
         if(backView.historyId === currentView.historyId) {
           // went back in the same history
           rsp.navDirection = 'back';
@@ -840,6 +841,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
           stateName: this.getCurrentStateName(),
           stateParams: this.getCurrentStateParams(),
           url: $location.url(),
+          scrollValues: null
         });
 
         // add the new view to this history's stack
