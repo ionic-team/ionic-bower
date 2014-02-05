@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "maine-coon",
-  "version": "0.9.23-alpha-647-1b4c77d",
+  "version": "0.9.23-alpha-648-24c382b",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
