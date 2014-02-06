@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-687
+ * Ionic, v0.9.24-alpha-688
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-687'
+  version: '0.9.24-alpha-688'
 };;
 (function(ionic) {
 
@@ -2011,7 +2011,7 @@ window.ionic = {
 
   function tapPolyfill(orgEvent) {
     // if the source event wasn't from a touch event then don't use this polyfill
-    if(!orgEvent.gesture || orgEvent.gesture.pointerType !== "touch" || !orgEvent.gesture.srcEvent) return;
+    if(!orgEvent.gesture || !orgEvent.gesture.srcEvent) return;
 
     var e = orgEvent.gesture.srcEvent; // evaluate the actual source event, not the created event by gestures.js
     var ele = e.target;
@@ -2104,7 +2104,7 @@ window.ionic = {
   function isRecentTap(event) {
     // loop through the tap coordinates and see if the same area has been tapped recently
     var tapId, existingCoordinates, currentCoordinates,
-    hitRadius = 20;
+    hitRadius = 15;
 
     for(tapId in tapCoordinates) {
       existingCoordinates = tapCoordinates[tapId];
@@ -2123,7 +2123,7 @@ window.ionic = {
   function recordCoordinates(event) {
     var c = getCoordinates(event);
     if(c.x && c.y) {
-      var tapId = 'ts' + Date.now();
+      var tapId = 't' + Date.now();
 
       // only record tap coordinates if we have valid ones
       tapCoordinates[tapId] = { x: c.x, y:c.y };
@@ -2154,7 +2154,7 @@ window.ionic = {
   }
 
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
-  var CLICK_PREVENT_DURATION = 450; // amount of milliseconds to check for ghostclicks
+  var CLICK_PREVENT_DURATION = 350; // amount of milliseconds to check for ghostclicks
 
   // set global click handler and check if the event should stop or not
   document.addEventListener('click', preventGhostClick, true);
