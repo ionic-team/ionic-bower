@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-679
+ * Ionic, v0.9.24-alpha-682
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-679'
+  version: '0.9.24-alpha-682'
 };;
 (function(ionic) {
 
@@ -1874,7 +1874,9 @@ window.ionic = {
     },
 
     exitApp: function() {
-      navigator.app && navigator.app.exitApp && navigator.app.exitApp();
+      this.ready(function(){
+        navigator.app && navigator.app.exitApp && navigator.app.exitApp();
+      });
     },
 
     showStatusBar: function(val) {

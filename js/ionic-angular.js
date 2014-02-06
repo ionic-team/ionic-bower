@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-679
+ * Ionic, v0.9.24-alpha-682
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2551,16 +2551,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
         '<i class="{{iconOff}}" ng-if="!active"></i> {{iconTitle}}' +
       '</a>'
   };
-}])
-
-.directive('tabBar', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    template: '<div class="tabs tabs-primary" ng-transclude></div>'
-  };
-});
+}]);
 
 ;
 (function(ionic) {
