@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-690
+ * Ionic, v0.9.24-alpha-691
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34,6 +34,7 @@ angular.module('ionic.ui.service', [
 ]);
 
 angular.module('ionic.ui', [
+                            'ionic.ui.bindHtml',
                             'ionic.ui.content',
                             'ionic.ui.scroll',
                             'ionic.ui.tabs',
@@ -53,10 +54,9 @@ angular.module('ionic', [
     'ionic.service',
     'ionic.ui.service',
     'ionic.ui',
-    
+
     // Angular deps
     'ngAnimate',
-    'ngSanitize',
     'ui.router'
 ]);
 ;
@@ -1205,12 +1205,12 @@ angular.module('ionic.ui.header', ['ngAnimate'])
     transclude: true,
     template: '<header class="bar bar-header">\
                 <div class="buttons">\
-                  <button ng-repeat="button in leftButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" ng-bind-html="button.content">\
+                  <button ng-repeat="button in leftButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" bind-html-unsafe="button.content">\
                   </button>\
                 </div>\
-                <h1 class="title" ng-bind-html="title"></h1>\
+                <h1 class="title" bind-html-unsafe="title"></h1>\
                 <div class="buttons">\
-                  <button ng-repeat="button in rightButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" ng-bind-html="button.content">\
+                  <button ng-repeat="button in rightButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" bind-html-unsafe="button.content">\
                   </button>\
                 </div>\
               </header>',
@@ -2677,9 +2677,9 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     // Clone the old title and add a new one so we can show two animating in and out
     // add ng-leave and ng-enter during creation to prevent flickering when they are swapped during animation
     title = angular.element(titles[0]);
-    oTitle = $compile('<h1 class="title" ng-bind-html="oldTitle"></h1>')($scope);
+    oTitle = $compile('<h1 class="title" bind-html-unsafe="oldTitle"></h1>')($scope);
     title.replaceWith(oTitle);
-    nTitle = $compile('<h1 class="title" ng-bind-html="currentTitle"></h1>')($scope);
+    nTitle = $compile('<h1 class="title" bind-html-unsafe="currentTitle"></h1>')($scope);
 
     var insert = $element[0].firstElementChild || null;
 
@@ -2706,11 +2706,11 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     template: '<header class="bar bar-header nav-bar invisible">' +
         '<div class="buttons"> ' +
           '<button view-back class="button" ng-if="enableBackButton"></button>' +
-          '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' +
+          '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" bind-html-unsafe="button.content"></button>' +
         '</div>' +
-        '<h1 class="title" ng-bind-html="currentTitle"></h1>' +
+        '<h1 class="title" bind-html-unsafe="currentTitle"></h1>' +
         '<div class="buttons" ng-if="rightButtons.length"> ' +
-          '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" class="button no-animation {{button.type}}" ng-bind-html="button.content"></button>' +
+          '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" class="button no-animation {{button.type}}" bind-html-unsafe="button.content"></button>' +
         '</div>' +
       '</header>',
 
