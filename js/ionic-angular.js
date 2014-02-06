@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-688
+ * Ionic, v0.9.24-alpha-690
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1313,7 +1313,7 @@ angular.module('ionic.ui.checkbox', [])
 (function() {
 'use strict';
 
-angular.module('ionic.ui.content', ['ionic.ui.service'])
+angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
 
 /**
  * Panel is a simple 100% width and height, fixed panel. It's meant for content to be
@@ -1330,7 +1330,7 @@ angular.module('ionic.ui.content', ['ionic.ui.service'])
 
 // The content directive is a core scrollable content area
 // that is part of many View hierarchies
-.directive('content', ['$parse', '$timeout', '$ionicScrollDelegate', function($parse, $timeout, $ionicScrollDelegate) {
+.directive('content', ['$parse', '$timeout', '$ionicScrollDelegate', '$controller', function($parse, $timeout, $ionicScrollDelegate, $controller) {
   return {
     restrict: 'E',
     replace: true,
@@ -1364,46 +1364,33 @@ angular.module('ionic.ui.content', ['ionic.ui.service'])
       if(attr.hasTabs == "true") { element.addClass('has-tabs'); }
       if(attr.padding == "true") { element.find('div').addClass('padding'); }
 
-      return function link($scope, $element, $attr, navViewCtrl) {
-        var clone, sc, sv,
+      return {
+        //Prelink <content> so it can compile before other directives compile.
+        //Then other directives can require ionicScrollCtrl
+        pre: prelink
+      };
+
+      function prelink($scope, $element, $attr, navViewCtrl) {
+        var clone, sc, scrollView, scrollCtrl,
           c = angular.element($element.children()[0]);
 
         if($scope.scroll === "false") {
           // No scrolling
           return;
-        } 
-
-        if (navViewCtrl) {
-          // If we do have a parent navView, wait for them to give us $viewContentLoaded event
-          // before we fully initialize
-          $scope.$on('$viewContentLoaded', function(e, viewHistoryData) {
-            initScroll(viewHistoryData);
-          });
-        } else {
-          // If we are standalone view, just initialize immediately.
-          initScroll();
         }
 
-        function initScroll(viewHistoryData) {
-          viewHistoryData || (viewHistoryData = {});
-          var savedScroll = viewHistoryData.scrollValues || {};
+        if(attr.overflowScroll === "true") {
+          $element.addClass('overflow-scroll');
+          return;
+        }
 
-          // If they want plain overflow scrolling, add that as a class
-          if(attr.overflowScroll === "true") {
-            $element.addClass('overflow-scroll');
-            return;
-          }
-
-          // Otherwise, use our scroll system
-          var hasBouncing = $scope.$eval($scope.hasBouncing);
-          var enableBouncing = (!ionic.Platform.isAndroid() && hasBouncing !== false) || hasBouncing === true;
-          // No bouncing by default for Android users, lest they take up pitchforks
-          // to our bouncing goodness
-          sv = new ionic.views.Scroll({
+        scrollCtrl = $controller('$ionicScroll', {
+          $scope: $scope,
+          scrollViewOptions: {
             el: $element[0],
-            bouncing: enableBouncing,
-            startX: $scope.$eval($scope.startX) || savedScroll.left || 0,
-            startY: $scope.$eval($scope.startY) || savedScroll.top || 0,
+            bouncing: $scope.$eval($scope.hasBouncing),
+            startX: $scope.$eval($scope.startX) || 0,
+            startY: $scope.$eval($scope.startY) || 0,
             scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
             scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
             scrollingX: $scope.$eval($scope.hasScrollX) === true,
@@ -1415,53 +1402,35 @@ angular.module('ionic.ui.content', ['ionic.ui.service'])
                 scrollLeft: this.__scrollLeft
               });
             }
-          });
+          }
+        });
+        //Publish scrollView to parent so children can access it
+        scrollView = $scope.$parent.scrollView = scrollCtrl.scrollView;
+
+        $scope.$on('$viewContentLoaded', function(e, viewHistoryData) {
+          viewHistoryData || (viewHistoryData = {});
+          if (viewHistoryData.scrollValues) {
+            scrollView.scrollTo(viewHistoryData.scrollValues);
+          }
 
           //Save scroll onto viewHistoryData when scope is destroyed
           $scope.$on('$destroy', function() {
-            viewHistoryData.scrollValues = sv.getValues();
+            viewHistoryData.scrollValues = scrollView.getValues();
           });
+        });
 
-          var refresher = $element[0].querySelector('.scroll-refresher');
-          var refresherHeight = refresher && refresher.clientHeight || 0;
-
-          if(attr.refreshComplete) {
-            $scope.refreshComplete = function() {
-              if($scope.scrollView) {
-                refresher && refresher.classList.remove('active');
-                $scope.scrollView.finishPullToRefresh();
-                $scope.$parent.$broadcast('scroll.onRefreshComplete');
-              }
-            };
-          }
-
-          // Activate pull-to-refresh
-          if(refresher) {
-            sv.activatePullToRefresh(50, function() {
-              refresher.classList.add('active');
-            }, function() {
-              refresher.classList.remove('refreshing');
-              refresher.classList.remove('active');
-            }, function() {
-              refresher.classList.add('refreshing');
-              $scope.onRefresh();
-              $scope.$parent.$broadcast('scroll.onRefresh');
-            });
-          }
-
-          // Register for scroll delegate event handling
-          $ionicScrollDelegate.register($scope, $element);
-
-          // Let child scopes access this 
-          $scope.$parent.scrollView = sv;
-
-          $timeout(function() {
-            // Give child containers a chance to build and size themselves
-            sv.run();
-          });
-
-          return sv;
+        if(attr.refreshComplete) {
+          $scope.refreshComplete = function() {
+            if($scope.scrollView) {
+              scrollCtrl.refresher && scrollCtrl.refresher.classList.remove('active');
+              scrollView.finishPullToRefresh();
+              $scope.$parent.$broadcast('scroll.onRefreshComplete');
+            }
+          };
         }
+
+        // Register for scroll delegate event handling
+        $ionicScrollDelegate.register($scope, $element);
 
         // Check if this supports infinite scrolling and listen for scroll events
         // to trigger the infinite scrolling
@@ -1475,20 +1444,20 @@ angular.module('ionic.ui.content', ['ionic.ui.service'])
           if(distance.indexOf('%')) {
             // It's a multiplier
             maxScroll = function() {
-              return sv.getScrollMax().top * ( 1 - parseInt(distance, 10) / 100 );
+              return scrollView.getScrollMax().top * ( 1 - parseInt(distance, 10) / 100 );
             };
           } else {
             // It's a pixel value
             maxScroll = function() {
-              return sv.getScrollMax().top - parseInt(distance, 10);
+              return scrollView.getScrollMax().top - parseInt(distance, 10);
             };
           }
           $element.bind('scroll', function(e) {
-            if( sv && !infiniteStarted && (sv.getValues().top > maxScroll() ) ) {
+            if( scrollView && !infiniteStarted && (scrollView.getValues().top > maxScroll() ) ) {
               infiniteStarted = true;
               infiniteScroll.addClass('active');
               var cb = function() {
-                sv.resize();
+                scrollView.resize();
                 infiniteStarted = false;
                 infiniteScroll.removeClass('active');
               };
@@ -1496,7 +1465,7 @@ angular.module('ionic.ui.content', ['ionic.ui.service'])
             }
           });
         }
-      };
+      }
     }
   };
 }])
@@ -1569,7 +1538,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
 
     link: function($scope, $element, $attr, list) {
       if(!list) return;
-      
+
       var $parentScope = list.scope;
       var $parentAttrs = list.attrs;
 
@@ -1586,7 +1555,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
 
       $scope.itemClass = $scope.itemType;
 
-      // Decide if this item can do stuff, and follow a certain priority 
+      // Decide if this item can do stuff, and follow a certain priority
       // depending on where the value comes from
       if(($attr.canDelete ? $scope.canDelete : $parentScope.canDelete) !== "false") {
         if($attr.onDelete || $parentAttrs.onDelete) {
@@ -1632,7 +1601,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
     restrict: 'E',
     replace: true,
     transclude: true,
-
+    require: '^?$ionicScroll',
     scope: {
       itemType: '@',
       canDelete: '@',
@@ -1654,10 +1623,12 @@ angular.module('ionic.ui.list', ['ngAnimate'])
       this.attrs = $attrs;
     }],
 
-    link: function($scope, $element, $attr) {
+    link: function($scope, $element, $attr, ionicScrollCtrl) {
       $scope.listView = new ionic.views.ListView({
         el: $element[0],
         listEl: $element[0].children[0],
+        scrollEl: ionicScrollCtrl && ionicScrollCtrl.element,
+        scrollView: ionicScrollCtrl && ionicScrollCtrl.scrollView,
         onReorder: function(el, oldIndex, newIndex) {
           $scope.$apply(function() {
             $scope.onReorder({el: el, start: oldIndex, end: newIndex});
@@ -1835,11 +1806,11 @@ angular.module('ionic.ui.radio', [])
 
 angular.module('ionic.ui.scroll', [])
 
-.directive('scroll', ['$parse', '$timeout', function($parse, $timeout) {
+.directive('scroll', ['$parse', '$timeout', '$controller', function($parse, $timeout, $controller) {
   return {
     restrict: 'E',
     replace: true,
-    template: '<div class="scroll-view"></div>',
+    template: '<div class="scroll-view"><div class="scroll" ng-transclude></div></div>',
     transclude: true,
     scope: {
       direction: '@',
@@ -1855,8 +1826,15 @@ angular.module('ionic.ui.scroll', [])
     controller: function() {},
 
     compile: function(element, attr, transclude) {
-      return function($scope, $element, $attr) {
-        var clone, sv, sc = document.createElement('div');
+
+      return {
+        //Prelink <scroll> so it can compile before other directives compile.
+        //Then other directives can require ionicScrollCtrl
+        pre: prelink
+      };
+
+      function prelink($scope, $element, $attr) {
+        var scrollView, scrollCtrl, sc = $element[0].children[0];
 
         // Create the internal scroll div
         sc.className = 'scroll';
@@ -1866,74 +1844,48 @@ angular.module('ionic.ui.scroll', [])
         if($scope.$eval($scope.paging) === true) {
           sc.classList.add('scroll-paging');
         }
-        $element.append(sc);
-
-        // Pass the parent scope down to the child
-        clone = transclude($scope.$parent);
-        angular.element($element[0].firstElementChild).append(clone);
-
-        // Get refresher size
-        var refresher = $element[0].querySelector('.scroll-refresher');
-        var refresherHeight = refresher && refresher.clientHeight || 0;
 
         if(!$scope.direction) { $scope.direction = 'y'; }
-        var hasScrollingX = $scope.direction.indexOf('x') >= 0;
-        var hasScrollingY = $scope.direction.indexOf('y') >= 0;
+        var isPaging = $scope.$eval($scope.paging) === true;
 
-        $timeout(function() {
-          var options = {
-            el: $element[0],
-            paging: $scope.$eval($scope.paging) === true,
-            scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
-            scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
-            scrollingX: hasScrollingX,
-            scrollingY: hasScrollingY
-          };
+        var scrollViewOptions= {
+          el: $element[0],
+          paging: isPaging,
+          scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
+          scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
+          scrollingX: $scope.direction.indexOf('x') >= 0,
+          scrollingY: $scope.direction.indexOf('y') >= 0
+        };
+        if (isPaging) {
+          scrollViewOptions.speedMultiplier = 0.8;
+          scrollViewOptions.bouncing = false;
+        }
 
-          if(options.paging) {
-            options.speedMultiplier = 0.8;
-            options.bouncing = false;
-          }
-
-          sv = new ionic.views.Scroll(options);
-
-          // Activate pull-to-refresh
-          if(refresher) {
-            sv.activatePullToRefresh(refresherHeight, function() {
-              refresher.classList.add('active');
-            }, function() {
-              refresher.classList.remove('refreshing');
-              refresher.classList.remove('active');
-            }, function() {
-              refresher.classList.add('refreshing');
-              $scope.onRefresh();
-              $scope.$parent.$broadcast('scroll.onRefresh');
-            });
-          }
-
-          $element.bind('scroll', function(e) {
-            $scope.onScroll({
-              event: e,
-              scrollTop: e.detail ? e.detail.scrollTop : e.originalEvent ? e.originalEvent.detail.scrollTop : 0,
-              scrollLeft: e.detail ? e.detail.scrollLeft: e.originalEvent ? e.originalEvent.detail.scrollLeft : 0
-            });
-          });
-
-          $scope.$parent.$on('scroll.resize', function(e) {
-            // Run the resize after this digest
-            $timeout(function() {
-              sv && sv.resize();
-            });
-          });
-
-          $scope.$parent.$on('scroll.refreshComplete', function(e) {
-            sv && sv.finishPullToRefresh();
-          });
-          
-          // Let child scopes access this 
-          $scope.$parent.scrollView = sv;
+        scrollCtrl = $controller('$ionicScroll', {
+          $scope: $scope,
+          scrollViewOptions: scrollViewOptions
         });
-      };
+        scrollView = $scope.$parent.scrollView = scrollCtrl.scrollView;
+
+        $element.bind('scroll', function(e) {
+          $scope.onScroll({
+            event: e,
+            scrollTop: e.detail ? e.detail.scrollTop : e.originalEvent ? e.originalEvent.detail.scrollTop : 0,
+            scrollLeft: e.detail ? e.detail.scrollLeft: e.originalEvent ? e.originalEvent.detail.scrollLeft : 0
+          });
+        });
+
+        $scope.$parent.$on('scroll.resize', function(e) {
+          // Run the resize after this digest
+          $timeout(function() {
+            scrollView && scrollView.resize();
+          });
+        });
+
+        $scope.$parent.$on('scroll.refreshComplete', function(e) {
+          scrollView && scrollView.finishPullToRefresh();
+        });
+      }
     }
   };
 }]);
@@ -3407,3 +3359,48 @@ angular.module('ionic.ui.virtualRepeat', [])
   }]);
 
 })(ionic);
+;
+(function() {
+'use strict';
+
+angular.module('ionic.ui.scroll')
+
+.controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout',
+                     function($scope,   scrollViewOptions,   $timeout) {
+
+  scrollViewOptions.bouncing = angular.isDefined(scrollViewOptions.bouncing) ?
+    scrollViewOptions.bouncing :
+    !ionic.Platform.isAndroid();
+
+  var element = this.element = scrollViewOptions.el;
+  var refresher = this.refresher = element.querySelector('.scroll-refresher');
+  var scrollView = this.scrollView = new ionic.views.Scroll(scrollViewOptions);
+
+  this.$element = angular.element(element);
+
+  //Attach self to element as a controller so other directives can require this controller
+  //through `require: '$ionicScroll'
+  this.$element.data('$$ionicScrollController', this);
+
+  $timeout(function() {
+    scrollView.run();
+
+    // Activate pull-to-refresh
+    if(refresher) {
+      var refresherHeight = refresher.clientHeight || 0;
+      scrollView.activatePullToRefresh(refresherHeight, function() {
+        refresher.classList.add('active');
+      }, function() {
+        refresher.classList.remove('refreshing');
+        refresher.classList.remove('active');
+      }, function() {
+        refresher.classList.add('refreshing');
+        $scope.onRefresh && $scope.onRefresh();
+        $scope.$parent.$broadcast('scroll.onRefresh');
+      });
+    }
+  });
+
+}]);
+
+})();

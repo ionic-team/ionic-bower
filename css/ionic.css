@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-688
+ * Ionic, v0.9.24-alpha-690
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4228,7 +4228,7 @@ button.item-button-right:after {
 
 .item-reordering {
   position: absolute;
-  z-index: 20;
+  z-index: 9;
   width: 100%; }
 
 .item-placeholder {
