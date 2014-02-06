@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-691
+ * Ionic, v0.9.24-alpha-692
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1270,6 +1270,16 @@ angular.module('ionic.ui.header', ['ngAnimate'])
 });
 
 })(ionic);
+;
+angular.module('ionic.ui.bindHtml', [])
+.directive('bindHtmlUnsafe', function () {
+  return function (scope, element, attr) {
+    element.addClass('ng-binding').data('$binding', attr.bindHtmlUnsafe);
+    scope.$watch(attr.bindHtmlUnsafe, function(value) {
+      element.html(value || '');
+    });
+  };
+});
 ;
 (function() {
 'use strict';
