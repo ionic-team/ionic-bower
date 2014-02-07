@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-696
+ * Ionic, v0.9.24-alpha-697
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2740,7 +2740,8 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       if(tAttrs.type) tElement.addClass(tAttrs.type);
 
       return function link($scope, $element, $attr) {
-        $scope.enableBackButton = true;
+        var canHaveBackButton = !(!tAttrs.backButtonType && !tAttrs.backButtonLabel);
+        $scope.enableBackButton = canHaveBackButton;
 
         $rootScope.$on('viewState.showNavBar', function(e, showNavBar) {
           if(showNavBar === false) {
@@ -2766,7 +2767,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
           $scope.rightButtons = data.rightButtons;
 
           if(typeof data.hideBackButton !== 'undefined') {
-            $scope.enableBackButton = data.hideBackButton !== true;
+            $scope.enableBackButton = data.hideBackButton !== true && canHaveBackButton;
           }
 
           if(data.animate !== false && $attr.animation && data.title && data.navDirection) {
