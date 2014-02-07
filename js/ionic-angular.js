@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-701
+ * Ionic, v0.9.24-alpha-703
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1911,7 +1911,7 @@ angular.module('ionic.ui.scroll', [])
  * left and/or right menu, which a center content area.
  */
 
-angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.view']) 
+angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.view'])
 
 /**
  * The internal controller for the side menu controller. This
@@ -1964,7 +1964,9 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 
         $element.addClass('menu-content');
 
-        $scope.dragContent = $scope.$eval($attr.dragContent) === false ? false : true;
+        $scope.$watch(attr.dragContent, function(value) {
+          $scope.dragContent = value;
+        });
 
         var defaultPrevented = false;
         var isDragging = false;
