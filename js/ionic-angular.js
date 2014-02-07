@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-700
+ * Ionic, v0.9.24-alpha-701
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2370,7 +2370,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ionic.ui.bindHtml'])
 }])
 
 // Generic controller directive
-.directive('tab', ['$ionicViewService', '$rootScope', '$parse', function($ionicViewService, $rootScope, $parse) {
+.directive('tab', ['$ionicViewService', '$rootScope', '$parse', '$interpolate', function($ionicViewService, $rootScope, $parse, $interpolate) {
   return {
     restrict: 'E',
     require: '^tabs',
@@ -2404,9 +2404,13 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ionic.ui.bindHtml'])
         // tell any parent nav controller to animate
         $scope.animate = $scope.$eval($attr.animate);
 
-        var badge = $parse($attr.badge);
-        $scope.$watch(badge, function(value) {
+        var badgeGet = $parse($attr.badge);
+        $scope.$watch(badgeGet, function(value) {
           $scope.badge = value;
+        });
+        var badgeStyleGet = $interpolate(attr.badgeStyle || '');
+        $scope.$watch(badgeStyleGet, function(val) {
+          $scope.badgeStyle = val;
         });
 
         var leftButtonsGet = $parse($attr.leftButtons);
@@ -2481,7 +2485,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ionic.ui.bindHtml'])
     replace: true,
     scope: true,
     template: '<div class="tabs">' +
-      '<tab-controller-item icon-title="{{c.title}}" icon="{{c.icon}}" icon-on="{{c.iconOn}}" icon-off="{{c.iconOff}}" badge="c.badge" active="c.isVisible" index="$index" ng-repeat="c in controllers"></tab-controller-item>' +
+      '<tab-controller-item icon-title="{{c.title}}" icon="{{c.icon}}" icon-on="{{c.iconOn}}" icon-off="{{c.iconOff}}" badge="c.badge" badge-style="c.badgeStyle" active="c.isVisible" index="$index" ng-repeat="c in controllers"></tab-controller-item>' +
     '</div>',
     link: function($scope, $element, $attr, tabsCtrl) {
       $element.addClass($scope.tabsType);
@@ -2501,6 +2505,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ionic.ui.bindHtml'])
       iconOn: '@',
       iconOff: '@',
       badge: '=',
+      badgeStyle: '=',
       active: '=',
       tabSelected: '@',
       index: '='
@@ -2516,7 +2521,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ionic.ui.bindHtml'])
     },
     template:
       '<a ng-class="{active:active, \'has-badge\':badge}" ng-click="selectTab()" class="tab-item">' +
-        '<i class="badge" ng-if="badge">{{badge}}</i>' +
+        '<i class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</i>' +
         '<i class="icon {{icon}}" ng-if="icon"></i>' +
         '<i class="{{iconOn}}" ng-if="active"></i>' +
         '<i class="{{iconOff}}" ng-if="!active"></i>' +

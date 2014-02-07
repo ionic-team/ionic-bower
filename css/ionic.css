@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-700
+ * Ionic, v0.9.24-alpha-701
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4448,33 +4448,43 @@ button.item-button-right:after {
   line-height: 16px; }
   .badge:empty {
     display: none; }
-  .badge.badge-light {
-    background-color: white;
-    color: #444444; }
-  .badge.badge-stable {
-    background-color: #f8f8f8;
-    color: #444444; }
-  .badge.badge-positive {
-    background-color: #4a87ee;
-    color: white; }
-  .badge.badge-calm {
-    background-color: #43cee6;
-    color: white; }
-  .badge.badge-assertive {
-    background-color: #ef4e3a;
-    color: white; }
-  .badge.badge-balanced {
-    background-color: #66cc33;
-    color: white; }
-  .badge.badge-energized {
-    background-color: #f0b840;
-    color: white; }
-  .badge.badge-royal {
-    background-color: #8a6de9;
-    color: white; }
-  .badge.badge-dark {
-    background-color: #444444;
-    color: white; }
+
+.tabs .tab-item .badge.badge-light,
+.badge.badge-light {
+  background-color: white;
+  color: #444444; }
+.tabs .tab-item .badge.badge-stable,
+.badge.badge-stable {
+  background-color: #f8f8f8;
+  color: #444444; }
+.tabs .tab-item .badge.badge-positive,
+.badge.badge-positive {
+  background-color: #4a87ee;
+  color: white; }
+.tabs .tab-item .badge.badge-calm,
+.badge.badge-calm {
+  background-color: #43cee6;
+  color: white; }
+.tabs .tab-item .badge.badge-assertive,
+.badge.badge-assertive {
+  background-color: #ef4e3a;
+  color: white; }
+.tabs .tab-item .badge.badge-balanced,
+.badge.badge-balanced {
+  background-color: #66cc33;
+  color: white; }
+.tabs .tab-item .badge.badge-energized,
+.badge.badge-energized {
+  background-color: #f0b840;
+  color: white; }
+.tabs .tab-item .badge.badge-royal,
+.badge.badge-royal {
+  background-color: #8a6de9;
+  color: white; }
+.tabs .tab-item .badge.badge-dark,
+.badge.badge-dark {
+  background-color: #444444;
+  color: white; }
 
 .button .badge {
   position: relative;
