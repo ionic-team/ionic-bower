@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-699
+ * Ionic, v0.9.24-alpha-700
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3384,8 +3384,9 @@ angular.module('ionic.ui.scroll')
     scrollViewOptions.bouncing :
     !ionic.Platform.isAndroid();
 
+  var self = this;
+
   var element = this.element = scrollViewOptions.el;
-  var refresher = this.refresher = element.querySelector('.scroll-refresher');
   var scrollView = this.scrollView = new ionic.views.Scroll(scrollViewOptions);
 
   this.$element = angular.element(element);
@@ -3397,16 +3398,18 @@ angular.module('ionic.ui.scroll')
   $timeout(function() {
     scrollView.run();
 
+    self.refresher = element.querySelector('.scroll-refresher');
+
     // Activate pull-to-refresh
-    if(refresher) {
-      var refresherHeight = refresher.clientHeight || 0;
+    if(self.refresher) {
+      var refresherHeight = self.refresher.clientHeight || 0;
       scrollView.activatePullToRefresh(refresherHeight, function() {
-        refresher.classList.add('active');
+        self.refresher.classList.add('active');
       }, function() {
-        refresher.classList.remove('refreshing');
-        refresher.classList.remove('active');
+        self.refresher.classList.remove('refreshing');
+        self.refresher.classList.remove('active');
       }, function() {
-        refresher.classList.add('refreshing');
+        self.refresher.classList.add('refreshing');
         $scope.onRefresh && $scope.onRefresh();
         $scope.$parent.$broadcast('scroll.onRefresh');
       });
