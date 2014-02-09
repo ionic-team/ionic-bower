@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-704
+ * Ionic, v0.9.24-alpha-709
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -59,6 +59,61 @@ angular.module('ionic', [
     'ngAnimate',
     'ui.router'
 ]);
+;
+
+angular.element.prototype.addClass = function(cssClasses) {
+  var x, y, cssClass, el, splitClasses, existingClasses;
+  if (cssClasses) {
+    for(x=0; x<this.length; x++) {
+      el = this[x];
+      if(el.setAttribute) {
+
+        if(cssClasses.indexOf(' ') < 0) {
+          el.classList.add(cssClasses);
+        } else {
+          existingClasses = (' ' + (el.getAttribute('class') || '') + ' ')
+            .replace(/[\n\t]/g, " ");
+          splitClasses = cssClasses.split(' ');
+
+          for (y=0; y<splitClasses.length; y++) {
+            cssClass = splitClasses[y].trim();
+            if (existingClasses.indexOf(' ' + cssClass + ' ') === -1) {
+              existingClasses += cssClass + ' ';
+            }
+          }
+          el.setAttribute('class', existingClasses.trim());
+        }
+      }
+    }
+  }
+  return this;
+};
+
+angular.element.prototype.removeClass = function(cssClasses) {
+  var x, y, splitClasses, cssClass, el;
+  if (cssClasses) {
+    for(x=0; x<this.length; x++) {
+      el = this[x];
+      if(el.getAttribute) {
+        if(cssClasses.indexOf(' ') < 0) {
+          el.classList.remove(cssClasses);
+        } else {
+          splitClasses = cssClasses.split(' ');
+
+          for (y=0; y<splitClasses.length; y++) {
+            cssClass = splitClasses[y];
+            el.setAttribute('class', (
+                (" " + (el.getAttribute('class') || '') + " ")
+                .replace(/[\n\t]/g, " ")
+                .replace(" " + cssClass.trim() + " ", " ")).trim()
+            );
+          }
+        }
+      }
+    }
+  }
+  return this;
+};
 ;
 (function() {
 'use strict';
@@ -2725,7 +2780,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     },
     template: '<header class="bar bar-header nav-bar invisible">' +
         '<div class="buttons"> ' +
-          '<button view-back class="back-button button" ng-if="enableBackButton"></button>' +
+          '<button view-back class="back-button button hide" ng-if="enableBackButton"></button>' +
           '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" bind-html-unsafe="button.content"></button>' +
         '</div>' +
         '<h1 class="title" bind-html-unsafe="currentTitle"></h1>' +
