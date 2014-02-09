@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-712
+ * Ionic, v0.9.24-alpha-713
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -201,7 +201,7 @@ angular.module('ionic.ui.service.scrollDelegate', [])
         var hash = $location.hash();
         var elm;
         //If there are multiple with this id, go to first one
-        if (hash && (elm = $document.body.querySelectorAll('#' + hash)[0])) {
+        if (hash && (elm = scrollEl.querySelectorAll('#' + hash)[0])) {
           var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
           scrollView.scrollTo(scroll.left, scroll.top);
         } else {
