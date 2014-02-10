@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-713
+ * Ionic, v0.9.24-alpha-714
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4064,15 +4064,22 @@ a.item-content {
   position: absolute;
   top: 7.5px;
   left: 7.5px;
-  min-width: initial;
-  min-height: 32px;
-  font-size: 32px; }
+  min-width: 34px;
+  min-height: 34px;
+  font-size: 18px;
+  line-height: 32px; }
   .item-button-left > .button .icon:before,
   .item-button-left .item-content > .button .icon:before {
     position: relative;
     left: auto;
     width: auto;
     line-height: 31px; }
+  .item-button-left > .button > .button,
+  .item-button-left .item-content > .button > .button {
+    margin: 0px 2px;
+    min-height: 34px;
+    font-size: 18px;
+    line-height: 32px; }
 
 .item-button-right,
 a.item.item-button-right,
@@ -4097,9 +4104,10 @@ button.item.item-button-right {
   position: absolute;
   top: 7.5px;
   right: 15px;
-  min-width: initial;
-  min-height: 32px;
-  font-size: 32px; }
+  min-width: 34px;
+  min-height: 34px;
+  font-size: 18px;
+  line-height: 32px; }
   .item-button-right > .button .icon:before,
   .item-button-right .item-content > .button .icon:before,
   .item-button-right > .buttons .icon:before,
@@ -4113,8 +4121,10 @@ button.item.item-button-right {
   .item-button-right > .buttons > .button,
   .item-button-right .item-content > .buttons > .button {
     margin: 0px 2px;
-    min-height: 32px;
-    font-size: 32px; }
+    min-width: 34px;
+    min-height: 34px;
+    font-size: 18px;
+    line-height: 32px; }
 
 /**
  * Auto Right Arrow Icon
