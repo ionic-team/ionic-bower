@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-716
+ * Ionic, v0.9.24-alpha-717
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3211,7 +3211,7 @@ a.subdued {
       padding-left: 2px;
       font-size: 20px;
       line-height: 32px; }
-    .bar .button.button-icon .icon:before, .bar .button.button-icon.icon:before, .bar .button.button-icon.icon-left:before, .bar .button.button-icon.icon-right:before {
+    .bar .button.button-icon .icon:before, .bar .button.button-icon:before, .bar .button.button-icon.icon:before, .bar .button.button-icon.icon-left:before, .bar .button.button-icon.icon-right:before {
       font-size: 32px;
       line-height: 32px; }
     .bar .button.button-clear {
