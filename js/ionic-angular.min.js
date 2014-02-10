@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-737
+ * Ionic, v0.9.24-alpha-738
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
