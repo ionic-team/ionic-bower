@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-730
+ * Ionic, v0.9.24-alpha-731
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63,7 +63,7 @@ angular.module('ionic', [
 
 angular.element.prototype.addClass = function(cssClasses) {
   var x, y, cssClass, el, splitClasses, existingClasses;
-  if (cssClasses) {
+  if (cssClasses && cssClasses != 'ng-scope' && cssClasses != 'ng-isolate-scope') {
     for(x=0; x<this.length; x++) {
       el = this[x];
       if(el.setAttribute) {
