@@ -1,0 +1,36 @@
+
+/**
+ * Menus
+ * --------------------------------------------------
+ * Side panel structure
+ */
+
+.menu {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: $z-index-menu;
+  overflow: hidden;
+
+  min-height: 100%;
+  max-height: 100%;
+  width: $menu-width;
+
+  background-color: #fff;
+}
+
+.menu-content {
+  box-shadow: $menu-side-shadow;
+}
+
+.menu-left { 
+  left: 0; 
+}
+
+.menu-right { 
+  right: 0; 
+}
+
+.menu-animated {
+  @include transition-transform($menu-animation-speed ease);
+}

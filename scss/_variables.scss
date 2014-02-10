@@ -1,0 +1,572 @@
+
+// Colors
+// -------------------------------
+
+$light:                 #fff !default;
+$stable:                #f8f8f8 !default;
+$positive:              #4a87ee !default;
+$calm:                  #43cee6 !default;
+$balanced:              #66cc33 !default;
+$energized:             #f0b840 !default;
+$assertive:             #ef4e3a !default;
+$royal:                 #8a6de9 !default;
+$dark:                  #444 !default;
+
+
+
+// Base
+// -------------------------------
+
+$font-family-sans-serif:         "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !default;
+$font-family-light-sans-serif:   "Helvetica Neue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !default;
+$font-family-serif:              Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:          Monaco, Menlo, Consolas, "Courier New", monospace !default;
+
+$font-family-base:               $font-family-sans-serif !default;
+$font-size-base:                 14px !default;
+$font-size-large:                18px !default;
+$font-size-small:                11px !default;
+
+$line-height-base:               1.428571429 !default; // 20/14
+$line-height-computed:           floor($font-size-base * $line-height-base) !default; // ~20px
+$line-height-large:              1.33 !default;
+$line-height-small:              1.5 !default;
+
+$headings-font-family:           $font-family-base !default;
+$headings-font-weight:           500 !default;
+$headings-line-height:           1.1 !default;
+
+$base-background-color:          #fff;
+$base-color:                     #000;
+
+$link-color:                     $positive !default;
+$link-hover-color:               darken($link-color, 15%) !default;
+
+$content-padding:                10px !default;
+
+$padding-base-vertical:          6px !default;
+$padding-base-horizontal:        12px !default;
+
+$padding-large-vertical:         10px !default;
+$padding-large-horizontal:       16px !default;
+
+$padding-small-vertical:         5px !default;
+$padding-small-horizontal:       10px !default;
+
+$border-radius-base:             4px !default;
+$border-radius-large:            6px !default;
+$border-radius-small:            3px !default;
+
+
+// Content
+// -------------------------------
+
+$scroll-refresh-icon-color: #666666;
+
+
+// Buttons
+// -------------------------------
+
+$button-color:                        #222;
+$button-block-margin:                 10px !default;
+$button-clear-padding:                6px !default;
+$button-border-radius:                2px;
+$button-border-width:                 1px;
+
+$button-font-size:                    16px;
+$button-height:                       42px;
+$button-padding:                      12px !default;
+$button-icon-size:                    24px;
+
+$button-large-font-size:              20px;
+$button-large-height:                 54px;
+$button-large-padding:                16px !default;
+$button-large-icon-size:              32px;
+
+$button-small-font-size:              12px;
+$button-small-height:                 28px;
+$button-small-padding:                4px !default;
+$button-small-icon-size:              16px;
+
+$button-bar-button-font-size:         13px;
+$button-bar-button-height:            32px;
+$button-bar-button-padding:           8px !default;
+$button-bar-button-icon-size:         20px;
+
+$button-light-bg:                     $light;
+$button-light-text:                   #444;
+$button-light-border:                 #ddd;
+$button-light-active-bg:              #fafafa;
+$button-light-active-border:          #ccc;
+
+$button-stable-bg:                    $stable;
+$button-stable-text:                  #444;
+$button-stable-border:                #b2b2b2;
+$button-stable-active-bg:             #e5e5e5;
+$button-stable-active-border:         #a2a2a2;
+
+$button-positive-bg:                  $positive;
+$button-positive-text:                #fff;
+$button-positive-border:              darken($positive, 15%);
+$button-positive-active-bg:           darken($positive, 15%);
+$button-positive-active-border:       darken($positive, 15%);
+
+$button-calm-bg:                      $calm;
+$button-calm-text:                    #fff;
+$button-calm-border:                  darken($calm, 15%);
+$button-calm-active-bg:               darken($calm, 15%);
+$button-calm-active-border:           darken($calm, 15%);
+
+$button-assertive-bg:                 $assertive;
+$button-assertive-text:               #fff;
+$button-assertive-border:             darken($assertive, 15%);
+$button-assertive-active-bg:          darken($assertive, 15%);
+$button-assertive-active-border:      darken($assertive, 15%);
+
+$button-balanced-bg:                  $balanced;
+$button-balanced-text:                #fff;
+$button-balanced-border:              darken($balanced, 15%);
+$button-balanced-active-bg:           darken($balanced, 15%);
+$button-balanced-active-border:       darken($balanced, 15%);
+
+$button-energized-bg:                 $energized;
+$button-energized-text:               #fff;
+$button-energized-border:             darken($energized, 15%);
+$button-energized-active-bg:          darken($energized, 15%);
+$button-energized-active-border:      darken($energized, 15%);
+
+$button-royal-bg:                     $royal;
+$button-royal-text:                   #fff;
+$button-royal-border:                 darken($royal, 15%);
+$button-royal-active-bg:              darken($royal, 15%);
+$button-royal-active-border:          darken($royal, 15%);
+
+$button-dark-bg:                      $dark;
+$button-dark-text:                    #fff;
+$button-dark-border:                  #111;
+$button-dark-active-bg:               #262626;
+$button-dark-active-border:           #000;
+
+$button-default-bg:                   $button-stable-bg;
+$button-default-text:                 $button-stable-text;
+$button-default-border:               $button-stable-border;
+$button-default-active-bg:            $button-stable-active-bg;
+$button-default-active-border:        $button-stable-active-border;
+
+
+// Bars
+// -------------------------------
+
+$bar-height:                      44px !default;
+$bar-title-font-size:             17px;
+$bar-padding-portrait:            5px;
+$bar-padding-landscape:           5px;
+$bar-transparency:                1;
+
+$bar-light-bg:                    rgba($button-light-bg, $bar-transparency);
+$bar-light-text:                  $button-light-text;
+$bar-light-border:                $button-light-border;
+$bar-light-active-bg:             $button-light-active-bg;
+$bar-light-active-border:         $button-light-active-border;
+
+$bar-stable-bg:                   rgba($button-stable-bg, $bar-transparency);
+$bar-stable-text:                 $button-stable-text;
+$bar-stable-border:               $button-stable-border;
+$bar-stable-active-bg:            $button-stable-active-bg;
+$bar-stable-active-border:        $button-stable-active-border;
+
+$bar-positive-bg:                 rgba($button-positive-bg, $bar-transparency);
+$bar-positive-text:               $button-positive-text;
+$bar-positive-border:             $button-positive-border;
+$bar-positive-active-bg:          $button-positive-active-bg;
+$bar-positive-active-border:      $button-positive-active-border;
+
+$bar-calm-bg:                     rgba($button-calm-bg, $bar-transparency);
+$bar-calm-text:                   $button-calm-text;
+$bar-calm-border:                 $button-calm-border;
+$bar-calm-active-bg:              $button-calm-active-bg;
+$bar-calm-active-border:          $button-calm-active-border;
+
+$bar-assertive-bg:                rgba($button-assertive-bg, $bar-transparency);
+$bar-assertive-text:              $button-assertive-text;
+$bar-assertive-border:            $button-assertive-border;
+$bar-assertive-active-bg:         $button-assertive-active-bg;
+$bar-assertive-active-border:     $button-assertive-active-border;
+
+$bar-balanced-bg:                 rgba($button-balanced-bg, $bar-transparency);
+$bar-balanced-text:               $button-balanced-text;
+$bar-balanced-border:             $button-balanced-border;
+$bar-balanced-active-bg:          $button-balanced-active-bg;
+$bar-balanced-active-border:      $button-balanced-active-border;
+
+$bar-energized-bg:                rgba($button-energized-bg, $bar-transparency);
+$bar-energized-text:              $button-energized-text;
+$bar-energized-border:            $button-energized-border;
+$bar-energized-active-bg:         $button-energized-active-bg;
+$bar-energized-active-border:     $button-energized-active-border;
+
+$bar-royal-bg:                    rgba($button-royal-bg, $bar-transparency);
+$bar-royal-text:                  $button-royal-text;
+$bar-royal-border:                $button-royal-border;
+$bar-royal-active-bg:             $button-royal-active-bg;
+$bar-royal-active-border:         $button-royal-active-border;
+
+$bar-dark-bg:                     rgba($button-dark-bg, $bar-transparency);
+$bar-dark-text:                   $button-dark-text;
+$bar-dark-border:                 $button-dark-border;
+$bar-dark-active-bg:              $button-dark-active-bg;
+$bar-dark-active-border:          $button-dark-active-border;
+
+$bar-default-bg:                  $bar-light-bg;
+$bar-default-text:                $bar-light-text;
+$bar-default-border:              $bar-light-border;
+$bar-default-active-bg:           $bar-light-active-bg;
+$bar-default-active-border:       $bar-light-active-border;
+
+
+// Tabs
+// -------------------------------
+
+$tabs-height:                      49px !default;
+$tabs-text-font-size:              14px !default;
+$tabs-text-font-size-side-icon:    12px !default;
+$tabs-icon-size:                   32px !default;
+$tabs-badge-padding:               2px 6px;
+$tabs-badge-font-size:             12px !default;
+$tabs-text-font-size:              14px !default;
+
+$tabs-light-bg:                    $button-light-bg;
+$tabs-light-border:                $button-light-border;
+$tabs-light-text:                  $button-light-text;
+
+$tabs-stable-bg:                   $button-stable-bg;
+$tabs-stable-border:               $button-stable-border;
+$tabs-stable-text:                 $button-stable-text;
+
+$tabs-positive-bg:                 $button-positive-bg;
+$tabs-positive-border:             $button-positive-border;
+$tabs-positive-text:               $button-positive-text;
+
+$tabs-calm-bg:                     $button-calm-bg;
+$tabs-calm-border:                 $button-calm-border;
+$tabs-calm-text:                   $button-calm-text;
+
+$tabs-assertive-bg:                $button-assertive-bg;
+$tabs-assertive-border:            $button-assertive-border;
+$tabs-assertive-text:              $button-assertive-text;
+
+$tabs-balanced-bg:                 $button-balanced-bg;
+$tabs-balanced-border:             $button-balanced-border;
+$tabs-balanced-text:               $button-balanced-text;
+
+$tabs-energized-bg:                $button-energized-bg;
+$tabs-energized-border:            $button-energized-border;
+$tabs-energized-text:              $button-energized-text;
+
+$tabs-royal-bg:                    $button-royal-bg;
+$tabs-royal-border:                $button-royal-border;
+$tabs-royal-text:                  $button-royal-text;
+
+$tabs-dark-bg:                     $button-dark-bg;
+$tabs-dark-border:                 $button-dark-border;
+$tabs-dark-text:                   $button-dark-text;
+
+$tabs-default-bg:                  $tabs-stable-bg;
+$tabs-default-border:              $tabs-stable-border;
+$tabs-default-text:                $tabs-stable-text;
+
+$tab-item-max-width: 150px;
+
+
+// Items
+// -------------------------------
+
+$item-font-size:                   16px;
+$item-border-width:                1px !default;
+$item-padding:                     15px !default;
+
+$item-button-font-size:            18px !default;
+$item-button-line-height:          32px !default;
+$item-icon-font-size:              32px !default;
+$item-icon-fill-font-size:         28px !default;
+
+$item-avitar-width:                40px !default;
+$item-avitar-height:               40px !default;
+
+$item-thumbnail-width:             80px !default;
+$item-thumbnail-height:            80px !default;
+$item-thumbnail-margin:            10px !default;
+
+$item-divider-bg:                  #f5f5f5;
+$item-divider-color:               #222;
+$item-divider-padding:             5px 15px;
+
+$item-light-bg:                    $button-light-bg;
+$item-light-border:                $button-light-border;
+$item-light-text:                  $button-light-text;
+$item-light-active-bg:             $button-light-active-bg;
+$item-light-active-border:         $button-light-active-border;
+
+$item-stable-bg:                   $button-stable-bg;
+$item-stable-border:               $button-stable-border;
+$item-stable-text:                 $button-stable-text;
+$item-stable-active-bg:            $button-stable-active-bg;
+$item-stable-active-border:        $button-stable-active-border;
+
+$item-positive-bg:                 $button-positive-bg;
+$item-positive-border:             $button-positive-border;
+$item-positive-text:               $button-positive-text;
+$item-positive-active-bg:          $button-positive-active-bg;
+$item-positive-active-border:      $button-positive-active-border;
+
+$item-calm-bg:                     $button-calm-bg;
+$item-calm-border:                 $button-calm-border;
+$item-calm-text:                   $button-calm-text;
+$item-calm-active-bg:              $button-calm-active-bg;
+$item-calm-active-border:          $button-calm-active-border;
+
+$item-assertive-bg:                $button-assertive-bg;
+$item-assertive-border:            $button-assertive-border;
+$item-assertive-text:              $button-assertive-text;
+$item-assertive-active-bg:         $button-assertive-active-bg;
+$item-assertive-active-border:     $button-assertive-active-border;
+
+$item-balanced-bg:                 $button-balanced-bg;
+$item-balanced-border:             $button-balanced-border;
+$item-balanced-text:               $button-balanced-text;
+$item-balanced-active-bg:          $button-balanced-active-bg;
+$item-balanced-active-border:      $button-balanced-active-border;
+
+$item-energized-bg:                $button-energized-bg;
+$item-energized-border:            $button-energized-border;
+$item-energized-text:              $button-energized-text;
+$item-energized-active-bg:         $button-energized-active-bg;
+$item-energized-active-border:     $button-energized-active-border;
+
+$item-royal-bg:                    $button-royal-bg;
+$item-royal-border:                $button-royal-border;
+$item-royal-text:                  $button-royal-text;
+$item-royal-active-bg:             $button-royal-active-bg;
+$item-royal-active-border:         $button-royal-active-border;
+
+$item-dark-bg:                     $button-dark-bg;
+$item-dark-border:                 $button-dark-border;
+$item-dark-text:                   $button-dark-text;
+$item-dark-active-bg:              $button-dark-active-bg;
+$item-dark-active-border:          $button-dark-active-border;
+
+$item-default-bg:                  $item-light-bg;
+$item-default-border:              $item-light-border;
+$item-default-text:                $item-light-text;
+$item-default-active-bg:           #D9D9D9;
+$item-default-active-border:       $item-light-active-border;
+
+
+// Lists
+// -------------------------------
+
+$list-header-bg:                  transparent;
+$list-header-color:               #222;
+$list-header-padding:             5px 15px;
+$list-header-margin-top:          20px !default;
+
+
+// Cards
+// -------------------------------
+
+$card-header-bg:            #F5F5F5;
+$card-body-bg:              #fff;
+$card-footer-bg:            #F5F5F5;
+
+$card-padding:              10px !default;
+$card-border-width:         1px !default;
+
+$card-border-color:         #ccc;
+$card-border-radius:        2px !default;
+
+
+// Icons
+// -------------------------------
+
+$icon-fill-border-radius:     6px !default;
+
+
+// Forms
+// -------------------------------
+
+$input-height-base:               ($line-height-computed + ($padding-base-vertical * 2) + 2) !default;
+$input-height-large:              (floor($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 2) !default;
+$input-height-small:              (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 2) !default;
+
+$input-bg:                        $light;
+$input-bg-disabled:               $stable;
+
+$input-color:                     #111;
+$input-border:                    $item-default-border;
+$input-border-width:              $item-border-width;
+$input-label-color:               $dark;
+$input-color-placeholder:         lighten($dark, 40%);
+
+
+// Toggle
+// -------------------------------
+
+$toggle-width:                    54px;
+$toggle-height:                   32px;
+$toggle-border-width:             2px;
+$toggle-border-radius:            20px;
+
+$toggle-handle-width:             $toggle-height - ($toggle-border-width * 2);
+$toggle-handle-height:            $toggle-handle-width;
+$toggle-handle-radius:            50%;
+
+$toggle-off-bg-color:             #E5E5E5;
+$toggle-off-border-color:         #E5E5E5;
+
+$toggle-on-bg-color:              #4A87EE;
+$toggle-on-border-color:          $toggle-on-bg-color;
+
+$toggle-handle-off-bg-color:      $light;
+$toggle-handle-on-bg-color:       $toggle-handle-off-bg-color;
+
+$toggle-transition-duration:      .1s;
+
+
+// Checkbox
+// -------------------------------
+
+$checkbox-width:                  28px;
+$checkbox-height:                 28px;
+$checkbox-border-radius:          50%;
+$checkbox-border-width:           1px;
+
+$checkbox-off-bg-color:           #fff;
+$checkbox-off-border-color:       #4A87EE;
+
+$checkbox-on-bg-color:            #4A87EE;
+$checkbox-on-border-color:        #4A87EE;
+
+$checkbox-check-width:            3px;
+$checkbox-check-color:            #fff;
+
+
+// Range
+// -------------------------------
+
+$range-track-height:           4px !default;
+$range-slider-width:           20px !default;
+$range-slider-height:          20px !default;
+$range-slider-border-radius:   10px !default;
+$range-icon-size:              24px !default;
+
+$range-light-track-bg:         $button-light-border !default;
+$range-stable-track-bg:        $button-stable-border !default;
+$range-positive-track-bg:      $button-positive-bg !default;
+$range-calm-track-bg:          $button-calm-bg !default;
+$range-balanced-track-bg:      $button-balanced-bg !default;
+$range-assertive-track-bg:     $button-assertive-bg !default;
+$range-energized-track-bg:     $button-energized-bg !default;
+$range-royal-track-bg:         $button-royal-bg !default;
+$range-dark-track-bg:          $button-dark-bg !default;
+$range-default-track-bg:       #ccc !default;
+
+
+// Menus
+// -------------------------------
+
+$menu-bg:                   #eee;
+$menu-inset-border-color:   #bbb;
+$menu-width:                275px;
+$menu-animation-speed:      200ms;
+
+$menu-side-shadow: -1px 0px 2px rgba(0, 0, 0, 0.2), 1px 0px 2px rgba(0,0,0,0.2);
+
+$split-pane-menu-width:   320px;
+$split-pane-menu-border-color:  #eee;
+
+
+// Modals
+// -------------------------------
+
+$modal-bg-color:              #fff !default;
+
+
+// Grids
+// -------------------------------
+
+$grid-padding-width:           10px !default;
+
+
+// Action Sheets
+// -------------------------------
+
+$sheet-bg-color:              rgba(255, 255, 255, 0.6) !default;
+$sheet-opacity:               0.95 !default;
+
+// Border radii for the action sheet button groups
+$sheet-border-radius:         3px 3px 3px 3px !default;
+$sheet-border-radius-top:         3px 3px 0px 0px !default;
+$sheet-border-radius-bottom:         0px 0px 3px 3px !default;
+
+
+// Badges
+// -------------------------
+
+$badge-font-size:                  14px !default;
+$badge-line-height:                16px !default;
+$badge-font-weight:                bold !default;
+$badge-border-radius:              10px !default;
+
+$badge-light-bg:                   $button-light-bg;
+$badge-light-text:                 $button-light-text;
+
+$badge-stable-bg:                  $button-stable-bg;
+$badge-stable-text:                $button-stable-text;
+
+$badge-positive-bg:                $button-positive-bg;
+$badge-positive-text:              $button-positive-text;
+
+$badge-calm-bg:                    $button-calm-bg;
+$badge-calm-text:                  $button-calm-text;
+
+$badge-balanced-bg:                $button-balanced-bg;
+$badge-balanced-text:              $button-balanced-text;
+
+$badge-assertive-bg:               $button-assertive-bg;
+$badge-assertive-text:             $button-assertive-text;
+
+$badge-energized-bg:               $button-energized-bg;
+$badge-energized-text:             $button-energized-text;
+
+$badge-royal-bg:                   $button-royal-bg;
+$badge-royal-text:                 $button-royal-text;
+
+$badge-dark-bg:                    $button-dark-bg;
+$badge-dark-text:                  $button-dark-text;
+
+$badge-default-bg:                 transparent !default;
+$badge-default-text:               #AAAAAA !default;
+
+
+// Z-Indexes
+// -------------------------------
+
+$z-index-action-sheet:       10;
+$z-index-bar:                10;
+$z-index-bar-title:          0;
+$z-index-bar-button:         1;
+$z-index-item:               2;
+$z-index-item-checkbox:      3;
+$z-index-item-drag:          0;
+$z-index-item-edit:          0;
+$z-index-item-options:       1;
+$z-index-item-radio:         3;
+$z-index-item-reordering:    9;
+$z-index-item-toggle:        3;
+$z-index-menu:               0;
+$z-index-modal:              10;
+$z-index-pane:               1;
+$z-index-scroll-bar:         9999;
+$z-index-tabs:               5;
+$z-index-view:               1;
+

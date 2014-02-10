@@ -1,0 +1,25 @@
+
+/**
+ * Modals
+ * --------------------------------------------------
+ * Modals are independent windows that slide in from off-screen.
+ */
+
+.modal {
+  @include translate3d(0, 100%, 0);
+  position: fixed;
+  top: 0; 
+  z-index: $z-index-modal;
+  overflow: hidden;
+
+  min-height: 100%;
+  width: 100%;
+
+  background-color: $modal-bg-color;
+  opacity: 0;
+
+  // Active modal
+  &.active {
+    height: 100%;
+  }
+}

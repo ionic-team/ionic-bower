@@ -1,0 +1,293 @@
+
+/**
+ * Scaffolding
+ * --------------------------------------------------
+ */
+
+*,
+*:before,
+*:after {
+  @include box-sizing(border-box);
+}
+
+a {
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+img {
+  -webkit-user-drag: none;
+}
+
+body, .ionic-body {
+  @include touch-callout(none);
+  @include font-smoothing(antialiased);
+  //-webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  @include text-size-adjust(none);
+  @include tap-highlight-transparent();
+  @include user-select(none);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+
+  margin: 0;
+  padding: 0;
+
+  color: $base-color;
+  word-wrap: break-word;
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  line-height: $line-height-computed;
+  text-rendering: optimizeLegibility;
+  -webkit-user-drag: none;
+}
+
+.scroll-content {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  position: absolute;
+  overflow: hidden;
+  //-webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+
+  // Hide the top border if any
+  margin-top: -1px;
+
+  width: auto;
+  height: auto;
+}
+
+.scroll-view {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  //-webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+
+  // Hide the top border if any
+  margin-top: -1px;
+}
+
+/**
+ * Scroll is the scroll view component available for complex and custom
+ * scroll view functionality.
+ */
+.scroll {
+  @include user-select(none);
+  @include touch-callout(none);
+  @include text-size-adjust(none);
+  @include translateZ(0);
+  @include transform-origin(left, top);
+  //-webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+}
+
+// Scroll bar styles
+.scroll-bar {
+  position: absolute;
+  z-index: $z-index-scroll-bar;
+}
+// hide the scroll-bar during animations
+.ng-animate .scroll-bar {
+  visibility: hidden;
+}
+.scroll-bar-h {
+  height: 3px;
+  left: 2px;
+  right: 2px;
+  bottom: 3px;
+
+  .scroll-bar-indicator {
+    height: 100%;
+  }
+}
+
+.scroll-bar-v {
+  width: 3px;
+  bottom: 2px;
+  top: 2px;
+  right: 3px;
+
+  .scroll-bar-indicator {
+    width: 100%;
+  }
+}
+.scroll-bar-indicator {
+  position: absolute;
+  background:rgba(0,0,0,0.3);
+  border-radius: 4px;
+  opacity: 1;
+
+
+  &.scroll-bar-fade-out {
+    @include transition(opacity 0.3s linear);
+    opacity: 0;
+  }
+}
+
+
+// Scroll refresher (for pull to refresh)
+.scroll-refresher {
+  overflow: hidden;
+  margin-top: -60px;
+  height: 60px;
+  position: relative;
+
+  .icon-refreshing {
+    display: none;
+    @include animation-duration(1.5s);
+  }
+}
+
+.scroll-refresher-content {
+  position: absolute;
+  left: 0;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+
+  font-size: 30px;
+  color: $scroll-refresh-icon-color;
+}
+
+.ionic-refresher-content {
+  position: absolute;
+  left: 0;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+
+  font-size: 30px;
+  color: $scroll-refresh-icon-color;
+
+  .icon-pulling {
+    @include animation-duration(200ms);
+    @include animation-timing-function(linear);
+    @include animation-fill-mode(both);
+  }
+}
+
+@keyframes refresh-spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(-180deg); }
+}
+
+@-webkit-keyframes refresh-spin {
+  0% {-webkit-transform: rotate(0); }
+  100% {-webkit-transform: rotate(-180deg); }
+}
+
+.scroll-refresher.active {
+
+  .icon-pulling {
+    display: block;
+  }
+  .icon-refreshing {
+    display: none;
+  }
+
+  &.refreshing {
+    .icon-pulling {
+      display: none;
+    }
+    .icon-refreshing {
+      display: block;
+    }
+  }
+
+  .ionic-refresher-content {
+    .icon-pulling {
+      @include animation-name(refresh-spin);
+    }
+  }
+}
+
+// Infinite scroll
+infinite-scroll .scroll-infinite {
+  overflow: hidden;
+  margin-top: -70px;
+  height: 60px;
+  position: relative;
+}
+
+.scroll-infinite-content {
+  position: absolute;
+  left: 0;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  color: #666666; }
+
+infinite-scroll.active .scroll-infinite {
+  margin-top: -30px;
+}
+
+.overflow-scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  .scroll {
+    position: static;
+    height: 100%;
+  }
+}
+
+
+.overflow-scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  .scroll {
+    position: static;
+    height: 100%;
+  }
+}
+
+// Pad top/bottom of content so it doesn't hide behind .bar-title and .bar-tab.
+// Note: For these to work, content must come after both bars in the markup
+.has-header {
+  top: $bar-height;
+}
+
+.has-subheader {
+  top: $bar-height * 2;
+}
+
+.has-footer {
+  bottom: $bar-height;
+}
+
+// Specify that a content area will have tabs
+.has-tabs {
+  bottom: 49px;
+}
+
+// A full screen section with a solid background
+.pane {
+  position: absolute;
+  z-index: $z-index-pane;
+}
+.view {
+  position: absolute;
+  z-index: $z-index-view;
+}
+.pane, .view {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  @include translate3d(0,0,0);
+}

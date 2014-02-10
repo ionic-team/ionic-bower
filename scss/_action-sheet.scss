@@ -1,0 +1,150 @@
+/**
+ * Action Sheets
+ * --------------------------------------------------
+ */
+
+@-webkit-keyframes fadeInHalf {
+  from { background-color: rgba(0,0,0,0); }
+  to { background-color: rgba(0,0,0,0.5); }
+}
+@keyframes fadeInHalf {
+  from { background-color: rgba(0,0,0,0); }
+  to { background-color: rgba(0,0,0,0.5); }
+}
+@-webkit-keyframes fadeOutHalf {
+  from { background-color: rgba(0,0,0,0.5); }
+  to { background-color: rgba(0,0,0,0); }
+}
+@keyframes fadeOutHalf {
+  from { background-color: rgba(0,0,0,0.5); }
+  to { background-color: rgba(0,0,0,0); }
+}
+
+.action-sheet-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $z-index-action-sheet;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0);
+
+  &.active {
+    @include animation(fadeInHalf 0.3s);
+    @include animation-fill-mode(both);
+  }
+
+  &.active-remove {
+    @include animation(fadeOutHalf 0.3s);
+    @include animation-fill-mode(both);
+    background-color: rgba(0,0,0,0.5);
+  }
+}
+
+@-webkit-keyframes actionSheetUp {
+  0% {
+    @include translate3d(0, 100%, 0);
+    opacity: 0;
+  }
+  100% {
+    @include translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes actionSheetOut {
+  0% {
+    @include translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    @include translate3d(0, 100%, 0);
+    opacity: 0;
+  }
+}
+$slide-in-up-function: cubic-bezier(.1, .7, .1, 1);
+
+.action-sheet-up {
+  // Start it down low
+  @include translate3d(0, 0%, 0);
+  opacity: 1;
+
+  &.ng-enter, .ng-enter {
+    // Start it down low
+    @include translate3d(0, 100%, 0);
+
+    @include animation-duration(400ms);
+    @include animation-fill-mode(both);
+    @include animation-timing-function($slide-in-up-function);
+    // Start hidden
+    opacity: 0;
+  }
+
+  &.ng-enter-active, .ng-enter-active {
+    @include animation-name(actionSheetUp);
+  }
+
+  &.ng-leave, .ng-leave {
+    @include animation-duration(400ms);
+    @include animation-fill-mode(both);
+    @include animation-timing-function($slide-in-up-function);
+  }
+
+  &.ng-leave-active, .ng-leave {
+    @include animation-name(actionSheetOut);
+  }
+}
+
+.action-sheet {
+  margin-left: 15px; 
+  margin-right: 15px; 
+  width: auto;
+  z-index: $z-index-action-sheet;
+  overflow: hidden;
+
+  .button {
+    display: block;
+    padding: 1px;
+    width: 100%;
+    border-radius: 0;
+
+    background-color: transparent;
+
+    color: $positive;
+    font-size: 18px;
+
+    &.destructive {
+      color: $assertive;
+    }
+  }
+}
+
+.action-sheet-wrapper {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+.action-sheet-title {
+  padding: 10px;
+  color: lighten($base-color, 40%);
+  text-align: center;
+  font-size: 12px;
+}
+
+.action-sheet-group {
+  margin-bottom: 5px;
+  border-radius: $sheet-border-radius;
+  background-color: #fff;
+  .button {
+    border-width: 1px 0px 0px 0px;
+    border-radius: 0;
+
+    &.active, &:active {
+      background-color: transparent;
+      color: inherit;
+    }
+  }
+  .button:first-child:last-child {
+    border-width: 0;
+  }
+}
