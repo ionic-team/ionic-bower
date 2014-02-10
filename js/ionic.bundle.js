@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-740
+ * Ionic, v0.9.24-alpha-741
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -23,7 +23,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-740'
+  version: '0.9.24-alpha-741'
 };;
 (function(ionic) {
 
@@ -30669,7 +30669,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-740
+ * Ionic, v0.9.24-alpha-741
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -33493,7 +33493,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       if(tAttrs.type) tElement.addClass(tAttrs.type);
 
       return function link($scope, $element, $attr) {
-        var canHaveBackButton = !(!tAttrs.backButtonType && !tAttrs.backButtonLabel);
+        var canHaveBackButton = !(!tAttrs.backButtonType && !tAttrs.backButtonLabel && !tAttrs.backButtonIcon);
         $scope.enableBackButton = canHaveBackButton;
 
         $rootScope.$on('viewState.showNavBar', function(e, showNavBar) {
