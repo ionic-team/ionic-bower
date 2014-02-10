@@ -17,7 +17,8 @@
  * angular.js,
  * angular-animate.js,
  * angular-ui-router.js,
- * ionic.js
+ * ionic.js,
+ * ionic-angular.js
  */
 
 /**
@@ -23876,7 +23877,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-735
+ * Ionic, v0.9.24-alpha-736
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -23891,7 +23892,7 @@ angular.module('ui.router.compat')
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-735'
+  version: '0.9.24-alpha-736'
 };;
 (function(ionic) {
 
@@ -30669,6 +30670,20 @@ ionic.controllers.TabBarController = ionic.controllers.ViewController.inherit({
 });
 
 })(window.ionic);
+;
+/*!
+ * Copyright 2014 Drifty Co.
+ * http://drifty.com/
+ *
+ * Ionic, v0.9.24-alpha-736
+ * A powerful HTML5 mobile app framework.
+ * http://ionicframework.com/
+ *
+ * By @maxlynch, @helloimben, @adamdbradley <3
+ *
+ * Licensed under the MIT license. Please see LICENSE for more information.
+ *
+ */
 ;
 /**
  * Create a wrapping module to ease having to include too many
