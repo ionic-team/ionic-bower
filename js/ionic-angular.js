@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-757
+ * Ionic, v0.9.24-alpha-760
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -161,6 +161,9 @@ angular.module('ionic.ui.service.scrollDelegate', [])
     scrollBottom: function(animate) {
       $rootScope.$broadcast('scroll.scrollBottom', animate);
     },
+    scrollTo: function(left, top, animate) {
+      $rootScope.$broadcast('scroll.scrollTo', left, top, animate);
+    },
     resize: function() {
       $rootScope.$broadcast('scroll.resize');
     },
@@ -192,18 +195,14 @@ angular.module('ionic.ui.service.scrollDelegate', [])
     getScrollView: function($scope) {
       return $scope.scrollView;
     },
+
     /**
-     * Register a scope for scroll event handling.
+     * Register a scope and scroll view for scroll event handling.
      * $scope {Scope} the scope to register and listen for events
      */
-    register: function($scope, $element) {
-      //Get scroll controller from parent
-      var scrollCtrl = $element.controller('$ionicScroll');
-      if (!scrollCtrl) {
-        return;
-      }
-      var scrollView = scrollCtrl.scrollView;
-      var scrollEl = scrollCtrl.element;
+    register: function($scope, $element, scrollView) {
+
+      var scrollEl = $element[0];
 
       function scrollViewResize() {
         // Run the resize after this digest
@@ -240,14 +239,14 @@ angular.module('ionic.ui.service.scrollDelegate', [])
         });
       });
 
-      /**
-       * Called to scroll to the top of the content
-       *
-       * @param animate {boolean} whether to animate or just snap
-       */
+      $scope.$parent.$on('scroll.scrollTo', function(e, left, top, animate) {
+        scrollViewResize().then(function() {
+          scrollView.scrollTo(left, top, !!animate);
+        });
+      });
       $scope.$parent.$on('scroll.scrollTop', function(e, animate) {
         scrollViewResize().then(function() {
-          scrollView.scrollTo(0, 0, animate === false ? false : true);
+          scrollView.scrollTo(0, 0, !!animate);
         });
       });
       $scope.$parent.$on('scroll.scrollBottom', function(e, animate) {
@@ -255,7 +254,7 @@ angular.module('ionic.ui.service.scrollDelegate', [])
           var sv = scrollView;
           if (sv) {
             var max = sv.getScrollMax();
-            sv.scrollTo(0, max.top, animate === false ? false : true);
+            sv.scrollTo(max.left, max.top, !!animate);
           }
         });
       });
@@ -1548,9 +1547,6 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
           };
         }
 
-        // Register for scroll delegate event handling
-        $ionicScrollDelegate.register($scope, $element);
-
         // Check if this supports infinite scrolling and listen for scroll events
         // to trigger the infinite scrolling
         // TODO(ajoslin): move functionality out of this function and make testable
@@ -1955,8 +1951,6 @@ angular.module('ionic.ui.scroll', [])
       function prelink($scope, $element, $attr) {
         var scrollView, scrollCtrl, sc = $element[0].children[0];
 
-        // Create the internal scroll div
-        sc.className = 'scroll';
         if(attr.padding == "true") {
           sc.classList.add('padding');
         }
@@ -1985,25 +1979,6 @@ angular.module('ionic.ui.scroll', [])
           scrollViewOptions: scrollViewOptions
         });
         scrollView = $scope.$parent.scrollView = scrollCtrl.scrollView;
-
-        $element.bind('scroll', function(e) {
-          $scope.onScroll({
-            event: e,
-            scrollTop: e.detail ? e.detail.scrollTop : e.originalEvent ? e.originalEvent.detail.scrollTop : 0,
-            scrollLeft: e.detail ? e.detail.scrollLeft: e.originalEvent ? e.originalEvent.detail.scrollLeft : 0
-          });
-        });
-
-        $scope.$parent.$on('scroll.resize', function(e) {
-          // Run the resize after this digest
-          $timeout(function() {
-            scrollView && scrollView.resize();
-          });
-        });
-
-        $scope.$parent.$on('scroll.refreshComplete', function(e) {
-          scrollView && scrollView.finishPullToRefresh();
-        });
       }
     }
   };
@@ -3493,8 +3468,8 @@ angular.module('ionic.ui.virtualRepeat', [])
 
 angular.module('ionic.ui.scroll')
 
-.controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout',
-                     function($scope,   scrollViewOptions,   $timeout) {
+.controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout', '$ionicScrollDelegate',
+                     function($scope,   scrollViewOptions,   $timeout,   $ionicScrollDelegate) {
 
   scrollViewOptions.bouncing = angular.isDefined(scrollViewOptions.bouncing) ?
     scrollViewOptions.bouncing :
@@ -3505,11 +3480,14 @@ angular.module('ionic.ui.scroll')
   var element = this.element = scrollViewOptions.el;
   var scrollView = this.scrollView = new ionic.views.Scroll(scrollViewOptions);
 
-  this.$element = angular.element(element);
+  var $element = this.$element = angular.element(element);
 
   //Attach self to element as a controller so other directives can require this controller
   //through `require: '$ionicScroll'
-  this.$element.data('$$ionicScrollController', this);
+  $element.data('$$ionicScrollController', this);
+
+  //Register delegate for event handling
+  $ionicScrollDelegate.register($scope, $element, scrollView);
 
   $timeout(function() {
     scrollView.run();
