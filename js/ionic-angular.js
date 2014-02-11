@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-747
+ * Ionic, v0.9.24-alpha-748
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -24,7 +24,8 @@ angular.module('ionic.service', [
   'ionic.service.modal',
   'ionic.service.popup',
   'ionic.service.templateLoad',
-  'ionic.service.view'
+  'ionic.service.view',
+  'ionic.decorator.location'
 ]);
 
 // UI specific services and delegates
@@ -116,6 +117,34 @@ angular.element.prototype.removeClass = function(cssClasses) {
   return this;
 };
 ;
+angular.module('ionic.decorator.location', [])
+
+.config(['$provide', function($provide) {
+  $provide.decorator('$location', ['$delegate', '$timeout', $LocationDecorator]);
+}]);
+
+function $LocationDecorator($location, $timeout) {
+
+  var firstHashSet = false;
+  $location.__hash = $location.hash;
+  //Fix: first time window.location.hash is set, the scrollable area
+  //found nearest to body's scrollTop is set to scroll to an element
+  //with that ID.
+  $location.hash = function(value) {
+    if (!firstHashSet && angular.isDefined(value)) {
+      $timeout(function() {
+        var scroll = document.querySelector('.scroll-content');
+        if (scroll)
+          scroll.scrollTop = 0;
+      }, 0, false);
+      firstHashSet = true;
+    }
+    return $location.__hash(value);
+  };
+
+  return $location;
+}
+;
 (function() {
 'use strict';
 
@@ -199,14 +228,16 @@ angular.module('ionic.ui.service.scrollDelegate', [])
       });
 
       $scope.$parent.$on('scroll.anchorScroll', function(e, animate) {
-        var hash = $location.hash();
-        var elm;
-        if (hash && (elm = document.getElementById(hash)) ) {
-          var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
-          scrollView.scrollTo(scroll.left, scroll.top, !!animate);
-        } else {
-          scrollView.scrollTo(0,0, !!animate);
-        }
+        scrollViewResize().then(function() {
+          var hash = $location.hash();
+          var elm;
+          if (hash && (elm = document.getElementById(hash)) ) {
+            var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
+            scrollView.scrollTo(scroll.left, scroll.top, !!animate);
+          } else {
+            scrollView.scrollTo(0,0, !!animate);
+          }
+        });
       });
 
       /**
