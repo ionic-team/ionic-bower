@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-753
+ * Ionic, v0.9.24-alpha-756
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3670,10 +3670,14 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
  */
 .list {
   position: relative;
-  margin-bottom: 20px;
   padding-top: 1px;
   padding-bottom: 1px;
-  padding-left: 0; }
+  padding-left: 0;
+  margin-bottom: 20px; }
+
+/* If a list is the last item in a container, don't add margin-bottom */
+.list:last-child {
+  margin-bottom: 0px; }
 
 /**
  * List editing styles. These trigger when the entire list goes into

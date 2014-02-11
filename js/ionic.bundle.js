@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-753
+ * Ionic, v0.9.24-alpha-756
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -23,7 +23,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-753'
+  version: '0.9.24-alpha-756'
 };;
 (function(ionic) {
 
@@ -2994,9 +2994,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     // Event Handler
     var container = this.__container;
-    
+
     if ('ontouchstart' in window) {
-      
+
       container.addEventListener("touchstart", function(e) {
         if (e.__scroller) {
           return;
@@ -3005,7 +3005,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         if (e.target.tagName.match(/input|textarea|select/i)) {
           return;
         }
-        
+
         self.doTouchStart(e.touches, e.timeStamp);
         e.preventDefault();
         //We don't want to stop propagation, other things might want to know about the touchstart
@@ -3022,9 +3022,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
       document.addEventListener("touchend", function(e) {
         self.doTouchEnd(e.timeStamp);
       }, false);
-      
+
     } else {
-      
+
       var mousedown = false;
 
       container.addEventListener("mousedown", function(e) {
@@ -3035,7 +3035,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         if (e.target.tagName.match(/input|textarea|select/i)) {
           return;
         }
-        
+
         self.doTouchStart([{
           pageX: e.pageX,
           pageY: e.pageY
@@ -3068,7 +3068,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
         mousedown = false;
       }, false);
-      
+
     }
   },
 
@@ -3283,7 +3283,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
     	this.__container.clientWidth,
     	this.__container.clientHeight,
     	Math.max(this.__content.scrollWidth, this.__content.offsetWidth),
-    	Math.max(this.__content.scrollHeight, this.__content.offsetHeight+20));
+      Math.max(this.__content.scrollHeight, this.__content.offsetHeight)
+    );
   },
   /*
   ---------------------------------------------------------------------------
@@ -3306,14 +3307,14 @@ ionic.views.Scroll = ionic.views.View.inherit({
     } else if (typeof navigator.cpuClass === 'string') {
       engine = 'trident';
     }
-    
+
     var vendorPrefix = {
       trident: 'ms',
       gecko: 'Moz',
       webkit: 'Webkit',
       presto: 'O'
     }[engine];
-    
+
     var helperElem = document.createElement("div");
     var undef;
 
@@ -3324,25 +3325,25 @@ ionic.views.Scroll = ionic.views.View.inherit({
     self.__perspectiveProperty = transformProperty;
     self.__transformProperty = transformProperty;
     self.__transformOriginProperty = transformOriginProperty;
-    
+
     if (helperElem.style[perspectiveProperty] !== undef) {
-      
+
       return function(left, top, zoom) {
         content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0)';
         self.__repositionScrollbars();
         self.triggerScrollEvent();
-      };	
-      
+      };
+
     } else if (helperElem.style[transformProperty] !== undef) {
-      
+
       return function(left, top, zoom) {
         content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px)';
         self.__repositionScrollbars();
         self.triggerScrollEvent();
       };
-      
+
     } else {
-      
+
       return function(left, top, zoom) {
         content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
         content.style.marginTop = top ? (-top/zoom) + 'px' : '';
@@ -3350,7 +3351,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         self.__repositionScrollbars();
         self.triggerScrollEvent();
       };
-      
+
     }
   },
 
@@ -4240,7 +4241,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     var sizer = function() {
       self.resize();
-        
+
       if((self.options.scrollingX && self.__maxScrollLeft == 0) || (self.options.scrollingY && self.__maxScrollTop == 0)) {
         //self.__sizerTimeout = setTimeout(sizer, 1000);
       }
@@ -4407,8 +4408,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
       var scrollOutsideY = 0;
 
       // This configures the amount of change applied to deceleration/acceleration when reaching boundaries
-      var penetrationDeceleration = self.options.penetrationDeceleration; 
-      var penetrationAcceleration = self.options.penetrationAcceleration; 
+      var penetrationDeceleration = self.options.penetrationDeceleration;
+      var penetrationAcceleration = self.options.penetrationAcceleration;
 
       // Check limits
       if (scrollLeft < self.__minDecelerationScrollLeft) {
@@ -30669,7 +30670,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-753
+ * Ionic, v0.9.24-alpha-756
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
