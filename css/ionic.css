@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-765
+ * Ionic, v0.9.24-alpha-766
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1953,6 +1953,8 @@ table {
 a {
   -webkit-user-drag: none;
   -webkit-tap-highlight-color: transparent; }
+  a:hover {
+    cursor: pointer; }
 
 img {
   -webkit-user-drag: none; }
@@ -3245,36 +3247,36 @@ a.subdued {
     background-color: #444;
     border-color: #111; }
 
-a.item.active, .ionic-pseudo a.item:active, button.item.active, .ionic-pseudo button.item:active {
+.item.active, .ionic-pseudo .item:active, .item-complex.active .item-content {
   background-color: #D9D9D9;
   border-color: #ccc; }
-a.item.item-light.active, .ionic-pseudo a.item.item-light:active, button.item.item-light.active, .ionic-pseudo button.item.item-light:active {
-  background-color: #fafafa;
-  border-color: #ccc; }
-a.item.item-stable.active, .ionic-pseudo a.item.item-stable:active, button.item.item-stable.active, .ionic-pseudo button.item.item-stable:active {
-  background-color: #e5e5e5;
-  border-color: #a2a2a2; }
-a.item.item-positive.active, .ionic-pseudo a.item.item-positive:active, button.item.item-positive.active, .ionic-pseudo button.item.item-positive:active {
-  background-color: #145fd7;
-  border-color: #145fd7; }
-a.item.item-calm.active, .ionic-pseudo a.item.item-calm:active, button.item.item-calm.active, .ionic-pseudo button.item.item-calm:active {
-  background-color: #1aacc3;
-  border-color: #1aacc3; }
-a.item.item-assertive.active, .ionic-pseudo a.item.item-assertive:active, button.item.item-assertive.active, .ionic-pseudo button.item.item-assertive:active {
-  background-color: #cc2311;
-  border-color: #cc2311; }
-a.item.item-balanced.active, .ionic-pseudo a.item.item-balanced:active, button.item.item-balanced.active, .ionic-pseudo button.item.item-balanced:active {
-  background-color: #498f24;
-  border-color: #498f24; }
-a.item.item-energized.active, .ionic-pseudo a.item.item-energized:active, button.item.item-energized.active, .ionic-pseudo button.item.item-energized:active {
-  background-color: #d39211;
-  border-color: #d39211; }
-a.item.item-royal.active, .ionic-pseudo a.item.item-royal:active, button.item.item-royal.active, .ionic-pseudo button.item.item-royal:active {
-  background-color: #552bdf;
-  border-color: #552bdf; }
-a.item.item-dark.active, .ionic-pseudo a.item.item-dark:active, button.item.item-dark.active, .ionic-pseudo button.item.item-dark:active {
-  background-color: #262626;
-  border-color: #000; }
+  .item.active.item-light, .ionic-pseudo .item:active.item-light, .item-complex.active .item-content.item-light {
+    background-color: #fafafa;
+    border-color: #ccc; }
+  .item.active.item-stable, .ionic-pseudo .item:active.item-stable, .item-complex.active .item-content.item-stable {
+    background-color: #e5e5e5;
+    border-color: #a2a2a2; }
+  .item.active.item-positive, .ionic-pseudo .item:active.item-positive, .item-complex.active .item-content.item-positive {
+    background-color: #145fd7;
+    border-color: #145fd7; }
+  .item.active.item-calm, .ionic-pseudo .item:active.item-calm, .item-complex.active .item-content.item-calm {
+    background-color: #1aacc3;
+    border-color: #1aacc3; }
+  .item.active.item-assertive, .ionic-pseudo .item:active.item-assertive, .item-complex.active .item-content.item-assertive {
+    background-color: #cc2311;
+    border-color: #cc2311; }
+  .item.active.item-balanced, .ionic-pseudo .item:active.item-balanced, .item-complex.active .item-content.item-balanced {
+    background-color: #498f24;
+    border-color: #498f24; }
+  .item.active.item-energized, .ionic-pseudo .item:active.item-energized, .item-complex.active .item-content.item-energized {
+    background-color: #d39211;
+    border-color: #d39211; }
+  .item.active.item-royal, .ionic-pseudo .item:active.item-royal, .item-complex.active .item-content.item-royal {
+    background-color: #552bdf;
+    border-color: #552bdf; }
+  .item.active.item-dark, .ionic-pseudo .item:active.item-dark, .item-complex.active .item-content.item-dark {
+    background-color: #262626;
+    border-color: #000; }
 
 .item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
   overflow: hidden;
