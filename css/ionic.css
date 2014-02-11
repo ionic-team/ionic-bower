@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-752
+ * Ionic, v0.9.24-alpha-753
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5720,25 +5720,49 @@ a.button {
   flex: 0 0 90%;
   max-width: 90%; }
 
-/* Responsive Grid Attribute */
-/* Adding a class of responsive to a row */
+/* Responsive Grid Classes */
+/* Adding a class of responsive-X to a row */
 /* will trigger the flex-direction to */
 /* change to column and add some margin */
 /* to any columns in the row for clearity */
-/* Adjust the max-width value to fit your own needs */
-/* Defaults to 767px (iPad portrait width)*/
-@media (max-width: 767px) {
-  .responsive .col {
-    width: 100%;
-    margin-bottom: 15px; }
-  .responsive {
+@media (max-width: 567px) {
+  .responsive-sm {
     -webkit-box-direction: normal;
     -moz-box-direction: normal;
     -webkit-box-orient: vertical;
     -moz-box-orient: vertical;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
-    flex-direction: column; } }
+    flex-direction: column; }
+    .responsive-sm .col {
+      width: 100%;
+      margin-bottom: 15px; } }
+
+@media (max-width: 767px) {
+  .responsive-md {
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column; }
+    .responsive-md .col {
+      width: 100%;
+      margin-bottom: 15px; } }
+
+@media (max-width: 1023px) {
+  .responsive-lg {
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column; }
+    .responsive-lg .col {
+      width: 100%;
+      margin-bottom: 15px; } }
 
 /**
  * Utility Classes
