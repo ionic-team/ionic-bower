@@ -89,10 +89,7 @@
 }
 
 // Link and Button Active States
-//a.item:active,
-//button.item:active
-
-.item.active, 
+.item.active,
 .ionic-pseudo .item:active,
 .item-complex.active .item-content {
   @include item-active-style($item-default-active-bg, $item-default-active-border);
