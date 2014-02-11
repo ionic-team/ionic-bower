@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-760
+ * Ionic, v0.9.24-alpha-761
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1949,7 +1949,8 @@ angular.module('ionic.ui.scroll', [])
       };
 
       function prelink($scope, $element, $attr) {
-        var scrollView, scrollCtrl, sc = $element[0].children[0];
+        var scrollView, scrollCtrl,
+          sc = $element[0].children[0];
 
         if(attr.padding == "true") {
           sc.classList.add('padding');

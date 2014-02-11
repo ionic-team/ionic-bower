@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "peleguin",
-  "version": "0.9.24-alpha-760",
+  "version": "0.9.24-alpha-761",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
