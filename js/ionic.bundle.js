@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-7322-13809-13288-6754-12323-4765-743
+ * Ionic, v0.9.24-alpha-745
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -23,7 +23,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-7322-13809-13288-6754-12323-4765-743'
+  version: '0.9.24-alpha-745'
 };;
 (function(ionic) {
 
@@ -30669,7 +30669,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-7322-13809-13288-6754-12323-4765-743
+ * Ionic, v0.9.24-alpha-745
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -30802,8 +30802,8 @@ angular.module('ionic.ui.service.scrollDelegate', [])
     resize: function() {
       $rootScope.$broadcast('scroll.resize');
     },
-    anchorScroll: function() {
-      $rootScope.$broadcast('scroll.anchorScroll');
+    anchorScroll: function(animate) {
+      $rootScope.$broadcast('scroll.anchorScroll', animate);
     },
     tapScrollToTop: function(element) {
       var _this = this;
@@ -30865,14 +30865,14 @@ angular.module('ionic.ui.service.scrollDelegate', [])
         scrollView.finishPullToRefresh();
       });
 
-      $scope.$parent.$on('scroll.anchorScroll', function() {
+      $scope.$parent.$on('scroll.anchorScroll', function(e, animate) {
         var hash = $location.hash();
         var elm;
         if (hash && (elm = document.getElementById(hash)) ) {
           var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
-          scrollView.scrollTo(scroll.left, scroll.top);
+          scrollView.scrollTo(scroll.left, scroll.top, !!animate);
         } else {
-          scrollView.scrollTo(0,0);
+          scrollView.scrollTo(0,0, !!animate);
         }
       });
 
