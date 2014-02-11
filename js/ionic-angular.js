@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-764
+ * Ionic, v0.9.24-alpha-765
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2074,7 +2074,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
             }
             isDragging = true;
             sideMenuCtrl._handleDrag(e);
-            //e.gesture.srcEvent.preventDefault();
+            e.gesture.srcEvent.preventDefault();
           }
         };
 
