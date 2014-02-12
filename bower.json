@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "quitzal",
-  "version": "0.9.25-alpha-779",
+  "version": "0.9.25-alpha-782",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
