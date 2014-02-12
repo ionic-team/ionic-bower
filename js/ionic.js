@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-768
+ * Ionic, v0.9.24-alpha-769
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.24-alpha-768'
+  version: '0.9.24-alpha-769'
 };;
 (function(ionic) {
 
@@ -4420,12 +4420,13 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       // Slow down until slow enough, then flip back to snap position
       if (scrollOutsideX !== 0) {
-        var isHeadingOutwardsX = scrollOutsideX * self.__decelerationVelocityX <= self.__minDecelerationScrollLeft;
+        var isHeadingOutwardsX = scrollOutsideX * self.__decelerationVelocityX <= 0;
         if (isHeadingOutwardsX) {
           self.__decelerationVelocityX += scrollOutsideX * penetrationDeceleration;
         }
+        var isStoppedX = Math.abs(self.__decelerationVelocityX) <= self.__minDecelerationScrollLeft;
         //If we're not heading outwards, or if the above statement got us below minDeceleration, go back towards bounds
-        if (!isHeadingOutwardsX || self.__decelerationVelocityX <= self.__minDecelerationScrollLeft) {
+        if (!isHeadingOutwardsX || isStoppedX) {
           self.__decelerationVelocityX = scrollOutsideX * penetrationAcceleration;
         }
       }
@@ -4435,8 +4436,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
         if (isHeadingOutwardsY) {
           self.__decelerationVelocityY += scrollOutsideY * penetrationDeceleration;
         }
+        var isStoppedY = Math.abs(self.__decelerationVelocityY) <= self.__minDecelerationScrollTop;
         //If we're not heading outwards, or if the above statement got us below minDeceleration, go back towards bounds
-        if (!isHeadingOutwardsY || self.__decelerationVelocityY <= self.__minDecelerationScrollTop) {
+        if (!isHeadingOutwardsY || isStoppedY) {
           self.__decelerationVelocityY = scrollOutsideY * penetrationAcceleration;
         }
       }
