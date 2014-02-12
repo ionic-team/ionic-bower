@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-770
+ * Ionic, v0.9.24-alpha-774
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5787,6 +5787,11 @@ a.button {
 .invisible {
   visibility: hidden; }
 
+.hide-footer .bar-footer, .hide-footer .tabs {
+  display: none; }
+.hide-footer .has-footer, .hide-footer .has-tabs {
+  bottom: 0; }
+
 .inline {
   display: inline-block; }
 
@@ -5847,8 +5852,8 @@ a.button {
 /**
  * Utility Colors
  * --------------------------------------------------
- * Utility colors are added to help set a naming convention. You'll 
- * notice we purposely do not use words like "red" or "blue", but 
+ * Utility colors are added to help set a naming convention. You'll
+ * notice we purposely do not use words like "red" or "blue", but
  * instead have colors which represent an emotion or generic theme.
  */
 .light, a.light {

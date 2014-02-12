@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.24-alpha-770
+ * Ionic, v0.9.24-alpha-774
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3473,8 +3473,7 @@ angular.module('ionic.ui.virtualRepeat', [])
 
 angular.module('ionic.ui.scroll')
 
-.controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout', '$ionicScrollDelegate',
-                     function($scope,   scrollViewOptions,   $timeout,   $ionicScrollDelegate) {
+.controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout', '$ionicScrollDelegate', '$window', function($scope, scrollViewOptions, $timeout, $ionicScrollDelegate, $window) {
 
   scrollViewOptions.bouncing = angular.isDefined(scrollViewOptions.bouncing) ?
     scrollViewOptions.bouncing :
@@ -3493,6 +3492,14 @@ angular.module('ionic.ui.scroll')
 
   //Register delegate for event handling
   $ionicScrollDelegate.register($scope, $element, scrollView);
+
+  $window.addEventListener('resize', resize);
+  $scope.$on('$destroy', function() {
+    $window.removeEventListener('resize', resize);
+  });
+  function resize() {
+    scrollView.resize();
+  }
 
   $timeout(function() {
     scrollView.run();
