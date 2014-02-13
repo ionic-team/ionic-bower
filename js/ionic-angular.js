@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-798
+ * Ionic, v0.9.25-alpha-799
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2849,7 +2849,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       backButtonIcon: '@',
       alignTitle: '@'
     },
-    template: '<header class="bar bar-header nav-bar invisible">' +
+    template: '<header class="bar bar-header nav-bar {{type}} {{isInvisible ? \'invisible\' : \'\'}}">' +
         '<div class="buttons"> ' +
           '<button view-back class="back-button button hide" ng-if="enableBackButton"></button>' +
           '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" bind-html-unsafe="button.content"></button>' +
@@ -2878,18 +2878,11 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         var canHaveBackButton = !(!tAttrs.backButtonType && !tAttrs.backButtonLabel && !tAttrs.backButtonIcon);
         $scope.enableBackButton = canHaveBackButton;
 
+        $scope.isInvisible = true;
         $rootScope.$on('viewState.showNavBar', function(e, showNavBar) {
-          if(showNavBar === false) {
-            $element[0].classList.add('invisible');
-          } else {
-            $element[0].classList.remove('invisible');
-          }
+          $scope.isInvisible = !showNavBar;
         });
 
-        $scope.$watch('type', setBarType);
-        $attr.$observe('class', function() {
-          setBarType($scope.type);
-        });
         function setBarType(value, oldValue) {
           if (oldValue) $element.removeClass(oldValue);
           $element.addClass(value);
