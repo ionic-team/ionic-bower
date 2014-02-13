@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-789
+ * Ionic, v0.9.25-alpha-790
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-789'
+  version: '0.9.25-alpha-790'
 };;
 (function(ionic) {
 
@@ -2023,7 +2023,6 @@ window.ionic = {
 
     if(ele.tagName === 'INPUT' || ele.tagName === 'TEXTAREA' || ele.tagName === 'SELECT') {
       ele.focus();
-      e.preventDefault();
     } else {
       ele.blur();
     }
@@ -2048,14 +2047,14 @@ window.ionic = {
     if( isRecentTap(e) ) {
       // if a tap in the same area just happened, don't continue
       
-      return;
+      return stopEvent(e);
     }
 
     if(ele.lastClick && ele.lastClick + CLICK_PREVENT_DURATION > Date.now()) {
       // if a click recently happend on this element, don't continue
       // (yes on some devices it's possible for a click to happen before a touchend)
       
-      return;
+      return stopEvent(e);
     }
 
     while(ele) {
@@ -2096,9 +2095,7 @@ window.ionic = {
         // Android will fire a click for the label, and a click for the input which it is associated to
         // this stops the second ghost click from the label from continuing
         
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
+        return stopEvent(e);
       }
 
       // remember the last time this label was clicked to it can prevent a second label ghostclick
@@ -2106,7 +2103,7 @@ window.ionic = {
 
       // The input's click event will propagate so don't bother letting this label's click 
       // propagate cuz it causes double clicks. However, do NOT e.preventDefault(), because 
-      // the label still needs to click the input
+      // the native layer still needs to click the input which the label controls
       
       e.stopPropagation();
       return;
@@ -2115,17 +2112,13 @@ window.ionic = {
     if( isRecentTap(e) ) {
       // a tap has already happened at these coordinates recently, ignore this event
       
-      e.stopPropagation();
-      e.preventDefault();
-      return false;
+      return stopEvent(e);
     }
 
     if(e.target.lastTap && e.target.lastTap + CLICK_PREVENT_DURATION > Date.now()) {
       // this element has already had the tap poly fill run on it recently, ignore this event
       
-      e.stopPropagation();
-      e.preventDefault();
-      return false;
+      return stopEvent(e);
     }
 
     // remember the last time this element was clicked
@@ -2134,6 +2127,12 @@ window.ionic = {
     // remember the coordinates of this click so if a tap or click in the 
     // same area quickly happened again we can ignore it
     recordCoordinates(e);
+  }
+
+  function stopEvent(e){
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
   }
 
   function isRecentTap(event) {
