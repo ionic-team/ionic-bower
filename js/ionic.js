@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-792
+ * Ionic, v0.9.25-alpha-793
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-792'
+  version: '0.9.25-alpha-793'
 };;
 (function(ionic) {
 
@@ -2009,7 +2009,7 @@ window.ionic = {
     // simulate a normal click by running the element's click method then focus on it
     if(ele.disabled) return;
 
-    
+    console.debug('tapElement', ele.tagName, ele.className);
 
     var c = getCoordinates(e);
 
@@ -2046,14 +2046,14 @@ window.ionic = {
 
     if( isRecentTap(e) ) {
       // if a tap in the same area just happened, don't continue
-      
+      console.debug('tapPolyfill', 'isRecentTap', ele.tagName);
       return stopEvent(e);
     }
 
     if(ele.lastClick && ele.lastClick + CLICK_PREVENT_DURATION > Date.now()) {
       // if a click recently happend on this element, don't continue
       // (yes on some devices it's possible for a click to happen before a touchend)
-      
+      console.debug('tapPolyfill', 'recent lastClick', ele.tagName);
       return stopEvent(e);
     }
 
@@ -2094,7 +2094,7 @@ window.ionic = {
       if(e.target.control.labelLastTap && e.target.control.labelLastTap + CLICK_PREVENT_DURATION > Date.now()) {
         // Android will fire a click for the label, and a click for the input which it is associated to
         // this stops the second ghost click from the label from continuing
-        
+        console.debug('preventGhostClick', 'labelLastTap');
         return stopEvent(e);
       }
 
@@ -2104,20 +2104,20 @@ window.ionic = {
       // The input's click event will propagate so don't bother letting this label's click 
       // propagate cuz it causes double clicks. However, do NOT e.preventDefault(), because 
       // the native layer still needs to click the input which the label controls
-      
+      console.debug('preventGhostClick', 'label stopPropagation');
       e.stopPropagation();
       return;
     }
 
     if( isRecentTap(e) ) {
       // a tap has already happened at these coordinates recently, ignore this event
-      
+      console.debug('preventGhostClick', 'isRecentTap', e.target.tagName);
       return stopEvent(e);
     }
 
     if(e.target.lastTap && e.target.lastTap + CLICK_PREVENT_DURATION > Date.now()) {
       // this element has already had the tap poly fill run on it recently, ignore this event
-      
+      console.debug('preventGhostClick', 'e.target.lastTap', e.target.tagName);
       return stopEvent(e);
     }
 
@@ -2405,8 +2405,7 @@ function androidKeyboardFix() {
     if (rememberedDeviceWidth !== window.innerWidth) {
       rememberedDeviceWidth = window.innerWidth;
       rememberedDeviceHeight = window.innerHeight;
-      console.info('orientation change. deviceWidth =', rememberedDeviceWidth,
-                  ', deviceHeight =', rememberedDeviceHeight);
+      console.info('orientation change. deviceWidth =', rememberedDeviceWidth, ', deviceHeight =', rememberedDeviceHeight);
 
     //If the height changes, and it's less than before, we have a keyboard open
     } else if (rememberedDeviceHeight !== window.innerHeight &&
