@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "quokka",
-  "version": "0.9.25-alpha-787",
+  "version": "0.9.25-alpha-788",
   "dependencies": {
     "angular": "1.2.10",
     "angular-animate": "1.2.10",
