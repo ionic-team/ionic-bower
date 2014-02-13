@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-785
+ * Ionic, v0.9.25-alpha-786
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1640,14 +1640,14 @@ angular.module('ionic.ui.list', ['ngAnimate'])
 
     template: '<div class="item item-complex">\
             <div class="item-edit" ng-if="deleteClick !== undefined">\
-              <button class="button button-icon icon" ng-class="deleteIconClass" ng-click="deleteClick()"></button>\
+              <button class="button button-icon icon" ng-class="deleteIconClass" ng-click="deleteClick()" stop-event="click"></button>\
             </div>\
             <a class="item-content" ng-href="{{ href }}" ng-transclude></a>\
             <div class="item-drag" ng-if="reorderIconClass !== undefined">\
               <button data-ionic-action="reorder" class="button button-icon icon" ng-class="reorderIconClass"></button>\
             </div>\
             <div class="item-options" ng-if="itemOptionButtons">\
-             <button ng-click="b.onTap(item, b)" class="button" ng-class="b.type" ng-repeat="b in itemOptionButtons" ng-bind="b.text"></button>\
+             <button ng-click="b.onTap(item, b)" stop-event="click" class="button" ng-class="b.type" ng-repeat="b in itemOptionButtons" ng-bind="b.text"></button>\
            </div>\
           </div>',
 
@@ -2735,7 +2735,19 @@ angular.module('ionic.ui.touch', [])
 
     };
 
-  }]);
+  }])
+
+  .directive('stopEvent', function () {
+    function stopEvent(e) {
+      e.stopPropagation();
+    }
+    return {
+      restrict: 'A',
+      link: function (scope, element, attr) {
+        element.bind(attr.stopEvent, stopEvent);
+      }
+    };
+  });
 
 
 })(window.angular, window.ionic);
