@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-797
+ * Ionic, v0.9.25-alpha-798
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2847,10 +2847,9 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       backButtonType: '@',
       backButtonLabel: '@',
       backButtonIcon: '@',
-      alignTitle: '@',
-      barType: '@type'
+      alignTitle: '@'
     },
-    template: '<header class="bar bar-header nav-bar invisible" ng-class="barType">' +
+    template: '<header class="bar bar-header nav-bar invisible">' +
         '<div class="buttons"> ' +
           '<button view-back class="back-button button hide" ng-if="enableBackButton"></button>' +
           '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" class="button no-animation {{button.type}}" bind-html-unsafe="button.content"></button>' +
@@ -2886,6 +2885,15 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
             $element[0].classList.remove('invisible');
           }
         });
+
+        $scope.$watch('type', setBarType);
+        $attr.$observe('class', function() {
+          setBarType($scope.type);
+        });
+        function setBarType(value, oldValue) {
+          if (oldValue) $element.removeClass(oldValue);
+          $element.addClass(value);
+        }
 
         // Initialize our header bar view which will handle resizing and aligning our title labels
         var hb = new ionic.views.HeaderBar({
