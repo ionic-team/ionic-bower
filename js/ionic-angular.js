@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-793
+ * Ionic, v0.9.25-alpha-795
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -495,13 +495,16 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
     },
     // Show the modal
     show: function() {
-      var _this = this;
+      var self = this;
       var element = angular.element(this.el);
+
+      self._isShown = true;
+
       if(!element.parent().length) {
         element.addClass(this.animation);
         $animate.enter(element, angular.element($document[0].body), null, function() {
         });
-        ionic.views.Modal.prototype.show.call(_this);
+        ionic.views.Modal.prototype.show.call(self);
       } else {
         $animate.addClass(element, this.animation, function() {
         });
@@ -509,10 +512,10 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
 
       if(!this.didInitEvents) {
         var onHardwareBackButton = function() {
-          _this.hide();
+          self.hide();
         };
 
-        _this.scope.$on('$destroy', function() {
+        self.scope.$on('$destroy', function() {
           $ionicPlatform.offHardwareBackButton(onHardwareBackButton);
         });
 
@@ -522,22 +525,33 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
         this.didInitEvents = true;
       }
 
+      this.scope.$parent.$broadcast('modal.shown', this);
+
     },
     // Hide the modal
     hide: function() {
+      this._isShown = false;
       var element = angular.element(this.el);
       $animate.removeClass(element, this.animation);
 
       ionic.views.Modal.prototype.hide.call(this);
+
+      this.scope.$parent.$broadcast('modal.hidden', this);
     },
 
     // Remove and destroy the modal scope
     remove: function() {
       var self  = this,
           element = angular.element(this.el);
+      this._isShown = false;
       $animate.leave(angular.element(this.el), function() {
+        self.scope.$parent.$broadcast('modal.removed', self);
         self.scope.$destroy();
       });
+    },
+
+    isShown: function() {
+      return !!this._isShown;
     }
   });
 
@@ -566,7 +580,7 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
     /**
      * Load a modal with the given template string.
      *
-     * A new isolated scope will be created for the 
+     * A new isolated scope will be created for the
      * modal and the new element will be appended into the body.
      */
     fromTemplate: function(templateString, options) {
