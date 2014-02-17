@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-818
+ * Ionic, v0.9.25-alpha-819
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-818'
+  version: '0.9.25-alpha-819'
 };;
 (function(ionic) {
 
@@ -152,16 +152,10 @@ window.ionic = {
      * until we are at the direct child of parentEl
      * use-case: find scroll offset of any element within a scroll container
      */
-    getPositionInParent: function(el, parentEl) {
-      var left = 0, top = 0;
-      while (el && el !== parentEl) {
-        left += el.offsetLeft;
-        top += el.offsetTop;
-        el = el.parentNode;
-      }
+    getPositionInParent: function(el) {
       return {
-        left: left,
-        top: top
+        left: el.offsetLeft,
+        top: el.offsetTop
       };
     },
 
