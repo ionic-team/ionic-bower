@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-821
+ * Ionic, v0.9.25-alpha-822
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-821'
+  version: '0.9.25-alpha-822'
 };;
 (function(ionic) {
 
@@ -173,18 +173,19 @@ window.ionic = {
         range.selectNodeContents(textNode);
         if(range.getBoundingClientRect) {
           var rect = range.getBoundingClientRect();
+          if(rect) {
+            var sx = window.scrollX;
+            var sy = window.scrollY;
 
-          var sx = window.scrollX;
-          var sy = window.scrollY;
-
-          return {
-            top: rect.top + sy,
-            left: rect.left + sx,
-            right: rect.left + sx + rect.width,
-            bottom: rect.top + sy + rect.height,
-            width: rect.width,
-            height: rect.height
-          };
+            return {
+              top: rect.top + sy,
+              left: rect.left + sx,
+              right: rect.left + sx + rect.width,
+              bottom: rect.top + sy + rect.height,
+              width: rect.width,
+              height: rect.height
+            };
+          }
         }
       }
       return null;
