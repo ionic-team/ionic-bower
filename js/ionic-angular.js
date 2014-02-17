@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-828
+ * Ionic, v0.9.25-alpha-831
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2834,7 +2834,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       '<nav-back-button ng-if="backButtonEnabled && (backType || backLabel || backIcon)" ' +
         'type="backType" label="backLabel" icon="backIcon" class="invisible" async-visible>' +
       '</nav-back-button>' +
-      '<div class="buttons"> ' +
+      '<div class="buttons left-buttons"> ' +
         '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" ' +
           'class="button no-animation {{button.type}}" ' +
           'bind-html-unsafe="button.content">' +
@@ -2844,7 +2844,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
       //ng-repeat makes it easy to add new / remove old and have proper enter/leave anims
       '<h1 ng-repeat="title in titles" bind-html-unsafe="title" class="title invisible" async-visible nav-bar-title></h1>' +
 
-      '<div class="buttons" ng-if="rightButtons.length"> ' +
+      '<div class="buttons right-buttons" ng-if="rightButtons.length"> ' +
       '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" '+
         'class="button no-animation {{button.type}}" ' +
         'bind-html-unsafe="button.content">' +
