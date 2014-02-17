@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-823
+ * Ionic, v0.9.25-alpha-824
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-823'
+  version: '0.9.25-alpha-824'
 };;
 (function(ionic) {
 
@@ -2453,6 +2453,7 @@ function androidKeyboardFix() {
 
 })(window.ionic);
 ;
+var IS_INPUT_LIKE_REGEX = /input|textarea|select/i;
 /*
  * Scroller
  * http://github.com/zynga/scroller
@@ -3068,17 +3069,19 @@ ionic.views.Scroll = ionic.views.View.inherit({
       e.stopPropagation();
     });
 
+    function shouldIgnorePress(e) {
+      // Don't react if initial down happens on a form element
+      return e.target.tagName.match(IS_INPUT_LIKE_REGEX) ||
+        e.target.isContentEditable;
+    }
+
+
     if ('ontouchstart' in window) {
 
       container.addEventListener("touchstart", function(e) {
-        if (e.defaultPrevented) {
+        if (e.defaultPrevented || shouldIgnorePress(e)) {
           return;
         }
-        // Don't react if initial down happens on a form element
-        if (e.target.tagName.match(/input|textarea|select/i)) {
-          return;
-        }
-
         self.doTouchStart(e.touches, e.timeStamp);
         e.preventDefault();
       }, false);
@@ -3099,14 +3102,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
       var mousedown = false;
 
       container.addEventListener("mousedown", function(e) {
-        if (e.defaultPrevented) {
+        if (e.defaultPrevented || shouldIgnorePress(e)) {
           return;
         }
-        // Don't react if initial down happens on a form element
-        if (e.target.tagName.match(/input|textarea|select/i)) {
-          return;
-        }
-
         self.doTouchStart([{
           pageX: e.pageX,
           pageY: e.pageY
