@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-832
+ * Ionic, v0.9.25-alpha-833
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2131,14 +2131,12 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
           getTranslateX: function() {
             return $scope.sideMenuContentTranslateX || 0;
           },
-          setTranslateX: function(amount) {
-            window.rAF(function() {
-              $element[0].style.webkitTransform = 'translate3d(' + amount + 'px, 0, 0)';
-              $timeout(function() {
-                $scope.sideMenuContentTranslateX = amount;
-              });
+          setTranslateX: ionic.animationFrameThrottle(function(amount) {
+            $element[0].style.webkitTransform = 'translate3d(' + amount + 'px, 0, 0)';
+            $timeout(function() {
+              $scope.sideMenuContentTranslateX = amount;
             });
-          },
+          }),
           enableAnimation: function() {
             //this.el.classList.add(this.animateClass);
             $scope.animationEnabled = true;
@@ -2950,7 +2948,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  */
 .directive('asyncVisible', function() {
   return function($scope, $element) {
-    window.rAF(function() {
+    ionic.requestAnimationFrame(function() {
       $element[0].classList.remove('invisible');
     });
   };

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-832
+ * Ionic, v0.9.25-alpha-833
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,8 +17,9 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-832'
-};;
+  version: '0.9.25-alpha-833'
+};
+;
 (function(ionic) {
 
   var bezierCoord = function (x,y) {
@@ -138,14 +139,58 @@ window.ionic = {
   var readyCallbacks = [],
   domReady = function() {
     for(var x=0; x<readyCallbacks.length; x++) {
-      window.rAF(readyCallbacks[x]);
+      ionic.requestAnimationFrame(readyCallbacks[x]);
     }
     readyCallbacks = [];
     document.removeEventListener('DOMContentLoaded', domReady);
   };
   document.addEventListener('DOMContentLoaded', domReady);
 
+  // From the man himself, Mr. Paul Irish.
+  // The requestAnimationFrame polyfill
+  // Put it on window just to preserve its context
+  // without having to use .call
+  window._rAF = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            function( callback ){
+              window.setTimeout(callback, 16);
+            };
+  })();
+
   ionic.DomUtil = {
+    //Call with proper context
+    requestAnimationFrame: function(cb) {
+      window._rAF(cb);
+    },
+
+    /*
+     * When given a callback, if that callback is called 100 times between
+     * animation frames, Throttle will make it only call the last of 100tha call
+     *
+     * It returns a function, which will then call the passed in callback.  The
+     * passed in callback will receive the context the returned function is called with.
+     *
+     * @example
+     *   this.setTranslateX = ionic.animationFrameThrottle(function(x) {
+     *     this.el.style.webkitTransform = 'translate3d(' + x + 'px, 0, 0)';
+     *   })
+     */
+    animationFrameThrottle: function(cb) {
+      var args, isQueued, context;
+      return function() {
+        args = arguments;
+        context = this;
+        if (!isQueued) {
+          isQueued = true;
+          ionic.requestAnimationFrame(function() {
+            cb.apply(context, args);
+            isQueued = false;
+          });
+        }
+      };
+    },
 
     /*
      * Find an element's offset, then add it to the offset of the parent
@@ -161,7 +206,7 @@ window.ionic = {
 
     ready: function(cb) {
       if(document.readyState === "complete") {
-        window.rAF(cb);
+        ionic.requestAnimationFrame(cb);
       } else {
         readyCallbacks.push(cb);
       }
@@ -241,6 +286,10 @@ window.ionic = {
       return true;
     }
   };
+
+  //Shortcuts
+  ionic.requestAnimationFrame = ionic.DomUtil.requestAnimationFrame;
+  ionic.animationFrameThrottle = ionic.DomUtil.animationFrameThrottle;
 })(window.ionic);
 ;
 /**
@@ -1972,20 +2021,9 @@ window.ionic = {
 (function(window, document, ionic) {
   'use strict';
 
-  // From the man himself, Mr. Paul Irish.
-  // The requestAnimationFrame polyfill
-  window.rAF = (function(){
-    return  window.requestAnimationFrame       ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
-              window.setTimeout(callback, 16);
-            };
-  })();
-
   // Ionic CSS polyfills
   ionic.CSS = {};
-  
+
   (function() {
     var d = document.createElement('div');
     var keys = ['webkitTransform', 'transform', '-webkit-transform', 'webkit-transform',
@@ -2013,7 +2051,7 @@ window.ionic = {
     clickEvent.initMouseEvent('click', true, true, window,
                               1, 0, 0, c.x, c.y,
                               false, false, false, false, 0, null);
-    
+
     ele.dispatchEvent(clickEvent);
 
     if(ele.tagName === 'INPUT' || ele.tagName === 'TEXTAREA' || ele.tagName === 'SELECT') {
@@ -2056,9 +2094,9 @@ window.ionic = {
     while(ele) {
       // climb up the DOM looking to see if the tapped element is, or has a parent, of one of these
       if( ele.tagName === "INPUT" ||
-          ele.tagName === "A" || 
-          ele.tagName === "BUTTON" || 
-          ele.tagName === "TEXTAREA" || 
+          ele.tagName === "A" ||
+          ele.tagName === "BUTTON" ||
+          ele.tagName === "TEXTAREA" ||
           ele.tagName === "SELECT" ) {
 
         return ionic.tapElement(ele, e);
@@ -2092,8 +2130,8 @@ window.ionic = {
       // remember the last time this label was clicked to it can prevent a second label ghostclick
       e.target.control.labelLastTap = Date.now();
 
-      // The input's click event will propagate so don't bother letting this label's click 
-      // propagate cuz it causes double clicks. However, do NOT e.preventDefault(), because 
+      // The input's click event will propagate so don't bother letting this label's click
+      // propagate cuz it causes double clicks. However, do NOT e.preventDefault(), because
       // the native layer still needs to click the input which the label controls
       console.debug('preventGhostClick', 'label stopPropagation');
       e.stopPropagation();
@@ -2115,7 +2153,7 @@ window.ionic = {
     // remember the last time this element was clicked
     e.target.lastClick = Date.now();
 
-    // remember the coordinates of this click so if a tap or click in the 
+    // remember the coordinates of this click so if a tap or click in the
     // same area quickly happened again we can ignore it
     recordCoordinates(e);
   }
@@ -2128,8 +2166,8 @@ window.ionic = {
 
   function blurActive() {
     var ele = document.activeElement;
-    if(ele && (ele.tagName === "INPUT" || 
-               ele.tagName === "TEXTAREA" || 
+    if(ele && (ele.tagName === "INPUT" ||
+               ele.tagName === "TEXTAREA" ||
                ele.tagName === "SELECT")) {
       // using a timeout to prevent funky scrolling while a keyboard hides
       setTimeout(function(){
@@ -2415,7 +2453,7 @@ function androidKeyboardFix() {
                window.innerHeight < rememberedDeviceHeight) {
       document.body.classList.add('hide-footer');
       //Wait for next frame so document.activeElement is set
-      window.rAF(handleKeyboardChange);
+      ionic.requestAnimationFrame(handleKeyboardChange);
     } else {
       //Otherwise we have a keyboard close or a *really* weird resize
       document.body.classList.remove('hide-footer');
@@ -3079,11 +3117,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
     if ('ontouchstart' in window) {
 
       container.addEventListener("touchstart", function(e) {
+        console.log('touchstart scrollview');
         if (e.defaultPrevented || shouldIgnorePress(e)) {
           return;
         }
         self.doTouchStart(e.touches, e.timeStamp);
-        e.preventDefault();
+        // e.preventDefault();
       }, false);
 
       document.addEventListener("touchmove", function(e) {
@@ -4569,75 +4608,71 @@ ionic.views.Scroll = ionic.views.View.inherit({
      * so that the header text size is maximized and aligned
      * correctly as long as possible.
      */
-    align: function(titleSelector) {
-      var _this = this;
+    align: ionic.animationFrameThrottle(function(titleSelector) {
 
-      window.rAF(ionic.proxy(function() {
+      // Find the titleEl element
+      var titleEl = this.el.querySelector(titleSelector || '.title');
+      if(!titleEl) {
+        return;
+      }
 
-        // Find the titleEl element
-        var titleEl = this.el.querySelector(titleSelector || '.title');
-        if(!titleEl) {
-          return;
+      var i, c, childSize;
+      var childNodes = this.el.childNodes;
+      var leftWidth = 0;
+      var rightWidth = 0;
+      var isCountingRightWidth = true;
+
+      // Compute how wide the left children are
+      // Skip all titles (there may still be two titles, one leaving the dom)
+      // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
+      for(i = 0; i < childNodes.length; i++) {
+        c = childNodes[i];
+        if (c.tagName && c.tagName.toLowerCase() == 'h1') {
+          isCountingRightWidth = false;
+          continue;
         }
 
-        var i, c, childSize;
-        var childNodes = this.el.childNodes;
-        var leftWidth = 0;
-        var rightWidth = 0;
-        var isCountingRightWidth = true;
-
-        // Compute how wide the left children are
-        // Skip all titles (there may still be two titles, one leaving the dom)
-        // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
-        for(i = 0; i < childNodes.length; i++) {
-          c = childNodes[i];
-          if (c.tagName && c.tagName.toLowerCase() == 'h1') {
-            isCountingRightWidth = false;
-            continue;
-          }
-
-          childSize = null;
-          if(c.nodeType == 3) {
-            childSize = ionic.DomUtil.getTextBounds(c);
-          } else if(c.nodeType == 1) {
-            childSize = c.getBoundingClientRect();
-          }
-          if(childSize) {
-            if (isCountingRightWidth) {
-              rightWidth += childSize.width;
-            } else {
-              leftWidth += childSize.width;
-            }
+        childSize = null;
+        if(c.nodeType == 3) {
+          childSize = ionic.DomUtil.getTextBounds(c);
+        } else if(c.nodeType == 1) {
+          childSize = c.getBoundingClientRect();
+        }
+        if(childSize) {
+          if (isCountingRightWidth) {
+            rightWidth += childSize.width;
+          } else {
+            leftWidth += childSize.width;
           }
         }
+      }
 
-        var margin = Math.max(leftWidth, rightWidth) + 10;
+      var margin = Math.max(leftWidth, rightWidth) + 10;
 
-        // Size and align the header titleEl based on the sizes of the left and
-        // right children, and the desired alignment mode
-        if(this.alignTitle == 'center') {
-          if(margin > 10) {
-            titleEl.style.left = margin + 'px';
-            titleEl.style.right = margin + 'px';
-          }
-          if(titleEl.offsetWidth < titleEl.scrollWidth) {
-            if(rightWidth > 0) {
-              titleEl.style.right = (rightWidth + 5) + 'px';
-            }
-          }
-        } else if(this.alignTitle == 'left') {
-          titleEl.classList.add('titleEl-left');
-          if(leftWidth > 0) {
-            titleEl.style.left = (leftWidth + 15) + 'px';
-          }
-        } else if(this.alignTitle == 'right') {
-          titleEl.classList.add('titleEl-right');
+      // Size and align the header titleEl based on the sizes of the left and
+      // right children, and the desired alignment mode
+      if(this.alignTitle == 'center') {
+        if(margin > 10) {
+          titleEl.style.left = margin + 'px';
+          titleEl.style.right = margin + 'px';
+        }
+        if(titleEl.offsetWidth < titleEl.scrollWidth) {
           if(rightWidth > 0) {
-            titleEl.style.right = (rightWidth + 15) + 'px';
+            titleEl.style.right = (rightWidth + 5) + 'px';
           }
         }
-      }, this));
-    }
+      } else if(this.alignTitle == 'left') {
+        titleEl.classList.add('titleEl-left');
+        if(leftWidth > 0) {
+          titleEl.style.left = (leftWidth + 15) + 'px';
+        }
+      } else if(this.alignTitle == 'right') {
+        titleEl.classList.add('titleEl-right');
+        if(rightWidth > 0) {
+          titleEl.style.right = (rightWidth + 15) + 'px';
+        }
+      }
+    })
   });
 
 })(ionic);
@@ -4706,41 +4741,39 @@ ionic.views.Scroll = ionic.views.View.inherit({
     };
   };
 
-  SlideDrag.prototype.drag = function(e) {
-    var _this = this, buttonsWidth;
+  SlideDrag.prototype.drag = ionic.animationFrameThrottle(function(e) {
+    var buttonsWidth;
 
-    window.rAF(function() {
-      // We really aren't dragging
-      if(!_this._currentDrag) {
-        return;
+    // We really aren't dragging
+    if(!this._currentDrag) {
+      return;
+    }
+
+    // Check if we should start dragging. Check if we've dragged past the threshold,
+    // or we are starting from the open state.
+    if(!this._isDragging &&
+        ((Math.abs(e.gesture.deltaX) > this.dragThresholdX) ||
+        (Math.abs(this._currentDrag.startOffsetX) > 0)))
+    {
+      this._isDragging = true;
+    }
+
+    if(this._isDragging) {
+      buttonsWidth = this._currentDrag.buttonsWidth;
+
+      // Grab the new X point, capping it at zero
+      var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+
+      // If the new X position is past the buttons, we need to slow down the drag (rubber band style)
+      if(newX < -buttonsWidth) {
+        // Calculate the new X position, capped at the top of the buttons
+        newX = Math.min(-buttonsWidth, -buttonsWidth + (((e.gesture.deltaX + buttonsWidth) * 0.4)));
       }
 
-      // Check if we should start dragging. Check if we've dragged past the threshold,
-      // or we are starting from the open state.
-      if(!_this._isDragging &&
-          ((Math.abs(e.gesture.deltaX) > _this.dragThresholdX) ||
-          (Math.abs(_this._currentDrag.startOffsetX) > 0)))
-      {
-        _this._isDragging = true;
-      }
-
-      if(_this._isDragging) {
-        buttonsWidth = _this._currentDrag.buttonsWidth;
-
-        // Grab the new X point, capping it at zero
-        var newX = Math.min(0, _this._currentDrag.startOffsetX + e.gesture.deltaX);
-
-        // If the new X position is past the buttons, we need to slow down the drag (rubber band style)
-        if(newX < -buttonsWidth) {
-          // Calculate the new X position, capped at the top of the buttons
-          newX = Math.min(-buttonsWidth, -buttonsWidth + (((e.gesture.deltaX + buttonsWidth) * 0.4)));
-        }
-
-        _this._currentDrag.content.style.webkitTransform = 'translate3d(' + newX + 'px, 0, 0)';
-        _this._currentDrag.content.style.webkitTransition = 'none';
-      }
-    });
-  };
+      this._currentDrag.content.style.webkitTransform = 'translate3d(' + newX + 'px, 0, 0)';
+      this._currentDrag.content.style.webkitTransition = 'none';
+    }
+  });
 
   SlideDrag.prototype.end = function(e, doneCallback) {
     var _this = this;
@@ -4777,7 +4810,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     //   e.target.removeEventListener('webkitTransitionEnd', onRestingAnimationEnd);
     // };
 
-    window.rAF(function() {
+    ionic.requestAnimationFrame(function() {
       // var currentX = parseFloat(_this._currentDrag.content.style.webkitTransform.replace('translate3d(', '').split(',')[0]) || 0;
       // if(currentX !== restingPoint) {
       //   _this._currentDrag.content.classList.add(ITEM_SLIDING_CLASS);
@@ -4850,53 +4883,49 @@ ionic.views.Scroll = ionic.views.View.inherit({
     this._moveElement(e);
   };
 
-  ReorderDrag.prototype.drag = function(e) {
-    var _this = this;
+  ReorderDrag.prototype.drag = ionic.animationFrameThrottle(function(e) {
+    // We really aren't dragging
+    if(!this._currentDrag) {
+      return;
+    }
 
-    window.rAF(function() {
-      // We really aren't dragging
-      if(!_this._currentDrag) {
-        return;
+    var scrollY = 0;
+    var pageY = e.gesture.center.pageY;
+
+    //If we have a scrollView, check scroll boundaries for dragged element and scroll if necessary
+    if (this.scrollView) {
+      var container = this.scrollEl;
+
+      scrollY = this.scrollView.getValues().top;
+
+      var containerTop = container.offsetTop;
+      var pixelsPastTop = containerTop - pageY + this._currentDrag.elementHeight/2;
+      var pixelsPastBottom = pageY + this._currentDrag.elementHeight/2 - containerTop - container.offsetHeight;
+
+      if (e.gesture.deltaY < 0 && pixelsPastTop > 0 && scrollY > 0) {
+        this.scrollView.scrollBy(null, -pixelsPastTop);
       }
-
-      var scrollY = 0;
-      var pageY = e.gesture.center.pageY;
-
-      //If we have a scrollView, check scroll boundaries for dragged element and scroll if necessary
-      if (_this.scrollView) {
-        var container = _this.scrollEl;
-
-        scrollY = _this.scrollView.getValues().top;
-
-        var containerTop = container.offsetTop;
-        var pixelsPastTop = containerTop - pageY + _this._currentDrag.elementHeight/2;
-        var pixelsPastBottom = pageY + _this._currentDrag.elementHeight/2 - containerTop - container.offsetHeight;
-
-        if (e.gesture.deltaY < 0 && pixelsPastTop > 0 && scrollY > 0) {
-          _this.scrollView.scrollBy(null, -pixelsPastTop);
-        }
-        if (e.gesture.deltaY > 0 && pixelsPastBottom > 0) {
-          if (scrollY < _this.scrollView.getScrollMax().top) {
-            _this.scrollView.scrollBy(null, pixelsPastBottom);
-          }
+      if (e.gesture.deltaY > 0 && pixelsPastBottom > 0) {
+        if (scrollY < this.scrollView.getScrollMax().top) {
+          this.scrollView.scrollBy(null, pixelsPastBottom);
         }
       }
+    }
 
-      // Check if we should start dragging. Check if we've dragged past the threshold,
-      // or we are starting from the open state.
-      if(!_this._isDragging && Math.abs(e.gesture.deltaY) > _this.dragThresholdY) {
-        _this._isDragging = true;
-      }
+    // Check if we should start dragging. Check if we've dragged past the threshold,
+    // or we are starting from the open state.
+    if(!this._isDragging && Math.abs(e.gesture.deltaY) > this.dragThresholdY) {
+      this._isDragging = true;
+    }
 
-      if(_this._isDragging) {
-        _this._moveElement(e);
+    if(this._isDragging) {
+      this._moveElement(e);
 
-        _this._currentDrag.currentY = scrollY + pageY - _this._currentDrag.placeholder.parentNode.offsetTop;
+      this._currentDrag.currentY = scrollY + pageY - this._currentDrag.placeholder.parentNode.offsetTop;
 
-        _this._reorderItems();
-      }
-    });
-  };
+      this._reorderItems();
+    }
+  });
 
   // When an item is dragged, we need to reorder any items for sorting purposes
   ReorderDrag.prototype._reorderItems = function() {
@@ -5351,7 +5380,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     alert: function(message) {
       var _this = this;
 
-      window.rAF(function() {
+      ionic.requestAnimationFrame(function() {
         _this.setTitle(message);
         _this.el.classList.add('active');
       });
@@ -5427,9 +5456,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
     getTranslateX: function() {
       return parseFloat(this.el.style.webkitTransform.replace('translate3d(', '').split(',')[0]);
     },
-    setTranslateX: function(x) {
+    setTranslateX: ionic.animationFrameThrottle(function(x) {
       this.el.style.webkitTransform = 'translate3d(' + x + 'px, 0, 0)';
-    }
+    })
   });
 
 })(ionic);
