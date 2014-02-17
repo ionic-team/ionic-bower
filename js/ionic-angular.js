@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-822
+ * Ionic, v0.9.25-alpha-823
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3520,14 +3520,16 @@ angular.module('ionic.ui.scroll')
 
 .controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout', '$ionicScrollDelegate', '$window', function($scope, scrollViewOptions, $timeout, $ionicScrollDelegate, $window) {
 
-  scrollViewOptions.bouncing = angular.isDefined(scrollViewOptions.bouncing) ?
-    scrollViewOptions.bouncing :
-    !ionic.Platform.isAndroid();
-
   var self = this;
 
   var element = this.element = scrollViewOptions.el;
   var scrollView = this.scrollView = new ionic.views.Scroll(scrollViewOptions);
+
+  if (!angular.isDefined(scrollViewOptions.bouncing)) {
+    ionic.Platform.ready(function() {
+      scrollView.options.bouncing = !ionic.Platform.isAndroid();
+    });
+  }
 
   var $element = this.$element = angular.element(element);
 
