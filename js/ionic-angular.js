@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-833
+ * Ionic, v0.9.25-alpha-834
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2828,7 +2828,8 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     },
     controller: function() {},
     template:
-    '<header class="bar bar-header nav-bar{{navBarClass()}}">' +
+    '<header class="bar bar-header nav-bar {{type}} {{isReverse ? \'reverse\' : \'\'}} ' +
+    '{{isInvisible ? \'invisible\' : \'\'}} {{animateEnabled ? animation : \'\'}}">' +
       '<nav-back-button ng-if="backButtonEnabled && (backType || backLabel || backIcon)" ' +
         'type="backType" label="backLabel" icon="backIcon" class="invisible" async-visible>' +
       '</nav-back-button>' +
@@ -2852,20 +2853,12 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     compile: function(tElement, tAttrs) {
 
       return function link($scope, $element, $attr) {
-        $scope.backButtonEnabled = true;
-
-        var animationDisabled = false;
         $scope.titles = [];
-
-        $scope.navBarClass = function() {
-          return ($scope.type ? ' ' + $scope.type : '') +
-            ($scope.isReverse ? ' reverse' : '') +
-            ($scope.isInvisible ? ' invisible' : '') +
-            (!animationDisabled && $scope.animation ? ' ' + $scope.animation : '');
-        };
-
-        $scope.isReverse = false; //default
-        $scope.isInvisible = true; //default
+        //defaults
+        $scope.backButtonEnabled = true;
+        $scope.animateEnabled = true;
+        $scope.isReverse = false;
+        $scope.isInvisible = true;
 
         // Initialize our header bar view which will handle
         // resizing and aligning our title labels
@@ -2876,15 +2869,15 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         $scope.headerBarView = hb;
 
         //Navbar events
-        $scope.$on('viewState.showNavBar', function(e, showNavBar) {
-          $scope.isInvisible = !showNavBar;
-        });
         $scope.$on('viewState.viewEnter', function(e, data) {
           updateHeaderData(data);
         });
+        $scope.$on('viewState.showNavBar', function(e, showNavBar) {
+          $scope.isInvisible = !showNavBar;
+        });
 
-        // All of these these are emitted from children, so we listen on parent
-        // so we can catch them as they bubble up
+        // All of these these are emitted from children of a sibling scope,
+        // so we listen on parent so we can catch them as they bubble up
         var unregisterEventListeners = [
           $scope.$parent.$on('$viewHistory.historyChange', function(e, data) {
             $scope.backButtonEnabled = !!data.showBack;
@@ -2903,20 +2896,20 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
           })
         ];
         $scope.$on('$destroy', function() {
-          for (var i=0; i<unregisterEventListeners.length; i++) 
+          for (var i=0; i<unregisterEventListeners.length; i++)
             unregisterEventListeners[i]();
         });
 
         function updateHeaderData(data) {
           var newTitle = data && data.title || '';
 
-          animationDisabled = data.animate === false;
           $scope.isReverse = data.navDirection == 'back';
 
           if (data.hideBackButton) {
             $scope.backButtonEnabled = false;
           }
 
+          $scope.animateEnabled = !!(data.navDirection && data.animate !== false);
           $scope.titles.length = 0;
           $scope.titles.push(newTitle);
           $scope.leftButtons = data.leftButtons;
