@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-837
+ * Ionic, v0.9.25-alpha-838
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -446,7 +446,7 @@ angular.module('ionic.service.loading', ['ionic.ui.loading'])
     /**
      * Load an action sheet with the given template string.
      *
-     * A new isolated scope will be created for the 
+     * A new isolated scope will be created for the
      * action sheet and the new element will be appended into the body.
      *
      * @param {object} opts the options for this ActionSheet (see docs)
@@ -457,7 +457,7 @@ angular.module('ionic.service.loading', ['ionic.ui.loading'])
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
-        showDelay: 2000
+        showDelay: 0
       };
 
       opts = angular.extend(defaults, opts);
