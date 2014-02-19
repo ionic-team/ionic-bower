@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-841
+ * Ionic, v0.9.25-alpha-844
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -115,8 +115,7 @@ angular.element.prototype.removeClass = function(cssClasses) {
     }
   }
   return this;
-};
-;
+};;
 angular.module('ionic.decorator.location', [])
 
 .config(['$provide', function($provide) {

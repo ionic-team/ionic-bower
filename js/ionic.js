@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.25-alpha-841
+ * Ionic, v0.9.25-alpha-844
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.25-alpha-841'
+  version: '0.9.25-alpha-844'
 };
 ;
 (function(ionic) {
@@ -2036,6 +2036,50 @@ window.ionic = {
       }
     }
   })();
+
+  // classList polyfill for them older Androids
+  // https://gist.github.com/devongovett/1381839
+  if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
+    Object.defineProperty(HTMLElement.prototype, 'classList', {
+      get: function() {
+        var self = this;
+        function update(fn) {
+          return function() {
+            var x, classes = self.className.split(/\s+/);
+
+            for(x=0; x<arguments.length; x++) {
+              fn(classes, classes.indexOf(arguments[x]), arguments[x]);
+            }
+            
+            self.className = classes.join(" ");
+          };
+        }
+
+        return {                    
+          add: update(function(classes, index, value) {
+            ~index || classes.push(value);
+          }),
+
+          remove: update(function(classes, index) {
+            ~index && classes.splice(index, 1);
+          }),
+
+          toggle: update(function(classes, index, value) {
+            ~index ? classes.splice(index, 1) : classes.push(value);
+          }),
+
+          contains: function(value) {
+            return !!~self.className.split(/\s+/).indexOf(value);
+          },
+
+          item: function(i) {
+            return self.className.split(/\s+/)[i] || null;
+          }
+        };
+
+      }
+    });
+  }
 
   // polyfill use to simulate native "tap"
   ionic.tapElement = function(target, e) {
