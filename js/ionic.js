@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-872
+ * Ionic, v0.9.26-alpha-873
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-872'
+  version: '0.9.26-alpha-873'
 };
 ;
 (function(ionic) {
@@ -174,7 +174,7 @@ window.ionic = {
      *
      * @example
      *   this.setTranslateX = ionic.animationFrameThrottle(function(x) {
-     *     this.el.style.webkitTransform = 'translate3d(' + x + 'px, 0, 0)';
+     *     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
      *   })
      */
     animationFrameThrottle: function(cb) {
@@ -4755,7 +4755,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     content.classList.remove(ITEM_SLIDING_CLASS);
 
     // Grab the starting X point for the item (for example, so we can tell whether it is open or closed to start)
-    offsetX = parseFloat(content.style.webkitTransform.replace('translate3d(', '').split(',')[0]) || 0;
+    offsetX = parseFloat(content.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]) || 0;
 
     // Grab the buttons
     buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
@@ -4801,7 +4801,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         newX = Math.min(-buttonsWidth, -buttonsWidth + (((e.gesture.deltaX + buttonsWidth) * 0.4)));
       }
 
-      this._currentDrag.content.style.webkitTransform = 'translate3d(' + newX + 'px, 0, 0)';
+      this._currentDrag.content.style[ionic.CSS.TRANSFORM] = 'translate3d(' + newX + 'px, 0, 0)';
       this._currentDrag.content.style.webkitTransition = 'none';
     }
   });
@@ -4842,17 +4842,17 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // };
 
     ionic.requestAnimationFrame(function() {
-      // var currentX = parseFloat(_this._currentDrag.content.style.webkitTransform.replace('translate3d(', '').split(',')[0]) || 0;
+      // var currentX = parseFloat(_this._currentDrag.content.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]) || 0;
       // if(currentX !== restingPoint) {
       //   _this._currentDrag.content.classList.add(ITEM_SLIDING_CLASS);
       //   _this._currentDrag.content.addEventListener('webkitTransitionEnd', onRestingAnimationEnd);
       // }
       if(restingPoint === 0) {
-        _this._currentDrag.content.style.webkitTransform = '';
+        _this._currentDrag.content.style[ionic.CSS.TRANSFORM] = '';
       } else {
-        _this._currentDrag.content.style.webkitTransform = 'translate3d(' + restingPoint + 'px, 0, 0)';
+        _this._currentDrag.content.style[ionic.CSS.TRANSFORM] = 'translate3d(' + restingPoint + 'px, 0, 0)';
       }
-      _this._currentDrag.content.style.webkitTransition = '';
+      _this._currentDrag.content.style[ionic.CSS.TRANSFORM] = '';
 
 
       // Kill the current drag
@@ -4876,7 +4876,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
   ReorderDrag.prototype._moveElement = function(e) {
     var y = (e.gesture.center.pageY - this._currentDrag.elementHeight/2);
-    this.el.style.webkitTransform = 'translate3d(0, '+y+'px, 0)';
+    this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
 
   ReorderDrag.prototype.start = function(e) {
@@ -4884,7 +4884,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
 
     // Grab the starting Y point for the item
-    var offsetY = this.el.offsetTop;//parseFloat(this.el.style.webkitTransform.replace('translate3d(', '').split(',')[1]) || 0;
+    var offsetY = this.el.offsetTop;//parseFloat(this.el.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[1]) || 0;
 
     var startIndex = ionic.DomUtil.getChildIndex(this.el, this.el.nodeName.toLowerCase());
     var elementHeight = this.el.offsetHeight;
@@ -4988,7 +4988,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     // Reposition the element
     this.el.classList.remove(ITEM_REORDERING_CLASS);
-    this.el.style.webkitTransform = '';
+    this.el.style[ionic.CSS.TRANSFORM] = '';
 
     placeholder.parentNode.insertBefore(this.el, placeholder);
     placeholder.parentNode.removeChild(placeholder);
@@ -5485,10 +5485,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
       this.el.classList.add(this.animationClass);
     },
     getTranslateX: function() {
-      return parseFloat(this.el.style.webkitTransform.replace('translate3d(', '').split(',')[0]);
+      return parseFloat(this.el.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]);
     },
     setTranslateX: ionic.animationFrameThrottle(function(x) {
-      this.el.style.webkitTransform = 'translate3d(' + x + 'px, 0, 0)';
+      this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
     })
   });
 
@@ -6346,7 +6346,7 @@ ionic.views.TabBar = ionic.views.View.inherit({
         } else {
           var openPixel = Math.round( (openPercent / 100) * this.track.offsetWidth - (this.handle.offsetWidth) );
           openPixel = (openPixel < 1 ? 0 : openPixel);
-          this.handle.style.webkitTransform = 'translate3d(' + openPixel + 'px,0,0)';
+          this.handle.style[ionic.CSS.TRANSFORM] = 'translate3d(' + openPixel + 'px,0,0)';
         }
       }
     },
@@ -6357,8 +6357,8 @@ ionic.views.TabBar = ionic.views.View.inherit({
 
     val: function(value) {
       if(value === true || value === false) {
-        if(this.handle.style.webkitTransform !== "") {
-          this.handle.style.webkitTransform = "";
+        if(this.handle.style[ionic.CSS.TRANSFORM] !== "") {
+          this.handle.style[ionic.CSS.TRANSFORM] = "";
         }
         this.checkbox.checked = value;
         this.openPercent = (value ? 100 : 0);
