@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-865
+ * Ionic, v0.9.26-alpha-866
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1908,7 +1908,7 @@ angular.module('ionic.ui.radio', [])
       if(!ngModel || !radioButtons) { return; }
 
       var setIt = function() {
-        console.log('SET');
+        
         $element.addClass('active');
         ngModel.$setViewValue($scope.$eval($attr.ngValue));
 
@@ -1916,7 +1916,7 @@ angular.module('ionic.ui.radio', [])
       };
 
       var clickHandler = function(e) {
-        console.log('CLICK');
+        
         setIt();
       };
 
@@ -2701,7 +2701,7 @@ angular.module('ionic.ui.toggle', [])
       //   });
 
       //   ionic.on('drag', function(e) {
-      //     console.log('drag');
+      //     
       //     $scope.toggle.drag(e);
       //   }, handle);
 

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-865
+ * Ionic, v0.9.26-alpha-866
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-865'
+  version: '0.9.26-alpha-866'
 };
 ;
 (function(ionic) {
@@ -2089,7 +2089,7 @@ window.ionic = {
 
     if(ele.disabled) return;
 
-    console.debug('tapElement', ele.tagName, ele.className);
+    
 
     var c = getCoordinates(e);
 
@@ -2115,7 +2115,7 @@ window.ionic = {
     }
 
     if(target.control) {
-      console.debug('tapElement, target.control, stop');
+      
       return stopEvent(e);
     }
   };
@@ -2129,7 +2129,7 @@ window.ionic = {
 
     if( isRecentTap(e) ) {
       // if a tap in the same area just happened, don't continue
-      console.debug('tapPolyfill', 'isRecentTap', ele.tagName);
+      
       return stopEvent(e);
     }
 
@@ -2157,13 +2157,13 @@ window.ionic = {
     if(e.target.control) {
       // this is a label that has an associated input
       // the native layer will send the actual event, so stop this one
-      console.debug('preventGhostClick', 'label');
+      
       return stopEvent(e);
     }
 
     if( isRecentTap(e) ) {
       // a tap has already happened at these coordinates recently, ignore this event
-      console.debug('preventGhostClick', 'isRecentTap', e.target.tagName);
+      
       return stopEvent(e);
     }
 
@@ -2472,7 +2472,7 @@ function androidKeyboardFix() {
     if (rememberedDeviceWidth !== window.innerWidth) {
       rememberedDeviceWidth = window.innerWidth;
       rememberedDeviceHeight = window.innerHeight;
-      console.info('orientation change. deviceWidth =', rememberedDeviceWidth, ', deviceHeight =', rememberedDeviceHeight);
+      
 
     //If the height changes, and it's less than before, we have a keyboard open
     } else if (rememberedDeviceHeight !== window.innerHeight &&
