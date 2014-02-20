@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-869
+ * Ionic, v0.9.26-alpha-870
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3469,10 +3469,10 @@ a.item-content {
  * By default, if an .item is created out of an <a> or <button>
  * then a arrow will be added to the right side of the item.
  */
-a.item, button.item {
+a.item, button.item, .item a[href].item-content, .item[ng-click] a.item-content {
   padding-right: 40px; }
 
-a.item:after, button.item:after {
+a.item:after, button.item:after, .item a[href].item-content:after, .item[ng-click] a.item-content:after {
   /* By default, both <a> and <button> have right side arrow icons */
   display: -webkit-box;
   display: -webkit-flex;
@@ -3502,7 +3502,7 @@ a.item:after, button.item:after {
   line-height: 1;
   speak: none; }
 
-a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after {
+a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after, .item a.item-content:after {
   display: none; }
 
 .item-avatar {
