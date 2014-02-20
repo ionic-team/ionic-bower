@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-870
+ * Ionic, v0.9.26-alpha-872
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3008,6 +3008,8 @@ a.subdued {
   font-size: 14px;
   font-family: "Helvetica Neue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   opacity: 0.7; }
+  .tab-item:hover {
+    cursor: pointer; }
 
 .tabs-icon-top .tab-item, .tabs-icon-bottom .tab-item {
   font-size: 12px;
