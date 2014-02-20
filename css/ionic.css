@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-868
+ * Ionic, v0.9.26-alpha-869
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1953,7 +1953,7 @@ table {
 a {
   -webkit-user-drag: none;
   -webkit-tap-highlight-color: transparent; }
-  a:hover {
+  a[href]:hover {
     cursor: pointer; }
 
 img {
