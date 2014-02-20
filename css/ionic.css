@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-875
+ * Ionic, v0.9.26-alpha-876
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2182,17 +2182,16 @@ infinite-scroll.active .scroll-infinite {
   bottom: 49px; }
 
 .pane {
-  position: absolute;
   z-index: 1;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
 .view {
-  position: absolute;
   z-index: 1; }
 
 .pane, .view {
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;

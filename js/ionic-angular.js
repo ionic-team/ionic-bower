@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-875
+ * Ionic, v0.9.26-alpha-876
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2049,7 +2049,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
     }],
     replace: true,
     transclude: true,
-    template: '<div class="pane" ng-transclude></div>'
+    template: '<div class="view" ng-transclude></div>'
   };
 })
 
