@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-854
+ * Ionic, v0.9.26-alpha-855
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-854'
+  version: '0.9.26-alpha-855'
 };
 ;
 (function(ionic) {
@@ -2834,6 +2834,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
       startX: 0,
       startY: 0,
 
+      /** The amount to dampen mousewheel events */
+      wheelDampen: 6,
+
       /** The minimum size the scrollbars scale to while scrolling */
       minScrollbarSizeX: 5,
       minScrollbarSizeY: 5,
@@ -3201,6 +3204,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
         mousedown = false;
       }, false);
 
+      document.addEventListener("mousewheel", function(e) {
+        self.scrollBy(e.wheelDeltaX/self.options.wheelDampen, -e.wheelDeltaY/self.options.wheelDampen);
+      });
     }
   },
 
