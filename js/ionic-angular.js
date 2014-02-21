@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-884
+ * Ionic, v0.9.26-alpha-885
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2556,7 +2556,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view', 'ngSanitize'])
             cleanupChild();
             childScope = $scope.$new();
             transclude(childScope, function(clone) {
-              clone.addClass('pane');
+              clone.addClass('view');
               clone.removeAttr('title');
               childElement = clone;
               $element.parent().append(childElement);
