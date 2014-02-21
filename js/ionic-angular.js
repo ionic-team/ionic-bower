@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-898
+ * Ionic, v0.9.26-alpha-900
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -217,12 +217,18 @@ angular.module('ionic.ui.service.scrollDelegate', [])
         });
       }
 
-      $element.bind('scroll', function(e) {
+      $element.on('scroll', function(e) {
+        if ( !$scope.onScroll ) {
+          return;
+        }
+        var detail = (e.originalEvent || e).detail || {};
+
         $scope.onScroll && $scope.onScroll({
           event: e,
-          scrollTop: e.detail ? e.detail.scrollTop : e.originalEvent ? e.originalEvent.detail.scrollTop : 0,
-          scrollLeft: e.detail ? e.detail.scrollLeft: e.originalEvent ? e.originalEvent.detail.scrollLeft : 0
+          scrollTop: detail.scrollTop || 0,
+          scrollLeft: detail.scrollLeft || 0
         });
+
       });
 
       $scope.$parent.$on('scroll.resize', scrollViewResize);
