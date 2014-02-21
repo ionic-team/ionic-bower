@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-883
+ * Ionic, v0.9.26-alpha-884
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5826,16 +5826,12 @@ a.button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  -ms-touch-action: none;
-  touch-action: none;
   -webkit-touch-callout: none;
-  touch-callout: none;
-  -ms-content-zooming: none;
-  content-zooming: none;
-  -webkit-user-drag: none;
-  user-drag: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+  -ms-touch-action: none;
+  -ms-content-zooming: none; }
 
 .block {
   display: block;
