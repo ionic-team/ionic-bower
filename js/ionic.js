@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-876
+ * Ionic, v0.9.26-alpha-882
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-876'
+  version: '0.9.26-alpha-882'
 };
 ;
 (function(ionic) {
@@ -1838,6 +1838,7 @@ window.ionic = {
     isReady: false,
     isFullScreen: false,
     platforms: null,
+    grade: null,
 
     ready: function(cb) {
       // run through tasks to complete now that the device is ready
@@ -1851,16 +1852,18 @@ window.ionic = {
     },
 
     detect: function() {
+      var i, bodyClass = document.body.className;
+
       ionic.Platform._checkPlatforms();
 
-      if(this.platforms.length) {
-        // only change the body class if we got platform info
-        var i, bodyClass = document.body.className;
-        for(i = 0; i < this.platforms.length; i++) {
-          bodyClass += ' platform-' + this.platforms[i];
-        }
-        document.body.className = bodyClass;
+      // only change the body class if we got platform info
+      for(i = 0; i < this.platforms.length; i++) {
+        bodyClass += ' platform-' + this.platforms[i];
       }
+
+      bodyClass += ' grade-' + this.grade;
+
+      document.body.className = bodyClass.trim();
     },
 
     device: function() {
@@ -1871,6 +1874,7 @@ window.ionic = {
 
     _checkPlatforms: function(platforms) {
       this.platforms = [];
+      this.grade = 'a';
       var v = this.version().toString().replace('.', '_');
 
       if(this.isCordova()) {
@@ -1888,6 +1892,10 @@ window.ionic = {
         this.platforms.push('android');
         this.platforms.push('android' + v.split('_')[0]);
         this.platforms.push('android' + v);
+
+        if(platformVersion > 0 && platformVersion < 4.4) {
+          this.grade = (platformVersion < 4 ? 'c' : 'b');
+        }
       }
     },
 
