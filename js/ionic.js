@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-882
+ * Ionic, v0.9.26-alpha-883
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-882'
+  version: '0.9.26-alpha-883'
 };
 ;
 (function(ionic) {
@@ -425,23 +425,11 @@ window.ionic = {
 
   // default settings
   ionic.Gestures.defaults = {
-    // add styles and attributes to the element to prevent the browser from doing
-    // its native behavior. this doesnt prevent the scrolling, but cancels
-    // the contextmenu, tap highlighting etc
+    // add css to the element to prevent the browser from doing
+    // its native behavior. this doesnt prevent the scrolling, 
+    // but cancels the contextmenu, tap highlighting etc
     // set to false to disable this
-    stop_browser_behavior: {
-      // this also triggers onselectstart=false for IE
-      userSelect: 'none',
-      // this makes the element blocking in IE10 >, you could experiment with the value
-      // see for more options this issue; https://github.com/EightMedia/hammer.js/issues/241
-      touchAction: 'none',
-      touchCallout: 'none',
-      contentZooming: 'none',
-      userDrag: 'none',
-      tapHighlightColor: 'rgba(0,0,0,0)'
-    }
-
-                           // more settings are defined per gesture at gestures.js
+    stop_browser_behavior: 'disable-user-behavior'
   };
 
   // detect touchevents
@@ -1107,37 +1095,16 @@ window.ionic = {
 
 
     /**
-     * stop browser default behavior with css props
+     * stop browser default behavior with css class
      * @param   {HtmlElement}   element
-     * @param   {Object}        css_props
+     * @param   {Object}        css_class
      */
-    stopDefaultBrowserBehavior: function stopDefaultBrowserBehavior(element, css_props) {
-      var prop,
-      vendors = ['webkit','khtml','moz','Moz','ms','o',''];
-
-      if(!css_props || !element.style) {
-        return;
-      }
-
-      // with css properties for modern browsers
-      for(var i = 0; i < vendors.length; i++) {
-        for(var p in css_props) {
-          if(css_props.hasOwnProperty(p)) {
-            prop = p;
-
-            // vender prefix at the property
-            if(vendors[i]) {
-              prop = vendors[i] + prop.substring(0, 1).toUpperCase() + prop.substring(1);
-            }
-
-            // set the style
-            element.style[prop] = css_props[p];
-          }
-        }
-      }
-
-      // also the disable onselectstart
-      if(css_props.userSelect == 'none') {
+    stopDefaultBrowserBehavior: function stopDefaultBrowserBehavior(element, css_class) {
+      // changed from making many style changes to just adding a preset classname
+      // less DOM manipulations, less code, and easier to control in the CSS side of things
+      // hammer.js doesn't come with CSS, but ionic does, which is why we prefer this method
+      if(element && element.classList) {
+        element.classList.add(css_class);
         element.onselectstart = function() {
           return false;
         };
