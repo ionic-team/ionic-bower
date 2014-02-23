@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-900
+ * Ionic, v0.9.26-alpha-901
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2349,7 +2349,7 @@ a.subdued {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 11;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0); }
@@ -2437,7 +2437,7 @@ a.subdued {
   margin-left: 15px;
   margin-right: 15px;
   width: auto;
-  z-index: 10;
+  z-index: 11;
   overflow: hidden; }
   .action-sheet .button {
     display: block;
@@ -2473,6 +2473,13 @@ a.subdued {
       color: inherit; }
   .action-sheet-group .button:first-child:last-child {
     border-width: 0; }
+
+.action-sheet-open {
+  pointer-events: none; }
+  .action-sheet-open.modal-open .modal {
+    pointer-events: none; }
+  .action-sheet-open .action-sheet {
+    pointer-events: auto; }
 
 /**
  * Bar (Headers and Footers)
@@ -3143,6 +3150,11 @@ a.subdued {
   opacity: 0; }
   .modal.active {
     height: 100%; }
+
+.modal-open {
+  pointer-events: none; }
+  .modal-open .modal {
+    pointer-events: auto; }
 
 /**
  * Popups

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-900
+ * Ionic, v0.9.26-alpha-901
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -366,7 +366,6 @@ angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ioni
 
       angular.extend(scope, opts);
 
-
       // Compile the template
       var element = $compile('<ion-action-sheet buttons="buttons"></ion-action-sheet>')(scope);
 
@@ -383,6 +382,8 @@ angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ioni
         $animate.removeClass(element, 'active', function() {
           scope.$destroy();
         });
+
+        $document[0].body.classList.remove('action-sheet-open');
       };
 
       var onHardwareBackButton = function() {
@@ -417,6 +418,8 @@ angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ioni
       };
 
       $document[0].body.appendChild(element[0]);
+
+      $document[0].body.classList.add('action-sheet-open');
 
       var sheet = new ionic.views.ActionSheet({el: element[0] });
       scope.sheet = sheet;
@@ -510,8 +513,7 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
       var self = this;
       var element = angular.element(this.el);
 
-      document.body.classList.add('disable-pointer-events');
-      this.el.classList.add('enable-pointer-events');
+      document.body.classList.add('modal-open');
 
       self._isShown = true;
 
@@ -574,8 +576,7 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
   });
 
   function onHideModal(element) {
-    document.body.classList.remove('disable-pointer-events');
-    element.classList.remove('enable-pointer-events');
+    document.body.classList.remove('modal-open');
   }
 
   var createModal = function(templateString, options) {
