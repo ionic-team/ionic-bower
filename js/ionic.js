@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-902
+ * Ionic, v0.9.26-alpha-903
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-902'
+  version: '0.9.26-alpha-903'
 };
 ;
 (function(ionic) {
@@ -5426,10 +5426,14 @@ ionic.views.Scroll = ionic.views.View.inherit({
       this.isEnabled = isEnabled;
     },
     bringUp: function() {
-      this.el.style.zIndex = 0;
+      if(this.el.style.zIndex !== '0') {
+        this.el.style.zIndex = '0';
+      }
     },
     pushDown: function() {
-      this.el.style.zIndex = -1;
+      if(this.el.style.zIndex !== '-1') {
+        this.el.style.zIndex = '-1';
+      }
     }
   });
 
