@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-901
+ * Ionic, v0.9.26-alpha-902
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3540,10 +3540,10 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
     width: 100%;
     border-radius: 4px; }
 
-.item-thumbnail-left {
+.item-thumbnail-left, .item-thumbnail-left .item-content {
   padding-left: 105px;
   min-height: 100px; }
-  .item-thumbnail-left > img:first-child, .item-thumbnail-left > .item-image {
+  .item-thumbnail-left > img:first-child, .item-thumbnail-left > .item-image, .item-thumbnail-left .item-content > img:first-child, .item-thumbnail-left .item-content > .item-image {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -3551,16 +3551,22 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
     max-height: 80px;
     width: 100%; }
 
-.item-thumbnail-right {
+.item-thumbnail-left.item-complex {
+  padding-left: 0; }
+
+.item-thumbnail-right, .item-thumbnail-right .item-content {
   padding-right: 105px;
   min-height: 100px; }
-  .item-thumbnail-right > img:first-child, .item-thumbnail-right > .item-image {
+  .item-thumbnail-right > img:first-child, .item-thumbnail-right > .item-image, .item-thumbnail-right .item-content > img:first-child, .item-thumbnail-right .item-content > .item-image {
     position: absolute;
     top: 10px;
     right: 10px;
     max-width: 80px;
     max-height: 80px;
     width: 100%; }
+
+.item-thumbnail-left.item-complex {
+  padding-right: 0; }
 
 .item-image {
   padding: 0;
