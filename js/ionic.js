@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-924
+ * Ionic, v0.9.26-alpha-929
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-924'
+  version: '0.9.26-alpha-929'
 };
 ;
 (function(ionic) {
@@ -1949,7 +1949,7 @@ window.ionic = {
       // exact match
       var pName = this.platform();
       if(pName) {
-        return pName.toLowerCase() === type;
+        return pName === type.toLowerCase();
       }
 
       // A quick hack for to check userAgent
