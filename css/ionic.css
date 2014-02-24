@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-923
+ * Ionic, v0.9.26-alpha-924
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1985,9 +1985,12 @@ body, .ionic-body {
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   line-height: 20px;
-  -webkit-backface-visibility: hidden;
   text-rendering: optimizeLegibility;
+  -webkit-backface-visibility: hidden;
   -webkit-user-drag: none; }
+
+body.grade-b, body.grade-c {
+  text-rendering: auto; }
 
 .content {
   position: relative; }
@@ -3528,6 +3531,12 @@ a.item:after, button.item:after, .item a[href].item-content:after, .item[ng-clic
   font-family: 'Ionicons';
   line-height: 1;
   speak: none; }
+
+.grade-b a.item:after, .grade-b button.item:after, .grade-b .item a[href].item-content:after, .grade-b .item[ng-click] a.item-content:after, .grade-c a.item:after, .grade-c button.item:after, .grade-c .item a[href].item-content:after, .grade-c .item[ng-click] a.item-content:after {
+  -webkit-font-smoothing: none;
+  font-smoothing: none;
+  content: '>';
+  font-family: 'monospace'; }
 
 a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after, .item a.item-content:after {
   display: none; }

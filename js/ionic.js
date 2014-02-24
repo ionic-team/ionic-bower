@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-923
+ * Ionic, v0.9.26-alpha-924
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-923'
+  version: '0.9.26-alpha-924'
 };
 ;
 (function(ionic) {
@@ -1806,6 +1806,7 @@ window.ionic = {
     isFullScreen: false,
     platforms: null,
     grade: null,
+    ua: navigator.userAgent,
 
     ready: function(cb) {
       // run through tasks to complete now that the device is ready
@@ -1877,7 +1878,7 @@ window.ionic = {
       return !(!window.cordova && !window.PhoneGap && !window.phonegap);
     },
     isIPad: function() {
-      return navigator.userAgent.toLowerCase().indexOf('ipad') >= 0;
+      return this.ua.toLowerCase().indexOf('ipad') >= 0;
     },
     isIOS: function() {
       return this.is('ios');
@@ -1888,26 +1889,51 @@ window.ionic = {
 
     platform: function() {
       // singleton to get the platform name
-      if(!platformName) this.setPlatform(this.device().platform);
+      if(platformName === null) this.setPlatform(this.device().platform);
       return platformName;
     },
 
     setPlatform: function(n) {
-      platformName = n;
+      if(typeof n != 'undefined' && n !== null && n.length) {
+        platformName = n.toLowerCase();
+      } else if(this.ua.indexOf('Android') > 0) {
+        platformName = 'android';
+      } else if(this.ua.indexOf('iPhone') > -1 || this.ua.indexOf('iPad') > -1 || this.ua.indexOf('iPod') > -1) {
+        platformName = 'ios';
+      } else {
+        platformName = 'unknown';
+      }
     },
 
     version: function() {
       // singleton to get the platform version
-      if(!platformVersion) this.setVersion(this.device().version);
+      if(platformVersion === null) this.setVersion(this.device().version);
       return platformVersion;
     },
 
     setVersion: function(v) {
-      if(v) {
+      if(typeof v != 'undefined' && v !== null) {
         v = v.split('.');
-        platformVersion = parseFloat(v[0] + '.' + (v.length > 1 ? v[1] : 0));
-      } else {
-        platformVersion = 0;
+        v = parseFloat(v[0] + '.' + (v.length > 1 ? v[1] : 0));
+        if(!isNaN(v)) {
+          platformVersion = v;
+          return;
+        }
+      }
+
+      platformVersion = 0;
+
+      // fallback to user-agent checking
+      var pName = this.platform();
+      var versionMatch = {
+        'android': /Android (\d+).(\d+)?/,
+        'ios': /OS (\d+)_(\d+)?/
+      };
+      if(versionMatch[pName]) {
+        v = this.ua.match( versionMatch[pName] );
+        if(v.length > 2) {
+          platformVersion = parseFloat( v[1] + '.' + v[2] );
+        }
       }
     },
 
@@ -1927,7 +1953,7 @@ window.ionic = {
       }
 
       // A quick hack for to check userAgent
-      return navigator.userAgent.toLowerCase().indexOf(type) >= 0;
+      return this.ua.toLowerCase().indexOf(type) >= 0;
     },
 
     exitApp: function() {
@@ -1974,8 +2000,8 @@ window.ionic = {
 
   };
 
-  var platformName, // just the name, like iOS or Android
-  platformVersion, // a float of the major and minor, like 7.1
+  var platformName = null, // just the name, like iOS or Android
+  platformVersion = null, // a float of the major and minor, like 7.1
   readyCallbacks = [];
 
   // setup listeners to know when the device is ready to go
