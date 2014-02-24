@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-912
+ * Ionic, v0.9.26-alpha-916
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1963,7 +1963,6 @@ body, .ionic-body {
   -webkit-touch-callout: none;
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
-  -webkit-backface-visibility: hidden;
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
@@ -1986,6 +1985,7 @@ body, .ionic-body {
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   line-height: 20px;
+  -webkit-backface-visibility: hidden;
   text-rendering: optimizeLegibility;
   -webkit-user-drag: none; }
 
@@ -1993,23 +1993,23 @@ body, .ionic-body {
   position: relative; }
 
 .scroll-content {
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  position: absolute;
   overflow: hidden;
-  -webkit-backface-visibility: hidden;
   margin-top: -1px;
   width: auto;
-  height: auto; }
+  height: auto;
+  -webkit-backface-visibility: hidden; }
 
 .scroll-view {
-  height: 100%;
-  overflow: hidden;
   position: relative;
-  -webkit-backface-visibility: hidden;
-  margin-top: -1px; }
+  overflow: hidden;
+  margin-top: -1px;
+  height: 100%;
+  -webkit-backface-visibility: hidden; }
 
 /**
  * Scroll is the scroll view component available for complex and custom
@@ -2040,25 +2040,25 @@ body, .ionic-body {
   visibility: hidden; }
 
 .scroll-bar-h {
-  height: 3px;
-  left: 2px;
   right: 2px;
-  bottom: 3px; }
+  bottom: 3px;
+  left: 2px;
+  height: 3px; }
   .scroll-bar-h .scroll-bar-indicator {
     height: 100%; }
 
 .scroll-bar-v {
-  width: 3px;
-  bottom: 2px;
   top: 2px;
-  right: 3px; }
+  right: 3px;
+  bottom: 2px;
+  width: 3px; }
   .scroll-bar-v .scroll-bar-indicator {
     width: 100%; }
 
 .scroll-bar-indicator {
   position: absolute;
-  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
   opacity: 1; }
   .scroll-bar-indicator.scroll-bar-fade-out {
     -webkit-transition: opacity 0.3s linear;
@@ -2067,39 +2067,40 @@ body, .ionic-body {
     opacity: 0; }
 
 .grade-b .scroll-bar-indicator, .grade-c .scroll-bar-indicator {
+  border-radius: 0;
   background: #aaa; }
 
 .scroll-refresher {
-  overflow: hidden;
-  top: -60px;
-  height: 60px;
-  left: 0;
-  right: 0;
   position: absolute;
-  margin: auto; }
+  top: -60px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  margin: auto;
+  height: 60px; }
   .scroll-refresher .icon-refreshing {
-    display: none;
     -webkit-animation-duration: 1.5s;
     -moz-animation-duration: 1.5s;
-    animation-duration: 1.5s; }
+    animation-duration: 1.5s;
+    display: none; }
 
 .scroll-refresher-content {
   position: absolute;
-  left: 0;
   bottom: 15px;
+  left: 0;
   width: 100%;
+  color: #666666;
   text-align: center;
-  font-size: 30px;
-  color: #666666; }
+  font-size: 30px; }
 
 .ionic-refresher-content {
   position: absolute;
-  left: 0;
   bottom: 15px;
+  left: 0;
   width: 100%;
+  color: #666666;
   text-align: center;
-  font-size: 30px;
-  color: #666666; }
+  font-size: 30px; }
   .ionic-refresher-content .icon-pulling {
     -webkit-animation-duration: 200ms;
     -moz-animation-duration: 200ms;
@@ -2139,19 +2140,19 @@ body, .ionic-body {
   animation-name: refresh-spin; }
 
 infinite-scroll .scroll-infinite {
+  position: relative;
   overflow: hidden;
   margin-top: -70px;
-  height: 60px;
-  position: relative; }
+  height: 60px; }
 
 .scroll-infinite-content {
   position: absolute;
-  left: 0;
   bottom: 15px;
+  left: 0;
   width: 100%;
+  color: #666666;
   text-align: center;
-  font-size: 30px;
-  color: #666666; }
+  font-size: 30px; }
 
 infinite-scroll.active .scroll-infinite {
   margin-top: -30px; }
@@ -2185,10 +2186,10 @@ infinite-scroll.active .scroll-infinite {
   bottom: 49px; }
 
 .pane {
-  z-index: 1;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
+  transform: translate3d(0, 0, 0);
+  z-index: 1; }
 
 .view {
   z-index: 1; }
