@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-906
+ * Ionic, v0.9.26-alpha-907
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-906'
+  version: '0.9.26-alpha-907'
 };
 ;
 (function(ionic) {
@@ -1842,7 +1842,13 @@ window.ionic = {
     _checkPlatforms: function(platforms) {
       this.platforms = [];
       this.grade = 'a';
-      var v = this.version().toString().replace('.', '_');
+
+      var v = this.version().toString();
+      if(v.indexOf('.') > 0) {
+        v = v.replace('.', '_');
+      } else {
+        v += '_0';
+      }
 
       if(this.isCordova()) {
         this.platforms.push('cordova');
@@ -1907,12 +1913,21 @@ window.ionic = {
 
     // Check if the platform is the one detected by cordova
     is: function(type) {
+      type = type.toLowerCase();
+      // check if it has an array of platforms
+      if(this.platforms) {
+        for(var x = 0; x < this.platforms.length; x++) {
+          if(this.platforms[x] === type) return true;
+        }
+      }
+      // exact match
       var pName = this.platform();
       if(pName) {
-        return pName.toLowerCase() === type.toLowerCase();
+        return pName.toLowerCase() === type;
       }
-      // A quick hack for 
-      return navigator.userAgent.toLowerCase().indexOf(type.toLowerCase()) >= 0;
+
+      // A quick hack for to check userAgent
+      return navigator.userAgent.toLowerCase().indexOf(type) >= 0;
     },
 
     exitApp: function() {
