@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "rabbit",
-  "version": "0.9.26-alpha-953",
+  "version": "0.9.26-alpha-954",
   "dependencies": {
     "angular": "1.2.12",
     "angular-animate": "1.2.12",
