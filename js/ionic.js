@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-934
+ * Ionic, v0.9.26-alpha-935
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -17,7 +17,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.26-alpha-934'
+  version: '0.9.26-alpha-935'
 };
 ;
 (function(ionic) {
@@ -1844,31 +1844,27 @@ window.ionic = {
       this.platforms = [];
       this.grade = 'a';
 
-      var v = this.version().toString();
-      if(v.indexOf('.') > 0) {
-        v = v.replace('.', '_');
-      } else {
-        v += '_0';
-      }
+      if(this.isCordova()) this.platforms.push('cordova');
+      if(this.isIPad()) this.platforms.push('ipad');
 
-      if(this.isCordova()) {
-        this.platforms.push('cordova');
-      }
-      if(this.isIOS()) {
-        this.platforms.push('ios');
-        this.platforms.push('ios' + v.split('_')[0]);
-        this.platforms.push('ios' + v);
-      }
-      if(this.isIPad()) {
-        this.platforms.push('ipad');
-      }
-      if(this.isAndroid()) {
-        this.platforms.push('android');
-        this.platforms.push('android' + v.split('_')[0]);
-        this.platforms.push('android' + v);
+      var platform = this.platform();
+      if(platform) {
+        this.platforms.push(platform);
 
-        if(platformVersion > 0 && platformVersion < 4.4) {
-          this.grade = (platformVersion < 4 ? 'c' : 'b');
+        var version = this.version();
+        if(version) {
+          var v = version.toString();
+          if(v.indexOf('.') > 0) {
+            v = v.replace('.', '_');
+          } else {
+            v += '_0';
+          }
+          this.platforms.push(platform + v.split('_')[0]);
+          this.platforms.push(platform + v);
+
+          if(this.isAndroid() && version < 4.4) {
+            this.grade = (version < 4 ? 'c' : 'b');
+          } 
         }
       }
     },
