@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-955
+ * Ionic, v0.9.26-alpha-956
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2652,6 +2652,8 @@ a.subdued {
       .bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before {
         font-size: 32px;
         line-height: 32px; }
+    .bar .button.back-button:active, .bar .button.back-button.active {
+      opacity: 1; }
   .bar .button-bar > .button, .bar .buttons > .button {
     min-height: 31px;
     line-height: 32px; }
@@ -5864,11 +5866,21 @@ a.button {
  * Utility Classes
  * --------------------------------------------------
  */
-.hidden, .hide {
+.hide {
+  display: none; }
+
+.opacity-hide {
+  opacity: 0; }
+
+.grade-b .opacity-hide, .grade-c .opacity-hide {
+  opacity: 1;
   display: none; }
 
 .show {
   display: block; }
+
+.opacity-show {
+  opacity: 1; }
 
 .invisible {
   visibility: hidden; }
