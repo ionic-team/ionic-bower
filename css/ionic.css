@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-933
+ * Ionic, v0.9.26-alpha-934
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2004,15 +2004,13 @@ body.grade-b, body.grade-c {
   overflow: hidden;
   margin-top: -1px;
   width: auto;
-  height: auto;
-  -webkit-backface-visibility: hidden; }
+  height: auto; }
 
 .scroll-view {
   position: relative;
   overflow: hidden;
   margin-top: -1px;
-  height: 100%;
-  -webkit-backface-visibility: hidden; }
+  height: 100%; }
 
 /**
  * Scroll is the scroll view component available for complex and custom
@@ -2072,6 +2070,10 @@ body.grade-b, body.grade-c {
 .grade-b .scroll-bar-indicator, .grade-c .scroll-bar-indicator {
   border-radius: 0;
   background: #aaa; }
+  .grade-b .scroll-bar-indicator.scroll-bar-fade-out, .grade-c .scroll-bar-indicator.scroll-bar-fade-out {
+    -webkit-transition: none;
+    -moz-transition: none;
+    transition: none; }
 
 .scroll-refresher {
   position: absolute;
@@ -3123,6 +3125,9 @@ a.subdued {
 .grade-b .menu-content, .grade-c .menu-content {
   right: -1px;
   left: -1px;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
   border-right: 1px solid #ccc;
   border-left: 1px solid #ccc;
   box-shadow: none; }
@@ -6005,25 +6010,25 @@ a.button {
  * --------------------------------------------------
  * Platform specific tweaks when in Cordova.
  */
-.platform-ios7:not(.fullscreen) .bar-header {
+.platform-ios7.platform-cordova:not(.fullscreen) .bar-header {
   height: 64px; }
-  .platform-ios7:not(.fullscreen) .bar-header.item-input-inset .item-input-wrapper {
+  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header.item-input-inset .item-input-wrapper {
     margin-top: 19px !important; }
-  .platform-ios7:not(.fullscreen) .bar-header > * {
+  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header > * {
     margin-top: 20px; }
-.platform-ios7:not(.fullscreen) .has-header, .platform-ios7:not(.fullscreen) .bar-subheader {
+.platform-ios7.platform-cordova:not(.fullscreen) .has-header, .platform-ios7.platform-cordova:not(.fullscreen) .bar-subheader {
   top: 64px; }
-.platform-ios7:not(.fullscreen) .has-subheader {
+.platform-ios7.platform-cordova:not(.fullscreen) .has-subheader {
   top: 108px; }
 
 .platform-ios7.status-bar-hide {
   margin-bottom: 20px; }
 
-.platform-android .bar-header {
+.platform-android.platform-cordova .bar-header {
   height: 48px; }
-.platform-android .has-header, .platform-android .bar-subheader {
+.platform-android.platform-cordova .has-header, .platform-android.platform-cordova .bar-subheader {
   top: 48px; }
-.platform-android .has-subheader {
+.platform-android.platform-cordova .has-subheader {
   top: 96px; }
-.platform-android .title {
+.platform-android.platform-cordova .title {
   line-height: 48px; }
