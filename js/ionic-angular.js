@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-950
+ * Ionic, v0.9.26-alpha-953
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2603,8 +2603,6 @@ function($scope, $ionicViewService, $rootScope, $element) {
           attrStr('icon', attr.icon) +
           attrStr('icon-on', attr.iconOn) +
           attrStr('icon-off', attr.iconOff) +
-          attrStr('ui-sref', attr.uiSref) +
-          attrStr('href', attr.href) +
           attrStr('badge', attr.badge) +
           attrStr('badge-style', attr.badgeStyle) +
           '></ion-tab-nav>'
@@ -2668,7 +2666,7 @@ function($scope, $ionicViewService, $rootScope, $element) {
     require: ['^ionTabs', '^ionTab'],
     template:
     '<a ng-class="{active: isTabActive(), \'has-badge\':badge}" ' +
-      'ng-click="selectTab()" class="tab-item">' +
+      'ng-click="selectTab($event)" class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{iconOn}}" ng-if="iconOn && isTabActive()"></i>' +
       '<i class="icon {{iconOff}}" ng-if="iconOff && !isTabActive()"></i>' +
@@ -2679,8 +2677,6 @@ function($scope, $ionicViewService, $rootScope, $element) {
       icon: '@',
       iconOn: '@',
       iconOff: '@',
-      uiSref: '@',
-      href: '@',
       badge: '=',
       badgeStyle: '@'
     },
@@ -2696,7 +2692,8 @@ function($scope, $ionicViewService, $rootScope, $element) {
         $scope.isTabActive = function() {
           return tabsCtrl.selectedTab === tabCtrl.$scope;
         };
-        $scope.selectTab = function() {
+        $scope.selectTab = function(e) {
+          e.preventDefault();
           tabsCtrl.select(tabCtrl.$scope, true);
         };
       };
