@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-949
+ * Ionic, v0.9.26-alpha-950
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2667,13 +2667,13 @@ function($scope, $ionicViewService, $rootScope, $element) {
     replace: true,
     require: ['^ionTabs', '^ionTab'],
     template:
-    '<div ng-class="{active: isTabActive(), \'has-badge\':badge}" ' +
+    '<a ng-class="{active: isTabActive(), \'has-badge\':badge}" ' +
       'ng-click="selectTab()" class="tab-item">' +
-      '<span class="badge {{badgeStyle}}" ng-show="badge">{{badge}}</span>' +
-      '<i class="icon {{iconOn}}" ng-show="isTabActive()"></i>' +
-      '<i class="icon {{iconOff}}" ng-hide="isTabActive()"></i>' +
+      '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
+      '<i class="icon {{iconOn}}" ng-if="iconOn && isTabActive()"></i>' +
+      '<i class="icon {{iconOff}}" ng-if="iconOff && !isTabActive()"></i>' +
       '<span class="tab-title" ng-bind-html="title"></span>' +
-    '</div>',
+    '</a>',
     scope: {
       title: '@',
       icon: '@',
