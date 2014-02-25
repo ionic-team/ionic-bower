@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-946
+ * Ionic, v0.9.26-alpha-947
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2598,7 +2598,7 @@ function($scope, $ionicViewService, $rootScope, $element) {
         });
 
         tabNavElement = angular.element(
-          '<ion-tab-nav ' +
+          '<ion-tab-nav' +
           attrStr('title', attr.title) +
           attrStr('icon', attr.icon) +
           attrStr('icon-on', attr.iconOn) +
