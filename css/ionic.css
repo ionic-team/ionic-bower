@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-938
+ * Ionic, v0.9.26-alpha-939
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4097,6 +4097,10 @@ input, button, select, textarea {
 
 .placeholder-icon {
   color: #aaa; }
+  .placeholder-icon:first-child {
+    padding-right: 6px; }
+  .placeholder-icon:last-child {
+    padding-left: 6px; }
 
 .item-stacked-label {
   display: block;
