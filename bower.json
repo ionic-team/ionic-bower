@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "codename": "rabbit-tmp",
+  "codename": "rabbit",
   "version": "0.9.26",
   "dependencies": {
     "angular": "1.2.12",
