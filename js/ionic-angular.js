@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.26-alpha-958
+ * Ionic, v0.9.26-alpha-961
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1203,17 +1203,26 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
       var doAnimation;
 
       // climb up the DOM and see which animation classname to use, if any
-      var animationClass = null;
-      var el = navViewElement[0];
-      while(!animationClass && el) {
-        animationClass = el.getAttribute('animation');
-        el = el.parentElement;
+      var animationClass = angular.isDefined(navViewScope.$nextAnimation) ?
+        navViewScope.$nextAnimation :
+        getParentAnimationClass(navViewElement[0]);
+
+      navViewScope.$nextAnimation = undefined;
+
+      function getParentAnimationClass(el) {
+        var className = '';
+        while(!className && el) {
+          className = el.getAttribute('animation');
+          el = el.parentElement;
+        }
+        return className;
       }
-      el = null;
 
       function setAnimationClass() {
         // add the animation CSS class we're gonna use to transition between views
-        navViewElement[0].classList.add(animationClass);
+        if (animationClass) {
+          navViewElement[0].classList.add(animationClass);
+        }
 
         if(registerData.navDirection === 'back') {
           // animate like we're moving backward
@@ -1240,6 +1249,9 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
 
               $animate.enter(element, navViewElement, null, function() {
                 document.body.classList.remove('disable-pointer-events');
+                if (animationClass) {
+                  navViewElement[0].classList.remove(animationClass);
+                }
               });
               return;
             }
@@ -1327,6 +1339,22 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
   };
 
 }]);
+;
+angular.module('ionic.ui.navAnimation', [])
+.directive('ionNavAnimation', function() {
+  return {
+    restrict: 'A',
+    require: '^?ionNavView',
+    link: function($scope, $element, $attrs, navViewCtrl) {
+      if (!navViewCtrl) {
+        return;
+      }
+      ionic.on('tap', function() {
+        navViewCtrl.setNextAnimation($attrs.ionNavAnimation);
+      }, $element[0]);
+    }
+  };
+});
 ;
 (function() {
 'use strict';
@@ -3128,7 +3156,6 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
   };
 }])
 
-
 .directive('ionNavView', ['$ionicViewService', '$state', '$compile', '$controller', '$animate',
               function( $ionicViewService,   $state,   $compile,   $controller,   $animate) {
   // IONIC's fork of Angular UI Router, v0.2.7
@@ -3140,9 +3167,13 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     terminal: true,
     priority: 2000,
     transclude: true,
-    controller: function() {}, //noop controller so this can be required
+    controller: ['$scope', function($scope) {
+      this.setNextAnimation = function(anim) {
+        $scope.$nextAnimation = anim;
+      };
+    }],
     compile: function (element, attr, transclude) {
-      return function(scope, element, attr) {
+      return function(scope, element, attr, navViewCtrl) {
         var viewScope, viewLocals,
             name = attr[directive.name] || attr.name || '',
             onloadExp = attr.onload || '',
@@ -3183,7 +3214,6 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
           var locals = $state.$current && $state.$current.locals[name];
           if (locals === viewLocals) return; // nothing to do
           var renderer = $ionicViewService.getRenderer(element, attr, scope);
-
 
           // Destroy previous view scope
           if (viewScope) {
