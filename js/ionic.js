@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-989
+ * Ionic, v0.10.0-alpha-992
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.10.0-alpha-989'
+  version: '0.10.0-alpha-992'
 };
 ;
 (function(ionic) {
@@ -4663,7 +4663,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       var childNodes = this.el.childNodes;
       var leftWidth = 0;
       var rightWidth = 0;
-      var isCountingRightWidth = true;
+      var isCountingRightWidth = false;
 
       // Compute how wide the left children are
       // Skip all titles (there may still be two titles, one leaving the dom)
@@ -4671,7 +4671,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       for(i = 0; i < childNodes.length; i++) {
         c = childNodes[i];
         if (c.tagName && c.tagName.toLowerCase() == 'h1') {
-          isCountingRightWidth = false;
+          isCountingRightWidth = true;
           continue;
         }
 
@@ -4705,12 +4705,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
           }
         }
       } else if(this.alignTitle == 'left') {
-        titleEl.classList.add('titleEl-left');
+        titleEl.classList.add('title-left');
         if(leftWidth > 0) {
           titleEl.style.left = (leftWidth + 15) + 'px';
         }
       } else if(this.alignTitle == 'right') {
-        titleEl.classList.add('titleEl-right');
+        titleEl.classList.add('title-right');
         if(rightWidth > 0) {
           titleEl.style.right = (rightWidth + 15) + 'px';
         }
