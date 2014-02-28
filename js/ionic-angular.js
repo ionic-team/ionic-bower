@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-994
+ * Ionic, v0.10.0-alpha-995
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1451,12 +1451,12 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 
       $scope.headerBarView = hb;
 
-      $scope.$watch('leftButtons', function(val) {
+      $scope.$watchCollection('leftButtons', function(val) {
         // Resize the title since the buttons have changed
         hb.align();
       });
 
-      $scope.$watch('rightButtons', function(val) {
+      $scope.$watchCollection('rightButtons', function(val) {
         // Resize the title since the buttons have changed
         hb.align();
       });
