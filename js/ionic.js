@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-999
+ * Ionic, v0.10.0-alpha-1000
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.10.0-alpha-999'
+  version: '0.10.0-alpha-1000'
 };
 ;
 (function(ionic) {
@@ -1865,7 +1865,7 @@ window.ionic = {
 
           if(this.isAndroid() && version < 4.4) {
             this.grade = (version < 4 ? 'c' : 'b');
-          } 
+          }
         }
       }
     },
@@ -1961,10 +1961,10 @@ window.ionic = {
 
     showStatusBar: function(val) {
       // Only useful when run within cordova
-      this.showStatusBar = val;
+      this._showStatusBar = val;
       this.ready(function(){
         // run this only when or if the platform (cordova) is ready
-        if(ionic.Platform.showStatusBar) {
+        if(ionic.Platform._showStatusBar) {
           // they do not want it to be full screen
           StatusBar.show();
           document.body.classList.remove('status-bar-hide');
@@ -2004,7 +2004,7 @@ window.ionic = {
   // setup listeners to know when the device is ready to go
   function onWindowLoad() {
     if(ionic.Platform.isCordova()) {
-      // the window and scripts are fully loaded, and a cordova/phonegap 
+      // the window and scripts are fully loaded, and a cordova/phonegap
       // object exists then let's listen for the deviceready
       document.addEventListener("deviceready", onPlatformReady, false);
     } else {
