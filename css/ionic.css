@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-996
+ * Ionic, v0.10.0-alpha-997
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3061,9 +3061,10 @@ a.subdued {
 
 .tab-item .badge {
   position: absolute;
-  padding: 2px 6px;
-  top: 2%;
-  right: 10%;
+  padding: 1px 6px;
+  top: 4%;
+  right: 33%;
+  right: calc(50% - 26px);
   font-size: 12px;
   height: auto;
   line-height: 16px; }
