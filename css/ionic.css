@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1030
+ * Ionic, v0.10.0-alpha-1031
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1746,7 +1746,7 @@ body {
 /**
  * Remove default outlines.
  */
-:focus, a:focus, button:focus, a:active, a:hover {
+a, button, :focus, a:focus, button:focus, a:active, a:hover {
   outline: 0; }
 
 /* *
