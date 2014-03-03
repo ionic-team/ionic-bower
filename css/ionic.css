@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1031
+ * Ionic, v0.10.0-alpha-1032
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1750,10 +1750,14 @@ a, button, :focus, a:focus, button:focus, a:active, a:hover {
   outline: 0; }
 
 /* *
- * Remove tap highlight color on Safari
+ * Remove tap highlight color
  */
 a {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent; }
+  a[href]:hover {
+    cursor: pointer; }
 
 /* ==========================================================================
    Typography
@@ -1931,6 +1935,9 @@ textarea {
   vertical-align: top;
   /* 2 */ }
 
+img {
+  -webkit-user-drag: none; }
+
 /* ==========================================================================
    Tables
    ========================================================================== */
@@ -1949,15 +1956,6 @@ table {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
-
-a {
-  -webkit-user-drag: none;
-  -webkit-tap-highlight-color: transparent; }
-  a[href]:hover {
-    cursor: pointer; }
-
-img {
-  -webkit-user-drag: none; }
 
 body, .ionic-body {
   -webkit-touch-callout: none;

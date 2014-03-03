@@ -1,7 +1,7 @@
 {
   "name": "ionic",
   "codename": "salamander",
-  "version": "0.10.0-alpha-1031",
+  "version": "0.10.0-alpha-1032",
   "dependencies": {
     "angular": "1.2.12",
     "angular-animate": "1.2.12",
