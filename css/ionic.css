@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1029
+ * Ionic, v0.10.0-alpha-1030
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2025,9 +2025,6 @@ body.grade-b, body.grade-c {
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  transform: translateZ(0);
   -webkit-transform-origin: left top;
   -moz-transform-origin: left top;
   transform-origin: left top;
