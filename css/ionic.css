@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1003
+ * Ionic, v0.10.0-alpha-1019
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3260,6 +3260,8 @@ a.subdued {
     position: absolute;
     top: 15px;
     right: 35px; }
+  .item.item-divider .badge {
+    top: 7.5px; }
   .item .badge + .badge {
     margin-right: 5px; }
   .item.item-light {
