@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1019
+ * Ionic, v0.10.0-alpha-1028
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4274,7 +4274,11 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 /* the overall container of the toggle */
 .toggle {
   position: relative;
-  display: inline-block; }
+  display: inline-block;
+  margin: -5px;
+  padding: 5px; }
+  .toggle.dragging .handle {
+    background-color: #f2f2f2 !important; }
 
 /* hide the actual input checkbox */
 .toggle input {
@@ -4285,9 +4289,9 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   -webkit-transition-timing-function: ease-in-out;
   -moz-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
-  -webkit-transition-duration: 0.1s;
-  -moz-transition-duration: 0.1s;
-  transition-duration: 0.1s;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
   -webkit-transition-property: background-color, border;
   -moz-transition-property: background-color, border;
   transition-property: background-color, border;
@@ -4304,12 +4308,12 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
 .toggle .handle {
-  -webkit-transition: 0.1s ease-in-out;
-  -moz-transition: 0.1s ease-in-out;
-  transition: 0.1s ease-in-out;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 7px;
+  left: 7px;
   display: block;
   width: 28px;
   height: 28px;

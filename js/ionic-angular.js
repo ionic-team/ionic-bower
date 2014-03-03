@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1019
+ * Ionic, v0.10.0-alpha-1028
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2763,7 +2763,7 @@ angular.module('ionic.ui.toggle', [])
 
 // The Toggle directive is a toggle switch that can be tapped to change
 // its value
-.directive('ionToggle', function() {
+.directive('ionToggle', ['$ionicGesture', '$timeout', function($ionicGesture, $timeout) {
 
   return {
     restrict: 'E',
@@ -2794,31 +2794,39 @@ angular.module('ionic.ui.toggle', [])
       if(attr.ngTrueValue) input.attr('ng-true-value', attr.ngTrueValue);
       if(attr.ngFalseValue) input.attr('ng-false-value', attr.ngFalseValue);
 
-      // return function link($scope, $element, $attr, ngModel) {
-      //   var el, checkbox, track, handle;
+      return function($scope, $element, $attr) {
+         var el, checkbox, track, handle;
 
-      //   el = $element[0].getElementsByTagName('label')[0];
-      //   checkbox = el.children[0];
-      //   track = el.children[1];
-      //   handle = track.children[0];
+         el = $element[0].getElementsByTagName('label')[0];
+         checkbox = el.children[0];
+         track = el.children[1];
+         handle = track.children[0];
+         
+         var ngModelController = angular.element(checkbox).controller('ngModel');
 
-      //   $scope.toggle = new ionic.views.Toggle({
-      //     el: el,
-      //     track: track,
-      //     checkbox: checkbox,
-      //     handle: handle
-      //   });
+         $scope.toggle = new ionic.views.Toggle({
+           el: el,
+           track: track,
+           checkbox: checkbox,
+           handle: handle,
+           onChange: function() {
+             if(checkbox.checked) {
+               ngModelController.$setViewValue(true);
+             } else {
+               ngModelController.$setViewValue(false);
+             }
+             $scope.$apply();
+           }
+         });
 
-      //   ionic.on('drag', function(e) {
-      //     
-      //     $scope.toggle.drag(e);
-      //   }, handle);
-
-      // }
+         $scope.$on('$destroy', function() {
+           $scope.toggle.destroy();
+         });
+      };
     }
 
   };
-});
+}]);
 
 })(window.ionic);
 ;
