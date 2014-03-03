@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1033
+ * Ionic, v0.10.0-alpha-1034
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4312,7 +4312,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   display: block;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 28px;
   background-color: #fff;
   /* used to create a larger (but hidden) hit area to slide the handle */ }
   .toggle .handle:before {
