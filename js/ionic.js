@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1042
+ * Ionic, v0.10.0-alpha-1043
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.10.0-alpha-1042'
+  version: '0.10.0-alpha-1043'
 };
 ;
 (function(ionic) {
@@ -5331,19 +5331,15 @@ ionic.views.Scroll = ionic.views.View.inherit({
     show: function() {
       var self = this;
 
-      this.el.classList.add('active');
-
-      if(this.focusFirstInput) {
+      if(self.focusFirstInput) {
         // Let any animations run first
         window.setTimeout(function() {
           var input = self.el.querySelector('input, textarea');
           input && input.focus && input.focus();
-        }, this.focusFirstDelay);
+        }, self.focusFirstDelay);
       }
     },
     hide: function() {
-      this.el.classList.remove('active');
-
       // Unfocus all elements
       if(this.unfocusOnHide) {
         var inputs = this.el.querySelectorAll('input, textarea');

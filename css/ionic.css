@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1042
+ * Ionic, v0.10.0-alpha-1043
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3147,17 +3147,13 @@ a.subdued {
  * Modals are independent windows that slide in from off-screen.
  */
 .modal {
-  -webkit-transform: translate3d(0, 100%, 0);
-  -moz-transform: translate3d(0, 100%, 0);
-  transform: translate3d(0, 100%, 0);
-  position: fixed;
+  position: absolute;
   top: 0;
   z-index: 10;
   overflow: hidden;
   min-height: 100%;
   width: 100%;
-  background-color: #fff;
-  opacity: 0; }
+  background-color: #fff; }
   .modal.active {
     height: 100%; }
 
@@ -4997,7 +4993,7 @@ a.button {
     -webkit-transform: translate3d(0, 100%, 0);
     -moz-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
-    opacity: 0; }
+    opacity: 1; }
 
   100% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -5010,7 +5006,7 @@ a.button {
     -webkit-transform: translate3d(0, 100%, 0);
     -moz-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
-    opacity: 0; }
+    opacity: 1; }
 
   100% {
     -webkit-transform: translate3d(0, 0, 0);
@@ -5029,7 +5025,7 @@ a.button {
     -webkit-transform: translate3d(0, 100%, 0);
     -moz-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
-    opacity: 0; } }
+    opacity: 1; } }
 
 @-moz-keyframes slideOutUp {
   0% {
@@ -5042,7 +5038,7 @@ a.button {
     -webkit-transform: translate3d(0, 100%, 0);
     -moz-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
-    opacity: 0; } }
+    opacity: 1; } }
 
 @-webkit-keyframes slideInFromLeft {
   from {
@@ -5256,7 +5252,7 @@ a.button {
   transform: translate3d(100%, 0, 0); }
 
 /**
- * iOS7 style slide left to right 
+ * iOS7 style slide left to right
  * --------------------------------------------------
  */
 .slide-left-right-ios7 > .ng-enter, .slide-left-right-ios7.ng-enter, .slide-left-right-ios7 > .ng-leave, .slide-left-right-ios7.ng-leave {
@@ -5516,75 +5512,29 @@ a.button {
   -moz-animation-name: slideOutToRight;
   animation-name: slideOutToRight; }
 
+/**
+ * Slide up from the bottom, used for modals
+ * --------------------------------------------------
+ */
 .slide-in-up {
+  -webkit-transform: translate3d(0, 100%, 0);
+  -moz-transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, 100%, 0); }
+
+.slide-in-up.ng-enter, .slide-in-up .ng-enter {
+  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+  -moz-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+
+.slide-in-up.ng-enter-active, .slide-in-up .ng-enter-active {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  opacity: 1; }
-  .slide-in-up.ng-enter, .slide-in-up .ng-enter {
-    -webkit-transform: translate3d(0, 100%, 0);
-    -moz-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
-    -webkit-animation-duration: 400ms;
-    -moz-animation-duration: 400ms;
-    animation-duration: 400ms;
-    -webkit-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    -moz-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both;
-    opacity: 0; }
-  .slide-in-up.ng-enter-active, .slide-in-up .ng-enter-active {
-    -webkit-animation-name: slideInUp;
-    -moz-animation-name: slideInUp;
-    animation-name: slideInUp; }
-  .slide-in-up.ng-leave, .slide-in-up .ng-leave {
-    -webkit-animation-duration: 400ms;
-    -moz-animation-duration: 400ms;
-    animation-duration: 400ms;
-    -webkit-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    -moz-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both; }
-  .slide-in-up.ng-leave-active, .slide-in-up .ng-leave {
-    -webkit-animation-name: slideOutUp;
-    -moz-animation-name: slideOutUp;
-    animation-name: slideOutUp; }
+  transform: translate3d(0, 0, 0); }
 
-.slide-in-up-add {
-  -webkit-animation-duration: 400ms;
-  -moz-animation-duration: 400ms;
-  animation-duration: 400ms;
-  -webkit-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  -moz-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  -webkit-animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  animation-fill-mode: forwards; }
-
-.slide-in-up-add-active {
-  -webkit-animation-name: slideInUp;
-  -moz-animation-name: slideInUp;
-  animation-name: slideInUp; }
-
-.slide-in-up-remove {
-  -webkit-animation-duration: 400ms;
-  -moz-animation-duration: 400ms;
-  animation-duration: 400ms;
-  -webkit-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  -moz-animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  animation-timing-function: cubic-bezier(0.1, 0.7, 0.1, 1);
-  -webkit-animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  animation-fill-mode: forwards; }
-
-.slide-in-up-remove-active {
-  -webkit-animation-name: slideOutUp;
-  -moz-animation-name: slideOutUp;
-  animation-name: slideOutUp; }
+.slide-in-up.ng-leave, .slide-in-up .ng-leave {
+  -webkit-transition: all ease-in-out 250ms;
+  -moz-transition: all ease-in-out 250ms;
+  transition: all ease-in-out 250ms; }
 
 .fade-in {
   -webkit-animation: fadeOut 0.3s;
