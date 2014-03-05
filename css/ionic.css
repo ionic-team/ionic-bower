@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1043
+ * Ionic, v0.10.0-alpha-1044
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4198,7 +4198,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     display: table;
     width: 100%;
     height: 100%;
-    border: 1px solid #4A87EE;
+    border: 1px solid #4a87ee;
     border-radius: 28px;
     background: #fff;
     content: ' ';
@@ -4238,7 +4238,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 
 /* what the background looks like when its checked */
 .checkbox input:checked:before {
-  background: #4A87EE; }
+  background: #4a87ee; }
 
 /* what the checkmark looks like when its checked */
 .checkbox input:checked:after {
@@ -4331,8 +4331,8 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 
 /* the track when the toggle is "on" */
 .toggle input:checked + .track {
-  border-color: #4A87EE;
-  background-color: #4A87EE; }
+  border-color: #4a87ee;
+  background-color: #4a87ee; }
 
 /* the handle when the toggle is "on" */
 .toggle input:checked + .track .handle {
