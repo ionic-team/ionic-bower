@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1050
+ * Ionic, v0.10.0-alpha-1051
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3327,7 +3327,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
           }
           link(viewScope);
 
-          var viewHistoryData = $ionicViewService._getView(viewRegisterData.viewId) || {};
+          var viewHistoryData = $ionicViewService._getViewById(viewRegisterData.viewId) || {};
           viewScope.$broadcast('$viewContentLoaded', viewHistoryData);
 
           if (onloadExp) viewScope.$eval(onloadExp);
