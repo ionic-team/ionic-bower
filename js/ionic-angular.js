@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-1051
+ * Ionic, v0.10.0-alpha-1052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -383,18 +383,14 @@ angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ioni
         });
 
         $document[0].body.classList.remove('action-sheet-open');
-      };
 
-      var onHardwareBackButton = function() {
-        hideSheet();
+        scope.$deregisterBackButton && scope.$deregisterBackButton();
       };
-
-      scope.$on('$destroy', function() {
-        $ionicPlatform.offHardwareBackButton(onHardwareBackButton);
-      });
 
       // Support Android back button to close
-      $ionicPlatform.onHardwareBackButton(onHardwareBackButton);
+      scope.$deregisterBackButton = $ionicPlatform.registerBackButtonAction(function(){
+        hideSheet();
+      }, 300);
 
       scope.cancel = function() {
         hideSheet(true);
@@ -582,24 +578,12 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
 
       $timeout(function(){
         element.addClass('ng-enter-active');
-
-        if(!self.didInitEvents) {
-          var onHardwareBackButton = function() {
-            self.hide();
-          };
-
-          self.scope.$on('$destroy', function() {
-            $ionicPlatform.offHardwareBackButton(onHardwareBackButton);
-          });
-
-          // Support Android back button to close
-          $ionicPlatform.onHardwareBackButton(onHardwareBackButton);
-
-          self.didInitEvents = true;
-        }
-
         self.scope.$parent.$broadcast('modal.shown');
       }, 20);
+
+      self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function(){
+        self.hide();
+      }, 200);
 
     },
     // Hide the modal
@@ -621,6 +605,8 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
       ionic.views.Modal.prototype.hide.call(this);
 
       this.scope.$parent.$broadcast('modal.hidden');
+
+      this._deregisterBackButton && this._deregisterBackButton();
     },
 
     // Remove and destroy the modal scope
@@ -695,7 +681,7 @@ angular.module('ionic.service.platform', [])
 .provider('$ionicPlatform', function() {
 
   return {
-    $get: ['$q', function($q) {
+    $get: ['$q', '$rootScope', function($q, $rootScope) {
       return {
         /**
          * Some platforms have hardware back buttons, so this is one way to bind to it.
@@ -719,6 +705,54 @@ angular.module('ionic.service.platform', [])
           });
         },
 
+        /**
+         * Register a hardware back button action. Only one action will execute when
+         * the back button is clicked, so this method decides which of the registered
+         * back button actions has the highest priority. For example, if an actionsheet
+         * is showing, the back button should close the actionsheet, but it should not
+         * also go back a page view or close a modal which may be open.
+         *
+         * @param {function} fn the listener function that was originally bound.
+         * @param {number} priority Only the highest priority will execute.
+         */
+        registerBackButtonAction: function(fn, priority, actionId) {
+          var self = this;
+
+          if(!self._hasBackButtonHandler) {
+            // add a back button listener if one hasn't been setup yet
+            $rootScope.$backButtonActions = {};
+            self.onHardwareBackButton(self.hardwareBackButtonClick);
+            self._hasBackButtonHandler = true;
+          }
+
+          var action = {
+            id: (actionId ? actionId : ionic.Utils.nextUid()),
+            priority: (priority ? priority : 0),
+            fn: fn
+          };
+          $rootScope.$backButtonActions[action.id] = action;
+
+          // return a function to de-register this back button action
+          return function() {
+            delete $rootScope.$backButtonActions[action.id];
+          };
+        },
+
+        hardwareBackButtonClick: function(e){
+          // loop through all the registered back button actions
+          // and only run the last one of the highest priority
+          var priorityAction, actionId;
+          for(actionId in $rootScope.$backButtonActions) {
+            if(!priorityAction || $rootScope.$backButtonActions[actionId].priority >= priorityAction.priority) {
+              priorityAction = $rootScope.$backButtonActions[actionId];
+            }
+          }
+          if(priorityAction) {
+            priorityAction.fn(e);
+            return priorityAction;
+          }
+        },
+
         is: function(type) {
           return ionic.Platform.is(type);
         },
@@ -740,7 +774,7 @@ angular.module('ionic.service.platform', [])
       };
     }]
   };
-  
+
 });
 
 })(ionic);
@@ -881,7 +915,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
     e.preventDefault();
     return false;
   }
-  $ionicPlatform.onHardwareBackButton(onHardwareBackButton);
+  $ionicPlatform.registerBackButtonAction(onHardwareBackButton, 100);
 
 }])
 
