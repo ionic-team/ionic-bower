@@ -1,26 +1,12 @@
-/*!
- * Copyright 2014 Drifty Co.
- * http://drifty.com/
- *
- * Ionic, v0.10.0-alpha-1052
- * A powerful HTML5 mobile app framework.
- * http://ionicframework.com/
- *
- * By @maxlynch, @benjsperry, @adamdbradley <3
- *
- * Licensed under the MIT license. Please see LICENSE for more information.
- *
- */
-;
 
 // Create namespaces
 //
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.10.0-alpha-1052'
+  version: '{{ VERSION }}'
 };
-;
+
 (function(ionic) {
 
   var bezierCoord = function (x,y) {
@@ -134,7 +120,7 @@ window.ionic = {
     }
   };
 })(ionic);
-;
+
 (function(ionic) {
 
   var readyCallbacks = [],
@@ -292,7 +278,7 @@ window.ionic = {
   ionic.requestAnimationFrame = ionic.DomUtil.requestAnimationFrame;
   ionic.animationFrameThrottle = ionic.DomUtil.animationFrameThrottle;
 })(window.ionic);
-;
+
 /**
  * ion-events.js
  *
@@ -401,7 +387,7 @@ window.ionic = {
   ionic.offGesture = function() { return ionic.EventController.offGesture.apply(ionic.EventController.offGesture, arguments); };
 
 })(window.ionic);
-;
+
 /**
   * Simple gesture controllers with some common gestures that emit
   * gesture events.
@@ -512,7 +498,7 @@ window.ionic = {
     // whatever lookup was done to find this element failed to find it
     // so we can't listen for events on it.
     if(element === null) {
-      console.error('Null element passed to gesture (element does not exist). Not listening for gesture');
+      void 0;
       return;
     }
 
@@ -1798,7 +1784,7 @@ window.ionic = {
     }
   };
 })(window.ionic);
-;
+
 (function(ionic) {
 
   ionic.Platform = {
@@ -1837,7 +1823,7 @@ window.ionic = {
 
     device: function() {
       if(window.device) return window.device;
-      if(this.isCordova()) console.error('device plugin required');
+      if(this.isCordova()) void 0;
       return {};
     },
 
@@ -2030,7 +2016,7 @@ window.ionic = {
   }
 
 })(window.ionic);
-;
+
 (function(window, document, ionic) {
   'use strict';
 
@@ -2113,7 +2099,7 @@ window.ionic = {
 
     if(ele.disabled) return;
 
-    
+    void 0;
 
     var c = getCoordinates(e);
 
@@ -2139,7 +2125,7 @@ window.ionic = {
     }
 
     if(target.control) {
-      
+      void 0;
       return stopEvent(e);
     }
   };
@@ -2153,7 +2139,7 @@ window.ionic = {
 
     if( isRecentTap(e) ) {
       // if a tap in the same area just happened, don't continue
-      
+      void 0;
       return stopEvent(e);
     }
 
@@ -2181,13 +2167,13 @@ window.ionic = {
     if(e.target.control) {
       // this is a label that has an associated input
       // the native layer will send the actual event, so stop this one
-      
+      void 0;
       return stopEvent(e);
     }
 
     if( isRecentTap(e) ) {
       // a tap has already happened at these coordinates recently, ignore this event
-      
+      void 0;
       return stopEvent(e);
     }
 
@@ -2288,7 +2274,7 @@ window.ionic = {
   document.addEventListener('mouseup', removeClickPrevent, false);
 
 })(this, document, ionic);
-;
+
 (function(ionic) {
 
   /* for nextUid() function below */
@@ -2474,7 +2460,7 @@ window.ionic = {
   ionic.debounce = ionic.Utils.debounce;
 
 })(window.ionic);
-;
+
 (function(ionic) {
 
 ionic.Platform.ready(function() {
@@ -2496,7 +2482,7 @@ function androidKeyboardFix() {
     if (rememberedDeviceWidth !== window.innerWidth) {
       rememberedDeviceWidth = window.innerWidth;
       rememberedDeviceHeight = window.innerHeight;
-      
+      void 0;
 
     //If the height changes, and it's less than before, we have a keyboard open
     } else if (rememberedDeviceHeight !== window.innerHeight &&
@@ -2526,7 +2512,7 @@ function androidKeyboardFix() {
 }
 
 })(window.ionic);
-;
+
 (function(ionic) {
 'use strict';
   ionic.views.View = function() {
@@ -2540,7 +2526,7 @@ function androidKeyboardFix() {
   });
 
 })(window.ionic);
-;
+
 var IS_INPUT_LIKE_REGEX = /input|textarea|select/i;
 var IS_EMBEDDED_OBJECT_REGEX = /object|embed/i;
 /*
@@ -4618,7 +4604,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
   /**
@@ -4645,7 +4631,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -4733,7 +4719,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -5260,7 +5246,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
   /**
@@ -5312,7 +5298,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -5354,7 +5340,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -5408,7 +5394,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
   /**
@@ -5447,7 +5433,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -5519,7 +5505,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 /*
  * Adapted from Swipe.js 2.0
  *
@@ -6103,7 +6089,7 @@ ionic.views.Slider = ionic.views.View.inherit({
 });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -6328,7 +6314,7 @@ ionic.views.TabBar = ionic.views.View.inherit({
 });
 
 })(window.ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -6474,7 +6460,7 @@ ionic.views.TabBar = ionic.views.View.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
   ionic.controllers.ViewController = function(options) {
@@ -6491,7 +6477,7 @@ ionic.views.TabBar = ionic.views.View.inherit({
   });
 
 })(window.ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -6644,7 +6630,7 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
 });
 
 })(window.ionic);
-;
+
 (function(ionic) {
 'use strict';
 
@@ -6922,7 +6908,7 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
   });
 
 })(ionic);
-;
+
 (function(ionic) {
 'use strict';
 
