@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1074
+ * Ionic, v0.10.0-alpha-nightly-1075
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4665,10 +4665,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
      * so that the header text size is maximized and aligned
      * correctly as long as possible.
      */
-    align: ionic.animationFrameThrottle(function(titleSelector) {
+    align: function() {
 
       // Find the titleEl element
-      var titleEl = this.el.querySelector(titleSelector || '.title');
+      var titleEl = this.el.querySelector('.title');
       if(!titleEl) {
         return;
       }
@@ -4704,32 +4704,35 @@ ionic.views.Scroll = ionic.views.View.inherit({
         }
       }
 
-      var margin = Math.max(leftWidth, rightWidth) + 10;
+      var self = this;
+      ionic.requestAnimationFrame(function() {
+        var margin = Math.max(leftWidth, rightWidth) + 10;
 
-      // Size and align the header titleEl based on the sizes of the left and
-      // right children, and the desired alignment mode
-      if(this.alignTitle == 'center') {
-        if(margin > 10) {
-          titleEl.style.left = margin + 'px';
-          titleEl.style.right = margin + 'px';
-        }
-        if(titleEl.offsetWidth < titleEl.scrollWidth) {
+        // Size and align the header titleEl based on the sizes of the left and
+        // right children, and the desired alignment mode
+        if(self.alignTitle == 'center') {
+          if(margin > 10) {
+            titleEl.style.left = margin + 'px';
+            titleEl.style.right = margin + 'px';
+          }
+          if(titleEl.offsetWidth < titleEl.scrollWidth) {
+            if(rightWidth > 0) {
+              titleEl.style.right = (rightWidth + 5) + 'px';
+            }
+          }
+        } else if(self.alignTitle == 'left') {
+          titleEl.classList.add('title-left');
+          if(leftWidth > 0) {
+            titleEl.style.left = (leftWidth + 15) + 'px';
+          }
+        } else if(self.alignTitle == 'right') {
+          titleEl.classList.add('title-right');
           if(rightWidth > 0) {
-            titleEl.style.right = (rightWidth + 5) + 'px';
+            titleEl.style.right = (rightWidth + 15) + 'px';
           }
         }
-      } else if(this.alignTitle == 'left') {
-        titleEl.classList.add('title-left');
-        if(leftWidth > 0) {
-          titleEl.style.left = (leftWidth + 15) + 'px';
-        }
-      } else if(this.alignTitle == 'right') {
-        titleEl.classList.add('title-right');
-        if(rightWidth > 0) {
-          titleEl.style.right = (rightWidth + 15) + 'px';
-        }
-      }
-    })
+      });
+    }
   });
 
 })(ionic);
