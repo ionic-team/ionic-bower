@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1078
+ * Ionic, v0.10.0-alpha-nightly-1080
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5462,7 +5462,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   ionic.views.SideMenu = ionic.views.View.inherit({
     initialize: function(opts) {
       this.el = opts.el;
-      this.isEnabled = opts.isEnabled || true;
+      this.isEnabled = (typeof opts.isEnabled === 'undefined') ? true : opts.isEnabled;
       this.setWidth(opts.width);
     },
 
