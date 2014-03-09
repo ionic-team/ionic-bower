@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1077
+ * Ionic, v0.10.0-alpha-nightly-1078
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1637,7 +1637,21 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 
 angular.module('ionic.ui.checkbox', [])
 
-
+/**
+ * @ngdoc directive
+ * @name ionCheckbox
+ * @module ionic
+ * @restrict E
+ * @description
+ * No different than the HTML checkbox input, except it's styled differently.
+ *
+ * Behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]).
+ *
+ * @usage
+ * ```html
+ * <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
+ * ```
+ */
 .directive('ionCheckbox', function() {
   return {
     restrict: 'E',
@@ -2141,6 +2155,31 @@ angular.module('ionic.ui.loading', [])
 })();
 
 angular.module('ionic.ui.navAnimation', [])
+/**
+ * @ngdoc directive
+ * @name ionNavAnimation
+ * @module ionic
+ * @restrict A
+ *
+ * @description
+ * When used under an {@link ionic.directive:ionNavView ionNavView} and on an `<a>` element, 
+ * allows you to set the animation all clicks on that link within the navView use.
+ *
+ * @usage
+ * ```html
+ * <ion-nav-view>
+ *   <ion-view>
+ *     <ion-content>
+ *       <a href="#/some-page" ion-nav-animation="slide-in-up">
+ *         Click me and #/some-page will transition in with the slide-in-up animation!
+ *       </a>
+ *     </ion-content>
+ *   </ion-view>
+ * </ion-nav-view>
+ * ```
+ *
+ * @param {string} ion-nav-animation The animation to make the parent ionNavView change pages with when clicking this element.
+ */
 .directive('ionNavAnimation', function() {
   return {
     restrict: 'A',
