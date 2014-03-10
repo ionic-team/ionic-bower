@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1083
+ * Ionic, v0.10.0-alpha-nightly-1084
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6789,8 +6789,6 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
       var maxLeft = this.left && this.left.width || 0;
       var maxRight = this.right && this.right.width || 0;
 
-      void 0;
-
       // Check if we can move to that side, depending if the left/right panel is enabled
       if(!(this.left && this.left.isEnabled) && amount > 0) {
         this.content.setTranslateX(0);
@@ -6798,7 +6796,6 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
       }
 
       if(!(this.right && this.right.isEnabled) && amount < 0) {
-        void 0;
         this.content.setTranslateX(0);
         return;
       }
