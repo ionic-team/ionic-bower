@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1096
+ * Ionic, v0.10.0-alpha-nightly-1097
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1096
+ * Ionic, v0.10.0-alpha-nightly-1097
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2352,6 +2352,9 @@ a.subdued {
  * --------------------------------------------------
  */
 .action-sheet-backdrop {
+  -webkit-transition: background-color 300ms ease-in-out;
+  -moz-transition: background-color 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
@@ -2360,19 +2363,6 @@ a.subdued {
   height: 100%;
   background-color: rgba(0, 0, 0, 0); }
   .action-sheet-backdrop.active {
-    -webkit-animation: fadeInHalf 0.3s;
-    -moz-animation: fadeInHalf 0.3s;
-    animation: fadeInHalf 0.3s;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both; }
-  .action-sheet-backdrop.active-remove {
-    -webkit-animation: fadeOutHalf 0.3s;
-    -moz-animation: fadeOutHalf 0.3s;
-    animation: fadeOutHalf 0.3s;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both;
     background-color: rgba(0, 0, 0, 0.5); }
 
 .action-sheet-wrapper {
