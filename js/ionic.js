@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1103
+ * Ionic, v0.10.0-alpha-nightly-1104
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4776,6 +4776,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
       content = e.target;
     } else if(e.target.classList.contains(ITEM_CLASS)) {
       content = e.target.querySelector('.' + ITEM_CONTENT_CLASS);
+    } else {
+      content = ionic.DomUtil.getParentWithClass(e.target, ITEM_CONTENT_CLASS);
     }
 
     // If we don't have a content area as one of our children (or ourselves), skip
@@ -5184,7 +5186,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       }
 
       // Or check if this is a swipe to the side drag
-      else if((e.gesture.direction == 'left' || e.gesture.direction == 'right') && Math.abs(e.gesture.deltaX) > 5) {
+      else if(!this._didDragUpOrDown && (e.gesture.direction == 'left' || e.gesture.direction == 'right') && Math.abs(e.gesture.deltaX) > 5) {
         this._dragOp = new SlideDrag({ el: this.el });
         this._dragOp.start(e);
         e.preventDefault();
@@ -5198,6 +5200,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     _handleEndDrag: function(e) {
       var _this = this;
+
+      this._didDragUpOrDown = false;
 
       if(!this._dragOp) {
         //ionic.views.ListView.__super__._handleEndDrag.call(this, e);
@@ -5221,6 +5225,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
      */
     _handleDrag: function(e) {
       var _this = this, content, buttons;
+
+      if(Math.abs(e.gesture.deltaY) > 5) {
+        this._didDragUpOrDown = true;
+      }
 
       // If the user has a touch timeout to highlight an element, clear it if we
       // get sufficient draggage
