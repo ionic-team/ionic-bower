@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1095
+ * Ionic, v0.10.0-alpha-nightly-1096
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1095
+ * Ionic, v0.10.0-alpha-nightly-1096
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4135,9 +4135,9 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   padding: 7px 7px;
   cursor: pointer; }
   .checkbox input:before {
-    border: 1px solid #b2b2b2; }
+    border: 1px solid #4a87ee; }
   .checkbox input:checked:before {
-    background: #b2b2b2; }
+    background: #4a87ee; }
   .checkbox.checkbox-light {
     /* what the background looks like when its checked */ }
     .checkbox.checkbox-light input:before {

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1095
+ * Ionic, v0.10.0-alpha-nightly-1096
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2157,8 +2157,11 @@ window.ionic = {
       return stopEvent(e);
     }
 
-    while(ele) {
+    for(var x=0; x<5; x++) {
       // climb up the DOM looking to see if the tapped element is, or has a parent, of one of these
+      // only climb up a max of 5 parents, anything more is probably isn't beneficial
+      if(!ele) break;
+
       if( ele.tagName === "INPUT" ||
           ele.tagName === "A" ||
           ele.tagName === "BUTTON" ||
