@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1097
+ * Ionic, v0.10.0-alpha-nightly-1098
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2111,7 +2111,7 @@ window.ionic = {
 
     var ele = target.control || target;
 
-    if(ele.disabled) return;
+    if(ele.disabled || ele.type === 'file') return;
 
     void 0;
 
@@ -2159,7 +2159,7 @@ window.ionic = {
 
     for(var x=0; x<5; x++) {
       // climb up the DOM looking to see if the tapped element is, or has a parent, of one of these
-      // only climb up a max of 5 parents, anything more is probably isn't beneficial
+      // only climb up a max of 5 parents, anything more probably isn't beneficial
       if(!ele) break;
 
       if( ele.tagName === "INPUT" ||
