@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1093
+ * Ionic, v0.10.0-alpha-nightly-1094
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2498,11 +2498,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
             return $scope.sideMenuContentTranslateX || 0;
           },
           setTranslateX: ionic.animationFrameThrottle(function(amount) {
-            if(amount === 0) {
-              $element[0].style[ionic.CSS.TRANSFORM] = 'none';
-            } else {
-              $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amount + 'px, 0, 0)';
-            }
+            $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amount + 'px, 0, 0)';
             $timeout(function() {
               $scope.sideMenuContentTranslateX = amount;
             });
