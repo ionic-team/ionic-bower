@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1084
+ * Ionic, v0.10.0-alpha-nightly-1085
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1084
+ * Ionic, v0.10.0-alpha-nightly-1085
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4275,12 +4275,61 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
  */
 /* the overall container of the toggle */
 .toggle {
+  /* the track when the toggle is "on" */
   position: relative;
   display: inline-block;
   margin: -5px;
   padding: 5px; }
+  .toggle input:checked + .track {
+    border-color: #4a87ee;
+    background-color: #4a87ee; }
   .toggle.dragging .handle {
     background-color: #f2f2f2 !important; }
+  .toggle.toggle-light {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-light input:checked + .track {
+      border-color: #ddd;
+      background-color: #ddd; }
+  .toggle.toggle-stable {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-stable input:checked + .track {
+      border-color: #b2b2b2;
+      background-color: #b2b2b2; }
+  .toggle.toggle-positive {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-positive input:checked + .track {
+      border-color: #4a87ee;
+      background-color: #4a87ee; }
+  .toggle.toggle-calm {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-calm input:checked + .track {
+      border-color: #43cee6;
+      background-color: #43cee6; }
+  .toggle.toggle-assertive {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-assertive input:checked + .track {
+      border-color: #ef4e3a;
+      background-color: #ef4e3a; }
+  .toggle.toggle-balanced {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-balanced input:checked + .track {
+      border-color: #66cc33;
+      background-color: #66cc33; }
+  .toggle.toggle-energized {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-energized input:checked + .track {
+      border-color: #f0b840;
+      background-color: #f0b840; }
+  .toggle.toggle-royal {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-royal input:checked + .track {
+      border-color: #8a6de9;
+      background-color: #8a6de9; }
+  .toggle.toggle-dark {
+    /* the track when the toggle is "on" */ }
+    .toggle.toggle-dark input:checked + .track {
+      border-color: #444;
+      background-color: #444; }
 
 /* hide the actual input checkbox */
 .toggle input {
@@ -4328,11 +4377,6 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     left: -22px;
     padding: 19px 35px;
     content: " "; }
-
-/* the track when the toggle is "on" */
-.toggle input:checked + .track {
-  border-color: #4a87ee;
-  background-color: #4a87ee; }
 
 /* the handle when the toggle is "on" */
 .toggle input:checked + .track .handle {
