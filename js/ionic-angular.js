@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1124
+ * Ionic, v0.10.0-alpha-nightly-1125
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2155,7 +2155,8 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * @param {expression} on-infinite What to call when the scroller reaches the
  * bottom.
  * @param {string=} distance The distance from the bottom that the scroll must
- * reach to trigger the on-infinite expression. Default 1%.
+ * reach to trigger the on-infinite expression. Default: 1%.
+ * @param {string=} icon The icon to show while loading. Default: 'ion-loading-d'.
  *
  * @usage
  * ```html
@@ -2184,6 +2185,7 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * ```html
  * <ion-infinite-scroll
  *   ng-if="moreDataCanBeLoaded()"
+ *   icon="ion-loading-c"
  *   on-infinite="loadMoreData()">
  * </ion-infinite-scroll>
  * ```
@@ -2195,9 +2197,10 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
     template:
       '<div class="scroll-infinite">' +
         '<div class="scroll-infinite-content">' +
-          '<i class="icon ion-loading-d icon-refreshing"></i>' +
+          '<i class="icon {{icon()}} icon-refreshing"></i>' +
         '</div>' +
       '</div>',
+    scope: true,
     controller: ['$scope', '$attrs', function($scope, $attrs) {
       this.isLoading = false;
       this.scrollView = null; //given by link function
@@ -2215,6 +2218,12 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
       var scrollCtrl = ctrls[0];
       var infiniteScrollCtrl = ctrls[1];
       var scrollView = infiniteScrollCtrl.scrollView = scrollCtrl.scrollView;
+
+      var iconElement = $element[0].querySelector('.icon');
+
+      $scope.icon = function() {
+        return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-loading-d';
+      };
 
       $scope.$on('scroll.infiniteScrollComplete', function() {
         $element[0].classList.remove('active');
