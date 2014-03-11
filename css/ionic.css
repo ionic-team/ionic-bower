@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1113
+ * Ionic, v0.10.0-alpha-nightly-1114
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1113
+ * Ionic, v0.10.0-alpha-nightly-1114
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5548,7 +5548,6 @@ a.button {
     -moz-animation-fill-mode: both;
     animation-fill-mode: both; }
 
-
 .slide-out-right-add {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
@@ -5577,17 +5576,17 @@ a.button {
   -moz-transform: translate3d(0, 100%, 0);
   transform: translate3d(0, 100%, 0); }
 
-.slide-in-up.ng-enter, .slide-in-up .ng-enter {
+.slide-in-up.ng-enter, .slide-in-up > .ng-enter {
   -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
   -moz-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
   transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
 
-.slide-in-up.ng-enter-active, .slide-in-up .ng-enter-active {
+.slide-in-up.ng-enter-active, .slide-in-up > .ng-enter-active {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0); }
 
-.slide-in-up.ng-leave, .slide-in-up .ng-leave {
+.slide-in-up.ng-leave, .slide-in-up > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   -moz-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
