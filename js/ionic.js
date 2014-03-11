@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1114
+ * Ionic, v0.10.0-alpha-nightly-1124
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -160,23 +160,39 @@ window.ionic = {
             };
   })();
 
+  /**
+  * @ngdoc utility
+  * @name ionic.DomUtil
+  * @module ionic
+  */
   ionic.DomUtil = {
     //Call with proper context
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#requestAnimationFrame
+     * @alias ionic.requestAnimationFrame
+     * @description Calls [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame), or a polyfill if not available.
+     * @param {function} callback The function to call when the next frame
+     * happens.
+     */
     requestAnimationFrame: function(cb) {
       window._rAF(cb);
     },
 
-    /*
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#animationFrameThrottle
+     * @alias ionic.animationFrameThrottle
+     * @description
      * When given a callback, if that callback is called 100 times between
-     * animation frames, Throttle will make it only call the last of 100tha call
+     * animation frames, adding Throttle will make it only run the last of
+     * the 100 calls.
      *
-     * It returns a function, which will then call the passed in callback.  The
-     * passed in callback will receive the context the returned function is called with.
-     *
-     * @example
-     *   this.setTranslateX = ionic.animationFrameThrottle(function(x) {
-     *     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + x + 'px, 0, 0)';
-     *   })
+     * @param {function} callback a function which will be throttled to
+     * requestAnimationFrame
+     * @returns {function} A function which will then call the passed in callback.
+     * The passed in callback will receive the context the returned function is
+     * called with.
      */
     animationFrameThrottle: function(cb) {
       var args, isQueued, context;
@@ -193,10 +209,15 @@ window.ionic = {
       };
     },
 
-    /*
-     * Find an element's offset, then add it to the offset of the parent
-     * until we are at the direct child of parentEl
-     * use-case: find scroll offset of any element within a scroll container
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#getPositionInParent
+     * @description
+     * Find an element's scroll offset within its container.
+     * @param {DOMElement} element The element to find the offset of.
+     * @returns {object} A position object with the following properties:
+     *   - `{number}` `left` The left offset of the element.
+     *   - `{number}` `top` The top offset of the element.
      */
     getPositionInParent: function(el) {
       return {
@@ -205,6 +226,14 @@ window.ionic = {
       };
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#ready
+     * @description
+     * Call a function when the dom is ready, or if it is already ready
+     * call the function immediately.
+     * @param {function} callback The function to be called.
+     */
     ready: function(cb) {
       if(document.readyState === "complete") {
         ionic.requestAnimationFrame(cb);
@@ -213,6 +242,20 @@ window.ionic = {
       }
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#getTextBounds
+     * @description
+     * Get a rect representing the bounds of the given textNode.
+     * @param {DOMElement} textNode The textNode to find the bounds of.
+     * @returns {object} An object representing the bounds of the node. Properties:
+     *   - `{number}` `left` The left positton of the textNode.
+     *   - `{number}` `right` The right positton of the textNode.
+     *   - `{number}` `top` The top positton of the textNode.
+     *   - `{number}` `bottom` The bottom position of the textNode.
+     *   - `{number}` `width` The width of the textNode.
+     *   - `{number}` `height` The height of the textNode.
+     */
     getTextBounds: function(textNode) {
       if(document.createRange) {
         var range = document.createRange();
@@ -237,6 +280,16 @@ window.ionic = {
       return null;
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#getChildIndex
+     * @description
+     * Get the first index of a child node within the given element of the
+     * specified type.
+     * @param {DOMElement} element The element to find the index of.
+     * @param {string} type The nodeName to match children of element against.
+     * @returns {number} The index, or -1, of a child with nodeName matching type.
+     */
     getChildIndex: function(element, type) {
       if(type) {
         var ch = element.parentNode.children;
@@ -253,11 +306,20 @@ window.ionic = {
       }
       return Array.prototype.slice.call(element.parentNode.children).indexOf(element);
     },
+
+    /**
+     * @private
+     */
     swapNodes: function(src, dest) {
       dest.parentNode.insertBefore(src, dest);
     },
     /**
-     * {returns} the closest parent matching the className
+     * @ngdoc method
+     * @name ionic.DomUtil#getParentWithClass
+     * @param {DOMElement} element
+     * @param {string} className
+     * @returns {DOMElement} The closest parent of element matching the 
+     * className, or null.
      */
     getParentWithClass: function(e, className) {
       while(e.parentNode) {
@@ -269,7 +331,12 @@ window.ionic = {
       return null;
     },
     /**
-     * {returns} the closest parent or self matching the className
+     * @ngdoc method
+     * @name ionic.DomUtil#getParentWithClass
+     * @param {DOMElement} element
+     * @param {string} className
+     * @returns {DOMElement} The closest parent or self matching the 
+     * className, or null.
      */
     getParentOrSelfWithClass: function(e, className) {
       while(e) {
@@ -281,6 +348,18 @@ window.ionic = {
       return null;
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#rectContains
+     * @param {number} x
+     * @param {number} y
+     * @param {number} x1
+     * @param {number} y1
+     * @param {number} x2
+     * @param {number} y2
+     * @returns {boolean} Whether {x,y} fits within the rectangle defined by 
+     * {x1,y1,x2,y2}.
+     */
     rectContains: function(x, y, x1, y1, x2, y2) {
       if(x < x1 || x > x2) return false;
       if(y < y1 || y > y2) return false;
@@ -339,9 +418,25 @@ window.ionic = {
     })();
   }
 
+
+  /**
+   * @ngdoc utility
+   * @name ionic.EventController
+   * @module ionic
+   */
   ionic.EventController = {
     VIRTUALIZED_EVENTS: ['tap', 'swipe', 'swiperight', 'swipeleft', 'drag', 'hold', 'release'],
 
+    /**
+     * @ngdoc method
+     * @name ionic.EventController#trigger
+     * @alias ionic.trigger
+     * @param {string} eventType The event to trigger.
+     * @param {object} data The data for the event. Hint: pass in
+     * `{target: targetElement}`
+     * @param {boolean=} bubbles Whether the event should bubble up the DOM.
+     * @param {boolean=} cancelable Whether the event should be cancelable.
+     */
     // Trigger a new event
     trigger: function(eventType, data, bubbles, cancelable) {
       var event = new CustomEvent(eventType, {
@@ -355,7 +450,15 @@ window.ionic = {
       data && data.target && data.target.dispatchEvent(event) || window.dispatchEvent(event);
     },
 
-    // Bind an event
+    /**
+     * @ngdoc method
+     * @name ionic.EventController#on
+     * @alias ionic.on
+     * @description Listen to an event on an element.
+     * @param {string} type The event to listen for.
+     * @param {function} callback The listener to be called.
+     * @param {DOMElement} element The element to listen for the event on.
+     */
     on: function(type, callback, element) {
       var e = element || window;
 
@@ -372,18 +475,44 @@ window.ionic = {
       e.addEventListener(type, callback);
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.EventController#off
+     * @alias ionic.off
+     * @description Remove an event listener.
+     * @param {string} type
+     * @param {function} callback
+     * @param {DOMElement} element
+     */
     off: function(type, callback, element) {
       element.removeEventListener(type, callback);
     },
 
-    // Register for a new gesture event on the given element
+    /**
+     * @ngdoc method
+     * @name ionic.EventController#onGesture
+     * @alias ionic.onGesture
+     * @description Add an event listener for a gesture on an element. 
+     * @param {string} eventType The gesture event to listen for.
+     * @param {function(e)} callback The function to call when the gesture
+     * happens.
+     * @param {DOMElement} element The angular element to listen for the event on.
+     */
     onGesture: function(type, callback, element) {
       var gesture = new ionic.Gesture(element);
       gesture.on(type, callback);
       return gesture;
     },
 
-    // Unregister a previous gesture event
+    /**
+     * @ngdoc method
+     * @name ionic.EventController#offGesture
+     * @alias ionic.offGesture
+     * @description Remove an event listener for a gesture on an element. 
+     * @param {string} eventType The gesture event.
+     * @param {function(e)} callback The listener that was added earlier.
+     * @param {DOMElement} element The element the listener was added on.
+     */
     offGesture: function(gesture, type, callback) {
       gesture.off(type, callback);
     },
@@ -1801,14 +1930,47 @@ window.ionic = {
 
 (function(ionic) {
 
+  /**
+   * @ngdoc utility
+   * @name ionic.Platform
+   * @module ionic
+   */
   ionic.Platform = {
 
+    /**
+     * @ngdoc property
+     * @name ionic.Platform#isReady
+     * @returns {boolean} Whether the device is ready.
+     */
     isReady: false,
+    /**
+     * @ngdoc property
+     * @name ionic.Platform#isFullScreen
+     * @returns {boolean} Whether the device is fullscreen.
+     */
     isFullScreen: false,
+    /**
+     * @ngdoc property
+     * @name ionic.Platform#platforms
+     * @returns {Array(string)} An array of all platforms found.
+     */
     platforms: null,
+    /**
+     * @ngdoc property
+     * @name ionic.Platform#grade
+     * @returns {string} What grade the current platform is.
+     */
     grade: null,
     ua: navigator.userAgent,
 
+    /** 
+     * @ngdoc method
+     * @name ionic.Platform#ready
+     * @description
+     * Trigger a callback once the device is ready,
+     * or immediately if the device is already ready.
+     * @param {function} callback The function to call.
+     */
     ready: function(cb) {
       // run through tasks to complete now that the device is ready
       if(this.isReady) {
@@ -1820,6 +1982,9 @@ window.ionic = {
       }
     },
 
+    /**
+     * @private
+     */
     detect: function() {
       var i, bodyClass = document.body.className;
 
@@ -1835,6 +2000,12 @@ window.ionic = {
       document.body.className = bodyClass.trim();
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#device
+     * @description Return the current device (given by cordova).
+     * @returns {object} The device object.
+     */
     device: function() {
       if(window.device) return window.device;
       if(this.isCordova()) void 0;
@@ -1870,26 +2041,53 @@ window.ionic = {
       }
     },
 
-    // Check if we are running in Cordova
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isCordova
+     * @returns {boolean} Whether we are running on Cordova.
+     */
     isCordova: function() {
       return !(!window.cordova && !window.PhoneGap && !window.phonegap);
     },
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isiPad
+     * @returns {boolean} Whether we are running on iPad.
+     */
     isIPad: function() {
       return this.ua.toLowerCase().indexOf('ipad') >= 0;
     },
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isiOS
+     * @returns {boolean} Whether we are running on iOS.
+     */
     isIOS: function() {
       return this.is('ios');
     },
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isAndroid
+     * @returns {boolean} Whether we are running on Android.
+     */
     isAndroid: function() {
       return this.is('android');
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#platform
+     * @returns {string} The name of the current platform.
+     */
     platform: function() {
       // singleton to get the platform name
       if(platformName === null) this.setPlatform(this.device().platform);
       return platformName;
     },
 
+    /**
+     * @private
+     */
     setPlatform: function(n) {
       if(typeof n != 'undefined' && n !== null && n.length) {
         platformName = n.toLowerCase();
@@ -1902,12 +2100,20 @@ window.ionic = {
       }
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#version
+     * @returns {string} The version of the current device platform.
+     */
     version: function() {
       // singleton to get the platform version
       if(platformVersion === null) this.setVersion(this.device().version);
       return platformVersion;
     },
 
+    /**
+     * @private
+     */
     setVersion: function(v) {
       if(typeof v != 'undefined' && v !== null) {
         v = v.split('.');
@@ -1953,12 +2159,23 @@ window.ionic = {
       return this.ua.toLowerCase().indexOf(type) >= 0;
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#exitApp
+     * @description Exit the app.
+     */
     exitApp: function() {
       this.ready(function(){
         navigator.app && navigator.app.exitApp && navigator.app.exitApp();
       });
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#showStatusBar
+     * @description Shows or hides the device status bar (in Cordova).
+     * @param {boolean} shouldShow Whether or not to show the status bar.
+     */
     showStatusBar: function(val) {
       // Only useful when run within cordova
       this._showStatusBar = val;
@@ -1976,6 +2193,13 @@ window.ionic = {
       });
     },
 
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#fullScreen
+     * @description
+     * Sets whether the app is fullscreen or not (in Cordova).
+     * @param {boolean} showFullScreen Whether or not to set the app to fullscreen.
+     */
     fullScreen: function(showFullScreen, showStatusBar) {
       // fullScreen( [showFullScreen[, showStatusBar] ] )
       // showFullScreen: default is true if no param provided
@@ -2296,7 +2520,7 @@ window.ionic = {
 
   /* for nextUid() function below */
   var uid = ['0','0','0'];
-  
+
   /**
    * Various utilities used throughout Ionic
    *
@@ -2327,7 +2551,7 @@ window.ionic = {
 
     /**
      * Only call a function once in the given interval.
-     * 
+     *
      * @param func {Function} the function to call
      * @param wait {int} how long to wait before/after to allow function calls
      * @param immediate {boolean} whether to call immediately or after the wait interval
@@ -5547,7 +5771,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
  * @name ionicSlideBox
  * @module ionic
  * @description
- * Controller for the {@link ionic.directive:ionTabs} directive.
+ * Controller for the {@link ionic.directive:ionSlideBox} directive.
  */
 
 (function(ionic) {
