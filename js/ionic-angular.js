@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1126
+ * Ionic, v0.10.0-alpha-nightly-1127
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2218,8 +2218,6 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
       var scrollCtrl = ctrls[0];
       var infiniteScrollCtrl = ctrls[1];
       var scrollView = infiniteScrollCtrl.scrollView = scrollCtrl.scrollView;
-
-      var iconElement = $element[0].querySelector('.icon');
 
       $scope.icon = function() {
         return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-loading-d';
