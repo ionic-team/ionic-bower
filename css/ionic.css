@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1127
+ * Ionic, v0.10.0-alpha-nightly-1131
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1127
+ * Ionic, v0.10.0-alpha-nightly-1131
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2148,7 +2148,7 @@ body.grade-b, body.grade-c {
   display: none; }
 .scroll-refresher.active.refreshing .icon-refreshing {
   display: block; }
-.scroll-refresher.active .ionic-refresher-content .icon-pulling {
+.scroll-refresher.active .ionic-refresher-content .icon.icon-pulling {
   -webkit-animation-name: refresh-spin;
   -moz-animation-name: refresh-spin;
   animation-name: refresh-spin; }

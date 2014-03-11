@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1127
+ * Ionic, v0.10.0-alpha-nightly-1131
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2405,16 +2405,11 @@ window.ionic = {
   }
 
   function preventGhostClick(e) {
-    if(e.target.control) {
-      // this is a label that has an associated input
-      // the native layer will send the actual event, so stop this one
-      void 0;
-      return stopEvent(e);
-    }
 
-    if( isRecentTap(e) ) {
-      // a tap has already happened at these coordinates recently, ignore this event
-      void 0;
+    void 0;
+
+
+    if(e.target.control || isRecentTap(e) || isScrolledSinceStart(e)) {
       return stopEvent(e);
     }
 
@@ -2439,6 +2434,16 @@ window.ionic = {
         return existingCoordinates;
       }
     }
+  }
+
+  function isScrolledSinceStart(event) {
+    // check if this click's coordinates are different than its touchstart/mousedown
+    var c = getCoordinates(event);
+
+    return (c.x > startCoordinates.x + HIT_RADIUS ||
+            c.x < startCoordinates.x - HIT_RADIUS ||
+            c.y > startCoordinates.y + HIT_RADIUS ||
+            c.y < startCoordinates.y - HIT_RADIUS);
   }
 
   function recordCoordinates(event) {
@@ -2499,7 +2504,12 @@ window.ionic = {
     }
   }
 
+  function recordStartCoordinates(e) {
+    startCoordinates = getCoordinates(e);
+  }
+
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
+  var startCoordinates = {}; // used to remember where the coordinates of the start of the tap
   var CLICK_PREVENT_DURATION = 1500; // max milliseconds ghostclicks in the same area should be prevented
   var REMOVE_PREVENT_DELAY = 375; // delay after a touchend/mouseup before removing the ghostclick prevent
   var HIT_RADIUS = 15;
@@ -2513,6 +2523,10 @@ window.ionic = {
   // listeners used to remove ghostclick prevention
   document.addEventListener('touchend', removeClickPrevent, false);
   document.addEventListener('mouseup', removeClickPrevent, false);
+
+  // in the case the user touched the screen, then scrolled, it shouldn't fire the click
+  document.addEventListener('touchstart', recordStartCoordinates, false);
+  document.addEventListener('mousedown', recordStartCoordinates, false);
 
 })(this, document, ionic);
 
