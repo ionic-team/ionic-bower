@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1111
+ * Ionic, v0.10.0-alpha-nightly-1112
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5542,6 +5542,14 @@ ionic.views.Scroll = ionic.views.View.inherit({
  *
 */
 
+/**
+ * @ngdoc controller
+ * @name ionicSlideBox
+ * @module ionic
+ * @description
+ * Controller for the {@link ionic.directive:ionTabs} directive.
+ */
+
 (function(ionic) {
 'use strict';
 
@@ -6001,6 +6009,12 @@ ionic.views.Slider = ionic.views.View.inherit({
       setup();
     };
 
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#slide
+     * @param {number} to The index to slide to.
+     * @param {number=} speed The number of milliseconds for the change to take.
+     */
     this.slide = function(to, speed) {
       // cancel slideshow
       stop();
@@ -6008,6 +6022,11 @@ ionic.views.Slider = ionic.views.View.inherit({
       slide(to, speed);
     };
 
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#prev
+     * @description Go to the previous slide. Wraps around if at the beginning.
+     */
     this.prev = function() {
       // cancel slideshow
       stop();
@@ -6015,6 +6034,11 @@ ionic.views.Slider = ionic.views.View.inherit({
       prev();
     };
 
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#next
+     * @description Go to the next slide. Wraps around if at the end.
+     */
     this.next = function() {
       // cancel slideshow
       stop();
@@ -6022,17 +6046,33 @@ ionic.views.Slider = ionic.views.View.inherit({
       next();
     };
 
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#stop
+     * @description Stop sliding. The slideBox will not move again until
+     * explicitly told to do so.
+     */
     this.stop = function() {
       // cancel slideshow
       stop();
     };
 
-    this.getPos = function() {
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#currentIndex
+     * @returns number The index of the current slide.
+     */
+    this.currentIndex = function() {
       // return current index position
       return index;
     };
 
-    this.getNumSlides = function() {
+    /**
+     * @ngdoc method
+     * @name ionicSlideBox#slidesCount
+     * @returns number The number of slides there are currently.
+     */
+    this.slidesCount = function() {
       // return total number of slides
       return length;
     };

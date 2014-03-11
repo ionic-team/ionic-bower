@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1111
+ * Ionic, v0.10.0-alpha-nightly-1112
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -131,7 +131,6 @@ angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ioni
  * @ngdoc service
  * @name $ionicActionSheet
  * @module ionic
- * @restrict E
  * @description
  * The Action Sheet is a slide-up pane that lets the user choose from a set of options.
  * Dangerous options are highlighted in red and made obvious.
@@ -1227,32 +1226,6 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
 
 }]);
 
-angular.module('ionic.decorator.location', [])
-
-.config(['$provide', function($provide) {
-  $provide.decorator('$location', ['$delegate', '$timeout', $LocationDecorator]);
-}]);
-
-function $LocationDecorator($location, $timeout) {
-
-  $location.__hash = $location.hash;
-  //Fix: first time window.location.hash is set, the scrollable area
-  //found nearest to body's scrollTop is set to scroll to an element
-  //with that ID.
-  $location.hash = function(value) {
-    if (angular.isDefined(value)) {
-      $timeout(function() {
-        var scroll = document.querySelector('.scroll-content');
-        if (scroll)
-          scroll.scrollTop = 0;
-      }, 0, false);
-    }
-    return $location.__hash(value);
-  };
-
-  return $location;
-}
-
 (function() {
 'use strict';
 
@@ -1444,7 +1417,7 @@ angular.module('ionic.ui.service.slideBoxDelegate', [])
           return;
         }
         $timeout(function() {
-          $scope.$parent.slideBox.setup();
+          $scope.$parent.slideBoxController.setup();
         });
         e.preventDefault();
       });
@@ -1453,6 +1426,32 @@ angular.module('ionic.ui.service.slideBoxDelegate', [])
 }]);
 
 })(ionic);
+
+angular.module('ionic.decorator.location', [])
+
+.config(['$provide', function($provide) {
+  $provide.decorator('$location', ['$delegate', '$timeout', $LocationDecorator]);
+}]);
+
+function $LocationDecorator($location, $timeout) {
+
+  $location.__hash = $location.hash;
+  //Fix: first time window.location.hash is set, the scrollable area
+  //found nearest to body's scrollTop is set to scroll to an element
+  //with that ID.
+  $location.hash = function(value) {
+    if (angular.isDefined(value)) {
+      $timeout(function() {
+        var scroll = document.querySelector('.scroll-content');
+        if (scroll)
+          scroll.scrollTop = 0;
+      }, 0, false);
+    }
+    return $location.__hash(value);
+  };
+
+  return $location;
+}
 
 (function() {
 'use strict';
@@ -1537,8 +1536,8 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * provide dynamic layout features such as auto-title centering and animation.
  * They are also used by the Views and Navigation Controller to animate a title
  * on navigation and toggle a back button.
- * *
- * The main header bar feature provide is auto title centering.
+ *
+ * The main header bar feature provided is auto title centering.
  * In this situation, the title text will center itself until either the
  * left or right button content is too wide for the label to center.
  * In that case, it will slide left or right until it can fit.
@@ -1700,6 +1699,14 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
  * Panel is a simple 100% width and height, fixed panel. It's meant for content to be
  * added to it, or animated around.
  */
+/**
+ * @ngdoc directive
+ * @name ionPane
+ * @module ionic
+ * @restrict E
+ *
+ * @description A simple container that fits content, with no side effects.  Adds the 'pane' class to the element.
+ */
 .directive('ionPane', function() {
   return {
     restrict: 'E',
@@ -1720,7 +1727,7 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
  *
  * While we recommend using the custom Scroll features in Ionic in most cases, sometimes (for performance reasons) only the browser's native overflow scrolling will suffice, and so we've made it easy to toggle between the Ionic scroll implementation and overflow scrolling.
  *
- * You can implement pull-to-refresh with the {@link ionic.directive:ionRefresher ionRefresher} directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll ionInfiniteScroll} directive.
+ * You can implement pull-to-refresh with the {@link ionic.directive:ionRefresher} directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll} directive.
  *
  * @restrict E
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
@@ -1883,15 +1890,21 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * @ngdoc directive
  * @name ionInfiniteScroll
  * @module ionic
+ * @parent ionContent, ionScroll
  * @restrict E
  *
  * @description
- * The ionInfiniteScroll directive, when placed inside of {@link ionic.directive:ionContent ionContent}, allows you to call a function whenever the user gets to the bottom of the page or near the bottom of the page.
+ * The ionInfiniteScroll directive, when placed inside of 
+ * {@link ionic.directive:ionContent}, allows you to call a function whenever 
+ * the user gets to the bottom of the page or near the bottom of the page.
  *
- * The expression you pass in for `on-infinite` is called when the user scrolls greater than `distance` away from the bottom of the content.
+ * The expression you pass in for `on-infinite` is called when the user scrolls 
+ * greater than `distance` away from the bottom of the content.
  *
- * @param {expression} on-infinite What to call when the scroller reaches the bottom.
- * @param {string=} distance The distance from the bottom that the scroll must reach to trigger the on-infinite expression. Default 1%.
+ * @param {expression} on-infinite What to call when the scroller reaches the 
+ * bottom.
+ * @param {string=} distance The distance from the bottom that the scroll must 
+ * reach to trigger the on-infinite expression. Default 1%.
  *
  * @usage
  * ```html
@@ -1914,7 +1927,8 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * }
  * ```
  *
- * An easy to way to stop infinite scroll once there is no more data to load is to use angular's `ng-if` directive:
+ * An easy to way to stop infinite scroll once there is no more data to load 
+ * is to use angular's `ng-if` directive:
  *
  * ```html
  * <ion-infinite-scroll
@@ -2016,6 +2030,9 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * @param {boolean=} can-swipe Whether or not this item can be swiped. Defaults ot hte ionList parent's can-swipe setting.
  * @param {boolean=} can-delete Whether or not this item can be deleted. Defaults to the ionList parent's can-delete setting.
  * @param {boolean=} can-reorder Whether or not this item can be reordered. Defaults to the ionList parent's can-reorder setting.
+ * @param {expression=} on-delete The expression to call when this item is deleted.
+ * @param {string=} delete-icon The class name of the icon to show on this item while deleting. Defaults to the ionList parent's delete-icon setting.
+ * @param {string=} reorder-icon The class name of the icon to show on this item while reordering. Defaults to the ionList parent's reorder-icon setting.
  */
 .directive('ionItem', ['$timeout', '$parse', function($timeout, $parse) {
   return {
@@ -2126,7 +2143,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * list item requires the item class. Ionic also comes with pre-built Angular
  * directives to make it easier to create a complex list.
  *
- * Using the ionList and {@link ionic.directive:ionItem ionItem} directives
+ * Using the ionList and {@link ionic.directive:ionItem} directives
  * make it easy to support various interaction modes such as swipe to edit,
  * drag to reorder, and removing items.
  *
@@ -2134,7 +2151,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * directives, but rather just use the classnames.
  * This demo is a simple list without using the directives.
  *
- * See the {@link ionic.directive:ionItem ionItem documentation} for more information on list items.
+ * See the {@link ionic.directive:ionItem} documentation for more information on list items.
  *
  * @usage
  * ```html
@@ -2145,8 +2162,8 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * ```
  *
  * @param {string=} item-type The type of this item.  See [the list CSS page](/docs/components/#list) for available item types.
- * @param {function()=} on-delete Called when a child item is deleted.
- * @param {function()=} on-reorder Called when a child item is reordered.
+ * @param {expression=} on-delete Called when a child item is deleted.
+ * @param {expression=} on-reorder Called when a child item is reordered.
  * @param {boolean=} show-delete Whether to show each item delete button.
  * @param {boolean=} show-reoder Whether to show each item's reorder button.
  * @param {boolean=} can-delete Whether child items are able to be deleted or not.
@@ -2272,9 +2289,10 @@ angular.module('ionic.ui.navAnimation', [])
  * @name ionNavAnimation
  * @module ionic
  * @restrict A
+ * @parent ionNavView
  *
  * @description
- * When used under an {@link ionic.directive:ionNavView ionNavView} and on an `<a>` element, 
+ * When used under an {@link ionic.directive:ionNavView} and on an `<a>` element,
  * allows you to set the animation all clicks on that link within the navView use.
  *
  * @usage
@@ -2429,7 +2447,7 @@ angular.module('ionic.ui.radio', [])
           $element.addClass('active');
         }
       });
-        
+
       ionic.on('tap', clickHandler, $element[0]);
 
       $scope.$on('$destroy', function() {
@@ -2446,6 +2464,22 @@ angular.module('ionic.ui.radio', [])
 
 angular.module('ionic.ui.scroll', [])
 
+/**
+ * @ngdoc directive
+ * @name ionScroll
+ * @module ionic
+ * @restrict E
+ *
+ * @description
+ * Creates a scrollable container for all content inside.
+ *
+ * @param {string=} direction Which way to scroll. 'x' or 'y'. Default 'y'.
+ * @param {boolean=} paging Whether to scroll with paging.
+ * @param {expression=} on-refresh Called on pull-to-refresh, triggered by an {@link ionic.directive:ionRefresher}.
+ * @param {expression=} on-scroll Called whenever the user scrolls.
+ * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
+ * @param {boolean=} scrollbar-x Whether to show the vertical scrollbar. Default true.
+ */
 .directive('ionScroll', ['$parse', '$timeout', '$controller', function($parse, $timeout, $controller) {
   return {
     restrict: 'E',
@@ -2457,7 +2491,6 @@ angular.module('ionic.ui.scroll', [])
       paging: '@',
       onRefresh: '&',
       onScroll: '&',
-      refreshComplete: '=',
       scroll: '@',
       scrollbarX: '@',
       scrollbarY: '@',
@@ -2535,23 +2568,41 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 }])
 
 /**
+ * @ngdoc controller
+ * @name ionicSideMenus
+ * @module ionic
+ *
+ * @description
+ * Controller for the {@link ionic.directive:ionSideMenus} directive.
+ */
+/**
+ * @ngdoc method
+ * @name ionicSideMenus#toggleLeft
+ * @description Toggle the left side menu (if it exists).
+ */
+/**
+ * @ngdoc method
+ * @name ionicSideMenus#toggleRight
+ * @description Toggle the right side menu (if it exists).
+ */
+
+/**
  * @ngdoc directive
  * @name ionSideMenus
  * @module ionic
  * @restrict E
+ * @controller ionicSideMenus
  *
  * @description
- *
- * A container element for side menu(s) and the main content.  By default, allows the left and/or
- * right side menu to be toggled by dragging the main content area side to side.
+ * A container element for side menu(s) and the main content. Allows the left
+ * and/or right side menu to be toggled by dragging the main content area side
+ * to side.
  *
  * ![Side Menu](http://ionicframework.com.s3.amazonaws.com/docs/controllers/sidemenu.gif)
  *
- * Exposes `$scope.sideMenuController` on all child scopes, with `toggleLeft()` and `toggleRight()` methods.
- *
  * For more information on side menus, check out the documenation for
- * {@link ionic.directive:ionSideMenuContent ionSideMenuContent}
- * {@link ionic.directive:ionSideMenu ionSideMenu}.
+ * {@link ionic.directive:ionSideMenuContent} and
+ * {@link ionic.directive:ionSideMenu}.
  *
  * @usage
  * To use side menus, add an `<ion-side-menus>` parent element,
@@ -2581,11 +2632,13 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * }
  * ```
  *
+ * @param {expression=} model The model to assign this side menu container's {@link ionic.controller:ionicSideMenus} controller to. By default, assigns  to $scope.sideMenuController.
+ *
  */
 .directive('ionSideMenus', function() {
   return {
     restrict: 'ECA',
-    controller: ['$scope', '$attrs', function($scope, $attrs) {
+    controller: ['$scope', '$attrs', '$parse', function($scope, $attrs, $parse) {
       var _this = this;
 
       angular.extend(this, ionic.controllers.SideMenuController.prototype);
@@ -2597,7 +2650,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 
       $scope.sideMenuContentTranslateX = 0;
 
-      $scope.sideMenuController = this;
+      $parse($attrs.model || 'sideMenuController').assign($scope, this);
     }],
     replace: true,
     transclude: true,
@@ -2614,18 +2667,18 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  *
  * @description
  * A container for the main visible content, sibling to one or more
- * {@link ionic.directive:ionSideMenu ionSideMenu} directives.
+ * {@link ionic.directive:ionSideMenu} directives.
  *
  * An attribute directive, recommended to be used as part of an `<ion-pane>` element.
  *
  * @usage
  * ```html
- * <div ion-side-menu-content 
+ * <div ion-side-menu-content
  *   drag-content="canDragContent()">
  * </div>
  * ```
  * For a complete side menu example, see the
- * {@link ionic.directive:ionSideMenus#usage ionSideMenus} documentation.
+ * {@link ionic.directive:ionSideMenus} documentation.
  *
  * @param {boolean=} drag-content Whether the content can be dragged.
  *
@@ -2743,14 +2796,14 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  *
  * @usage
  * ```html
- * <ion-side-menu 
- *   side="left" 
+ * <ion-side-menu
+ *   side="left"
  *   width="myWidthValue + 20"
  *   is-enabled="shouldLeftSideMenuBeEnabled()">
  * </ion-side-menu>
  * ```
  * For a complete side menu example, see the
- * {@link ionic.directive:ionSideMenus#usage ionSideMenus} documentation.
+ * {@link ionic.directive:ionSideMenus} documentation.
  *
  * @param {string} side Which side the side menu is currently on.  Allowed values: 'left' or 'right'.
  * @param {boolean=} is-enabled Whether this side menu is enabled.
@@ -2799,18 +2852,45 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 (function() {
 'use strict';
 
-/**
- * @description
- * The slideBoxCtrol lets you quickly create a multi-page 
- * container where each page can be swiped or dragged between
- */
-
 angular.module('ionic.ui.slideBox', [])
 
 /**
  * The internal controller for the slide box controller.
  */
 
+/**
+ * @ngdoc directive
+ * @name ionSlideBox
+ * @module ionic
+ * @restrict E
+ * @description
+ * The Slide Box is a multi-page container where each page can be swiped or dragged between:
+ *
+ * ![SlideBox](http://ionicframework.com.s3.amazonaws.com/docs/controllers/slideBox.gif)
+ *
+ * @usage
+ * ```html
+ * <ion-slide-box>
+ *   <ion-slide>
+ *     <div class="box blue"><h1>BLUE</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box yellow"><h1>YELLOW</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box pink"><h1>PINK</h1></div>
+ *   </ion-slide>
+ * </ion-slide-box>
+ * ```
+ *
+ * @param {expression=} model The model to assign this slide box container's {@link ionic.controller:ionicSlideBox} controller to. By default, assigns to $scope.slideBoxController.
+ * @param {boolean=} does-continue Whether the slide box should automatically slide.
+ * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
+ * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
+ * @param {boolean=} disable-scroll Whether to disallow scrolling/dragging of the slide-box content.
+ * @param {expression=} on-slide-changed Expression called whenever the slide is changed.
+ * @param {expression=} active-slide Model to bind the current slide to.
+ */
 .directive('ionSlideBox', ['$timeout', '$compile', '$ionicSlideBoxDelegate', function($timeout, $compile, $ionicSlideBoxDelegate) {
   return {
     restrict: 'E',
@@ -2824,7 +2904,7 @@ angular.module('ionic.ui.slideBox', [])
       onSlideChanged: '&',
       activeSlide: '=?'
     },
-    controller: ['$scope', '$element', function($scope, $element) {
+    controller: ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
       var _this = this;
 
       var continuous = $scope.$eval($scope.doesContinue) === true;
@@ -2837,7 +2917,7 @@ angular.module('ionic.ui.slideBox', [])
         continuous: continuous,
         startSlide: $scope.activeSlide,
         slidesChanged: function() {
-          $scope.currentSlide = slider.getPos();
+          $scope.currentSlide = slider.currentIndex();
 
           // Try to trigger a digest
           $timeout(function() {});
@@ -2870,12 +2950,12 @@ angular.module('ionic.ui.slideBox', [])
         slider.slide(index);
       });
 
-      $scope.$parent.slideBox = slider;
+      $parse($attrs.model || 'slideBoxController').assign($scope.$parent, slider);
 
       $ionicSlideBoxDelegate.register($scope, $element);
 
-      this.getNumSlides = function() {
-        return slider.getNumSlides();
+      this.slidesCount = function() {
+        return slider.slidesCount();
       };
 
       $timeout(function() {
@@ -2930,7 +3010,7 @@ angular.module('ionic.ui.slideBox', [])
       };
 
       $scope.numSlides = function() {
-        return new Array(slideBox.getNumSlides());
+        return new Array(slideBox.slidesCount());
       };
 
       $scope.$watch('currentSlide', function(v) {
@@ -2945,24 +3025,41 @@ angular.module('ionic.ui.slideBox', [])
 
 angular.module('ionic.ui.tabs', ['ionic.service.view'])
 
-/**
- * @description
- *
- * The Tab Controller renders a set of pages that switch based on taps
- * on a tab bar. Modelled off of UITabBarController.
- */
-
 .run(['$ionicViewService', function($ionicViewService) {
   // set that the tabs directive should not animate when transitioning
   // to it. Instead, the children <tab> directives would animate
   $ionicViewService.disableRegisterByTagName('ion-tabs');
 }])
 
-.controller('$ionicTabs', ['$scope', '$ionicViewService', '$element', function($scope, $ionicViewService, $element) {
-  var self = $scope.tabsController = this;
+/**
+ * @ngdoc controller
+ * @name ionicTabs
+ * @module ionic
+ *
+ * @description
+ * Controller for the {@link ionic.directive:ionTabs} directive.
+ */
+.controller('ionicTabs', ['$scope', '$ionicViewService', '$element', function($scope, $ionicViewService, $element) {
+  var _selectedTab = null;
+  var self = this;
   self.tabs = [];
 
-  self.selectedTab = null;
+  /**
+   * @ngdoc method
+   * @name ionicTabs#selectedTabIndex
+   * @returns `number` The index of the selected tab, or -1.
+   */
+  self.selectedTabIndex = function() {
+    return self.tabs.indexOf(_selectedTab);
+  };
+  /**
+   * @ngdoc method
+   * @name ionicTabs#selectedTab
+   * @returns `ionTab` The selected tab or null if none selected.
+   */
+  self.selectedTab = function() {
+    return _selectedTab;
+  };
 
   self.add = function(tab) {
     $ionicViewService.registerHistory(tab);
@@ -2992,18 +3089,25 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
     self.tabs.splice(tabIndex, 1);
   };
 
-  self.getTabIndex = function(tab) {
-    return self.tabs.indexOf(tab);
-  };
-
   self.deselect = function(tab) {
     if (tab.$tabSelected) {
-      self.selectedTab = null;
+      _selectedTab = null;
       tab.$tabSelected = false;
       (tab.onDeselect || angular.noop)();
     }
   };
 
+  /**
+   * @ngdoc method
+   * @name ionicTabs#select
+   * @description Select the given tab or tab index.
+   *
+   * @param {ionTab|number} tabOrIndex A tab object or index of a tab to select
+   * @param {boolean=} shouldChangeHistory Whether this selection should load this tab's view history
+   * (if it exists) and use it, or just loading the default page. Default false.
+   * Hint: you probably want this to be true if you have an
+   * {@link ionic.directive:ionNavView} inside your tab.
+   */
   self.select = function(tab, shouldEmitEvent) {
     var tabIndex;
     if (angular.isNumber(tab)) {
@@ -3016,7 +3120,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
       throw new Error('Cannot select tab "' + tabIndex + '"!');
     }
 
-    if (self.selectedTab && self.selectedTab.$historyId == tab.$historyId) {
+    if (_selectedTab && _selectedTab.$historyId == tab.$historyId) {
       if (shouldEmitEvent) {
         $ionicViewService.goToHistoryRoot(tab.$historyId);
       }
@@ -3025,7 +3129,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
         self.deselect(tab);
       });
 
-      self.selectedTab = tab;
+      _selectedTab = tab;
       //Use a funny name like $tabSelected so the developer doesn't overwrite the var in a child scope
       tab.$tabSelected = true;
       (tab.onSelect || angular.noop)();
@@ -3048,13 +3152,50 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
   };
 }])
 
-.directive('ionTabs', ['$ionicViewService', '$ionicBind', function($ionicViewService, $ionicBind) {
+/**
+ * @ngdoc directive
+ * @name ionTabs
+ * @module ionic
+ * @restrict E
+ * @controller ionicTabs
+ * @codepen KbrzJ
+ *
+ * @description
+ * Powers a multi-tabbed interface with a Tab Bar and a set of "pages" that can be tabbed through.
+ *
+ * See the {@link ionic.directive:ionTab} directive's documentation for more details.
+ *
+ * @usage
+ * ```html
+ * <ion-tabs tabs-type="tabs-icon-only">
+ *
+ *   <ion-tab title="Home" icon-on="ion-ios7-filing" icon-off="ion-ios7-filing-outline">
+ *     <!-- Tab 1 content -->
+ *   </ion-tab>
+ *
+ *   <ion-tab title="About" icon-on="ion-ios7-clock" icon-off="ion-ios7-clock-outline">
+ *     <!-- Tab 2 content -->
+ *   </ion-tab>
+ *
+ *   <ion-tab title="Settings" icon-on="ion-ios7-gear" icon-off="ion-ios7-gear-outline">
+ *     <!-- Tab 3 content -->
+ *   </ion-tab>
+ * </ion-tabs>
+ * ```
+ *
+ * @param {expression=} model The model to assign this tabbar's {@link ionic.controller:ionicTabs} controller to. By default, assigns  to $scope.tabsController.
+ * @param {string=} animation The animation to use when changing between tab pages.
+ * @param {string=} tabs-style The class to apply to the tabs. Defaults to 'tabs-positive'.
+ * @param {string=} tabs-type Whether to put the tabs on the top or bottom. Defaults to 'tabs-bottom'.
+ */
+
+.directive('ionTabs', ['$ionicViewService', '$ionicBind', '$parse', function($ionicViewService, $ionicBind, $parse) {
   return {
     restrict: 'E',
     replace: true,
     scope: true,
     transclude: true,
-    controller: '$ionicTabs',
+    controller: 'ionicTabs',
     template:
     '<div class="view {{$animation}}">' +
       '<div class="tabs {{$tabsStyle}} {{$tabsType}}">' +
@@ -3071,6 +3212,8 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
           $tabsType: '@tabsType'
         });
 
+        $parse(attr.model || 'tabsController').assign($scope, tabsCtrl);
+
         tabsCtrl.$scope = $scope;
         tabsCtrl.$element = $element;
         tabsCtrl.$tabsElement = angular.element($element[0].querySelector('.tabs'));
@@ -3083,13 +3226,50 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
   };
 }])
 
-.controller('$ionicTab', ['$scope', '$ionicViewService', '$rootScope', '$element',
+.controller('ionicTab', ['$scope', '$ionicViewService', '$rootScope', '$element',
 function($scope, $ionicViewService, $rootScope, $element) {
   this.$scope = $scope;
 }])
 
-// Generic controller directive
-.directive('ionTab', ['$rootScope', '$animate', '$ionicBind', '$compile', '$ionicViewService', 
+/**
+ * @ngdoc directive
+ * @name ionTab
+ * @module ionic
+ * @restrict E
+ * @parent ionTabs
+ *
+ * @description
+ * Contains a tab's content.  The content only exists while the given tab is selected.
+ *
+ * Each ionTab has its own view history.
+ *
+ * Whenever a tab is shown or hidden, it will broadcast a 'tab.shown' or 'tab.hidden' event.
+ *
+ * @usage
+ * ```html
+ * <ion-tab
+ *   title="Tab!"
+ *   icon="my-icon"
+ *   href="#/tab/tab-link"
+ *   on-select="onTabSelected()"
+ *   on-deselect="onTabDeselected()">
+ * </ion-tab>
+ * ```
+ * For a complete, working tab bar example, see the {@link ionic.directive:ionTabs} documentation.
+ *
+ * @param {string} title The title of the tab.
+ * @param {string=} href The link that this tab will navigate to when tapped.
+ * @param {string=} icon The icon of the tab. If given, this will become the default for icon-on and icon-off.
+ * @param {string=} icon-on The icon of the tab while it is selected.
+ * @param {string=} icon-off The icon of the tab while it is not selected.
+ * @param {expression=} badge The badge to put on this tab (usually a number).
+ * @param {expression=} badge-style The style of badge to put on this tab (eg tabs-positive).
+ * @param {expression=} left-buttons The left buttons to use on a parent {@link ionic.directive:ionNavBar} while this tab is selected.
+ * @param {expression=} right-buttons The right buttons to use on a parent {@link ionic.directive:ionNavBar} while this tab is selected.
+ * @param {expression=} on-select Called when this tab is selected.
+ * @param {expression=} on-deselect Called when this tab is deselected.
+ */
+.directive('ionTab', ['$rootScope', '$animate', '$ionicBind', '$compile', '$ionicViewService',
 function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
 
   //Returns ' key="value"' if value exists
@@ -3100,11 +3280,11 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
     restrict: 'E',
     require: ['^ionTabs', 'ionTab'],
     replace: true,
-    controller: '$ionicTab',
+    controller: 'ionicTab',
     scope: true,
     compile: function(element, attr) {
       //Do we have a navView?
-      var navView = element[0].querySelector('ion-nav-view') || 
+      var navView = element[0].querySelector('ion-nav-view') ||
         element[0].querySelector('data-ion-nav-view');
       var navViewName = navView && navView.getAttribute('name');
 
@@ -3216,7 +3396,7 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
         };
 
         $scope.isTabActive = function() {
-          return tabsCtrl.selectedTab === tabCtrl.$scope;
+          return tabsCtrl.selectedTab() === tabCtrl.$scope;
         };
         $scope.selectTab = function(e) {
           e.preventDefault();
@@ -3232,8 +3412,20 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
 
 angular.module('ionic.ui.toggle', [])
 
-// The Toggle directive is a toggle switch that can be tapped to change
-// its value
+/**
+ * @ngdoc directive
+ * @name ionToggle
+ * @module ionic
+ * @restrict E
+ *
+ * @description
+ * An animated switch which binds a given model to a boolean.
+ *
+ * Allows dragging of the switch's nub.
+ *
+ * Behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]) otherwise.
+ *
+ */
 .directive('ionToggle', ['$ionicGesture', '$timeout', function($ionicGesture, $timeout) {
 
   return {
@@ -3387,7 +3579,35 @@ angular.module('ionic.ui.touch', [])
 angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gesture', 'ngSanitize'])
 
 /**
- * Our Nav Bar directive which updates as the controller state changes.
+ * @ngdoc directive
+ * @name ionNavBar
+ * @module ionic
+ * @restrict E
+ *
+ * @usage
+ * If have an {@link ionic.directive:ionNavView} directive, we can also create an
+ * <ion-nav-bar>, which will create a topbar that updates as the application state changes. 
+ * We can also add some styles and set up animations:
+ * 
+ * ```html
+ * <body ng-app="starter">
+ *   <!-- The nav bar that will be updated as we navigate -->
+ *   <ion-nav-bar animation="nav-title-slide-ios7"
+ *            type="bar-positive"
+ *            back-button-type="button-icon"
+ *            back-button-icon="ion-arrow-left-c"></ion-nav-bar>
+ * 
+ *   <!-- where the initial view template will be rendered -->
+ *   <ion-nav-view animation="slide-left-right"></ion-nav-view>
+ * </body>
+ * ```
+ *
+ * @param {string=} back-button-type The type of the back button's icon. Available: 'button-icon' or just 'button'.
+ * @param {string=} back-button-icon The icon to use for the back button. For example, 'ion-arrow-left-c'.
+ * @param {string=} back-button-label The label to use for the back button. For example, 'Back'.
+ * @param animation {string=} The animation used to transition between titles. 
+ * @param type {string=} The className for the navbar.  For example, 'bar-positive'.
+ * @param align {string=} Where to align the title of the navbar. Available: 'left', 'right', 'center'. Defaults to 'center'.
  */
 .directive('ionNavBar', ['$ionicViewService', '$rootScope', '$animate', '$compile',
                 function( $ionicViewService,   $rootScope,   $animate,   $compile) {
@@ -3576,6 +3796,12 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
   };
 })
 
+/**
+* @ngdoc directive
+* @name ionView
+* @module ionic
+* @restrict E
+*/
 .directive('ionView', ['$ionicViewService', '$rootScope', '$animate',
            function( $ionicViewService,   $rootScope,   $animate) {
   return {
@@ -3664,6 +3890,99 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
   };
 }])
 
+/**
+ * @ngdoc directive
+ * @name ionNavView
+ * @module ionic
+ * @restrict E
+ * @codepen HjnFx
+ *
+ * @description
+ * As a user navigates throughout your app, Ionic is able to keep track of their
+ * navigation history. By knowing their history, transitions between views
+ * correctly slide either left or right, or no transition at all. An additional
+ * benefit to Ionic's navigation system is its ability to manage multiple
+ * histories.
+ *
+ * Ionic uses the AngularUI Router module so app interfaces can be organized
+ * into various "states". Like Angular's core $route service, URLs can be used
+ * to control the views. However, the AngularUI Router provides a more powerful
+ * state manager in that states are bound to named, nested, and parallel views,
+ * allowing more than one template to be rendered on the same page.
+ * Additionally, each state is not required to be bound to a URL, and data can
+ * be pushed to each state which allows much flexibility.
+ *
+ * The ionNavView directive is used to render templates in your application. Each template
+ * is part of a state. States are usually mapped to a url, and are defined programatically
+ * using angular-ui-router (see [their docs](https://github.com/angular-ui/ui-router/wiki)),
+ * and remember to replace ui-view with ion-nav-view in examples).
+ *
+ * @usage
+ * In this example, we will create a navigation view that contains our different states for the app.
+ *
+ * To do this, in our markup use the ionNavView top level directive, adding an
+ * {@link ionic.directive:ionNavBar} directive which will render a header bar that updates as we
+ * navigate through the navigation stack.
+ *
+ * ```html
+ * <ion-nav-view>
+ *   <!-- Center content -->
+ *   <ion-nav-bar>
+ *   </ion-nav-bar>
+ * </ion-nav-view>
+ * ```
+ *
+ * Next, we need to setup our states that will be rendered.
+ *
+ * ```js
+ * var app = angular.module('myApp', ['ionic']);
+ * app.config(function($stateProvider) {
+ *   $stateProvider
+ *   .state('index', {
+ *     url: '/',
+ *     templateUrl: 'home.html'
+ *   })
+ *   .state('music', {
+ *     url: '/music',
+ *     templateUrl: 'music.html'
+ *   });
+ * });
+ * ```
+ * Then on app start, $stateProvider will look at the url, see it matches the index state,
+ * and then try to load home.html into the `<ion-nav-view>`.
+ *
+ * Pages are loaded by the URLs given. One simple way to create templates in Angular is to put
+ * them directly into your HTML file and use the `<script type="text/ng-template">` syntax.
+ * So here is one way to put home.html into our app:
+ *
+ * ```html
+ * <script id="home" type="text/ng-template">
+ *   <!-- The title of the ion-view will be shown on the navbar -->
+ *   <ion-view title="'Home'">
+ *     <ion-content ng-controller="HomeCtrl">
+ *       <!-- The content of the page -->
+ *       <a href="#/music">Go to music page!</a>
+ *     </ion-content>
+ *   </ion-view>
+ * </script>
+ * ```
+ *
+ * This is good to do because the template will be cached for very fast loading, instead of
+ * having to fetch them from the network.
+ *
+ * Please visit [AngularUI Router's docs](https://github.com/angular-ui/ui-router/wiki) for
+ * more info. Below is a great video by the AngularUI Router guys that may help to explain 
+ * how it all works:
+ * 
+ * <iframe width="560" height="315" src="//www.youtube.com/embed/dqJRoh8MnBo" 
+ * frameborder="0" allowfullscreen></iframe>
+ *
+ * @param {string=} name A view name. The name should be unique amongst the other views in the
+ * same state. You can have views of the same name that live in different states. For more
+ * information, see ui-router's [ui-view documentation](http://angular-ui.github.io/ui-router/site/#/api/ui.router.state.directive:ui-view).
+ * @param {string=} animation The animation to use for views underneath this ionNavView.
+ * Defaults to 'slide-left-right'.
+ */
 .directive('ionNavView', ['$ionicViewService', '$state', '$compile', '$controller', '$animate',
               function( $ionicViewService,   $state,   $compile,   $controller,   $animate) {
   // IONIC's fork of Angular UI Router, v0.2.7
@@ -4132,6 +4451,9 @@ angular.module('ionic.ui.virtualRepeat', [])
 
 angular.module('ionic.ui.scroll')
 
+/**
+ * @private
+ */
 .controller('$ionicScroll', ['$scope', 'scrollViewOptions', '$timeout', '$ionicScrollDelegate', '$window', function($scope, scrollViewOptions, $timeout, $ionicScrollDelegate, $window) {
 
   var self = this;
