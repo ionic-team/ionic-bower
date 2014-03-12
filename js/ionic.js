@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1151
+ * Ionic, v0.10.0-alpha-nightly-1153
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -538,7 +538,7 @@ window.ionic = {
   * Ported from github.com/EightMedia/hammer.js Gestures - thanks!
   */
 (function(ionic) {
-  
+
   /**
    * ionic.Gestures
    * use this to create instances
@@ -556,7 +556,7 @@ window.ionic = {
   // default settings
   ionic.Gestures.defaults = {
     // add css to the element to prevent the browser from doing
-    // its native behavior. this doesnt prevent the scrolling, 
+    // its native behavior. this doesnt prevent the scrolling,
     // but cancels the contextmenu, tap highlighting etc
     // set to false to disable this
     stop_browser_behavior: 'disable-user-behavior'
@@ -746,21 +746,21 @@ window.ionic = {
    * this holds the last move event,
    * used to fix empty touchend issue
    * see the onTouch event for an explanation
-   * @type {Object}
+   * type {Object}
    */
   var last_move_event = null;
 
 
   /**
    * when the mouse is hold down, this is true
-   * @type {Boolean}
+   * type {Boolean}
    */
   var enable_detect = false;
 
 
   /**
    * when touch events have been fired, this is true
-   * @type {Boolean}
+   * type {Boolean}
    */
   var touch_triggered = false;
 
@@ -989,7 +989,7 @@ window.ionic = {
   ionic.Gestures.PointerEvent = {
     /**
      * holds all pointers
-     * @type {Object}
+     * type {Object}
      */
     pointers: {},
 
@@ -1069,7 +1069,7 @@ window.ionic = {
      * also used for cloning when dest is an empty object
      * @param   {Object}    dest
      * @param   {Object}    src
-     * @parm	{Boolean}	merge		do a merge
+     * @param	{Boolean}	merge		do a merge
      * @returns {Object}    dest
      */
     extend: function extend(dest, src, merge) {
@@ -1505,16 +1505,16 @@ window.ionic = {
     *      like in the drag gesture we set it to 'drag' and in the swipe gesture we can
     *      check if the current gesture is 'drag' by accessing ionic.Gestures.detectionic.current.name
     *
-    *      @readonly
+    *      readonly
     *      @param  {ionic.Gestures.Instance}    inst
     *      the instance we do the detection for
     *
-    *      @readonly
+    *      readonly
     *      @param  {Object}    startEvent
     *      contains the properties of the first gesture detection in this sessionic.
     *      Used for calculations about timing, distance, etc.
     *
-    *      @readonly
+    *      readonly
     *      @param  {Object}    lastEvent
     *      contains all the properties of the last gesture detect in this sessionic.
     *
@@ -1540,7 +1540,7 @@ window.ionic = {
       /**
        * Hold
        * Touch stays at the same place for x time
-       * @events  hold
+       * events  hold
        */
       ionic.Gestures.gestures.Hold = {
         name: 'hold',
@@ -1586,7 +1586,7 @@ window.ionic = {
   /**
    * Tap/DoubleTap
    * Quick touch at a place or double at the same place
-   * @events  tap, doubletap
+   * events  tap, doubletap
    */
   ionic.Gestures.gestures.Tap = {
     name: 'tap',
@@ -1632,7 +1632,7 @@ window.ionic = {
   /**
    * Swipe
    * triggers swipe events when the end velocity is above the threshold
-   * @events  swipe, swipeleft, swiperight, swipeup, swipedown
+   * events  swipe, swipeleft, swiperight, swipeup, swipedown
    */
   ionic.Gestures.gestures.Swipe = {
     name: 'swipe',
@@ -1668,7 +1668,7 @@ window.ionic = {
    * Move with x fingers (default 1) around on the page. Blocking the scrolling when
    * moving left and right is a good practice. When all the drag events are blocking
    * you disable scrolling on that area.
-   * @events  drag, drapleft, dragright, dragup, dragdown
+   * events  drag, drapleft, dragright, dragup, dragdown
    */
   ionic.Gestures.gestures.Drag = {
     name: 'drag',
@@ -1789,7 +1789,7 @@ window.ionic = {
   /**
    * Transform
    * User want to scale or rotate with 2 fingers
-   * @events  transform, pinch, pinchin, pinchout, rotate
+   * events  transform, pinch, pinchin, pinchout, rotate
    */
   ionic.Gestures.gestures.Transform = {
     name: 'transform',
@@ -1879,7 +1879,7 @@ window.ionic = {
   /**
    * Touch
    * Called as first, tells the user has touched the screen
-   * @events  touch
+   * events  touch
    */
   ionic.Gestures.gestures.Touch = {
     name: 'touch',
@@ -1915,7 +1915,7 @@ window.ionic = {
   /**
    * Release
    * Called as last, tells the user has released the screen
-   * @events  release
+   * events  release
    */
   ionic.Gestures.gestures.Release = {
     name: 'release',
