@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1135
+ * Ionic, v0.10.0-alpha-nightly-1144
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1974,27 +1974,27 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
  * @module ionic
  *
  * @description
- * The ionContent directive provides an easy to use content area that can be configured 
+ * The ionContent directive provides an easy to use content area that can be configured
  * to use Ionic's custom Scroll View, or the built in overflow scorlling of the browser.
  *
- * While we recommend using the custom Scroll features in Ionic in most cases, sometimes 
+ * While we recommend using the custom Scroll features in Ionic in most cases, sometimes
  * (for performance reasons) only the browser's native overflow scrolling will suffice,
- * and so we've made it easy to toggle between the Ionic scroll implementation and 
+ * and so we've made it easy to toggle between the Ionic scroll implementation and
  * overflow scrolling.
  *
- * You can implement pull-to-refresh with the {@link ionic.directive:ionRefresher} 
- * directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll} 
+ * You can implement pull-to-refresh with the {@link ionic.directive:ionRefresher}
+ * directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll}
  * directive.
  *
  * @restrict E
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
- * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of 
+ * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll.
  * @param {boolean=} padding Whether to add padding to the content.
  * @param {boolean=} has-header Whether to offset the content for a header bar.
  * @param {boolean=} has-subheader Whether to offset the content for a subheader bar.
  * @param {boolean=} has-footer Whether to offset the content for a footer bar.
- * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges 
+ * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {expression=} on-scroll Expression to evaluate when the content is scrolled.
  * @param {expression=} on-scroll-complete Expression to evaluate when a scroll action completes.
@@ -2034,9 +2034,6 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
           scrollContent = angular.element($element[0].querySelector('.scroll'));
 
         $ionicBind($scope, $attr, {
-          //Use $ to stop onRefresh from recursively calling itself
-          $onRefresh: '&onRefresh',
-          $onRefreshOpening: '&onRefreshOpening',
           $onScroll: '&onScroll',
           $onScrollComplete: '&onScrollComplete',
           hasBouncing: '@',
@@ -2095,14 +2092,6 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
             });
           });
 
-          if(attr.refreshComplete) {
-            $scope.refreshComplete = function() {
-              if($scope.scrollView) {
-                $scope.$parent.$broadcast('scroll.onRefreshComplete');
-              }
-            };
-          }
-
         }
 
         transclude($scope, function(clone) {
@@ -2132,14 +2121,14 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * When refreshing is complete, $broadcast the 'scroll.refreshComplete' event
  * from your controller.
  *
- * @param {expression=} on-refresh Called when the user pulls down enough and lets go 
+ * @param {expression=} on-refresh Called when the user pulls down enough and lets go
  * of the refresher.
- * @param {expression=} on-pulling Called when the user starts to pull down 
+ * @param {expression=} on-pulling Called when the user starts to pull down
  * on the refresher.
- * @param {string=} pulling-icon The icon to display while the user is pulling down.  
+ * @param {string=} pulling-icon The icon to display while the user is pulling down.
  * Default: 'ion-arrow-down-c'.
- * @param {string=} pulling-text The text to display while the user is pulling down. 
- * @param {string=} refreshing-icon The icon to display after user lets go of the 
+ * @param {string=} pulling-text The text to display while the user is pulling down.
+ * @param {string=} refreshing-icon The icon to display after user lets go of the
  * refresher.
  * @param {string=} refreshing-text The text to display after the user lets go of
  * the refresher.
@@ -2198,7 +2187,7 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
           refreshingIcon: '@',
           refreshingText: '@',
           $onRefresh: '&onRefresh',
-          $onRefreshOpening: '&onRefreshOpening'
+          $onPulling: '&onPulling'
         });
 
         scrollCtrl.setRefresher($scope, $element[0]);
@@ -4797,7 +4786,7 @@ angular.module('ionic.ui.scroll')
     var refresherHeight = self.refresher.clientHeight || 0;
     scrollView.activatePullToRefresh(refresherHeight, function() {
       refresher.classList.add('active');
-      refresherScope.$onRefreshOpening();
+      refresherScope.$onPulling();
     }, function() {
       refresher.classList.remove('refreshing');
       refresher.classList.remove('active');
