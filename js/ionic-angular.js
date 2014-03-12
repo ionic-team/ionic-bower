@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1144
+ * Ionic, v0.10.0-alpha-nightly-1151
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -548,6 +548,8 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
       self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function(){
         self.hide();
       }, 200);
+
+      ionic.views.Modal.prototype.show.call(this);
 
     },
 
