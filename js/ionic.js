@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1154
+ * Ionic, v0.10.0-alpha-nightly-1166
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2255,7 +2255,7 @@ window.ionic = {
 
 })(window.ionic);
 
-(function(window, document, ionic) {
+(function(document, ionic) {
   'use strict';
 
   // Ionic CSS polyfills
@@ -2328,6 +2328,11 @@ window.ionic = {
       }
     });
   }
+
+})(document, ionic);
+
+(function(window, document, ionic) {
+  'use strict';
 
   // polyfill use to simulate native "tap"
   ionic.tapElement = function(target, e) {
