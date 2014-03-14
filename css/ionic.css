@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1192
+ * Ionic, v0.10.0-alpha-nightly-1194
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1192
+ * Ionic, v0.10.0-alpha-nightly-1194
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3072,6 +3072,20 @@ a.subdued {
  * --------------------------------------------------
  * Modals are independent windows that slide in from off-screen.
  */
+.modal-backdrop {
+  -webkit-transition: background-color 300ms ease-in-out;
+  -moz-transition: background-color 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0); }
+  .modal-backdrop.active {
+    background-color: rgba(0, 0, 0, 0.5); }
+
 .modal {
   position: absolute;
   top: 0;
@@ -3080,8 +3094,19 @@ a.subdued {
   min-height: 100%;
   width: 100%;
   background-color: #fff; }
-  .modal.active {
-    height: 100%; }
+
+@media (min-width: 680px) {
+  .modal {
+    top: 20%;
+    right: 20%;
+    bottom: 20%;
+    left: 20%;
+    overflow: visible;
+    min-height: 240px;
+    max-width: 768px;
+    width: 60%; }
+  .modal.ng-leave-active {
+    bottom: 0; } }
 
 .modal-open {
   pointer-events: none; }
