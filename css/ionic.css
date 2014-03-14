@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1204
+ * Ionic, v0.10.0-alpha-nightly-1206
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1204
+ * Ionic, v0.10.0-alpha-nightly-1206
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3329,34 +3329,34 @@ a.subdued {
     background-color: #444;
     border-color: #111; }
 
-.item.active, .ionic-pseudo .item:active, .item-complex.active .item-content {
+.item.active:not(.item-divider), .item:active:not(.item-divider), .item-complex.active .item-content {
   background-color: #D9D9D9;
   border-color: #ccc; }
-  .item.active.item-light, .ionic-pseudo .item:active.item-light, .item-complex.active .item-content.item-light {
+  .item.active:not(.item-divider).item-light, .item:active:not(.item-divider).item-light, .item-complex.active .item-content.item-light {
     background-color: #fafafa;
     border-color: #ccc; }
-  .item.active.item-stable, .ionic-pseudo .item:active.item-stable, .item-complex.active .item-content.item-stable {
+  .item.active:not(.item-divider).item-stable, .item:active:not(.item-divider).item-stable, .item-complex.active .item-content.item-stable {
     background-color: #e5e5e5;
     border-color: #a2a2a2; }
-  .item.active.item-positive, .ionic-pseudo .item:active.item-positive, .item-complex.active .item-content.item-positive {
+  .item.active:not(.item-divider).item-positive, .item:active:not(.item-divider).item-positive, .item-complex.active .item-content.item-positive {
     background-color: #145fd7;
     border-color: #145fd7; }
-  .item.active.item-calm, .ionic-pseudo .item:active.item-calm, .item-complex.active .item-content.item-calm {
+  .item.active:not(.item-divider).item-calm, .item:active:not(.item-divider).item-calm, .item-complex.active .item-content.item-calm {
     background-color: #1aacc3;
     border-color: #1aacc3; }
-  .item.active.item-assertive, .ionic-pseudo .item:active.item-assertive, .item-complex.active .item-content.item-assertive {
+  .item.active:not(.item-divider).item-assertive, .item:active:not(.item-divider).item-assertive, .item-complex.active .item-content.item-assertive {
     background-color: #cc2311;
     border-color: #cc2311; }
-  .item.active.item-balanced, .ionic-pseudo .item:active.item-balanced, .item-complex.active .item-content.item-balanced {
+  .item.active:not(.item-divider).item-balanced, .item:active:not(.item-divider).item-balanced, .item-complex.active .item-content.item-balanced {
     background-color: #498f24;
     border-color: #498f24; }
-  .item.active.item-energized, .ionic-pseudo .item:active.item-energized, .item-complex.active .item-content.item-energized {
+  .item.active:not(.item-divider).item-energized, .item:active:not(.item-divider).item-energized, .item-complex.active .item-content.item-energized {
     background-color: #d39211;
     border-color: #d39211; }
-  .item.active.item-royal, .ionic-pseudo .item:active.item-royal, .item-complex.active .item-content.item-royal {
+  .item.active:not(.item-divider).item-royal, .item:active:not(.item-divider).item-royal, .item-complex.active .item-content.item-royal {
     background-color: #552bdf;
     border-color: #552bdf; }
-  .item.active.item-dark, .ionic-pseudo .item:active.item-dark, .item-complex.active .item-content.item-dark {
+  .item.active:not(.item-divider).item-dark, .item:active:not(.item-divider).item-dark, .item-complex.active .item-content.item-dark {
     background-color: #262626;
     border-color: #000; }
 

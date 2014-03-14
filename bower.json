@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "0.10.0-alpha-nightly-1204",
+  "version": "0.10.0-alpha-nightly-1206",
   "codename": "salamander",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -35,4 +35,3 @@
     "angular-ui-router": "0.2.7"
   }
 }
-undefined
