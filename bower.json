@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "0.10.0-alpha-nightly-1202",
+  "version": "0.10.0-alpha-nightly-1205",
   "codename": "salamander",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -28,25 +28,6 @@
   ],
   "license": "MIT",
   "private": false,
-  "ignore": [
-    "**/.*",
-    "CONTRIBUTING.md",
-    "Gruntfile.js",
-    "component.json",
-    "config",
-    "examples",
-    "package.json",
-    "js/angular",
-    "js/angular-ui",
-    "scripts",
-    "test",
-    "js/controllers",
-    "js/ext",
-    "js/utils",
-    "js/views",
-    "js/_license.js",
-    "js/ionic.js"
-  ],
   "dependencies": {
     "angular": "1.2.12",
     "angular-animate": "1.2.12",
@@ -54,3 +35,4 @@
     "angular-ui-router": "0.2.7"
   }
 }
+undefined
