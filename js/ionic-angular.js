@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1195
+ * Ionic, v0.10.0-alpha-nightly-1199
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -822,7 +822,7 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
  * @name $ionicPopup
  * @module ionic
  * @restrict E
- * @codepen jsHjf
+ * @codepen zkmhJ
  * @description
  *
  * The Ionic Popup service makes it easy to programatically create and show popup
