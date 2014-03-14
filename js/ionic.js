@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1201
+ * Ionic, v0.10.0-alpha-nightly-1202
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7104,8 +7104,11 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
       // what the drag velocity is
       var ratio = this.getOpenRatio();
 
-      if(ratio === 0)
+      if(ratio === 0) {
+        // Just to be safe
+        this.openPercentage(0);
         return;
+      }
 
       var velocityThreshold = 0.3;
       var velocityX = e.gesture.velocityX;
