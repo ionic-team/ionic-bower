@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1208
+ * Ionic, v0.10.0-alpha-nightly-1209
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4895,6 +4895,14 @@ ionic.views.Scroll = ionic.views.View.inherit({
 (function(ionic) {
 'use strict';
 
+  /**
+   * @ngdoc controller
+   * @name ionicBar
+   * @module ionic
+   * @description
+   * Controller for the {@link ionic.directive:ionHeaderBar} and
+   * {@link ionic.directive:ionFooterBar} directives.
+   */
   ionic.views.HeaderBar = ionic.views.View.inherit({
     initialize: function(opts) {
       this.el = opts.el;
@@ -4907,11 +4915,18 @@ ionic.views.Scroll = ionic.views.View.inherit({
     },
 
     /**
-     * Align the title text given the buttons in the header
-     * so that the header text size is maximized and aligned
-     * correctly as long as possible.
+     * @ngdoc method
+     * @name ionicBar#align
+     * @description
+     * Aligns the title text with the buttons in the bar
+     * so that the title size is maximized and aligned correctly
+     * as much as possible.
+     * @param {string=} direction Which direction to align the title towards.
+     * Available: 'left', 'right', 'center'. Default: 'center'.
      */
-    align: function() {
+    align: function(align) {
+
+      align || (align = this.alignTitle);
 
       // Find the titleEl element
       var titleEl = this.el.querySelector('.title');
@@ -4956,7 +4971,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
         // Size and align the header titleEl based on the sizes of the left and
         // right children, and the desired alignment mode
-        if(self.alignTitle == 'center') {
+        if(align == 'center') {
           if(margin > 10) {
             titleEl.style.left = margin + 'px';
             titleEl.style.right = margin + 'px';
@@ -4966,12 +4981,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
               titleEl.style.right = (rightWidth + 5) + 'px';
             }
           }
-        } else if(self.alignTitle == 'left') {
+        } else if(align == 'left') {
           titleEl.classList.add('title-left');
           if(leftWidth > 0) {
             titleEl.style.left = (leftWidth + 15) + 'px';
           }
-        } else if(self.alignTitle == 'right') {
+        } else if(align == 'right') {
           titleEl.classList.add('title-right');
           if(rightWidth > 0) {
             titleEl.style.right = (rightWidth + 15) + 'px';

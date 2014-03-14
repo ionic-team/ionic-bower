@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1208
+ * Ionic, v0.10.0-alpha-nightly-1209
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40,26 +40,25 @@ angular.module('ionic.service', [
 // UI specific services and delegates
 angular.module('ionic.ui.service', [
   'ionic.ui.service.scrollDelegate',
-  'ionic.ui.service.slideBoxDelegate',
-  'ionic.ui.service.sideMenuDelegate',
+  'ionic.ui.service.slideBoxDelegate'
 ]);
 
 angular.module('ionic.ui', [
-                            'ionic.ui.content',
-                            'ionic.ui.scroll',
-                            'ionic.ui.tabs',
-                            'ionic.ui.viewState',
-                            'ionic.ui.header',
-                            'ionic.ui.sideMenu',
-                            'ionic.ui.slideBox',
-                            'ionic.ui.list',
-                            'ionic.ui.checkbox',
-                            'ionic.ui.toggle',
-                            'ionic.ui.radio',
-                            'ionic.ui.touch',
-                            'ionic.ui.popup'
-                           ]);
-
+    'ionic.ui.checkbox',
+    'ionic.ui.content',
+    'ionic.ui.header',
+    'ionic.ui.list',
+    'ionic.ui.navBar',
+    'ionic.ui.popup',
+    'ionic.ui.radio',
+    'ionic.ui.scroll',
+    'ionic.ui.sideMenu',
+    'ionic.ui.slideBox',
+    'ionic.ui.tabs',
+    'ionic.ui.toggle',
+    'ionic.ui.touch',
+    'ionic.ui.viewState'
+]);
 
 angular.module('ionic', [
     'ionic.service',
@@ -2118,46 +2117,6 @@ angular.module('ionic.ui.service.scrollDelegate', [])
 (function() {
 'use strict';
 
-angular.module('ionic.ui.service.sideMenuDelegate', [])
-
-.factory('$ionicSideMenuDelegate', ['$rootScope', '$timeout', '$q', function($rootScope, $timeout, $q) {
-  return {
-    getSideMenuController: function($scope) {
-      return $scope.sideMenuController;
-    },
-    close: function($scope) {
-      if($scope.sideMenuController) {
-        $scope.sideMenuController.close();
-      }
-    },
-    toggleLeft: function($scope) {
-      if($scope.sideMenuController) {
-        $scope.sideMenuController.toggleLeft();
-      }
-    },
-    toggleRight: function($scope) {
-      if($scope.sideMenuController) {
-        $scope.sideMenuController.toggleRight();
-      }
-    },
-    openLeft: function($scope) {
-      if($scope.sideMenuController) {
-        $scope.sideMenuController.openPercentage(100);
-      }
-    },
-    openRight: function($scope) {
-      if($scope.sideMenuController) {
-        $scope.sideMenuController.openPercentage(-100);
-      }
-    }
-  };
-}]);
-
-})();
-
-(function() {
-'use strict';
-
 angular.module('ionic.ui.service.slideBoxDelegate', [])
 
 .factory('$ionicSlideBoxDelegate', ['$rootScope', '$timeout', function($rootScope, $timeout) {
@@ -2262,109 +2221,99 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @name ionHeaderBar
  * @module ionic
  * @restrict E
+ * @controller ionicBar
+ *
  * @description
- * While Ionic provides simple Header and Footer bars that can be created through
- * HTML and CSS alone, Header bars specifically can be extended in order to
- * provide dynamic layout features such as auto-title centering and animation.
- * They are also used by the Views and Navigation Controller to animate a title
- * on navigation and toggle a back button.
+ * Adds a fixed header bar above some content.
  *
- * The main header bar feature provided is auto title centering.
- * In this situation, the title text will center itself until either the
- * left or right button content is too wide for the label to center.
- * In that case, it will slide left or right until it can fit.
- * You can also align the title left for a more Android-friendly header.
+ * Is able to have left or right buttons, and additionally its title can be
+ * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
  *
- * Using two-way data binding, the header bar will automatically
- * readjust the heading title alignment when the title or buttons change.
- *
- * @param {string} title The title use on the headerBar.
- * @param {expression=} leftButtons Point to an array of buttons to put on the left of the bar.
- * @param {expression=} rightButtons Point to an array of buttons to put on the right of the bar.
- * @param {string=} type The type of the bar, for example 'bar-positive'.
- * @param {string=} align Where to align the title. 'left', 'right', or 'center'.  Defaults to 'center'.
+ * @param {string=} model The model to assign this headerBar's 
+ * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * Defaults to assigning to $scope.headerBarController.
+ * @param {string=} align-title Where to align the title at the start.
+ * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
  * @usage
  * ```html
- * <ion-header-bar
- *  title="{{myTitle}}"
- *  left-buttons="leftButtons"
- *  right-buttons="rightButtons"
- *  type="bar-positive"
- *  align-title="center">
+ * <ion-header-bar align-title="left">
+ *   <div class="buttons">
+ *     <button class="button">Left Button</button>
+ *   </div>
+ *   <h1 class="title">Title!</h1>
+ *   <div class="buttons">
+ *     <button class="button">Right Button</button>
+ *   </div>
  * </ion-header-bar>
+ * <ion-content>
+ *   Some content!
+ * </ion-content>
  * ```
- *
  */
-.directive('ionHeaderBar', ['$ionicScrollDelegate', function($ionicScrollDelegate) {
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    template: '<header class="bar bar-header">\
-                <div class="buttons">\
-                  <button ng-repeat="button in leftButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" ng-bind-html="button.content">\
-                  </button>\
-                </div>\
-                <h1 class="title" ng-bind-html="title"></h1>\
-                <div class="buttons">\
-                  <button ng-repeat="button in rightButtons" class="button no-animation" ng-class="button.type" ng-click="button.tap($event, $index)" ng-bind-html="button.content">\
-                  </button>\
-                </div>\
-              </header>',
+.directive('ionHeaderBar', barDirective(true))
 
-    scope: {
-      leftButtons: '=',
-      rightButtons: '=',
-      title: '@',
-      type: '@',
-      alignTitle: '@'
-    },
-    link: function($scope, $element, $attr) {
-      var hb = new ionic.views.HeaderBar({
-        el: $element[0],
-        alignTitle: $scope.alignTitle || 'center'
-      });
+/**
+ * @ngdoc directive
+ * @name ionFooterBar
+ * @module ionic
+ * @restrict E
+ * @controller ionicBar
+ *
+ * @description
+ * Adds a fixed footer bar below some content.
+ *
+ * Is able to have left or right buttons, and additionally its title can be
+ * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
+ *
+ * @param {string=} model The model to assign this footerBar's 
+ * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * Defaults to assigning to $scope.footerBarController.
+ * @param {string=} align-title Where to align the title at the start.
+ * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
+ *
+ * @usage
+ * ```html
+ * <ion-content>
+ *   Some content!
+ * </ion-content>
+ * <ion-footer-bar align-title="left">
+ *   <div class="buttons">
+ *     <button class="button">Left Button</button>
+ *   </div>
+ *   <h1 class="title">Title!</h1>
+ *   <div class="buttons">
+ *     <button class="button">Right Button</button>
+ *   </div>
+ * </ion-footer-bar>
+ * ```
+ */
+.directive('ionFooterBar', barDirective(false));
 
-      $element.addClass($scope.type);
+function barDirective(isHeader) {
+  var BAR_TEMPLATE = isHeader ?
+    '<header class="bar bar-header" ng-transclude></header>' :
+    '<footer class="bar bar-header" ng-transclude></footer>';
+  var BAR_MODEL_DEFAULT = isHeader ? 
+    'headerBarController' : 
+    'footerBarController';
+  return ['$parse', function($parse) {
+    return {
+      restrict: 'E',
+      replace: true,
+      transclude: true,
+      template: BAR_TEMPLATE,
+      link: function($scope, $element, $attr) {
+        var hb = new ionic.views.HeaderBar({
+          el: $element[0],
+          alignTitle: $attr.alignTitle || 'center'
+        });
 
-      $scope.headerBarView = hb;
-
-      $scope.$watchCollection('leftButtons', function(val) {
-        // Resize the title since the buttons have changed
-        hb.align();
-      });
-
-      $scope.$watchCollection('rightButtons', function(val) {
-        // Resize the title since the buttons have changed
-        hb.align();
-      });
-
-      $scope.$watch('title', function(val) {
-        // Resize the title since the title has changed
-        hb.align();
-      });
-    }
-  };
-}])
-
-.directive('ionFooterBar', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    template: '<footer class="bar bar-footer" ng-transclude>\
-              </footer>',
-
-    scope: {
-      type: '@',
-    },
-
-    link: function($scope, $element, $attr) {
-      $element.addClass($scope.type);
-    }
-  };
-});
+        $parse($attr.model || BAR_MODEL_DEFAULT).assign($scope.$parent, hb);
+      }
+    };
+  }];
+}
 
 })(ionic);
 
@@ -3122,6 +3071,386 @@ angular.module('ionic.ui.navAnimation', [])
     }
   };
 });
+
+
+angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
+
+/**
+ * @ngdoc controller
+ * @name ionicNavBar
+ * @module ionic
+ * @description
+ * Controller for the {@link ionic.directive:ionNavBar} directive.
+ */
+.controller('$ionicNavBar', ['$scope', '$element', '$ionicViewService', '$animate', '$compile',
+function($scope, $element, $ionicViewService, $animate, $compile) {
+  //Let the parent know about our controller too so that children of
+  //sibling content elements can know about us.
+  $element.parent().data('$ionNavBarController', this);
+
+  var hb = this._headerBarView = new ionic.views.HeaderBar({
+    el: $element[0],
+    alignTitle: $scope.alignTitle || 'center'
+  });
+
+  this.leftButtonsElement = angular.element(
+    $element[0].querySelector('.buttons.left-buttons')
+  );
+  this.rightButtonsElement = angular.element(
+    $element[0].querySelector('.buttons.right-buttons')
+  );
+
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#back
+   * @description Goes back in the view history.
+   * @param {DOMEvent=} event The event object (eg from a tap event)
+   */
+  this.back = function(e) {
+    var backView = $ionicViewService.getBackView();
+    backView && backView.go();
+    e && (e.alreadyHandled = true);
+    return false;
+  };
+
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#align
+   * @description Calls {@link ionic.controller:ionicBar#align ionicBar#align} for this navBar.
+   * @param {string=} direction The direction to the align the title text towards.
+   */
+  this.align = function(direction) {
+    this._headerBarView.align(direction);
+  };
+
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#showBackButton
+   * @description
+   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown (if it exists).
+   * @param {boolean} show Whether to show the back button.
+   */
+  this.showBackButton = function(show) {
+    $scope.backButtonShown = !!show;
+  };
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#showBar
+   * @description
+   * Set whether the {@link ionic.directive:ionNavBar} should be shown.
+   * @param {boolean} show Whether to show the bar.
+   */
+  this.showBar = function(show) {
+    $scope.isInvisible = !show;
+  };
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#setTitle
+   * @description
+   * Set the title for the {@link ionic.directive:ionNavBar}.
+   * @param {string} title The new title to show.
+   */
+  this.setTitle = function(title) {
+    $scope.oldTitle = $scope.title;
+    $scope.title = title || '';
+  };
+  /**
+   * @ngdoc method
+   * @name ionicNavBar#changeTitle
+   * @description
+   * Change the title, transitioning the new title in and the old one out in a given direction.
+   * @param {string} title The new title to show.
+   * @param {string} direction The direction to transition the new title in.
+   * Available: 'forward', 'back'.
+   */
+  this.changeTitle = function(title, direction) {
+    if ($scope.title === title) {
+      return false;
+    }
+    this.setTitle(title);
+    $scope.isReverse = direction == 'back';
+    $scope.shouldAnimate = !!direction;
+
+    if (!$scope.shouldAnimate) {
+      //We're done!
+      this._headerBarView.align();
+    } else {
+      this._animateTitles();
+    }
+    return true;
+  };
+
+  /**
+   * @private
+   * Exposed for testing
+   */
+  this._animateTitles = function() {
+    var oldTitleEl, newTitleEl, currentTitles;
+
+    //If we have any title right now
+    //(or more than one, they could be transitioning on switch),
+    //replace the first one with an oldTitle element
+    currentTitles = $element[0].querySelectorAll('.title');
+    if (currentTitles.length) {
+      oldTitleEl = $compile('<h1 class="title" ng-bind-html="oldTitle"></h1>')($scope);
+      angular.element(currentTitles[0]).replaceWith(oldTitleEl);
+    }
+    //Compile new title
+    newTitleEl = $compile('<h1 class="title invisible" ng-bind-html="title"></h1>')($scope);
+
+    //Animate in on next frame
+    ionic.requestAnimationFrame(function() {
+
+      oldTitleEl && $animate.leave(angular.element(oldTitleEl));
+
+      var insert = oldTitleEl && angular.element(oldTitleEl) || null;
+      $animate.enter(newTitleEl, $element, insert, function() {
+        hb.align();
+      });
+
+      //Cleanup any old titles leftover (besides the one we already did replaceWith on)
+      angular.forEach(currentTitles, function(el) {
+        if (el && el.parentNode) {
+          //Use .remove() to cleanup things like .data()
+          angular.element(el).remove();
+        }
+      });
+
+      //$apply so bindings fire
+      $scope.$digest();
+
+      //Stop flicker of new title on ios7
+      ionic.requestAnimationFrame(function() {
+        newTitleEl[0].classList.remove('invisible');
+      });
+    });
+  };
+}])
+
+/**
+ * @ngdoc directive
+ * @name ionNavBar
+ * @module ionic
+ * @controller ionicNavBar
+ * @restrict E
+ *
+ * @description
+ * If we have an {@link ionic.directive:ionNavView} directive, we can also create an
+ * `<ion-nav-bar>`, which will create a topbar that updates as the application state changes.
+ *
+ * We can add a back button by putting an {@link ionic.directive:ionNavBackButton} inside.
+ *
+ * We can add buttons depending on the currently visible view using
+ * {@link ionic.directive:ionNavButtons}.
+ *
+ * @usage
+ *
+ * ```html
+ * <body ng-app="starter">
+ *   <!-- The nav bar that will be updated as we navigate -->
+ *   <ion-nav-bar
+ *     animation="nav-title-slide-ios7"
+ *     type="bar-positive"></ion-nav-bar>
+ *
+ *   <!-- where the initial view template will be rendered -->
+ *   <ion-nav-view animation="slide-left-right"></ion-nav-view>
+ * </body>
+ * ```
+ *
+ * @param model {string=} The model to assign the
+ * {@link ionic.controller:ionicNavBar ionicNavBar controller} to.
+ * Default: assigns it to $scope.navBarController.
+ * @param animation {string=} The animation used to transition between titles.
+ * @param type {string=} The className for the navbar.  For example, 'bar-positive'.
+ * @param align {string=} Where to align the title of the navbar.
+ * Available: 'left', 'right', 'center'. Defaults to 'center'.
+ */
+.directive('ionNavBar', ['$ionicViewService', '$rootScope', '$animate', '$compile', '$parse',
+function($ionicViewService, $rootScope, $animate, $compile, $parse) {
+
+  return {
+    restrict: 'E',
+    replace: true,
+    transclude: true,
+    controller: '$ionicNavBar',
+    scope: {
+      animation: '@',
+      type: '@',
+      alignTitle: '@'
+    },
+    template:
+      '<header class="bar bar-header nav-bar{{navBarClass()}}">' +
+        '<div class="buttons left-buttons"> ' +
+        '</div>' +
+        '<h1 ng-bind-html="title" class="title"></h1>' +
+        '<div class="buttons right-buttons"> ' +
+        '</div>' +
+      '</header>',
+    compile: function(tElement, tAttrs, transclude) {
+
+      return function link($scope, $element, $attr, navBarCtrl) {
+        $parse($attr.model || 'navBarController')
+          .assign($scope.$parent, navBarCtrl);
+
+        //Put transcluded content (usually a back button) before the rest
+        transclude($scope, function(clone) {
+          $element.prepend(clone);
+        });
+
+        //defaults
+        $scope.backButtonShown = false;
+        $scope.shouldAnimate = true;
+        $scope.isReverse = false;
+        $scope.isInvisible = true;
+
+        $scope.navBarClass = function() {
+          return ($scope.type ? ' ' + $scope.type : '') +
+            ($scope.isReverse ? ' reverse' : '') +
+            ($scope.isInvisible ? ' invisible' : '') +
+            ($scope.shouldAnimate && $scope.animation ? ' ' + $scope.animation : '');
+        };
+      };
+    }
+  };
+}])
+
+/**
+ * @ngdoc directive
+ * @name ionNavBackButton
+ * @module ionic
+ * @restrict E
+ * @parent ionNavBar
+ * @description
+ * Creates a back button inside an {@link ionic.directive:ionNavBar}.
+ *
+ * Will show up when the user is able to go back in the current navigation stack.
+ *
+ * By default, will go back when clicked.  If you wish to set a custom action on click,
+ * simply define an `ng-click` attribute and use
+ * {@link ionic.controller:ionicNavBar#back ionicNavBar controller's .back method} to go back
+ * when wished.
+ *
+ * @usage
+ *
+ * With default click action:
+ *
+ * ```html
+ * <ion-nav-bar>
+ *   <ion-nav-back-button class="button-icon">
+ *     <i class="ion-arrow-left-c"></i> Back!
+ *   </ion-nav-back-button>
+ * </ion-nav-bar>
+ * ```
+ *
+ * With custom click action:
+ *
+ * ```html
+ * <ion-nav-bar>
+ *   <ion-nav-back-button class="button-icon"
+ *     ng-click="canGoBack && navBarController.back()">
+ *     <i class="ion-arrow-left-c"></i> Back!
+ *   </ion-nav-back-button>
+ * </ion-nav-bar>
+ * ```
+ */
+.directive('ionNavBackButton', [function() {
+  return {
+    restrict: 'E',
+    require: '^ionNavBar',
+    replace: true,
+    transclude: true,
+    template:
+      '<button class="button back-button" ng-transclude>' +
+      '</button>',
+    link: function($scope, $element, $attr, navBarCtrl) {
+      if (!$attr.ngClick) {
+        ionic.on('tap', navBarCtrl.back, $element[0]);
+      }
+
+      //If the current viewstate does not allow a back button,
+      //always hide it.
+      var deregisterListener = $scope.$parent.$on(
+        '$viewHistory.historyChange',
+        function(e, data) {
+          $scope.hasBackButton = !!data.showBack;
+        }
+      );
+      $scope.$on('$destroy', deregisterListener);
+
+      //Make sure both that a backButton is allowed in the first place,
+      //and that it is shown by the current view.
+      $scope.$watch('!!(backButtonShown && hasBackButton)', function(val) {
+        $element.toggleClass('hide', !val);
+      });
+    }
+  };
+}])
+
+/**
+ * @ngdoc directive
+ * @name ionNavButtons
+ * @module ionic
+ * @restrict E
+ * @parent ionNavView
+ *
+ * @description
+ * Use ionNavButtons to set the buttons on your {@link ionic.directive:ionNavBar}
+ * from within an {@link ionic.directive:ionView}.
+ *
+ * Any buttons you declare will be placed onto the navbar's corresponding side,
+ * and then destroyed when the user leaves their parent view.
+ *
+ * @usage
+ * ```html
+ * <ion-nav-bar>
+ * </ion-nav-bar>
+ * <ion-nav-view>
+ *   <ion-view>
+ *     <ion-nav-buttons side="left">
+ *       <button class="button">
+ *         I'm a button on the left of the navbar!
+ *       </button>
+ *     </ion-nav-buttons>
+ *     <ion-content>
+ *       Some super content here!
+ *     </ion-content>
+ *   </ion-view>
+ * </ion-nav-view>
+ * ```
+ *
+ * @param {string} side The side to place the buttons on in the parent
+ * {@link ionic.directive:ionNavBar}. Available: 'left' or 'right'.
+ */
+.directive('ionNavButtons', ['$compile', '$animate', function($compile, $animate) {
+  return {
+    require: '^ionNavBar',
+    transclude: true,
+    restrict: 'E',
+    compile: function($element, $attrs, transclude) {
+      return function($scope, $element, $attrs, navBarCtrl) {
+        var navElement = $attrs.side === 'right' ?
+          navBarCtrl.rightButtonsElement :
+          navBarCtrl.leftButtonsElement;
+
+        //Put all of our inside buttons into their own div,
+        //so we can remove them all when this element dies -
+        //even if the buttons have changed through an ng-repeat or the like,
+        //we just remove their div parent and they are gone.
+        var clone = angular.element('<div>').append(transclude($scope));
+        $animate.enter(clone, navElement);
+
+        //When our ion-nav-buttons container is destroyed,
+        //destroy everything in the navbar
+        $element.on('$destroy', function() {
+          $animate.leave(clone);
+        });
+
+        //The original element is just a completely empty <ion-nav-buttons></ion-nav-buttons> - make it invisible
+        $element.css('display', 'none');
+      };
+    }
+  };
+}]);
 
 (function() {
 'use strict';
@@ -4125,8 +4454,6 @@ function($scope, $ionicViewService, $rootScope, $element) {
  * @param {string=} icon-off The icon of the tab while it is not selected.
  * @param {expression=} badge The badge to put on this tab (usually a number).
  * @param {expression=} badge-style The style of badge to put on this tab (eg tabs-positive).
- * @param {expression=} left-buttons The left buttons to use on a parent {@link ionic.directive:ionNavBar} while this tab is selected.
- * @param {expression=} right-buttons The right buttons to use on a parent {@link ionic.directive:ionNavBar} while this tab is selected.
  * @param {expression=} on-select Called when this tab is selected.
  * @param {expression=} on-deselect Called when this tab is deselected.
  */
@@ -4159,8 +4486,6 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
 
         $ionicBind($scope, $attr, {
           animate: '=',
-          leftButtons: '=',
-          rightButtons: '=',
           onSelect: '&',
           onDeselect: '&',
           title: '@',
@@ -4425,197 +4750,6 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
 
 /**
  * @ngdoc directive
- * @name ionNavBar
- * @module ionic
- * @restrict E
- *
- * @usage
- * If have an {@link ionic.directive:ionNavView} directive, we can also create an
- * <ion-nav-bar>, which will create a topbar that updates as the application state changes.
- * We can also add some styles and set up animations:
- *
- * ```html
- * <body ng-app="starter">
- *   <!-- The nav bar that will be updated as we navigate -->
- *   <ion-nav-bar animation="nav-title-slide-ios7"
- *            type="bar-positive"
- *            back-button-type="button-icon"
- *            back-button-icon="ion-arrow-left-c"></ion-nav-bar>
- *
- *   <!-- where the initial view template will be rendered -->
- *   <ion-nav-view animation="slide-left-right"></ion-nav-view>
- * </body>
- * ```
- *
- * @param {string=} back-button-type The type of the back button's icon. Available: 'button-icon' or just 'button'.
- * @param {string=} back-button-icon The icon to use for the back button. For example, 'ion-arrow-left-c'.
- * @param {string=} back-button-label The label to use for the back button. For example, 'Back'.
- * @param animation {string=} The animation used to transition between titles.
- * @param type {string=} The className for the navbar.  For example, 'bar-positive'.
- * @param align {string=} Where to align the title of the navbar. Available: 'left', 'right', 'center'. Defaults to 'center'.
- */
-.directive('ionNavBar', ['$ionicViewService', '$rootScope', '$animate', '$compile',
-                function( $ionicViewService,   $rootScope,   $animate,   $compile) {
-
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      animation: '@',
-      type: '@',
-      backType: '@backButtonType',
-      backLabel: '@backButtonLabel',
-      backIcon: '@backButtonIcon',
-      alignTitle: '@'
-    },
-    controller: function() {},
-    template:
-    '<header class="bar bar-header nav-bar{{navBarClass()}}">' +
-      '<ion-nav-back-button ng-if="(backType || backLabel || backIcon)" ' +
-        'type="backType" label="backLabel" icon="backIcon" class="hide" ' +
-        'ng-class="{\'hide\': !backButtonEnabled}">' +
-      '</ion-nav-back-button>' +
-      '<div class="buttons left-buttons"> ' +
-        '<button ng-click="button.tap($event)" ng-repeat="button in leftButtons" ' +
-          'class="button no-animation {{button.type}}" ng-bind-html="button.content">' +
-        '</button>' +
-      '</div>' +
-
-      '<h1 ng-bind-html="title" class="title"></h1>' +
-
-      '<div class="buttons right-buttons"> ' +
-        '<button ng-click="button.tap($event)" ng-repeat="button in rightButtons" '+
-          'class="button no-animation {{button.type}}" ng-bind-html="button.content">' +
-        '</button>' +
-      '</div>' +
-    '</header>',
-    compile: function(tElement, tAttrs) {
-
-      return function link($scope, $element, $attr) {
-        //defaults
-        $scope.backButtonEnabled = false;
-        $scope.animateEnabled = true;
-        $scope.isReverse = false;
-        $scope.isInvisible = true;
-
-        $scope.navBarClass = function() {
-          return ($scope.type ? ' ' + $scope.type : '') +
-            ($scope.isReverse ? ' reverse' : '') +
-            ($scope.isInvisible ? ' invisible' : '') +
-            (!$scope.animationDisabled && $scope.animation ? ' ' + $scope.animation : '');
-        };
-
-        // Initialize our header bar view which will handle
-        // resizing and aligning our title labels
-        var hb = new ionic.views.HeaderBar({
-          el: $element[0],
-          alignTitle: $scope.alignTitle || 'center'
-        });
-        $scope.headerBarView = hb;
-
-        //Navbar events
-        $scope.$on('viewState.viewEnter', function(e, data) {
-          updateHeaderData(data);
-        });
-        $scope.$on('viewState.showNavBar', function(e, showNavBar) {
-          $scope.isInvisible = !showNavBar;
-        });
-
-        // All of these these are emitted from children of a sibling scope,
-        // so we listen on parent so we can catch them as they bubble up
-        var unregisterEventListeners = [
-          $scope.$parent.$on('$viewHistory.historyChange', function(e, data) {
-            $scope.backButtonEnabled = !!data.showBack;
-          }),
-          $scope.$parent.$on('viewState.leftButtonsChanged', function(e, data) {
-            $scope.leftButtons = data;
-          }),
-          $scope.$parent.$on('viewState.rightButtonsChanged', function(e, data) {
-            $scope.rightButtons = data;
-          }),
-          $scope.$parent.$on('viewState.showBackButton', function(e, data) {
-            $scope.backButtonEnabled = !!data;
-          }),
-          $scope.$parent.$on('viewState.titleUpdated', function(e, data) {
-            $scope.title = data && data.title || '';
-          })
-        ];
-        $scope.$on('$destroy', function() {
-          for (var i=0; i<unregisterEventListeners.length; i++)
-            unregisterEventListeners[i]();
-        });
-
-        function updateHeaderData(data) {
-
-          if (angular.isDefined(data.hideBackButton)) {
-            $scope.backButtonEnabled = !!data.hideBackButton;
-          }
-          $scope.isReverse = data.navDirection == 'back';
-          $scope.animateEnabled = !!(data.navDirection && data.animate !== false);
-
-          $scope.leftButtons = data.leftButtons;
-          $scope.rightButtons = data.rightButtons;
-          $scope.oldTitle = $scope.title;
-          $scope.title = data && data.title || '';
-
-          // only change if they're different
-          if($scope.oldTitle !== $scope.title) {
-            if (!$scope.animateEnabled) {
-              //If no animation, we're done!
-              hb.align();
-            } else {
-              animateTitles();
-            }
-          }
-        }
-
-        function animateTitles() {
-          var oldTitleEl, newTitleEl, currentTitles;
-
-          //If we have any title right now (or more than one, they could be transitioning on switch),
-          //replace the first one with an oldTitle element
-          currentTitles = $element[0].querySelectorAll('.title');
-          if (currentTitles.length) {
-            oldTitleEl = $compile('<h1 class="title" ng-bind-html="oldTitle"></h1>')($scope);
-            angular.element(currentTitles[0]).replaceWith(oldTitleEl);
-          }
-          //Compile new title
-          newTitleEl = $compile('<h1 class="title invisible" ng-bind-html="title"></h1>')($scope);
-
-          //Animate in one frame
-          ionic.requestAnimationFrame(function() {
-
-            oldTitleEl && $animate.leave(angular.element(oldTitleEl));
-
-            var insert = oldTitleEl && angular.element(oldTitleEl) || null;
-            $animate.enter(newTitleEl, $element, insert, function() {
-              hb.align();
-            });
-
-            //Cleanup any old titles leftover (besides the one we already did replaceWith on)
-            angular.forEach(currentTitles, function(el) {
-              if (el && el.parentNode) {
-                //Use .remove() to cleanup things like .data()
-                angular.element(el).remove();
-              }
-            });
-
-            //$apply so bindings fire
-            $scope.$digest();
-
-            //Stop flicker of new title on ios7
-            ionic.requestAnimationFrame(function() {
-              newTitleEl[0].classList.remove('invisible');
-            });
-          });
-        }
-      };
-    }
-  };
-}])
-
-/**
- * @ngdoc directive
  * @name ionView
  * @module ionic
  * @restrict E
@@ -4639,10 +4773,9 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * </ion-nav-view>
  * ```
  *
- * @param {expression=} left-buttons The leftButtons to display on the parent {@link ionic.directive:ionNavBar}.
- * @param {expression=} right-buttons The rightButtons to display on the parent {@link ionic.directive:ionNavBar}.
  * @param {string=} title The title to display on the parent {@link ionic.directive:ionNavBar}.
- * @param {boolean=} hideBackButton Whether to hide the back button on the parent {@link ionic.directive:ionNavBar}.
+ * @param {boolean=} hideBackButton Whether to hide the back button on the parent
+ * {@link ionic.directive:ionNavBar}.
  * @param {boolean=} hideNavBar Whether to hide the parent {@link ionic.directive:ionNavBar}.
  */
 .directive('ionView', ['$ionicViewService', '$rootScope', '$animate',
@@ -4650,85 +4783,40 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
   return {
     restrict: 'EA',
     priority: 1000,
+    require: '^?ionNavBar',
     scope: {
-      leftButtons: '=',
-      rightButtons: '=',
       title: '@',
-      hideBackButton: '@',
-      hideNavBar: '@',
+      hideBackButton: '&',
+      hideNavBar: '&',
     },
-
     compile: function(tElement, tAttrs, transclude) {
       tElement.addClass('pane');
       tElement[0].removeAttribute('title');
 
-      return function link($scope, $element, $attr) {
-
-        $rootScope.$broadcast('viewState.viewEnter', {
-          title: $scope.title,
-          navDirection: $scope.$navDirection || $scope.$parent.$navDirection
-        });
+      return function link($scope, $element, $attr, navBarCtrl) {
+        if (!navBarCtrl) {
+          return;
+        }
+        navBarCtrl.changeTitle($scope.title, $scope.$parent.$navDirection);
 
         // Should we hide a back button when this tab is shown
-        $scope.hideBackButton = $scope.$eval($scope.hideBackButton);
-        if($scope.hideBackButton) {
-          $rootScope.$broadcast('viewState.showBackButton', false);
-        }
+        navBarCtrl.showBackButton(!$scope.hideBackButton());
 
         // Should the nav bar be hidden for this view or not?
-        $rootScope.$broadcast('viewState.showNavBar', ($scope.hideNavBar !== 'true') );
-
-        // watch for changes in the left buttons
-        $scope.$watch('leftButtons', function(value) {
-          $scope.$emit('viewState.leftButtonsChanged', $scope.leftButtons);
-        });
-
-        $scope.$watch('rightButtons', function(val) {
-          $scope.$emit('viewState.rightButtonsChanged', $scope.rightButtons);
-        });
+        navBarCtrl.showBar(!$scope.hideNavBar());
 
         // watch for changes in the title
-        $scope.$watch('title', function(val) {
-          $scope.$emit('viewState.titleUpdated', $scope);
+        $scope.$watch('title', function(val, oldVal) {
+          //Don't send in initial value, changeTitle does that
+          if (val !== oldVal) {
+            navBarCtrl.setTitle(val);
+          }
         });
       };
     }
   };
 }])
 
-
-/**
-* @private
-*/
-.directive('ionNavBackButton', ['$ionicViewService', '$rootScope',
-                     function($ionicViewService,   $rootScope) {
-
-  function goBack(e) {
-    var backView = $ionicViewService.getBackView();
-    backView && backView.go();
-    e.alreadyHandled = true;
-    return false;
-  }
-
-  return {
-    restrict: 'E',
-    scope: {
-      type: '=',
-      label: '=',
-      icon: '='
-    },
-    replace: true,
-    template:
-    '<button ng-click="goBack($event)" class="button back-button {{type}} ' +
-      '{{(icon && !label) ? \'icon \' + icon : \'\'}}">' +
-      '<i ng-if="icon && label" class="icon {{icon}}"></i> ' +
-      '{{label}}' +
-    '</button>',
-    link: function($scope) {
-      $scope.goBack = goBack;
-    }
-  };
-}])
 
 /**
  * @ngdoc directive
