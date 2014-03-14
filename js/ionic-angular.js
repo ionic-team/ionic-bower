@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1211
+ * Ionic, v0.10.0-alpha-nightly-1212
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1462,9 +1462,9 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
 
     return null;
   };
-  View.prototype.destory = function() {
+  View.prototype.destroy = function() {
     if(this.scope) {
-      this.scope.destory && this.scope.destory();
+      this.scope.destroy && this.scope.destroy();
       this.scope = null;
     }
   };
@@ -1567,8 +1567,8 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
             if(forwardsHistory) {
               // the forward has a history
               for(var x=forwardsHistory.stack.length - 1; x >= forwardView.index; x--) {
-                // starting from the end destory all forwards in this history from this point
-                forwardsHistory.stack[x].destory();
+                // starting from the end destroy all forwards in this history from this point
+                forwardsHistory.stack[x].destroy();
                 forwardsHistory.stack.splice(x);
               }
             }
