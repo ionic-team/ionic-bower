@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1209
+ * Ionic, v0.10.0-alpha-nightly-1211
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -125,6 +125,7 @@ angular.element.prototype.removeClass = function(cssClasses) {
   }
   return this;
 };
+
 angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ionic.service.platform', 'ionic.ui.actionSheet', 'ngAnimate'])
 
 /**
@@ -681,6 +682,7 @@ angular.module('ionic.service.platform', [])
  * @ngdoc service
  * @name $ionicPlatform
  * @module ionic
+ * @group utilities
  * @description
  * An angular abstraction of {@link ionic.utility:ionic.Platform}.
  *
@@ -1931,6 +1933,7 @@ angular.module('ionic.ui.service.scrollDelegate', [])
  * @ngdoc service
  * @name $ionicScrollDelegate
  * @module ionic
+ * @group page layout
  * @description
  * Allows you to have some control over a scrollable area (created by an
  * {@link ionic.directive:ionContent} or {@link ionic.directive:ionScroll}
@@ -2221,6 +2224,7 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @name ionHeaderBar
  * @module ionic
  * @restrict E
+ * @group page layout
  * @controller ionicBar
  *
  * @description
@@ -2229,8 +2233,8 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * Is able to have left or right buttons, and additionally its title can be
  * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
  *
- * @param {string=} model The model to assign this headerBar's 
- * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * @param {string=} model The model to assign this headerBar's
+ * {@link ionic.controller:ionicBar ionicBar controller} to.
  * Defaults to assigning to $scope.headerBarController.
  * @param {string=} align-title Where to align the title at the start.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
@@ -2258,6 +2262,7 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @name ionFooterBar
  * @module ionic
  * @restrict E
+ * @group page layout
  * @controller ionicBar
  *
  * @description
@@ -2266,8 +2271,8 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * Is able to have left or right buttons, and additionally its title can be
  * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
  *
- * @param {string=} model The model to assign this footerBar's 
- * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * @param {string=} model The model to assign this footerBar's
+ * {@link ionic.controller:ionicBar ionicBar controller} to.
  * Defaults to assigning to $scope.footerBarController.
  * @param {string=} align-title Where to align the title at the start.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
@@ -2294,8 +2299,8 @@ function barDirective(isHeader) {
   var BAR_TEMPLATE = isHeader ?
     '<header class="bar bar-header" ng-transclude></header>' :
     '<footer class="bar bar-header" ng-transclude></footer>';
-  var BAR_MODEL_DEFAULT = isHeader ? 
-    'headerBarController' : 
+  var BAR_MODEL_DEFAULT = isHeader ?
+    'headerBarController' :
     'footerBarController';
   return ['$parse', function($parse) {
     return {
@@ -2383,6 +2388,7 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
  * @ngdoc directive
  * @name ionPane
  * @module ionic
+ * @group page layout
  * @restrict E
  *
  * @description A simple container that fits content, with no side effects.  Adds the 'pane' class to the element.
@@ -2400,6 +2406,8 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
  * @ngdoc directive
  * @name ionContent
  * @module ionic
+ * @group page layout
+ * @groupMainItem
  *
  * @description
  * The ionContent directive provides an easy to use content area that can be configured
@@ -2539,7 +2547,8 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * @name ionRefresher
  * @module ionic
  * @restrict E
- * @parent ionContent, ionScroll
+ * @group page layout
+ * @parent ionic.directive:ionContent, ionic.directive:ionScroll
  * @description
  * Allows you to add pull-to-refresh to a scrollView.
  *
@@ -2632,7 +2641,8 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
  * @ngdoc directive
  * @name ionInfiniteScroll
  * @module ionic
- * @parent ionContent, ionScroll
+ * @group page layout
+ * @parent ionic.directive:ionContent, ionic.directive:ionScroll
  * @restrict E
  *
  * @description
@@ -2742,7 +2752,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * @name ionItem
  * @module ionic
  * @restrict E
- * @parent ionList
+ * @parent ionic.directive:ionList
  *
  * @description
  * The ionItem directive creates a list-item that can easily be swiped,
@@ -3036,7 +3046,7 @@ angular.module('ionic.ui.navAnimation', [])
  * @name ionNavAnimation
  * @module ionic
  * @restrict A
- * @parent ionNavView
+ * @parent ionic.directive:ionNavView
  *
  * @description
  * When used under an {@link ionic.directive:ionNavView} and on an `<a>` element,
@@ -3079,6 +3089,7 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
  * @ngdoc controller
  * @name ionicNavBar
  * @module ionic
+ * @group navigation
  * @description
  * Controller for the {@link ionic.directive:ionNavBar} directive.
  */
@@ -3231,6 +3242,7 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
  * @ngdoc directive
  * @name ionNavBar
  * @module ionic
+ * @group navigation
  * @controller ionicNavBar
  * @restrict E
  *
@@ -3319,6 +3331,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
  * @name ionNavBackButton
  * @module ionic
  * @restrict E
+ * @group navigation
  * @parent ionNavBar
  * @description
  * Creates a back button inside an {@link ionic.directive:ionNavBar}.
@@ -3391,6 +3404,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
  * @name ionNavButtons
  * @module ionic
  * @restrict E
+ * @group navigation
  * @parent ionNavView
  *
  * @description
@@ -3760,6 +3774,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @ngdoc controller
  * @name ionicSideMenus
  * @module ionic
+ * @group side menu
  *
  * @description
  * Controller for the {@link ionic.directive:ionSideMenus} directive.
@@ -3780,6 +3795,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @name ionSideMenus
  * @module ionic
  * @restrict E
+ * @group side menu
+ * @groupMainItem
  * @controller ionicSideMenus
  *
  * @description
@@ -3852,7 +3869,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @name ionSideMenuContent
  * @module ionic
  * @restrict A
- * @parent ionSideMenus
+ * @group side menu
+ * @parent ionic.directive:ionSideMenus
  *
  * @description
  * A container for the main visible content, sibling to one or more
@@ -3978,7 +3996,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @name ionSideMenu
  * @module ionic
  * @restrict E
- * @parent ionSideMenus
+ * @group side menu
+ * @parent ionic.directive:ionSideMenus
  *
  * @description
  * A container for a side menu, sibling to an {@link ionic.directive:ionSideMenuContent} directive.
@@ -4223,6 +4242,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
 
 /**
  * @ngdoc controller
+ * @group tab bar
  * @name ionicTabs
  * @module ionic
  *
@@ -4347,6 +4367,8 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  * @name ionTabs
  * @module ionic
  * @restrict E
+ * @group tab bar
+ * @groupMainItem
  * @controller ionicTabs
  * @codepen KbrzJ
  *
@@ -4373,7 +4395,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  * </ion-tabs>
  * ```
  *
- * @param {expression=} model The model to assign this tabbar's {@link ionic.controller:ionicTabs} controller to. By default, assigns  to $scope.tabsController.
+ * @param {expression=} model The model to assign this tab bar's {@link ionic.controller:ionicTabs} controller to. By default, assigns  to $scope.tabsController.
  * @param {string=} animation The animation to use when changing between tab pages.
  * @param {string=} tabs-style The class to apply to the tabs. Defaults to 'tabs-positive'.
  * @param {string=} tabs-type Whether to put the tabs on the top or bottom. Defaults to 'tabs-bottom'.
@@ -4423,10 +4445,11 @@ function($scope, $ionicViewService, $rootScope, $element) {
 
 /**
  * @ngdoc directive
+ * @group tab bar
  * @name ionTab
  * @module ionic
  * @restrict E
- * @parent ionTabs
+ * @parent ionic.directive:ionTabs
  *
  * @description
  * Contains a tab's content.  The content only exists while the given tab is selected.
@@ -4753,7 +4776,8 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * @name ionView
  * @module ionic
  * @restrict E
- * @parent ionNavBar
+ * @group navigation
+ * @parent ionic.directive:ionNavBar
  *
  * @description
  * A container for content, used to tell a parent {@link ionic.directive:ionNavBar}
@@ -4823,6 +4847,8 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * @name ionNavView
  * @module ionic
  * @restrict E
+ * @group navigation
+ * @groupMainItem
  * @codepen HjnFx
  *
  * @description
