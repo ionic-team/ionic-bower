@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1219
+ * Ionic, v0.10.0-alpha-nightly-1220
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2492,6 +2492,13 @@ window.ionic = {
       var tap = isRecentTap(e);
       if(tap) delete tapCoordinates[tap.id];
     }, REMOVE_PREVENT_DELAY);
+
+    setTimeout(function(){
+      for(var hitKey in hitElements) {
+        hitElements[hitKey] && hitElements[hitKey].classList.remove('active');
+        delete hitElements[hitKey];
+      }
+    }, 150);
   }
 
   function stopEvent(e){
@@ -2514,6 +2521,20 @@ window.ionic = {
 
   function recordStartCoordinates(e) {
     startCoordinates = getCoordinates(e);
+
+    var x, ele = e.target;
+    for(x=0; x<5; x++) {
+      if(!ele || ele.tagName === 'LABEL') break;
+      if( ele.classList.contains('item') || ele.classList.contains('button') ) {
+        hitElements[hitCounts] = ele;
+        hitCounts = (hitCounts > 24 ? 0 : hitCounts + 1);
+        ionic.requestAnimationFrame(function(){
+          ele.classList.add('active');
+        });
+        break;
+      }
+      ele = ele.parentElement;
+    }
   }
 
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
@@ -2521,6 +2542,8 @@ window.ionic = {
   var CLICK_PREVENT_DURATION = 1500; // max milliseconds ghostclicks in the same area should be prevented
   var REMOVE_PREVENT_DELAY = 375; // delay after a touchend/mouseup before removing the ghostclick prevent
   var HIT_RADIUS = 15;
+  var hitElements = {};
+  var hitCounts = 0;
 
   // set global click handler and check if the event should stop or not
   document.addEventListener('click', preventGhostClick, true);
