@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1220
+ * Ionic, v0.10.0-alpha-nightly-1221
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3366,7 +3366,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
  * </ion-nav-bar>
  * ```
  */
-.directive('ionNavBackButton', [function() {
+.directive('ionNavBackButton', ['$ionicNgClick', function($ionicNgClick) {
   return {
     restrict: 'E',
     require: '^ionNavBar',
@@ -3376,8 +3376,9 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
       '<button class="button back-button" ng-transclude>' +
       '</button>',
     link: function($scope, $element, $attr, navBarCtrl) {
+      $scope.$navBack = navBarCtrl.back;
       if (!$attr.ngClick) {
-        ionic.on('tap', navBarCtrl.back, $element[0]);
+        $ionicNgClick($scope, $element, '$navBack($event)');
       }
 
       //If the current viewstate does not allow a back button,
@@ -4704,10 +4705,9 @@ angular.module('ionic.ui.toggle', [])
 
 
 // Similar to Angular's ngTouch, however it uses Ionic's tap detection
-// and click simulation. ngClick 
+// and click simulation. ngClick
 
 (function(angular, ionic) {'use strict';
-
 
 angular.module('ionic.ui.touch', [])
 
@@ -4719,17 +4719,16 @@ angular.module('ionic.ui.touch', [])
     }]);
   }])
 
-  .directive('ngClick', ['$parse', function($parse) {
-    
+  /**
+   * @private
+   */
+  .factory('$ionicNgClick', ['$parse', function($parse) {
     function onTap(e) {
       // wire this up to Ionic's tap/click simulation
       ionic.tapElement(e.target, e);
     }
-
-    // Actual linking function.
-    return function(scope, element, attr) {
-
-      var clickHandler = $parse(attr.ngClick);
+    return function(scope, element, clickExpr) {
+      var clickHandler = $parse(clickExpr);
 
       element.on('click', function(event) {
         scope.$apply(function() {
@@ -4746,9 +4745,13 @@ angular.module('ionic.ui.touch', [])
       scope.$on('$destroy', function () {
         ionic.off('tap', onTap, element[0]);
       });
-
     };
+  }])
 
+  .directive('ngClick', ['$ionicNgClick', function($ionicNgClick) {
+    return function(scope, element, attr) {
+      $ionicNgClick(scope, element, attr.ngClick);
+    };
   }])
 
   .directive('ionStopEvent', function () {
