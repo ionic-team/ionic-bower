@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1233
+ * Ionic, v0.9.27-nightly-1235
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4925,7 +4925,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @ngdoc controller
    * @name ionicBar
    * @module ionic
-   * @group page layout
    * @description
    * Controller for the {@link ionic.directive:ionHeaderBar} and
    * {@link ionic.directive:ionFooterBar} directives.
