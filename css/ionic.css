@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1217
+ * Ionic, v0.10.0-alpha-nightly-1218
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1217
+ * Ionic, v0.10.0-alpha-nightly-1218
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3157,19 +3157,19 @@ a.subdued {
 
 .popup-head {
   padding: 15px 0px;
-  text-align: center;
-  border-bottom: 1px solid #eee; }
+  border-bottom: 1px solid #eee;
+  text-align: center; }
 
 .popup-title {
-  font-size: 15px;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  font-size: 15px; }
 
 .popup-sub-title {
-  font-size: 11px;
   margin: 5px 0 0 0;
   padding: 0;
-  font-weight: normal; }
+  font-weight: normal;
+  font-size: 11px; }
 
 .popup-body {
   padding: 10px; }
@@ -3179,21 +3179,14 @@ a.subdued {
 .popup-buttons .button {
   margin: 0px 5px;
   min-height: 45px;
-  line-height: 20px;
-  border-radius: 2px; }
+  border-radius: 2px;
+  line-height: 20px; }
   .popup-buttons .button:first-child {
     margin-left: 0px; }
   .popup-buttons .button:last-child {
     margin-right: 0px; }
 
 .popup-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
   -webkit-animation-name: fadeIn;
   -moz-animation-name: fadeIn;
   animation-name: fadeIn;
@@ -3205,7 +3198,14 @@ a.subdued {
   animation-timing-function: linear;
   -webkit-animation-fill-mode: both;
   -moz-animation-fill-mode: both;
-  animation-fill-mode: both; }
+  animation-fill-mode: both;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); }
 
 .loading-backdrop {
   position: fixed;
