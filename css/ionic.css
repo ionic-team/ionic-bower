@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1213
+ * Ionic, v0.10.0-alpha-nightly-1216
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.10.0-alpha-nightly-1213
+ * Ionic, v0.10.0-alpha-nightly-1216
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3329,34 +3329,34 @@ a.subdued {
     background-color: #444;
     border-color: #111; }
 
-.item.active:not(.item-divider), .item:active:not(.item-divider), .item-complex.active .item-content {
+.item.active:not(.item-divider):not(.item-input-inset), .item:active:not(.item-divider):not(.item-input-inset), .item-complex.active .item-content {
   background-color: #D9D9D9;
   border-color: #ccc; }
-  .item.active:not(.item-divider).item-light, .item:active:not(.item-divider).item-light, .item-complex.active .item-content.item-light {
+  .item.active:not(.item-divider):not(.item-input-inset).item-light, .item:active:not(.item-divider):not(.item-input-inset).item-light, .item-complex.active .item-content.item-light {
     background-color: #fafafa;
     border-color: #ccc; }
-  .item.active:not(.item-divider).item-stable, .item:active:not(.item-divider).item-stable, .item-complex.active .item-content.item-stable {
+  .item.active:not(.item-divider):not(.item-input-inset).item-stable, .item:active:not(.item-divider):not(.item-input-inset).item-stable, .item-complex.active .item-content.item-stable {
     background-color: #e5e5e5;
     border-color: #a2a2a2; }
-  .item.active:not(.item-divider).item-positive, .item:active:not(.item-divider).item-positive, .item-complex.active .item-content.item-positive {
+  .item.active:not(.item-divider):not(.item-input-inset).item-positive, .item:active:not(.item-divider):not(.item-input-inset).item-positive, .item-complex.active .item-content.item-positive {
     background-color: #145fd7;
     border-color: #145fd7; }
-  .item.active:not(.item-divider).item-calm, .item:active:not(.item-divider).item-calm, .item-complex.active .item-content.item-calm {
+  .item.active:not(.item-divider):not(.item-input-inset).item-calm, .item:active:not(.item-divider):not(.item-input-inset).item-calm, .item-complex.active .item-content.item-calm {
     background-color: #1aacc3;
     border-color: #1aacc3; }
-  .item.active:not(.item-divider).item-assertive, .item:active:not(.item-divider).item-assertive, .item-complex.active .item-content.item-assertive {
+  .item.active:not(.item-divider):not(.item-input-inset).item-assertive, .item:active:not(.item-divider):not(.item-input-inset).item-assertive, .item-complex.active .item-content.item-assertive {
     background-color: #cc2311;
     border-color: #cc2311; }
-  .item.active:not(.item-divider).item-balanced, .item:active:not(.item-divider).item-balanced, .item-complex.active .item-content.item-balanced {
+  .item.active:not(.item-divider):not(.item-input-inset).item-balanced, .item:active:not(.item-divider):not(.item-input-inset).item-balanced, .item-complex.active .item-content.item-balanced {
     background-color: #498f24;
     border-color: #498f24; }
-  .item.active:not(.item-divider).item-energized, .item:active:not(.item-divider).item-energized, .item-complex.active .item-content.item-energized {
+  .item.active:not(.item-divider):not(.item-input-inset).item-energized, .item:active:not(.item-divider):not(.item-input-inset).item-energized, .item-complex.active .item-content.item-energized {
     background-color: #d39211;
     border-color: #d39211; }
-  .item.active:not(.item-divider).item-royal, .item:active:not(.item-divider).item-royal, .item-complex.active .item-content.item-royal {
+  .item.active:not(.item-divider):not(.item-input-inset).item-royal, .item:active:not(.item-divider):not(.item-input-inset).item-royal, .item-complex.active .item-content.item-royal {
     background-color: #552bdf;
     border-color: #552bdf; }
-  .item.active:not(.item-divider).item-dark, .item:active:not(.item-divider).item-dark, .item-complex.active .item-content.item-dark {
+  .item.active:not(.item-divider):not(.item-input-inset).item-dark, .item:active:not(.item-divider):not(.item-input-inset).item-dark, .item-complex.active .item-content.item-dark {
     background-color: #262626;
     border-color: #000; }
 
@@ -4073,6 +4073,8 @@ input, button, select, textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; }
+  .item-input .icon {
+    min-width: 14px; }
 
 .item-input-inset {
   display: -webkit-box;
@@ -4134,7 +4136,8 @@ input, button, select, textarea {
   padding: 7px 10px 7px 3px;
   max-width: 200px;
   color: #444;
-  font-weight: bold; }
+  font-weight: bold;
+  font-size: 14px; }
 
 .placeholder-icon {
   color: #aaa; }
@@ -4166,11 +4169,12 @@ input, button, select, textarea {
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   display: block;
+  padding-top: 2px;
   height: 34px;
   color: #111;
   vertical-align: middle;
   font-size: 14px;
-  line-height: 20px; }
+  line-height: 16px; }
 
 input, textarea {
   width: 100%; }
