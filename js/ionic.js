@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1240
+ * Ionic, v0.9.27-nightly-1241
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2482,7 +2482,7 @@ window.ionic = {
               gesture.originalEvent.changedTouches[0]) ||
           touches[0].originalEvent || touches[0];
 
-      if(e) return { x: e.clientX, y: e.clientY };
+      if(e) return { x: e.clientX || e.pageX, y: e.clientY || e.pageY };
     }
     return { x:0, y:0 };
   }
