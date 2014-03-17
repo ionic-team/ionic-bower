@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1244
+ * Ionic, v0.9.27-nightly-1245
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1244
+ * Ionic, v0.9.27-nightly-1245
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3908,19 +3908,19 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
  */
 .slider {
   position: relative;
-  overflow: hidden;
-  visibility: hidden; }
+  visibility: hidden;
+  overflow: hidden; }
 
 .slider-slides {
   position: relative;
   height: 100%; }
 
 .slider-slide {
-  display: block;
   position: relative;
+  display: block;
+  float: left;
   width: 100%;
   height: 100%;
-  float: left;
   vertical-align: top; }
 
 .slider-slide-image > img {
@@ -3929,9 +3929,10 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
 .slider-pager {
   position: absolute;
   bottom: 20px;
+  z-index: 1;
   width: 100%;
-  text-align: center;
-  z-index: 1; }
+  height: 15px;
+  text-align: center; }
   .slider-pager .slider-pager-page {
     display: inline-block;
     margin: 0px 3px;
@@ -3940,10 +3941,10 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
     text-decoration: none;
     opacity: 0.3; }
     .slider-pager .slider-pager-page.active {
-      opacity: 1;
       -webkit-transition: opacity 0.4s ease-in;
       -moz-transition: opacity 0.4s ease-in;
-      transition: opacity 0.4s ease-in; }
+      transition: opacity 0.4s ease-in;
+      opacity: 1; }
 
 /**
  * Split Pane
