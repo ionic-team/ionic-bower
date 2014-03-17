@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1248
+ * Ionic, v0.9.27-nightly-1249
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2489,13 +2489,6 @@ window.ionic = {
       var tap = isRecentTap(e);
       if(tap) delete tapCoordinates[tap.id];
     }, REMOVE_PREVENT_DELAY);
-
-    setTimeout(function(){
-      for(var hitKey in hitElements) {
-        hitElements[hitKey] && hitElements[hitKey].classList.remove('active');
-        delete hitElements[hitKey];
-      }
-    }, 150);
   }
 
   function stopEvent(e){
@@ -2518,20 +2511,6 @@ window.ionic = {
 
   function recordStartCoordinates(e) {
     startCoordinates = getCoordinates(e);
-
-    var x, ele = e.target;
-    for(x=0; x<5; x++) {
-      if(!ele || ele.tagName === 'LABEL') break;
-      if( ele.classList.contains('item') || ele.classList.contains('button') ) {
-        hitElements[hitCounts] = ele;
-        hitCounts = (hitCounts > 24 ? 0 : hitCounts + 1);
-        ionic.requestAnimationFrame(function(){
-          ele.classList.add('active');
-        });
-        break;
-      }
-      ele = ele.parentElement;
-    }
   }
 
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
@@ -2539,8 +2518,6 @@ window.ionic = {
   var CLICK_PREVENT_DURATION = 1500; // max milliseconds ghostclicks in the same area should be prevented
   var REMOVE_PREVENT_DELAY = 375; // delay after a touchend/mouseup before removing the ghostclick prevent
   var HIT_RADIUS = 15;
-  var hitElements = {};
-  var hitCounts = 0;
 
   // set global click handler and check if the event should stop or not
   document.addEventListener('click', preventGhostClick, true);
@@ -2557,6 +2534,76 @@ window.ionic = {
   document.addEventListener('mousedown', recordStartCoordinates, false);
 
 })(this, document, ionic);
+
+(function(document, ionic) {
+  'use strict';
+
+  var queueElements = {};   // elements that should get an active state in XX milliseconds
+  var activeElements = {};  // elements that are currently active
+  var keyId = 0;            // a counter for unique keys for the above ojects
+
+  function onStart(e) {
+    // when an element is touched/clicked, it climbs up a few
+    // parents to see if it is an .item or .button element
+    var x, ele = e.target;
+
+    ionic.requestAnimationFrame(function(){
+      for(x=0; x<5; x++) {
+        if(!ele || ele.tagName === 'LABEL') break;
+        if( ele.classList.contains('item') || ele.classList.contains('button') ) {
+          keyId = (keyId > 99 ? 0 : keyId + 1);
+
+          // queue that this element should be set to active
+          queueElements[keyId] = ele;
+          setTimeout(activateElements, 32);
+        }
+        ele = ele.parentElement;
+      }
+    });
+  }
+
+  function activateElements() {
+    // activate all elements in the queue
+    for(var key in queueElements) {
+      if(queueElements[key]) {
+        queueElements[key].classList.add('active');
+        activeElements[key] = queueElements[key];
+      }
+    }
+    queueElements = {};
+  }
+
+  function onEnd(e) {
+    // clear out any active/queued elements after XX milliseconds
+    setTimeout(clear, 200);
+  }
+
+  function clear() {
+    // clear out any active/queued elements immediately
+    queueElements = {};
+    for(var key in activeElements) {
+      activeElements[key] && activeElements[key].classList.remove('active');
+      delete activeElements[key];
+    }
+  }
+
+  // use window.onload because this doesn't need to run immediately
+  window.addEventListener('load', function(){
+    // start an active element
+    document.body.addEventListener('touchstart', onStart, false);
+    document.body.addEventListener('mousedown', onStart, false);
+
+    // clear all active elements after XX milliseconds
+    document.body.addEventListener('touchend', onEnd, false);
+    document.body.addEventListener('mouseup', onEnd, false);
+
+    // clear all active immediately
+    document.body.addEventListener('mousemove', clear, false);
+    document.body.addEventListener('touchmove', clear, false);
+    document.body.addEventListener('touchcancel', clear, false);
+  }, false);
+
+})(document, ionic);
 
 (function(ionic) {
 
@@ -5350,10 +5397,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
       this.onRefreshOpening = opts.onRefreshOpening || function() {};
       this.onRefreshHolding = opts.onRefreshHolding || function() {};
 
-      window.ionic.onGesture('touch', function(e) {
-        _this._handleTouch(e);
-      }, this.el);
-
       window.ionic.onGesture('release', function(e) {
         _this._handleEndDrag(e);
       }, this.el);
@@ -5497,13 +5540,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return;
       }
 
-      // Cancel touch timeout
-      clearTimeout(this._touchTimeout);
-      var items = _this.el.querySelectorAll('.item');
-      for(var i = 0, l = items.length; i < l; i++) {
-        items[i].classList.remove('active');
-      }
-
       this._dragOp.end(e, function() {
         _this._initDrag();
       });
@@ -5519,13 +5555,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
         this._didDragUpOrDown = true;
       }
 
-      // If the user has a touch timeout to highlight an element, clear it if we
-      // get sufficient draggage
-      if(Math.abs(e.gesture.deltaX) > 10 || Math.abs(e.gesture.deltaY) > 10) {
-        clearTimeout(this._touchTimeout);
-      }
-
-      clearTimeout(this._touchTimeout);
       // If we get a drag event, make sure we aren't in another drag, then check if we should
       // start one
       if(!this.isDragging && !this._dragOp) {
@@ -5540,25 +5569,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       e.gesture.srcEvent.preventDefault();
       this._dragOp.drag(e);
-    },
-
-    /**
-     * Handle the touch event to show the active state on an item if necessary.
-     */
-    _handleTouch: function(e) {
-      var _this = this;
-
-      var item = ionic.DomUtil.getParentOrSelfWithClass(e.target, ITEM_CLASS);
-      if(!item) { return; }
-
-      this._touchTimeout = setTimeout(function() {
-        var items = _this.el.querySelectorAll('.item');
-        for(var i = 0, l = items.length; i < l; i++) {
-          items[i].classList.remove('active');
-        }
-        item.classList.add('active');
-      }, 250);
-    },
+    }
 
   });
 
