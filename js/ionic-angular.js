@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1241
+ * Ionic, v0.9.27-nightly-1244
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1516,7 +1516,9 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
         // they went back one, set the old current view as a forward view
         rsp.viewId = backView.viewId;
         rsp.navAction = 'moveBack';
-        currentView.scrollValues = {}; //when going back, erase scrollValues
+        rsp.viewId = backView.viewId;
+        //when going back, erase scrollValues
+        currentView.rememberedScrollValues = {}; 
         if(backView.historyId === currentView.historyId) {
           // went back in the same history
           rsp.navDirection = 'back';
@@ -1590,7 +1592,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
           stateName: this.getCurrentStateName(),
           stateParams: this.getCurrentStateParams(),
           url: $location.url(),
-          scrollValues: null
+          rememberedScrollValues: null
         });
 
         // add the new view to this history's stack
@@ -1939,9 +1941,18 @@ angular.module('ionic.ui.service.scrollDelegate', [])
  * {@link ionic.directive:ionContent} or {@link ionic.directive:ionScroll}
  * directive).
  *
- * Inject it into a controller, and its methods will send messages to the nearest scrollView and all of its children.
+ * Inject it into a controller, create a new instance based upon the current scope,
+ * and its methods will send messages to the nearest scrollView and its children.
  *
  * @usage
+ * ```js
+ * function MyController($scope, $ionicScrollDelegate) {
+ *   var delegate = $ionicScrollDelegate($scope);
+ *   $scope.scrollToTop = function() {
+ *     delegate.scrollTop();
+ *   };
+ * }
+ * ```
  * ```html
  * <ion-content ng-controller="MyController">
  *   <button class="button" ng-click="scrollToTop()">
@@ -1949,170 +1960,236 @@ angular.module('ionic.ui.service.scrollDelegate', [])
  *   </button>
  * </ion-content>
  * ```
- * ```js
- * function MyController($scope, $ionicScrollDelegate) {
- *   $scope.scrollToTop = function() {
- *     $ionicScrollDelegate.scrollTop();
- *   };
- * }
- * ```
  */
-.factory('$ionicScrollDelegate', ['$rootScope', '$timeout', '$q', '$anchorScroll', '$location', '$document', function($rootScope, $timeout, $q, $anchorScroll, $location, $document) {
-  return {
-    /**
-     * @ngdoc method
-     * @name $ionicScrollDelegate#scrollTop
-     * @param {boolean=} shouldAnimate Whether the scroll should animate.
-     */
-    scrollTop: function(animate) {
-      $rootScope.$broadcast('scroll.scrollTop', animate);
-    },
-    /**
-     * @ngdoc method
-     * @name $ionicScrollDelegate#scrollBottom
-     * @param {boolean=} shouldAnimate Whether the scroll should animate.
-     */
-    scrollBottom: function(animate) {
-      $rootScope.$broadcast('scroll.scrollBottom', animate);
-    },
-    /**
-     * @ngdoc method
-     * @name $ionicScrollDelegate#scroll
-     * @param {number} left The x-value to scroll to.
-     * @param {number} top The y-value to scroll to.
-     * @param {boolean=} shouldAnimate Whether the scroll should animate.
-     */
-    scrollTo: function(left, top, animate) {
-      $rootScope.$broadcast('scroll.scrollTo', left, top, animate);
-    },
-    /**
-     * @ngdoc method
-     * @name $ionicScrollDelegate#anchorScroll
-     * @description Tell the scrollView to scroll to the element with an id
-     * matching window.location.hash.
-     *
-     * If no matching element is found, it will scroll to top.
-     *
-     * @param {boolean=} shouldAnimate Whether the scroll should animate.
-     */
-    anchorScroll: function(animate) {
-      $rootScope.$broadcast('scroll.anchorScroll', animate);
-    },
-    /**
-     * @ngdoc method
-     * @name $ionicScrollDelegate#resize
-     * @description Tell the scrollView to recalculate the size of its container.
-     */
-    resize: function() {
-      $rootScope.$broadcast('scroll.resize');
-    },
-    /**
-     * @private
-     */
-    tapScrollToTop: function(element, animate) {
-      var _this = this;
-      if (!angular.isDefined(animate)) {
-        animate = true;
-      }
+.factory('$ionicScrollDelegate', ['$rootScope', '$timeout', '$location', '$ionicViewService', function($rootScope, $timeout, $location, $ionicViewService) {
+  //Exposed for testing
+  var rememberedScrollValues = ionicScrollDelegate._rememberedScrollValues = {};
 
-      ionic.on('tap', function(e) {
-        var target = e.target;
-        //Don't scroll to top for a button click
-        if (ionic.DomUtil.getParentOrSelfWithClass(target, 'button')) {
-          return;
+  function getScrollCtrl($scope) {
+    var ctrl;
+    while ($scope) {
+      if ( (ctrl = $scope.$$ionicScrollController) ) {
+        return ctrl;
+      }
+      $scope = $scope.$parent;
+    }
+    return ctrl;
+  }
+
+  function ionicScrollDelegate($scope) {
+    var scrollCtrl = getScrollCtrl($scope);
+    var scrollScope = scrollCtrl && scrollCtrl.$scope || $rootScope;
+
+    return {
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#scrollTop
+       * @description 
+       * @param {boolean=} shouldAnimate Whether the scroll should animate.
+       */
+      scrollTop: function(animate) {
+        scrollScope.$broadcast('scroll.scrollTop', animate);
+      },
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#scrollBottom
+       * @description 
+       * @param {boolean=} shouldAnimate Whether the scroll should animate.
+       */
+      scrollBottom: function(animate) {
+        scrollScope.$broadcast('scroll.scrollBottom', animate);
+      },
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#scroll
+       * @description 
+       * @param {number} left The x-value to scroll to.
+       * @param {number} top The y-value to scroll to.
+       * @param {boolean=} shouldAnimate Whether the scroll should animate.
+       */
+      scrollTo: function(left, top, animate) {
+        scrollScope.$broadcast('scroll.scrollTo', left, top, animate);
+      },
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#anchorScroll
+       * @description 
+       *
+       * Tell the scrollView to scroll to the element with an id
+       * matching window.location.hash.
+       *
+       * If no matching element is found, it will scroll to top.
+       *
+       * @param {boolean=} shouldAnimate Whether the scroll should animate.
+       */
+      anchorScroll: function(animate) {
+        scrollScope.$broadcast('scroll.anchorScroll', animate);
+      },
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#resize
+       * @description 
+       *
+       * Tell the scrollView to recalculate the size of its container.
+       */
+      resize: function() {
+        scrollScope.$broadcast('scroll.resize');
+      },
+      /**
+       * @private
+       */
+      tapScrollToTop: function(element, animate) {
+        var _this = this;
+        if (!angular.isDefined(animate)) {
+          animate = true;
         }
 
-        var el = element[0];
-        var bounds = el.getBoundingClientRect();
+        ionic.on('tap', function(e) {
+          var target = e.target;
+          //Don't scroll to top for a button click
+          if (ionic.DomUtil.getParentOrSelfWithClass(target, 'button')) {
+            return;
+          }
 
-        if(ionic.DomUtil.rectContains(e.gesture.touches[0].pageX, e.gesture.touches[0].pageY, bounds.left, bounds.top, bounds.left + bounds.width, bounds.top + 20)) {
-          _this.scrollTop(animate);
+          var el = element[0];
+          var bounds = el.getBoundingClientRect();
+
+          if(ionic.DomUtil.rectContains(e.gesture.touches[0].pageX, e.gesture.touches[0].pageY, bounds.left, bounds.top, bounds.left + bounds.width, bounds.top + 20)) {
+            _this.scrollTop(animate);
+          }
+        }, element[0]);
+      },
+
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#rememberScrollPosition
+       * @description 
+       *
+       * When this scroll area is destroyed, its last scroll position will be
+       * saved using the given id.
+       *
+       * @param {string} id The identifier for this saved scroll position.
+       */
+      rememberScrollPosition: function(id) {
+        if (!id) {
+          throw new Error("Must supply a unique id!");
         }
-      }, element[0]);
-    },
+        scrollScope.$broadcast('scroll.rememberPosition', id);
+      },
 
-    finishRefreshing: function($scope) {
-      $scope.$broadcast('scroll.refreshComplete');
-    },
+      /**
+       * @ngdoc method
+       * @name $ionicScrollDelegate#scrollToRememberedPosition
+       * @description 
+       *
+       * If a scroll position was remembered using the given id, loads the
+       * remembered scroll position and scrolls there.
+       *
+       * @param {string} id The identifier for this saved scroll position.
+       * @param {boolean=} shouldAnimate Whether to animate the scroll.
+       */
+      scrollToRememberedPosition: function(id, animate) {
+        if (!id) {
+          throw new Error("Must supply a unique id!");
+        }
+        scrollScope.$broadcast('scroll.scrollToRememberedPosition', id, !!animate);
+      },
 
-    /**
-     * @private
-     * Attempt to get the current scroll view in scope (if any)
-     *
-     * Note: will not work in an isolated scope context.
-     */
-    getScrollView: function($scope) {
-      return $scope.scrollView;
-    },
-
-    /**
-     * @private
-     * Register a scope and scroll view for scroll event handling.
-     * $scope {Scope} the scope to register and listen for events
-     */
-    register: function($scope, $element, scrollView) {
-
-      var scrollEl = $element[0];
-
-      function scrollViewResize() {
-        // Run the resize after this digest
-        return $timeout(function() {
-          scrollView.resize();
-        });
+      /**
+       * @private
+       * Attempt to get the current scroll view in scope (if any)
+       *
+       * Note: will not work in an isolated scope context.
+       */
+      getScrollView: function() {
+        return scrollCtrl && scrollCtrl.scrollView;
       }
+    };
+  }
 
-      $element.on('scroll', function(e) {
-        var detail = (e.originalEvent || e).detail || {};
+  /**
+   * @private
+   * Register a scope and scroll view for scroll event handling.
+   * $scope {Scope} the scope to register and listen for events
+   */
+  ionicScrollDelegate.register = function($scope, $element, scrollView) {
 
-        $scope.$onScroll && $scope.$onScroll({
-          event: e,
-          scrollTop: detail.scrollTop || 0,
-          scrollLeft: detail.scrollLeft || 0
-        });
+    var scrollEl = $element[0];
 
-      });
-
-      $scope.$parent.$on('scroll.resize', scrollViewResize);
-
-      // Called to stop refreshing on the scroll view
-      $scope.$parent.$on('scroll.refreshComplete', function(e) {
-        scrollView.finishPullToRefresh();
-      });
-
-      $scope.$parent.$on('scroll.anchorScroll', function(e, animate) {
-        scrollViewResize().then(function() {
-          var hash = $location.hash();
-          var elm;
-          if (hash && (elm = document.getElementById(hash)) ) {
-            var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
-            scrollView.scrollTo(scroll.left, scroll.top, !!animate);
-          } else {
-            scrollView.scrollTo(0,0, !!animate);
-          }
-        });
-      });
-
-      $scope.$parent.$on('scroll.scrollTo', function(e, left, top, animate) {
-        scrollViewResize().then(function() {
-          scrollView.scrollTo(left, top, !!animate);
-        });
-      });
-      $scope.$parent.$on('scroll.scrollTop', function(e, animate) {
-        scrollViewResize().then(function() {
-          scrollView.scrollTo(0, 0, !!animate);
-        });
-      });
-      $scope.$parent.$on('scroll.scrollBottom', function(e, animate) {
-        scrollViewResize().then(function() {
-          var sv = scrollView;
-          if (sv) {
-            var max = sv.getScrollMax();
-            sv.scrollTo(max.left, max.top, !!animate);
-          }
-        });
+    function scrollViewResize() {
+      // Run the resize after this digest
+      return $timeout(function() {
+        scrollView.resize();
       });
     }
+
+    $element.on('scroll', function(e) {
+      var detail = (e.originalEvent || e).detail || {};
+
+      $scope.$onScroll && $scope.$onScroll({
+        event: e,
+        scrollTop: detail.scrollTop || 0,
+        scrollLeft: detail.scrollLeft || 0
+      });
+
+    });
+
+    $scope.$on('scroll.resize', scrollViewResize);
+
+    $scope.$on('scroll.anchorScroll', function(e, animate) {
+      scrollViewResize().then(function() {
+        var hash = $location.hash();
+        var elm;
+        if (hash && (elm = document.getElementById(hash)) ) {
+          var scroll = ionic.DomUtil.getPositionInParent(elm, scrollEl);
+          scrollView.scrollTo(scroll.left, scroll.top, !!animate);
+        } else {
+          scrollView.scrollTo(0,0, !!animate);
+        }
+      });
+    });
+
+    $scope.$on('scroll.scrollTo', function(e, left, top, animate) {
+      scrollViewResize().then(function() {
+        scrollView.scrollTo(left, top, !!animate);
+      });
+    });
+    $scope.$on('scroll.scrollTop', function(e, animate) {
+      scrollViewResize().then(function() {
+        scrollView.scrollTo(0, 0, !!animate);
+      });
+    });
+    $scope.$on('scroll.scrollBottom', function(e, animate) {
+      scrollViewResize().then(function() {
+        var sv = scrollView;
+        if (sv) {
+          var max = sv.getScrollMax();
+          sv.scrollTo(max.left, max.top, !!animate);
+        }
+      });
+    });
+
+    var rememberScrollId;
+    $scope.$on('scroll.rememberPosition', function(e, id) {
+      rememberScrollId = id;
+    });
+    $scope.$on('$destroy', function() {
+      if (rememberScrollId) {
+        rememberedScrollValues[rememberScrollId] = scrollView.getValues();
+      }
+    });
+
+    $scope.$on('scroll.scrollToRememberedPosition', function(e, id, animate) {
+      var values = rememberedScrollValues[id];
+      if (values) {
+        scrollViewResize().then(function() {
+          scrollView.scrollTo(+values.left || null, +values.top || null, animate);
+        });
+      }
+    });
   };
+
+  return ionicScrollDelegate;
 }]);
 
 })(ionic);
@@ -2213,8 +2290,7 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
   return {
     restrict: 'C',
     link: function($scope, $element, $attr) {
-      // We want to scroll to top when the top of this element is clicked
-      $ionicScrollDelegate.tapScrollToTop($element);
+      $ionicScrollDelegate($scope).tapScrollToTop($element);
     }
   };
 }])
@@ -2232,8 +2308,9 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * Is able to have left or right buttons, and additionally its title can be
  * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
  *
- * @param {string=} model The model to assign this headerBar's 
- * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * @param {string=} type The type of the bar. For example 'bar-positive'.
+ * @param {string=} model The model to assign this headerBar's
+ * {@link ionic.controller:ionicBar ionicBar controller} to.
  * Defaults to assigning to $scope.headerBarController.
  * @param {string=} align-title Where to align the title at the start.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
@@ -2269,8 +2346,9 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * Is able to have left or right buttons, and additionally its title can be
  * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
  *
- * @param {string=} model The model to assign this footerBar's 
- * {@link ionic.controller:ionicBar ionicBar controller} to. 
+ * @param {string=} type The type of the bar. For example 'bar-positive'.
+ * @param {string=} model The model to assign this footerBar's
+ * {@link ionic.controller:ionicBar ionicBar controller} to.
  * Defaults to assigning to $scope.footerBarController.
  * @param {string=} align-title Where to align the title at the start.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
@@ -2296,9 +2374,9 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 function barDirective(isHeader) {
   var BAR_TEMPLATE = isHeader ?
     '<header class="bar bar-header" ng-transclude></header>' :
-    '<footer class="bar bar-header" ng-transclude></footer>';
-  var BAR_MODEL_DEFAULT = isHeader ? 
-    'headerBarController' : 
+    '<footer class="bar bar-footer" ng-transclude></footer>';
+  var BAR_MODEL_DEFAULT = isHeader ?
+    'headerBarController' :
     'footerBarController';
   return ['$parse', function($parse) {
     return {
@@ -2312,7 +2390,12 @@ function barDirective(isHeader) {
           alignTitle: $attr.alignTitle || 'center'
         });
 
-        $parse($attr.model || BAR_MODEL_DEFAULT).assign($scope.$parent, hb);
+        $parse($attr.model || BAR_MODEL_DEFAULT).assign($scope.$parent || $scope, hb);
+
+        $attr.$observe('type', function(val, oldVal) {
+          oldVal && $element.removeClass(oldVal);
+          $element.addClass(val);
+        });
       }
     };
   }];
@@ -2436,10 +2519,9 @@ angular.module('ionic.ui.content', ['ionic.ui.service', 'ionic.ui.scroll'])
 .directive('ionContent', [
   '$parse',
   '$timeout',
-  '$ionicScrollDelegate',
   '$controller',
   '$ionicBind',
-function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
+function($parse, $timeout, $controller, $ionicBind) {
   return {
     restrict: 'E',
     replace: true,
@@ -2447,7 +2529,7 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
     require: '^?ionNavView',
     scope: true,
     template:
-    '<div class="scroll-content">' +
+    '<div class="scroll-content" ng-class="$$contentState.getClassName()">' +
       '<div class="scroll"></div>' +
     '</div>',
     compile: function(element, attr, transclude) {
@@ -2510,22 +2592,6 @@ function($parse, $timeout, $ionicScrollDelegate, $controller, $ionicBind) {
           });
           //Publish scrollView to parent so children can access it
           scrollView = $scope.$parent.scrollView = scrollCtrl.scrollView;
-
-          $scope.$on('$viewContentLoaded', function(e, viewHistoryData) {
-            viewHistoryData || (viewHistoryData = {});
-            var scroll = viewHistoryData.scrollValues;
-            if (scroll) {
-              $timeout(function() {
-                scrollView.scrollTo(+scroll.left || null, +scroll.top || null);
-              }, 0);
-            }
-
-            //Save scroll onto viewHistoryData when scope is destroyed
-            $scope.$on('$destroy', function() {
-              viewHistoryData.scrollValues = scrollView.getValues();
-            });
-          });
-
         }
 
         transclude($scope, function(clone) {
@@ -5452,6 +5518,9 @@ angular.module('ionic.ui.scroll')
   var element = this.element = scrollViewOptions.el;
   var scrollView = this.scrollView = new ionic.views.Scroll(scrollViewOptions);
 
+  this.$scope = $scope;
+  $scope.$parent.$$ionicScrollController = this;
+
   if (!angular.isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
       scrollView.options.bouncing = !ionic.Platform.isAndroid();
@@ -5467,13 +5536,31 @@ angular.module('ionic.ui.scroll')
   //Register delegate for event handling
   $ionicScrollDelegate.register($scope, $element, scrollView);
 
+  var resize = angular.bind(scrollView, scrollView.resize);
   $window.addEventListener('resize', resize);
+
+  $scope.$on('$viewContentLoaded', function(e, historyData) {
+    if (e.defaultPrevented) {
+      return;
+    }
+    //only the top-most scroll area under a view should remember that view's
+    //scroll position
+    e.preventDefault();
+
+    var values = historyData && historyData.rememberedScrollValues;
+    if (values) {
+      $timeout(function() {
+        scrollView.scrollTo(+values.left || null, +values.top || null);
+      }, 0, false);
+    }
+    $scope.$on('$destroy', function() {
+      historyData && (historyData.rememberedScrollValues = scrollView.getValues());
+    });
+  });
+
   $scope.$on('$destroy', function() {
     $window.removeEventListener('resize', resize);
   });
-  function resize() {
-    scrollView.resize();
-  }
 
   this.setRefresher = function(refresherScope, refresherElement) {
     var refresher = this.refresher = refresherElement;
