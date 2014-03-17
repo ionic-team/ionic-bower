@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1245
+ * Ionic, v0.9.27-nightly-1246
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -164,7 +164,6 @@ window.ionic = {
   * @ngdoc utility
   * @name ionic.DomUtil
   * @module ionic
-  * @group utilities
   */
   ionic.DomUtil = {
     //Call with proper context
@@ -424,7 +423,6 @@ window.ionic = {
    * @ngdoc utility
    * @name ionic.EventController
    * @module ionic
-   * @group utilities
    */
   ionic.EventController = {
     VIRTUALIZED_EVENTS: ['tap', 'swipe', 'swiperight', 'swipeleft', 'drag', 'hold', 'release'],
@@ -494,7 +492,7 @@ window.ionic = {
      * @ngdoc method
      * @name ionic.EventController#onGesture
      * @alias ionic.onGesture
-     * @description Add an event listener for a gesture on an element. 
+     * @description Add an event listener for a gesture on an element.
      * @param {string} eventType The gesture event to listen for.
      * @param {function(e)} callback The function to call when the gesture
      * happens.
@@ -510,7 +508,7 @@ window.ionic = {
      * @ngdoc method
      * @name ionic.EventController#offGesture
      * @alias ionic.offGesture
-     * @description Remove an event listener for a gesture on an element. 
+     * @description Remove an event listener for a gesture on an element.
      * @param {string} eventType The gesture event.
      * @param {function(e)} callback The listener that was added earlier.
      * @param {DOMElement} element The element the listener was added on.
@@ -1936,7 +1934,6 @@ window.ionic = {
    * @ngdoc utility
    * @name ionic.Platform
    * @module ionic
-   * @group utilities
    */
   ionic.Platform = {
 
