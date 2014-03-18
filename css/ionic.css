@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1280
+ * Ionic, v0.9.27-nightly-1284
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1280
+ * Ionic, v0.9.27-nightly-1284
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2116,6 +2116,9 @@ body.grade-b, body.grade-c {
   text-align: center;
   font-size: 30px; }
   .ionic-refresher-content .icon-pulling {
+    -webkit-animation-name: refresh-spin-back;
+    -moz-animation-name: refresh-spin-back;
+    animation-name: refresh-spin-back;
     -webkit-animation-duration: 200ms;
     -moz-animation-duration: 200ms;
     animation-duration: 200ms;
@@ -2139,6 +2142,20 @@ body.grade-b, body.grade-c {
 
   100% {
     -webkit-transform: rotate(-180deg); } }
+
+@keyframes refresh-spin-back {
+  0% {
+    transform: rotate(-180deg); }
+
+  100% {
+    transform: rotate(0); } }
+
+@-webkit-keyframes refresh-spin-back {
+  0% {
+    -webkit-transform: rotate(-180deg); }
+
+  100% {
+    -webkit-transform: rotate(0); } }
 
 .scroll-refresher.active .icon-pulling {
   display: block; }
@@ -2839,78 +2856,6 @@ a.subdued {
   .tabs .tab-item .badge {
     background-color: #444;
     color: #f8f8f8; }
-  .tabs.tabs-light {
-    background-color: #fff;
-    background-image: linear-gradient(0deg, #ddd, #ddd 50%, transparent 50%);
-    border-color: #ddd;
-    color: #444; }
-    .tabs.tabs-light .tab-item .badge {
-      background-color: #444;
-      color: #fff; }
-  .tabs.tabs-stable {
-    background-color: #f8f8f8;
-    background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
-    border-color: #b2b2b2;
-    color: #444; }
-    .tabs.tabs-stable .tab-item .badge {
-      background-color: #444;
-      color: #f8f8f8; }
-  .tabs.tabs-positive {
-    background-color: #4a87ee;
-    background-image: linear-gradient(0deg, #145fd7, #145fd7 50%, transparent 50%);
-    border-color: #145fd7;
-    color: #fff; }
-    .tabs.tabs-positive .tab-item .badge {
-      background-color: #fff;
-      color: #4a87ee; }
-  .tabs.tabs-calm {
-    background-color: #43cee6;
-    background-image: linear-gradient(0deg, #1aacc3, #1aacc3 50%, transparent 50%);
-    border-color: #1aacc3;
-    color: #fff; }
-    .tabs.tabs-calm .tab-item .badge {
-      background-color: #fff;
-      color: #43cee6; }
-  .tabs.tabs-assertive {
-    background-color: #ef4e3a;
-    background-image: linear-gradient(0deg, #cc2311, #cc2311 50%, transparent 50%);
-    border-color: #cc2311;
-    color: #fff; }
-    .tabs.tabs-assertive .tab-item .badge {
-      background-color: #fff;
-      color: #ef4e3a; }
-  .tabs.tabs-balanced {
-    background-color: #66cc33;
-    background-image: linear-gradient(0deg, #498f24, #498f24 50%, transparent 50%);
-    border-color: #498f24;
-    color: #fff; }
-    .tabs.tabs-balanced .tab-item .badge {
-      background-color: #fff;
-      color: #66cc33; }
-  .tabs.tabs-energized {
-    background-color: #f0b840;
-    background-image: linear-gradient(0deg, #d39211, #d39211 50%, transparent 50%);
-    border-color: #d39211;
-    color: #fff; }
-    .tabs.tabs-energized .tab-item .badge {
-      background-color: #fff;
-      color: #f0b840; }
-  .tabs.tabs-royal {
-    background-color: #8a6de9;
-    background-image: linear-gradient(0deg, #552bdf, #552bdf 50%, transparent 50%);
-    border-color: #552bdf;
-    color: #fff; }
-    .tabs.tabs-royal .tab-item .badge {
-      background-color: #fff;
-      color: #8a6de9; }
-  .tabs.tabs-dark {
-    background-color: #444;
-    background-image: linear-gradient(0deg, #111, #111 50%, transparent 50%);
-    border-color: #111;
-    color: #fff; }
-    .tabs.tabs-dark .tab-item .badge {
-      background-color: #fff;
-      color: #444; }
   @media (min--moz-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
     .tabs {
       padding-top: 2px;
@@ -2920,7 +2865,90 @@ a.subdued {
       background-size: 100% 1px;
       background-repeat: no-repeat; } }
 
-.tabs-top {
+/* Allow parent element of tabs to define color, or just the tab itself */
+.tabs-light > .tabs, .tabs.tabs-light {
+  background-color: #fff;
+  background-image: linear-gradient(0deg, #ddd, #ddd 50%, transparent 50%);
+  border-color: #ddd;
+  color: #444; }
+  .tabs-light > .tabs .tab-item .badge, .tabs.tabs-light .tab-item .badge {
+    background-color: #444;
+    color: #fff; }
+
+.tabs-stable > .tabs, .tabs.tabs-stable {
+  background-color: #f8f8f8;
+  background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
+  border-color: #b2b2b2;
+  color: #444; }
+  .tabs-stable > .tabs .tab-item .badge, .tabs.tabs-stable .tab-item .badge {
+    background-color: #444;
+    color: #f8f8f8; }
+
+.tabs-positive > .tabs, .tabs.tabs-positive {
+  background-color: #4a87ee;
+  background-image: linear-gradient(0deg, #145fd7, #145fd7 50%, transparent 50%);
+  border-color: #145fd7;
+  color: #fff; }
+  .tabs-positive > .tabs .tab-item .badge, .tabs.tabs-positive .tab-item .badge {
+    background-color: #fff;
+    color: #4a87ee; }
+
+.tabs-calm > .tabs, .tabs.tabs-calm {
+  background-color: #43cee6;
+  background-image: linear-gradient(0deg, #1aacc3, #1aacc3 50%, transparent 50%);
+  border-color: #1aacc3;
+  color: #fff; }
+  .tabs-calm > .tabs .tab-item .badge, .tabs.tabs-calm .tab-item .badge {
+    background-color: #fff;
+    color: #43cee6; }
+
+.tabs-assertive > .tabs, .tabs.tabs-assertive {
+  background-color: #ef4e3a;
+  background-image: linear-gradient(0deg, #cc2311, #cc2311 50%, transparent 50%);
+  border-color: #cc2311;
+  color: #fff; }
+  .tabs-assertive > .tabs .tab-item .badge, .tabs.tabs-assertive .tab-item .badge {
+    background-color: #fff;
+    color: #ef4e3a; }
+
+.tabs-balanced > .tabs, .tabs.tabs-balanced {
+  background-color: #66cc33;
+  background-image: linear-gradient(0deg, #498f24, #498f24 50%, transparent 50%);
+  border-color: #498f24;
+  color: #fff; }
+  .tabs-balanced > .tabs .tab-item .badge, .tabs.tabs-balanced .tab-item .badge {
+    background-color: #fff;
+    color: #66cc33; }
+
+.tabs-energized > .tabs, .tabs.tabs-energized {
+  background-color: #f0b840;
+  background-image: linear-gradient(0deg, #d39211, #d39211 50%, transparent 50%);
+  border-color: #d39211;
+  color: #fff; }
+  .tabs-energized > .tabs .tab-item .badge, .tabs.tabs-energized .tab-item .badge {
+    background-color: #fff;
+    color: #f0b840; }
+
+.tabs-royal > .tabs, .tabs.tabs-royal {
+  background-color: #8a6de9;
+  background-image: linear-gradient(0deg, #552bdf, #552bdf 50%, transparent 50%);
+  border-color: #552bdf;
+  color: #fff; }
+  .tabs-royal > .tabs .tab-item .badge, .tabs.tabs-royal .tab-item .badge {
+    background-color: #fff;
+    color: #8a6de9; }
+
+.tabs-dark > .tabs, .tabs.tabs-dark {
+  background-color: #444;
+  background-image: linear-gradient(0deg, #111, #111 50%, transparent 50%);
+  border-color: #111;
+  color: #fff; }
+  .tabs-dark > .tabs .tab-item .badge, .tabs.tabs-dark .tab-item .badge {
+    background-color: #fff;
+    color: #444; }
+
+/* Allow parent element to have tabs-top */
+.tabs-top > .tabs, .tabs.tabs-top {
   top: 44px;
   padding-top: 0;
   padding-bottom: 2px;
@@ -3287,6 +3315,8 @@ a.subdued {
     position: absolute;
     top: 15px;
     right: 35px; }
+  .item.item-button-right .badge {
+    right: 65px; }
   .item.item-divider .badge {
     top: 7.5px; }
   .item .badge + .badge {
@@ -3544,40 +3574,38 @@ a.item-content {
  * By default, if an .item is created out of an <a> or <button>
  * then a arrow will be added to the right side of the item.
  */
-a.item, button.item, .item a[href].item-content, .item[ng-click] a.item-content {
+a.item, button.item, .item[href] .item-content, .item[ng-click] .item-content {
   padding-right: 40px; }
+  a.item:after, button.item:after, .item[href] .item-content:after, .item[ng-click] .item-content:after {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    position: absolute;
+    top: 0;
+    right: 11px;
+    height: 100%;
+    color: #ccc;
+    content: "\f125";
+    text-transform: none;
+    font-weight: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-size: 16px;
+    font-family: 'Ionicons';
+    line-height: 1;
+    speak: none; }
 
-a.item:after, button.item:after, .item a[href].item-content:after, .item[ng-click] a.item-content:after {
-  /* By default, both <a> and <button> have right side arrow icons */
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  position: absolute;
-  top: 0;
-  right: 11px;
-  height: 100%;
-  color: #ccc;
-  content: "\f125";
-  text-transform: none;
-  font-weight: normal;
-  font-style: normal;
-  font-variant: normal;
-  font-size: 16px;
-  font-family: 'Ionicons';
-  line-height: 1;
-  speak: none; }
-
-.grade-b a.item:after, .grade-b button.item:after, .grade-b .item a[href].item-content:after, .grade-b .item[ng-click] a.item-content:after, .grade-c a.item:after, .grade-c button.item:after, .grade-c .item a[href].item-content:after, .grade-c .item[ng-click] a.item-content:after {
+.grade-b a.item:after, .grade-b button.item:after, .grade-b .item[href] .item-content:after, .grade-b .item[ng-click] .item-content:after, .grade-c a.item:after, .grade-c button.item:after, .grade-c .item[href] .item-content:after, .grade-c .item[ng-click] .item-content:after {
   -webkit-font-smoothing: none;
   font-smoothing: none;
   content: '>';
@@ -3856,6 +3884,7 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
 .badge {
   background-color: transparent;
   color: #AAAAAA;
+  z-index: 1;
   display: inline-block;
   padding: 3px 8px;
   min-width: 10px;
