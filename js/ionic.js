@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1266
+ * Ionic, v0.9.27-nightly-1269
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2048,7 +2048,7 @@ window.ionic = {
     },
     /**
      * @ngdoc method
-     * @name ionic.Platform#isiPad
+     * @name ionic.Platform#isIPad
      * @returns {boolean} Whether we are running on iPad.
      */
     isIPad: function() {
@@ -2056,7 +2056,7 @@ window.ionic = {
     },
     /**
      * @ngdoc method
-     * @name ionic.Platform#isiOS
+     * @name ionic.Platform#isIOS
      * @returns {boolean} Whether we are running on iOS.
      */
     isIOS: function() {
