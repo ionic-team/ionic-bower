@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1272
+ * Ionic, v0.9.27-nightly-1280
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1272
+ * Ionic, v0.9.27-nightly-1280
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3103,7 +3103,6 @@ a.subdued {
     left: 20%;
     overflow: visible;
     min-height: 240px;
-    max-width: 768px;
     width: 60%; }
   .modal.ng-leave-active {
     bottom: 0; } }
