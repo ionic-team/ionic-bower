@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1256
+ * Ionic, v0.9.27-nightly-1257
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -959,7 +959,6 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
     var _this = this;
 
     ionic.requestAnimationFrame(function() {
-
       hideBody(popup);
       positionPopup(popup);
       popup.el.classList.remove('popup-hidden');
@@ -983,8 +982,6 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
   // Hide a single popup
   var hideSinglePopup = function(popup) {
     ionic.requestAnimationFrame(function() {
-      var buttons, lastButton;
-
       popup.el.classList.remove('active');
       popup.el.classList.add('popup-hidden');
     });
