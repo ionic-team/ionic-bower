@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1252
+ * Ionic, v0.9.27-nightly-1255
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2444,6 +2444,11 @@ window.ionic = {
   function isScrolledSinceStart(event) {
     // check if this click's coordinates are different than its touchstart/mousedown
     var c = getCoordinates(event);
+
+    // Quick check for 0,0 which could be simulated mouse click for form submission
+    if(c.x === 0 && c.y === 0) {
+      return false;
+    }
 
     return (c.x > startCoordinates.x + HIT_RADIUS ||
             c.x < startCoordinates.x - HIT_RADIUS ||
