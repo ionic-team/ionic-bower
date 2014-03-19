@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1298
+ * Ionic, v0.9.27-nightly-1300
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1298
+ * Ionic, v0.9.27-nightly-1300
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6054,7 +6054,8 @@ a.button {
       flex: 1;
       margin-bottom: 15px;
       max-width: 100%;
-      width: 100%; } }
+      width: 100%;
+      margin-left: 0; } }
 
 @media (max-width: 767px) {
   .responsive-md {
@@ -6074,7 +6075,8 @@ a.button {
       flex: 1;
       margin-bottom: 15px;
       max-width: 100%;
-      width: 100%; } }
+      width: 100%;
+      margin-left: 0; } }
 
 @media (max-width: 1023px) {
   .responsive-lg {
@@ -6094,7 +6096,8 @@ a.button {
       flex: 1;
       margin-bottom: 15px;
       max-width: 100%;
-      width: 100%; } }
+      width: 100%;
+      margin-left: 0; } }
 
 /**
  * Utility Classes
