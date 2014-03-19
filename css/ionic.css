@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1290
+ * Ionic, v0.9.27-nightly-1291
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1290
+ * Ionic, v0.9.27-nightly-1291
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3617,7 +3617,7 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
 .item-avatar, .item-avatar .item-content {
   padding-left: 70px;
   min-height: 70px; }
-  .item-avatar > img:first-child, .item-avatar .item-img, .item-avatar .item-content > img:first-child, .item-avatar .item-content .item-img {
+  .item-avatar > img:first-child, .item-avatar .item-image, .item-avatar .item-content > img:first-child, .item-avatar .item-content .item-image {
     position: absolute;
     top: 15px;
     left: 15px;
