@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1301
+ * Ionic, v0.9.27-nightly-1309
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -135,16 +135,19 @@ window.ionic = {
   };
 })(ionic);
 
-(function(ionic) {
+(function(window, document, ionic) {
 
-  var readyCallbacks = [],
-  domReady = function() {
+  var readyCallbacks = [];
+  var isDomReady = false;
+
+  function domReady() {
+    isDomReady = true;
     for(var x=0; x<readyCallbacks.length; x++) {
       ionic.requestAnimationFrame(readyCallbacks[x]);
     }
     readyCallbacks = [];
     document.removeEventListener('DOMContentLoaded', domReady);
-  };
+  }
   document.addEventListener('DOMContentLoaded', domReady);
 
   // From the man himself, Mr. Paul Irish.
@@ -230,12 +233,12 @@ window.ionic = {
      * @ngdoc method
      * @name ionic.DomUtil#ready
      * @description
-     * Call a function when the dom is ready, or if it is already ready
+     * Call a function when the DOM is ready, or if it is already ready
      * call the function immediately.
      * @param {function} callback The function to be called.
      */
     ready: function(cb) {
-      if(document.readyState === "complete") {
+      if(isDomReady || document.readyState === "complete") {
         ionic.requestAnimationFrame(cb);
       } else {
         readyCallbacks.push(cb);
@@ -321,8 +324,9 @@ window.ionic = {
      * @returns {DOMElement} The closest parent of element matching the
      * className, or null.
      */
-    getParentWithClass: function(e, className) {
-      while(e.parentNode) {
+    getParentWithClass: function(e, className, depth) {
+      depth = depth || 10;
+      while(e.parentNode && depth--) {
         if(e.parentNode.classList && e.parentNode.classList.contains(className)) {
           return e.parentNode;
         }
@@ -338,8 +342,9 @@ window.ionic = {
      * @returns {DOMElement} The closest parent or self matching the
      * className, or null.
      */
-    getParentOrSelfWithClass: function(e, className) {
-      while(e) {
+    getParentOrSelfWithClass: function(e, className, depth) {
+      depth = depth || 10;
+      while(e && depth--) {
         if(e.classList && e.classList.contains(className)) {
           return e;
         }
@@ -370,7 +375,7 @@ window.ionic = {
   //Shortcuts
   ionic.requestAnimationFrame = ionic.DomUtil.requestAnimationFrame;
   ionic.animationFrameThrottle = ionic.DomUtil.animationFrameThrottle;
-})(window.ionic);
+})(this, document, ionic);
 
 /**
  * ion-events.js
@@ -2181,11 +2186,11 @@ window.ionic = {
         ionic.requestAnimationFrame(function(){
           if(ionic.Platform._showStatusBar) {
             // they do not want it to be full screen
-            StatusBar.show();
+            window.StatusBar && window.StatusBar.show();
             document.body.classList.remove('status-bar-hide');
           } else {
             // it should be full screen
-            StatusBar.hide();
+            window.StatusBar && window.StatusBar.hide();
             document.body.classList.add('status-bar-hide');
           }
         });
@@ -3563,12 +3568,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
       }, false);
 
       var wheelShowBarFn = ionic.debounce(function() {
-        void 0;
         self.__fadeScrollbars('in');
       }, 500, true);
 
       var wheelHideBarFn = ionic.debounce(function() {
-        void 0;
         self.__fadeScrollbars('out');
       }, 100, false);
 
