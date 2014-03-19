@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1288
+ * Ionic, v0.9.27-nightly-1289
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1493,6 +1493,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
           currentView = viewHistory.currentView,
           backView = viewHistory.backView,
           forwardView = viewHistory.forwardView,
+          nextViewOptions = this.nextViewOptions(),
           rsp = {
             viewId: null,
             navAction: null,
@@ -1528,7 +1529,7 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
         rsp.navAction = 'moveBack';
         rsp.viewId = backView.viewId;
         //when going back, erase scrollValues
-        currentView.rememberedScrollValues = {}; 
+        currentView.rememberedScrollValues = {};
         if(backView.historyId === currentView.historyId) {
           // went back in the same history
           rsp.navDirection = 'back';
@@ -1607,6 +1608,12 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
 
         // add the new view to this history's stack
         hist.stack.push(viewHistory.views[rsp.viewId]);
+      }
+
+      if(nextViewOptions) {
+        if(nextViewOptions.disableAnimate) rsp.navDirection = null;
+        if(nextViewOptions.disableBack) viewHistory.views[rsp.viewId].backViewId = null;
+        this.nextViewOptions(null);
       }
 
       this.setNavViews(rsp.viewId);
@@ -1756,6 +1763,14 @@ angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
       }
       // no history for for the parent, use the root
       return { historyId: 'root', scope: $rootScope };
+    },
+
+    nextViewOptions: function(opts) {
+      if(arguments.length) {
+        this._nextOpts = opts;
+      } else {
+        return this._nextOpts;
+      }
     },
 
     getRenderer: function(navViewElement, navViewAttrs, navViewScope) {
@@ -4076,7 +4091,38 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
       };
     }
   };
-});
+})
+
+
+/**
+ * @ngdoc directive
+ * @name menuClose
+ * @module ionic
+ * @restrict AC
+ *
+ * @description
+ * Closes a side menu which is currently opened.
+ *
+ * @usage
+ * Below is an example of a link within a side menu. Tapping this link would
+ * automatically close the currently opened menu
+ *
+ * ```html
+ * <a nav-clear menu-close href="#/home" class="item">Home</a>
+ * ```
+ */
+.directive('menuClose', ['$ionicViewService', function($ionicViewService) {
+  return {
+    restrict: 'AC',
+    require: '^ionSideMenus',
+    link: function($scope, $element, $attr, sideMenuCtrl) {
+      $element.bind('click', function(){
+        sideMenuCtrl.close();
+      });
+    }
+  };
+}]);
+
 })();
 
 (function() {
@@ -5065,6 +5111,40 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     }
   };
   return directive;
+}])
+
+
+/**
+ * @ngdoc directive
+ * @name navClear
+ * @module ionic
+ * @restrict AC
+ *
+ * @description
+ * Disables any transition animations between views, along with removing the back
+ * button which would normally show on the next view. This directive is useful for
+ * links within a sideMenu.
+ *
+ * @usage
+ * Below is an example of a link within a side menu. Tapping this link would disable
+ * any animations which would normally occur between views.
+ *
+ * ```html
+ * <a nav-clear menu-close href="#/home" class="item">Home</a>
+ * ```
+ */
+.directive('navClear', ['$ionicViewService', function($ionicViewService) {
+  return {
+    restrict: 'AC',
+    link: function($scope, $element, $attr) {
+      $element.bind('click', function(){
+        $ionicViewService.nextViewOptions({
+          disableAnimate: true,
+          disableBack: true
+        });
+      });
+    }
+  };
 }]);
 
 })();
