@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1314
+ * Ionic, v0.9.27-nightly-1315
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2802,6 +2802,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
       var destroyShowReorderWatch = $scope.$watch('showReorder', function(val) {
         if(val) {
           $element[0].classList.add('item-options-hide');
+          $scope.listView && $scope.listView.clearDragEffects();
         } else if(val === false) {
           // false checking is because it could be undefined
           // if its undefined then we don't care to do anything
