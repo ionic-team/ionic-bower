@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1289
+ * Ionic, v0.9.27-nightly-1290
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1289
+ * Ionic, v0.9.27-nightly-1290
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3614,10 +3614,10 @@ a.item, button.item, .item[href] .item-content, .item[ng-click] .item-content {
 a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after, .item a.item-content:after {
   display: none; }
 
-.item-avatar {
+.item-avatar, .item-avatar .item-content {
   padding-left: 70px;
   min-height: 70px; }
-  .item-avatar img:first-child, .item-avatar .item-img {
+  .item-avatar > img:first-child, .item-avatar .item-img, .item-avatar .item-content > img:first-child, .item-avatar .item-content .item-img {
     position: absolute;
     top: 15px;
     left: 15px;
@@ -3629,7 +3629,7 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
 .item-thumbnail-left, .item-thumbnail-left .item-content {
   padding-left: 105px;
   min-height: 100px; }
-  .item-thumbnail-left > img:first-child, .item-thumbnail-left > .item-image, .item-thumbnail-left .item-content > img:first-child, .item-thumbnail-left .item-content > .item-image {
+  .item-thumbnail-left > img:first-child, .item-thumbnail-left .item-image, .item-thumbnail-left .item-content > img:first-child, .item-thumbnail-left .item-content .item-image {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -3637,13 +3637,13 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
     max-height: 80px;
     width: 100%; }
 
-.item-thumbnail-left.item-complex {
+.item-avatar.item-complex, .item-thumbnail-left.item-complex {
   padding-left: 0; }
 
 .item-thumbnail-right, .item-thumbnail-right .item-content {
   padding-right: 105px;
   min-height: 100px; }
-  .item-thumbnail-right > img:first-child, .item-thumbnail-right > .item-image, .item-thumbnail-right .item-content > img:first-child, .item-thumbnail-right .item-content > .item-image {
+  .item-thumbnail-right > img:first-child, .item-thumbnail-right .item-image, .item-thumbnail-right .item-content > img:first-child, .item-thumbnail-right .item-content .item-image {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -3651,7 +3651,7 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
     max-height: 80px;
     width: 100%; }
 
-.item-thumbnail-left.item-complex {
+.item-thumbnail-right.item-complex {
   padding-right: 0; }
 
 .item-image {
