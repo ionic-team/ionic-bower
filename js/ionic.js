@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1311
+ * Ionic, v0.9.27-nightly-1312
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5538,10 +5538,15 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       // Or check if this is a swipe to the side drag
       else if(!this._didDragUpOrDown && (e.gesture.direction == 'left' || e.gesture.direction == 'right') && Math.abs(e.gesture.deltaX) > 5) {
-        this._dragOp = new SlideDrag({ el: this.el });
-        this._dragOp.start(e);
-        e.preventDefault();
-        return;
+
+        // Make sure this is an item with buttons
+        var item = this._getItem(e.target);
+        if(item && item.querySelector('.item-options')) {
+          this._dragOp = new SlideDrag({ el: this.el });
+          this._dragOp.start(e);
+          e.preventDefault();
+          return;
+        }
       }
 
       // We aren't handling it, so pass it up the chain
