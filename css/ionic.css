@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1295
+ * Ionic, v0.9.27-nightly-1297
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1295
+ * Ionic, v0.9.27-nightly-1297
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3212,6 +3212,13 @@ a.subdued {
     margin-left: 0px; }
   .popup-buttons .button:last-child {
     margin-right: 0px; }
+
+.popup-open {
+  pointer-events: none; }
+  .popup-open.modal-open .modal {
+    pointer-events: none; }
+  .popup-open .popup-backdrop, .popup-open .popup {
+    pointer-events: auto; }
 
 .popup-backdrop {
   -webkit-animation-name: fadeIn;
