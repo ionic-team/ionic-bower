@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1292
+ * Ionic, v0.9.27-nightly-1293
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7028,26 +7028,26 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
     },
 
     isOpenLeft: function() {
-      return this._leftShowing;
+      return this.getOpenAmount() > 0;
     },
 
     isOpenRight: function() {
-      return this._rightShowing;
+      return this.getOpenAmount() < 0;
     },
 
     /**
      * Toggle the left menu to open 100%
      */
     toggleLeft: function(shouldOpen) {
+      var openAmount = this.getOpenAmount();
       if (arguments.length === 0) {
-        shouldOpen = !this._leftShowing;
+        shouldOpen = openAmount <= 0;
       }
       this.content.enableAnimation();
-      var openAmount = this.getOpenAmount();
-      if(shouldOpen) {
-        this.openPercentage(100);
-      } else {
+      if(!shouldOpen) {
         this.openPercentage(0);
+      } else {
+        this.openPercentage(100);
       }
     },
 
@@ -7055,15 +7055,15 @@ ionic.controllers.NavController = ionic.controllers.ViewController.inherit({
      * Toggle the right menu to open 100%
      */
     toggleRight: function(shouldOpen) {
+      var openAmount = this.getOpenAmount();
       if (arguments.length === 0) {
-        shouldOpen = !this._rightShowing;
+        shouldOpen = openAmount >= 0;
       }
       this.content.enableAnimation();
-      var openAmount = this.getOpenAmount();
-      if(shouldOpen) {
-        this.openPercentage(-100);
-      } else {
+      if(!shouldOpen) {
         this.openPercentage(0);
+      } else {
+        this.openPercentage(-100);
       }
     },
 
