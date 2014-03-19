@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1312
+ * Ionic, v0.9.27-nightly-1313
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2120,25 +2120,47 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 .directive('ionFooterBar', barDirective(false));
 
 function barDirective(isHeader) {
-  var BAR_TEMPLATE = isHeader ?
-    '<header class="bar bar-header" ng-transclude></header>' :
-    '<footer class="bar bar-footer" ng-transclude></footer>';
-  var BAR_MODEL_DEFAULT = isHeader ?
-    '$ionicHeaderBarController' :
-    '$ionicFooterBarController';
   return ['$parse', function($parse) {
     return {
       restrict: 'E',
-      replace: true,
-      transclude: true,
-      template: BAR_TEMPLATE,
-      link: function($scope, $element, $attr) {
-        var hb = new ionic.views.HeaderBar({
-          el: $element[0],
-          alignTitle: $attr.alignTitle || 'center'
-        });
+      compile: function($element, $attr) {
+        $element.addClass(isHeader ? 'bar bar-header' : 'bar bar-footer');
+        return { pre: prelink };
+        function prelink($scope, $element, $attr) {
+          var hb = new ionic.views.HeaderBar({
+            el: $element[0],
+            alignTitle: $attr.alignTitle || 'center'
+          });
 
-        $parse($attr.controllerBind || BAR_MODEL_DEFAULT).assign($scope, hb);
+          $parse($attr.controllerBind ||
+            (isHeader ? '$ionicHeaderBarController' : '$ionicFooterBarController')
+          ).assign($scope, hb);
+
+          var el = $element[0];
+
+          if (isHeader) {
+            $scope.$watch(function() { return el.className; }, function(value) {
+              var isSubheader = value.indexOf('bar-subheader') !== -1;
+              $scope.$parent.$hasHeader = !isSubheader;
+              $scope.$parent.$hasSubheader = isSubheader;
+            });
+            $scope.$on('$destroy', function() {
+              $scope.$parent.$hasHeader = $scope.$parent.$hasSubheader = null;
+            });
+          } else {
+            $scope.$watch(function() { return el.className; }, function(value) {
+              var isSubfooter = value.indexOf('bar-subfooter') !== -1;
+              $scope.$parent.$hasFooter = !isSubfooter;
+              $scope.$parent.$hasSubfooter = isSubfooter;
+            });
+            $scope.$on('$destroy', function() {
+              $scope.$parent.$hasFooter = $scope.$parent.$hasSubfooter = null;
+            });
+            $scope.$watch('$hasTabs', function(val) {
+              $element.toggleClass('has-tabs', !!val);
+            });
+          }
+        }
       }
     };
   }];
@@ -2245,9 +2267,6 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll}
  * directive.
  *
- * Use the classes 'has-header', 'has-subheader', 'has-footer', and 'has-tabs'
- * to modify the positioning of the ion-content relative to surrounding elements.
- *
  * @param {string=} controller-bind The scope variable to bind this element's scrollView's
  * {@link ionic.controller:ionicScroll ionicScroll controller} to.
  * Default: $scope.$ionicScrollController.
@@ -2269,24 +2288,31 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
 function($parse, $timeout, $controller, $ionicBind) {
   return {
     restrict: 'E',
-    replace: true,
-    transclude: true,
     require: '^?ionNavView',
     scope: true,
-    template:
-    '<div class="scroll-content">' +
-      '<div class="scroll"></div>' +
-    '</div>',
-    compile: function(element, attr, transclude) {
-      return {
-        //Prelink <ion-content> so it can compile before other directives compile.
-        //Then other directives can require ionicScrollCtrl
-        pre: prelink
-      };
+    compile: function(element, attr) {
+      element.addClass('scroll-content');
 
+      //We cannot transclude here because it breaks element.data() inheritance on compile
+      var innerElement = angular.element('<div class="scroll"></div>');
+      innerElement.append(element.contents());
+      element.append(innerElement);
+
+      return { pre: prelink };
       function prelink($scope, $element, $attr, navViewCtrl) {
-        var clone, sc, scrollView, scrollCtrl,
-          scrollContent = angular.element($element[0].querySelector('.scroll'));
+        var clone, sc, scrollView, scrollCtrl;
+
+        $scope.$watch(function() {
+          return ($scope.$hasHeader ? ' has-header' : '')  +
+            ($scope.$hasSubheader ? ' has-subheader' : '') +
+            ($scope.$hasFooter ? ' has-footer' : '') +
+            ($scope.$hasSubfooter ? ' has-subfooter' : '') +
+            ($scope.$hasTabs ? ' has-tabs' : '') +
+            ($scope.$hasTabsTop ? ' has-tabs-top' : '');
+        }, function(className, oldClassName) {
+          $element.removeClass(oldClassName);
+          $element.addClass(className);
+        });
 
         $ionicBind($scope, $attr, {
           $onScroll: '&onScroll',
@@ -2305,7 +2331,7 @@ function($parse, $timeout, $controller, $ionicBind) {
 
         if (angular.isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
-            scrollContent.toggleClass('padding', !!newVal);
+            innerElement.toggleClass('padding', !!newVal);
           });
         }
 
@@ -2339,13 +2365,6 @@ function($parse, $timeout, $controller, $ionicBind) {
           //Publish scrollView to parent so children can access it
           scrollView = scrollCtrl.scrollView;
         }
-
-        transclude($scope, function(clone) {
-          if (scrollCtrl) {
-            clone.data('$$ionicScrollController', scrollCtrl);
-          }
-          scrollContent.append(clone);
-        });
 
       }
     }
@@ -3067,20 +3086,22 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
 
   return {
     restrict: 'E',
-    replace: true,
-    transclude: true,
     controller: '$ionicNavBar',
-    template:
-      '<header class="bar bar-header nav-bar{{navBarClass()}}">' +
-        '<div class="buttons left-buttons"> ' +
-        '</div>' +
-        '<h1 ng-bind-html="title" class="title"></h1>' +
-        '<div class="buttons right-buttons"> ' +
-        '</div>' +
-      '</header>',
-    compile: function(tElement, tAttrs, transclude) {
+    scope: true,
+    compile: function(tElement, tAttrs) {
+      //We cannot transclude here because it breaks element.data() inheritance on compile
+      tElement
+        .addClass('bar bar-header nav-bar')
+        .append(
+          '<div class="buttons left-buttons"> ' +
+          '</div>' +
+          '<h1 ng-bind-html="title" class="title"></h1>' +
+          '<div class="buttons right-buttons"> ' +
+          '</div>'
+        );
 
-      return function link($scope, $element, $attr, navBarCtrl) {
+      return { pre: prelink };
+      function prelink($scope, $element, $attr, navBarCtrl) {
         navBarCtrl._headerBarView = new ionic.views.HeaderBar({
           el: $element[0],
           alignTitle: $attr.alignTitle || 'center'
@@ -3089,23 +3110,23 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
         $parse($attr.controllerBind || '$ionicNavBarController')
           .assign($scope, navBarCtrl);
 
-        //Put transcluded content (usually a back button) before the rest
-        transclude($scope, function(clone) {
-          $element.prepend(clone);
-        });
-
         //defaults
         $scope.backButtonShown = false;
         $scope.shouldAnimate = true;
         $scope.isReverse = false;
         $scope.isInvisible = true;
+        $scope.$parent.$hasHeader = true;
 
-        $scope.navBarClass = function() {
+        $scope.$watch(function() {
           return ($scope.isReverse ? ' reverse' : '') +
             ($scope.isInvisible ? ' invisible' : '') +
             (!$scope.shouldAnimate ? ' no-animation' : '');
-        };
-      };
+        }, function(className, oldClassName) {
+          $element.removeClass(oldClassName);
+          $element.addClass(className);
+        });
+
+      }
     }
   };
 }])
@@ -3163,32 +3184,30 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
   return {
     restrict: 'E',
     require: '^ionNavBar',
-    replace: true,
-    transclude: true,
-    template:
-      '<button class="button back-button" ng-transclude>' +
-      '</button>',
-    link: function($scope, $element, $attr, navBarCtrl) {
-      $scope.$navBack = navBarCtrl.back;
-      if (!$attr.ngClick) {
-        $ionicNgClick($scope, $element, '$navBack($event)');
-      }
-
-      //If the current viewstate does not allow a back button,
-      //always hide it.
-      var deregisterListener = $scope.$parent.$on(
-        '$viewHistory.historyChange',
-        function(e, data) {
-          $scope.hasBackButton = !!data.showBack;
+    compile: function(tElement, tAttrs) {
+      tElement.addClass('button back-button');
+      return function($scope, $element, $attr, navBarCtrl) {
+        $scope.$navBack = navBarCtrl.back;
+        if (!$attr.ngClick) {
+          $ionicNgClick($scope, $element, '$navBack($event)');
         }
-      );
-      $scope.$on('$destroy', deregisterListener);
 
-      //Make sure both that a backButton is allowed in the first place,
-      //and that it is shown by the current view.
-      $scope.$watch('!!(backButtonShown && hasBackButton)', function(val) {
-        $element.toggleClass('hide', !val);
-      });
+        //If the current viewstate does not allow a back button,
+        //always hide it.
+        var deregisterListener = $scope.$parent.$on(
+          '$viewHistory.historyChange',
+          function(e, data) {
+            $scope.hasBackButton = !!data.showBack;
+          }
+        );
+        $scope.$on('$destroy', deregisterListener);
+
+        //Make sure both that a backButton is allowed in the first place,
+        //and that it is shown by the current view.
+        $scope.$watch('!!(backButtonShown && hasBackButton)', function(val) {
+          $element.toggleClass('hide', !val);
+        });
+      };
     }
   };
 }])
@@ -3231,9 +3250,8 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
 .directive('ionNavButtons', ['$compile', '$animate', function($compile, $animate) {
   return {
     require: '^ionNavBar',
-    transclude: true,
     restrict: 'E',
-    compile: function($element, $attrs, transclude) {
+    compile: function($element, $attrs) {
       return function($scope, $element, $attrs, navBarCtrl) {
         var navElement = $attrs.side === 'right' ?
           navBarCtrl.rightButtonsElement :
@@ -3243,13 +3261,13 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
         //so we can remove them all when this element dies -
         //even if the buttons have changed through an ng-repeat or the like,
         //we just remove their div parent and they are gone.
-        var clone = angular.element('<div>').append(transclude($scope));
-        $animate.enter(clone, navElement);
+        var buttons = angular.element('<div>').append($element.contents().remove());
+        $animate.enter(buttons, navElement);
 
         //When our ion-nav-buttons container is destroyed,
         //destroy everything in the navbar
         $scope.$on('$destroy', function() {
-          $animate.leave(clone);
+          $animate.leave(buttons);
         });
 
         // The original element is just a completely empty <ion-nav-buttons> element.
@@ -3285,6 +3303,18 @@ angular.module('ionic.ui.popup', [])
     replace: true,
     transclude: true,
     scope: true,
+    template:
+      '<div class="popup">' +
+        '<div class="popup-head">' +
+          '<h3 class="popup-title" ng-bind-html="title"></h3>' +
+          '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
+        '</div>' +
+        '<div class="popup-body" ng-transclude>' +
+        '</div>' +
+        '<div class="popup-buttons row">' +
+          '<button ng-repeat="button in buttons" ng-click="_buttonTapped(button, $event)" class="button col" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
+        '</div>' +
+      '</div>',
     link: function($scope, $element, $attr) {
       $ionicBind($scope, $attr, {
         title: '@',
@@ -3307,18 +3337,7 @@ angular.module('ionic.ui.popup', [])
         }
         $scope.$onButtonTap({button: button, event: event});
       }
-    },
-    template:   '<div class="popup">' +
-                  '<div class="popup-head">' +
-                    '<h3 class="popup-title" ng-bind-html="title"></h3>' +
-                    '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
-                  '</div>' +
-                  '<div class="popup-body" ng-transclude>' +
-                  '</div>' +
-                  '<div class="popup-buttons row">' +
-                    '<button ng-repeat="button in buttons" ng-click="_buttonTapped(button, $event)" class="button col" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
-                  '</div>' +
-                '</div>'
+    }
   };
 }]);
 
@@ -3482,9 +3501,6 @@ angular.module('ionic.ui.scroll', [])
 .directive('ionScroll', ['$parse', '$timeout', '$controller', function($parse, $timeout, $controller) {
   return {
     restrict: 'E',
-    replace: true,
-    template: '<div class="scroll-view"><div class="scroll" ng-transclude></div></div>',
-    transclude: true,
     scope: {
       direction: '@',
       paging: '@',
@@ -3495,23 +3511,25 @@ angular.module('ionic.ui.scroll', [])
       scrollbarY: '@',
     },
     controller: function() {},
-    compile: function(element, attr, transclude) {
+    compile: function(element, attr) {
+      element.addClass('scroll-view');
 
-      return {
-        //Prelink <ion-scroll> so it can compile before other directives compile.
-        //Then other directives can require ionicScrollCtrl
-        pre: prelink
-      };
+      //We cannot transclude here because it breaks element.data() inheritance on compile
+      var innerElement = angular.element('<div class="scroll"></div>');
+      innerElement.append(element.contents());
+      element.append(innerElement);
 
+      return { pre: prelink };
       function prelink($scope, $element, $attr) {
-        var scrollView, scrollCtrl,
-          sc = $element[0].children[0];
+        var scrollView, scrollCtrl;
 
-        if(attr.padding == "true") {
-          sc.classList.add('padding');
+        if (angular.isDefined($attr.padding)) {
+          $scope.$watch($attr.padding, function(newVal) {
+            innerElement.toggleClass('padding', !!newVal);
+          });
         }
         if($scope.$eval($scope.paging) === true) {
-          sc.classList.add('scroll-paging');
+          innerElement.addClass('scroll-paging');
         }
 
         if(!$scope.direction) { $scope.direction = 'y'; }
@@ -3702,8 +3720,9 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
     restrict: 'AC',
     require: '^ionSideMenus',
     scope: true,
-    compile: function(element, attr, transclude) {
-      return function($scope, $element, $attr, sideMenuCtrl) {
+    compile: function(element, attr) {
+      return { pre: prelink };
+      function prelink($scope, $element, $attr, sideMenuCtrl) {
 
         $element.addClass('menu-content');
 
@@ -3793,7 +3812,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
           $ionicGesture.off(releaseGesture, 'release', dragReleaseFn);
           ionic.off('tap', contentTap, $element[0]);
         });
-      };
+      }
     }
   };
 }])
@@ -3827,13 +3846,12 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   return {
     restrict: 'E',
     require: '^ionSideMenus',
-    replace: true,
-    transclude: true,
     scope: true,
-    template: '<div class="menu menu-{{side}}"></div>',
-    compile: function(element, attr, transclude) {
+    compile: function(element, attr) {
       angular.isUndefined(attr.isEnabled) && attr.$set('isEnabled', 'true');
       angular.isUndefined(attr.width) && attr.$set('width', '275');
+
+      element.addClass('menu menu-' + attr.side);
 
       return function($scope, $element, $attr, sideMenuCtrl) {
         $scope.side = $attr.side || 'left';
@@ -3852,10 +3870,6 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
         });
         $scope.$watch($attr.isEnabled, function(val) {
           sideMenu.setIsEnabled(!!val);
-        });
-
-        transclude($scope, function(clone) {
-          $element.append(clone);
         });
       };
     }
@@ -4243,28 +4257,33 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
 .directive('ionTabs', ['$ionicViewService', '$parse', function($ionicViewService, $parse) {
   return {
     restrict: 'E',
-    replace: true,
     scope: true,
-    transclude: true,
     controller: 'ionicTabs',
-    template:
-    '<div class="view">' +
-      '<div class="tabs">' +
-      '</div>' +
-    '</div>',
-    compile: function(element, attr, transclude) {
+    compile: function(element, attr) {
+      element.addClass('view');
+      //We cannot transclude here because it breaks element.data() inheritance on compile
+      var innerElement = angular.element('<div class="tabs"></div>');
+      innerElement.append(element.contents());
+      element.append(innerElement);
 
-      return function link($scope, $element, $attr, tabsCtrl) {
+      return { pre: prelink };
+      function prelink($scope, $element, $attr, tabsCtrl) {
         $parse(attr.model || '$ionicTabsController').assign($scope, tabsCtrl);
 
         tabsCtrl.$scope = $scope;
         tabsCtrl.$element = $element;
         tabsCtrl.$tabsElement = angular.element($element[0].querySelector('.tabs'));
 
-        transclude($scope, function(clone) {
-          $element.append(clone);
+        var el = $element[0];
+        $scope.$watch(function() { return el.className; }, function(value) {
+          var isTabsTop = value.indexOf('tabs-top') !== -1;
+          $scope.$hasTabs = !isTabsTop;
+          $scope.$hasTabsTop = isTabsTop;
         });
-      };
+        $scope.$on('$destroy', function() {
+          $scope.$hasTabs = $scope.$hasTabsTop = null;
+        });
+      }
     }
   };
 }])
