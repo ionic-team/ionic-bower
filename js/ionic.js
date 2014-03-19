@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1293
+ * Ionic, v0.9.27-nightly-1295
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2339,7 +2339,7 @@ window.ionic = {
 
     var ele = target.control || target;
 
-    if(ele.disabled || ele.type === 'file') return;
+    if(ele.disabled || ele.type === 'file' || ele.type === 'range') return;
 
     void 0;
 
