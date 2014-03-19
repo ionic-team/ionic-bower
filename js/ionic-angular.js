@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1313
+ * Ionic, v0.9.27-nightly-1314
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1136,7 +1136,7 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
         pushAndShow(popup, data);
 
       }, function(err) {
-        console.error('Unable to load popup:', err);
+        void 0;
       });
 
       return q.promise;
@@ -3187,8 +3187,8 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
     compile: function(tElement, tAttrs) {
       tElement.addClass('button back-button');
       return function($scope, $element, $attr, navBarCtrl) {
-        $scope.$navBack = navBarCtrl.back;
         if (!$attr.ngClick) {
+          $scope.$navBack = navBarCtrl.back;
           $ionicNgClick($scope, $element, '$navBack($event)');
         }
 
