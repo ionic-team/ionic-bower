@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1316
+ * Ionic, v0.9.27-nightly-1318
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2677,11 +2677,11 @@ angular.module('ionic.ui.list', ['ngAnimate'])
           $scope.deleteClick = function() {
             if($attr.onDelete) {
               // this item has an on-delete attribute
-              $scope.onDelete({ item: $scope.item });
+              $scope.onDelete({ item: $scope.item, index: $scope.$parent.$index });
             } else if($parentAttrs.onDelete) {
               // run the parent list's onDelete method
               // if it doesn't exist nothing will happen
-              $parentScope.onDelete({ item: $scope.item });
+              $parentScope.onDelete({ item: $scope.item, index: $scope.$parent.$index });
             }
           };
 
