@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1319
+ * Ionic, v0.9.27-nightly-1320
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.27-nightly-1319'
+  version: '0.9.27-nightly-1320'
 };
 
 (function(ionic) {
@@ -2563,11 +2563,14 @@ window.ionic = {
           queueElements[keyId] = ele;
 
           // in XX milliseconds, set the queued elements to active
-          setTimeout(activateElements, 60);
-
           // add listeners to clear all queued/active elements onMove
-          document.body.addEventListener('mousemove', clear, false);
-          document.body.addEventListener('touchmove', clear, false);
+          if(e.type === 'touchstart') {
+            document.body.addEventListener('touchmove', clear, false);
+            setTimeout(activateElements, 85);
+          } else {
+            document.body.addEventListener('mousemove', clear, false);
+            ionic.requestAnimationFrame(activateElements);
+          }
 
           keyId = (keyId > 19 ? 0 : keyId + 1);
           break;
@@ -2588,6 +2591,15 @@ window.ionic = {
     queueElements = {};
   }
 
+  function deactivateElements() {
+    for(var key in activeElements) {
+      if(activeElements[key]) {
+        activeElements[key].classList.remove('active');
+        delete activeElements[key];
+      }
+    }
+  }
+
   function onEnd(e) {
     // clear out any active/queued elements after XX milliseconds
     setTimeout(clear, 200);
@@ -2598,14 +2610,7 @@ window.ionic = {
     queueElements = {};
 
     // in the next frame, remove the active class from all active elements
-    ionic.requestAnimationFrame(function(){
-      for(var key in activeElements) {
-        if(activeElements[key]) {
-          activeElements[key].classList.remove('active');
-          delete activeElements[key];
-        }
-      }
-    });
+    ionic.requestAnimationFrame(deactivateElements);
 
     // remove onMove listeners that clear out active elements
     document.body.removeEventListener('mousemove', clear);

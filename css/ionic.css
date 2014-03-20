@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1319
+ * Ionic, v0.9.27-nightly-1320
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1319
+ * Ionic, v0.9.27-nightly-1320
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3290,9 +3290,6 @@ a.subdued {
   border-color: #ddd;
   background-color: #fff;
   color: #444;
-  -webkit-transition: margin-left 0.2s ease-in-out, margin-right 0.2s ease-in-out, left 0.2s ease-in-out;
-  -moz-transition: margin-left 0.2s ease-in-out, margin-right 0.2s ease-in-out, left 0.2s ease-in-out;
-  transition: margin-left 0.2s ease-in-out, margin-right 0.2s ease-in-out, left 0.2s ease-in-out;
   position: relative;
   z-index: 2;
   display: block;
@@ -3426,14 +3423,6 @@ a.item {
   padding: 0; }
 
 .item-complex .item-content, .item-radio .item-content {
-  /**
-   * The content area of a complex list item. This area can
-   * Slide left and right and be dragged to support different
-   * UI interactions.
-   */
-  -webkit-transition: all 0.1s ease-in-out;
-  -moz-transition: all 0.1s ease-in-out;
-  transition: all 0.1s ease-in-out;
   position: relative;
   z-index: 2;
   padding: 15px 40px 15px 15px;
@@ -3696,32 +3685,58 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
   color: #aaa;
   font-size: 14px; }
 
-.item-reordering {
-  position: absolute;
-  z-index: 9;
-  width: 100%; }
+.item-left-editable .item-content, .item-right-editable .item-content {
+  -webkit-transition-duration: 250ms;
+  -moz-transition-duration: 250ms;
+  transition-duration: 250ms;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-property: none;
+  -moz-transition-property: none;
+  transition-property: none; }
 
-.item-placeholder {
-  opacity: 0.7; }
+.item-left-editable .item-content {
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform; }
 
-/**
- * The left-side edit area of a complex list item. This area shows
- * whe the list item is in edit mode.
- */
-.item-edit {
-  -webkit-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  -moz-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
+.item-right-editable .item-content {
+  -webkit-transition-property: margin-right;
+  -moz-transition-property: margin-right;
+  transition-property: margin-right; }
+
+.item-left-editable.item-right-editable .item-content {
+  -webkit-transition-property: -webkit-transform, margin-right;
+  -moz-transition-property: -moz-transform, margin-right;
+  transition-property: transform, margin-right; }
+
+.list-left-editing .item-left-editable .item-content, .item-left-editing.item-left-editable .item-content {
+  -webkit-transform: translate3d(50px, 0, 0);
+  -moz-transform: translate3d(50px, 0, 0);
+  transform: translate3d(50px, 0, 0); }
+
+.list-right-editing .item-right-editable .item-content, .item-right-editing.item-right-editable .item-content {
+  margin-right: 50px; }
+
+.item-left-edit {
+  -webkit-transition: all ease-in-out 250ms;
+  -moz-transition: all ease-in-out 250ms;
+  transition: all ease-in-out 250ms;
+  -webkit-transform: translate3d(-42px, 0, 0);
+  -moz-transform: translate3d(-42px, 0, 0);
+  transform: translate3d(-42px, 0, 0);
   position: absolute;
   top: 0;
-  left: 8px;
+  left: 0;
   z-index: 0;
-  width: 48px;
+  width: 50px;
   height: 100%;
-  line-height: 100%; }
-  .item-edit .button {
+  line-height: 100%;
+  opacity: 0; }
+  .item-left-edit .button {
     height: 100%; }
-    .item-edit .button.icon {
+    .item-left-edit .button.icon {
       display: -webkit-box;
       display: -webkit-flex;
       display: -moz-box;
@@ -3736,27 +3751,30 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
       position: absolute;
       top: 0;
       left: 0;
-      height: 100%;
-      color: #ef4e3a;
-      font-size: 24px; }
-  .item-edit.ng-enter {
-    -webkit-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    -moz-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    left: -48px;
-    opacity: 0; }
-  .item-edit.ng-enter-active {
-    left: 8px;
-    opacity: 1; }
-  .item-edit.ng-leave {
-    -webkit-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    -moz-transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    left: 0px;
-    opacity: 1; }
-  .item-edit.ng-leave-active {
-    left: -48px;
-    opacity: 0; }
+      height: 100%; }
+
+.list-left-editing .item-left-edit {
+  -webkit-transform: translate3d(8px, 0, 0);
+  -moz-transform: translate3d(8px, 0, 0);
+  transform: translate3d(8px, 0, 0);
+  opacity: 1; }
+
+.item-delete .button.icon {
+  color: #ef4e3a;
+  font-size: 24px; }
+  .item-delete .button.icon:hover {
+    opacity: 0.7; }
+
+.list-reordering .item-drag {
+  z-index: 1; }
+
+.item-reordering {
+  position: absolute;
+  z-index: 9;
+  width: 100%; }
+
+.item-placeholder {
+  opacity: 0.7; }
 
 .item-drag {
   position: absolute;
@@ -3815,23 +3833,8 @@ a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after
   padding-left: 0;
   margin-bottom: 20px; }
 
-/* If a list is the last item in a container, don't add margin-bottom */
 .list:last-child {
   margin-bottom: 0px; }
-
-/**
- * List editing styles. These trigger when the entire list goes into
- * "edit mode" or reordering list items
- */
-.list-editing .item-content {
-  -webkit-transform: translate3d(50px, 0, 0);
-  -moz-transform: translate3d(50px, 0, 0);
-  transform: translate3d(50px, 0, 0); }
-
-.list-reordering .item-content {
-  margin-right: 50px; }
-.list-reordering .item-drag {
-  z-index: 1; }
 
 /**
  * List Header
