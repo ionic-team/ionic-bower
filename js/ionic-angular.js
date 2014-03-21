@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1325
+ * Ionic, v0.9.27-nightly-1326
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2024,10 +2024,10 @@ angular.module('ionic.ui.actionSheet', [])
 
 angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 
-.directive('barHeader', ['$document', function($document) {
+.directive('ionHeaderBar', ['$document', function($document) {
   return {
-    restrict: 'C',
-    link: function($scope, $element, $attr) {
+    restrict: 'E',
+    link: function($scope, $element, $attr, scrollCtrl) {
       ionic.requestAnimationFrame(function() {
         var scrollCtrl = $element.controller('$ionicScroll');
         if (!scrollCtrl) {
@@ -2150,24 +2150,25 @@ function barDirective(isHeader) {
           ).assign($scope, hb);
 
           var el = $element[0];
+          var parentScope = $scope.$parent || $scope; //just incase header is on rootscope
 
           if (isHeader) {
             $scope.$watch(function() { return el.className; }, function(value) {
               var isSubheader = value.indexOf('bar-subheader') !== -1;
-              $scope.$parent.$hasHeader = !isSubheader;
-              $scope.$parent.$hasSubheader = isSubheader;
+              parentScope.$hasHeader = !isSubheader;
+              parentScope.$hasSubheader = isSubheader;
             });
             $scope.$on('$destroy', function() {
-              $scope.$parent.$hasHeader = $scope.$parent.$hasSubheader = null;
+              parentScope.$hasHeader = parentScope.$hasSubheader = null;
             });
           } else {
             $scope.$watch(function() { return el.className; }, function(value) {
               var isSubfooter = value.indexOf('bar-subfooter') !== -1;
-              $scope.$parent.$hasFooter = !isSubfooter;
-              $scope.$parent.$hasSubfooter = isSubfooter;
+              parentScope.$hasFooter = !isSubfooter;
+              parentScope.$hasSubfooter = isSubfooter;
             });
             $scope.$on('$destroy', function() {
-              $scope.$parent.$hasFooter = $scope.$parent.$hasSubfooter = null;
+              parentScope.$hasFooter = parentScope.$hasSubfooter = null;
             });
             $scope.$watch('$hasTabs', function(val) {
               $element.toggleClass('has-tabs', !!val);
@@ -3270,6 +3271,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
     require: '^ionNavBar',
     restrict: 'E',
     compile: function($element, $attrs) {
+      var content = $element.contents().remove();
       return function($scope, $element, $attrs, navBarCtrl) {
         var navElement = $attrs.side === 'right' ?
           navBarCtrl.rightButtonsElement :
@@ -3279,7 +3281,14 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
         //so we can remove them all when this element dies -
         //even if the buttons have changed through an ng-repeat or the like,
         //we just remove their div parent and they are gone.
-        var buttons = angular.element('<div>').append($element.contents().remove());
+        var buttons = angular.element('<div>').append(content);
+
+        //Compile buttons inside content so they have access to everything
+        //something inside content does (eg parent ionicScroll)
+        $element.append(buttons);
+        $compile(buttons)($scope);
+
+        //Append buttons to navbar
         $animate.enter(buttons, navElement);
 
         //When our ion-nav-buttons container is destroyed,
@@ -4688,11 +4697,6 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
     restrict: 'EA',
     priority: 1000,
     require: '^?ionNavBar',
-    scope: {
-      title: '@',
-      hideBackButton: '&',
-      hideNavBar: '&',
-    },
     compile: function(tElement, tAttrs, transclude) {
       tElement.addClass('pane');
       tElement[0].removeAttribute('title');
@@ -4701,18 +4705,21 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         if (!navBarCtrl) {
           return;
         }
-        navBarCtrl.changeTitle($scope.title, $scope.$parent.$navDirection);
+        navBarCtrl.changeTitle($attr.title, $scope.$navDirection);
 
-        // Should we hide a back button when this tab is shown
-        navBarCtrl.showBackButton(!$scope.hideBackButton());
+        $scope.$watch($attr.hideBackButton, function(value) {
+          // Should we hide a back button when this tab is shown
+          navBarCtrl.showBackButton(!value);
+        });
 
-        // Should the nav bar be hidden for this view or not?
-        navBarCtrl.showBar(!$scope.hideNavBar());
+        $scope.$watch($attr.hideNavBar, function(value) {
+          // Should the nav bar be hidden for this view or not?
+          navBarCtrl.showBar(!value);
+        });
 
         // watch for changes in the title
-        $scope.$watch('title', function(val, oldVal) {
-          //Don't send in initial value, changeTitle does that
-          if (val !== oldVal) {
+        $attr.$observe('title', function(val, oldVal) {
+          if (val) {
             navBarCtrl.setTitle(val);
           }
         });
