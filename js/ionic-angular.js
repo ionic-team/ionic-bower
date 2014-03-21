@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1327
+ * Ionic, v0.9.27-nightly-1328
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2150,7 +2150,8 @@ function barDirective(isHeader) {
           ).assign($scope, hb);
 
           var el = $element[0];
-          var parentScope = $scope.$parent || $scope; //just incase header is on rootscope
+          //just incase header is on rootscope
+          var parentScope = $scope.$parent || $scope;
 
           if (isHeader) {
             $scope.$watch(function() { return el.className; }, function(value) {
@@ -3525,18 +3526,10 @@ angular.module('ionic.ui.scroll', [])
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
  * @param {boolean=} scrollbar-x Whether to show the vertical scrollbar. Default true.
  */
-.directive('ionScroll', ['$parse', '$timeout', '$controller', function($parse, $timeout, $controller) {
+.directive('ionScroll', ['$parse', '$timeout', '$controller', '$ionicBind', function($parse, $timeout, $controller, $ionicBind) {
   return {
     restrict: 'E',
-    scope: {
-      direction: '@',
-      paging: '@',
-      onRefresh: '&',
-      onScroll: '&',
-      scroll: '@',
-      scrollbarX: '@',
-      scrollbarY: '@',
-    },
+    scope: true,
     controller: function() {},
     compile: function(element, attr) {
       element.addClass('scroll-view');
@@ -3549,6 +3542,15 @@ angular.module('ionic.ui.scroll', [])
       return { pre: prelink };
       function prelink($scope, $element, $attr) {
         var scrollView, scrollCtrl;
+
+        $ionicBind($scope, $attr, {
+          direction: '@',
+          paging: '@',
+          $onScroll: '&onScroll',
+          scroll: '@',
+          scrollbarX: '@',
+          scrollbarY: '@',
+        });
 
         if (angular.isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
@@ -3709,7 +3711,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 
       $scope.sideMenuContentTranslateX = 0;
 
-      $parse($attrs.controllerBind || '$ionicSideMenusController').assign($scope, this);
+      $parse($attrs.controllerBind || '$ionicSideMenusController')
+        .assign($scope, this);
     }],
     replace: true,
     transclude: true,
@@ -5364,7 +5367,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     .data('$$ionicScrollController', this);
 
   $parse(scrollViewOptions.controllerBind || '$ionicScrollController')
-    .assign($scope.$parent, this);
+    .assign($scope.$parent || $scope, this);
 
   if (!angular.isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
