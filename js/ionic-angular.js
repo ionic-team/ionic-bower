@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1330
+ * Ionic, v0.9.27-nightly-1332
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -397,6 +397,7 @@ angular.module('ionic.service.loading', ['ionic.ui.loading'])
      * @returns {object} A shown loader with the following methods:
      *  - `hide()` - Hides the loader.
      *  - `show()` - Shows the loader.
+     *  - `setContent(string)` - Sets the html content of the loader.
      */
     show: function(opts) {
       var defaults = {
