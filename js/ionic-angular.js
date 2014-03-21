@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1323
+ * Ionic, v0.9.27-nightly-1324
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2800,6 +2800,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
 
     link: function($scope, $element, $attr, ionicScrollCtrl) {
       $scope.listView = new ionic.views.ListView({
+        canSwipe: $scope.canSwipe !== "false" && !!$scope.optionButtons(),
         el: $element[0],
         listEl: $element[0].children[0],
         scrollEl: ionicScrollCtrl && ionicScrollCtrl.element,
