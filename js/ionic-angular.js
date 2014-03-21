@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1337
+ * Ionic, v0.9.27-nightly-1338
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2861,7 +2861,7 @@ angular.module('ionic.ui.loading', [])
     link: function($scope, $element){
       $element.addClass($scope.animation || '');
     },
-    template: '<div class="loading-backdrop" ng-class="{enabled: showBackdrop}">' +
+    template: '<div class="loading-backdrop" ng-class="{\'show-backdrop\': showBackdrop}">' +
                 '<div class="loading" ng-transclude>' +
                 '</div>' +
               '</div>'
