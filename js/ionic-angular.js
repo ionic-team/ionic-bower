@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1336
+ * Ionic, v0.9.27-nightly-1337
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1015,7 +1015,9 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
   // Remove the backdrop element
   var removeBackdrop = function() {
     backdropEl.remove();
-    $document[0].body.classList.remove('popup-open');
+    $timeout(function(){
+      $document[0].body.classList.remove('popup-open');
+    }, 300);
   };
 
   // Push the new popup onto the stack with the given data and scope.
