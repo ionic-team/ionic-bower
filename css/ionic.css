@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1326
+ * Ionic, v0.9.27-nightly-1327
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1326
+ * Ionic, v0.9.27-nightly-1327
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1686,11 +1686,11 @@
  * --------------------------------------------------
  * Adapted from normalize.css and some reset.css. We don't care even one
  * bit about old IE, so we don't need any hacks for that in here.
- * 
+ *
  * There are probably other things we could remove here, as well.
  *
  * normalize.css v2.1.2 | MIT License | git.io/normalize
- 
+
  * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
  * http://cssreset.com
  */
@@ -3367,6 +3367,8 @@ a.subdued {
     border-color: #111;
     background-color: #444;
     color: #fff; }
+  .item[ng-click]:hover {
+    cursor: pointer; }
 
 .item.active:not(.item-divider):not(.item-input):not(.item-input-inset), .item-complex.active .item-content {
   border-color: #ccc;
