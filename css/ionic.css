@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1351
+ * Ionic, v0.9.27-nightly-1352
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1351
+ * Ionic, v0.9.27-nightly-1352
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2982,6 +2982,9 @@ a.subdued {
   opacity: 0.7; }
   .tab-item:hover {
     cursor: pointer; }
+
+.tabs.tabs-item-hide, .tabs-item-hide > .tabs {
+  display: none; }
 
 .tabs-icon-top .tab-item, .tabs-icon-bottom .tab-item {
   font-size: 12px;

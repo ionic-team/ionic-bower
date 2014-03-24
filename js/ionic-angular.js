@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1351
+ * Ionic, v0.9.27-nightly-1352
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4316,8 +4316,9 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
         var el = $element[0];
         $scope.$watch(function() { return el.className; }, function(value) {
           var isTabsTop = value.indexOf('tabs-top') !== -1;
-          $scope.$hasTabs = !isTabsTop;
-          $scope.$hasTabsTop = isTabsTop;
+          var isHidden = value.indexOf('tabs-item-hide') !== -1;
+          $scope.$hasTabs = !isTabsTop && !isHidden;
+          $scope.$hasTabsTop = isTabsTop && !isHidden;
         });
         $scope.$on('$destroy', function() {
           $scope.$hasTabs = $scope.$hasTabsTop = null;
