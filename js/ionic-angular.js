@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1363
+ * Ionic, v0.9.27-nightly-1365
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -125,32 +125,37 @@ function delegateService(methodNames) {
   return ['$log', function($log) {
     var delegate = this;
 
-    this._instances = {};
+    var instances = this._instances = [];
     this._registerInstance = function(instance, handle) {
       handle || (handle = ionic.Utils.nextUid());
-      delegate._instances[handle] = instance;
+
+      instance.$$delegateHandle = handle;
+      instances.push(instance);
 
       return function deregister() {
-        delete delegate._instances[handle];
+        var index = instances.indexOf(instance);
+        if (index !== -1) {
+          instances.splice(index, 1);
+        }
       };
     };
 
-    this.withHandle = function(handle) {
+    this.forHandle = function(handle) {
       if (!handle) {
         return delegate;
       }
-      return new InstanceWithHandle(handle);
+      return new InstanceForHandle(handle);
     };
 
     /*
      * Creates a new object that will have all the methodNames given,
      * and call them on the given the controller instance matching given
      * handle.
-     * The reason we don't just let withHandle return the controller instance
+     * The reason we don't just let forHandle return the controller instance
      * itself is that the controller instance might not exist yet.
      *
      * We want people to be able to do
-     * `var instance = $ionicScrollDelegate.withHandle('foo')` on controller
+     * `var instance = $ionicScrollDelegate.forHandle('foo')` on controller
      * instantiation, but on controller instantiation a child directive
      * may not have been compiled yet!
      *
@@ -158,31 +163,38 @@ function delegateService(methodNames) {
      * that will only try to fetch the controller with given handle
      * once the methods are actually called.
      */
-    function InstanceWithHandle(handle) {
+    function InstanceForHandle(handle) {
       this.handle = handle;
     }
     methodNames.forEach(function(methodName) {
-      InstanceWithHandle.prototype[methodName] = function() {
-        var instance = delegate._instances[this.handle];
-        if (!instance) {
-          return $log.error(
-            'Delegate with handle "'+this.handle+'" could not find a',
+      InstanceForHandle.prototype[methodName] = function() {
+        var handle = this.handle;
+        var instancesToUse = instances.filter(function(instance) {
+          return instance.$$delegateHandle === handle;
+        });
+        if (!instancesToUse.length) {
+          return $log.warn(
+            'Delegate for handle "'+this.handle+'" could not find a',
             'corresponding element with delegate-handle="'+this.handle+'"!',
             methodName, 'was not called!');
         }
-        return instance[methodName].apply(instance, arguments);
+        return callMethod(instancesToUse, methodName, arguments);
       };
       delegate[methodName] = function() {
-        var args = arguments;
-        var returnValue;
-        angular.forEach(delegate._instances, function(instance) {
-          var result = instance[methodName].apply(instance, args);
-          if (!angular.isDefined(returnValue)) {
-            returnValue = result;
+        return callMethod(instances, methodName, arguments);
+      };
+
+      function callMethod(instancesToUse, methodName, args) {
+        var finalResult;
+        var result;
+        instancesToUse.forEach(function(instance) {
+          result = instance[methodName].apply(instance, args);
+          if (!angular.isDefined(finalResult)) {
+            finalResult = result;
           }
         });
-        return returnValue;
-      };
+        return finalResult;
+      }
     });
   }];
 }
@@ -3750,7 +3762,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   'isOpenRight'
   /**
    * @ngdoc method
-   * @name $ionicSideMenuDelegate#withHandle
+   * @name $ionicSideMenuDelegate#forHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * sideMenu with delegate-handle matching the given handle.
@@ -4020,6 +4032,44 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   };
 })
 
+/**
+ * @ngdoc directive
+ * @name menuToggle
+ * @module ionic
+ * @restrict AC
+ *
+ * @description
+ * Toggle a side menu on the given side
+ *
+ * @usage
+ * Below is an example of a link within a nav bar. Tapping this link would
+ * automatically open the given side menu
+ *
+ * ```html
+ * <ion-view>
+ *   <ion-nav-buttons side="left">
+ *    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+ *   </ion-nav-buttons>
+ *  ...
+ * </ion-view>
+ * ```
+ */
+.directive('menuToggle', ['$ionicViewService', function($ionicViewService) {
+  return {
+    restrict: 'AC',
+    require: '^ionSideMenus',
+    link: function($scope, $element, $attr, sideMenuCtrl) {
+      var side = $scope.$eval($attr.menuToggle) || 'left';
+      $element.bind('click', function(){
+        if(side === 'left') {
+          sideMenuCtrl.toggleLeft();
+        } else if(side === 'right') {
+          sideMenuCtrl.toggleRight();
+        }
+      });
+    }
+  };
+}])
 
 /**
  * @ngdoc directive
@@ -5448,7 +5498,7 @@ angular.module('ionic.ui.scroll')
  * {@link ionic.directive:ionContent} and
  * {@link ionic.directive:ionScroll} directives).
  *
- * Each method on $ionicScrollDelegate can be called on the service itself to control all scrollViews.  Alternatively, one can control one specific scrollView using `withHandle` and `delegate-handle`. See the example below.
+ * Each method on $ionicScrollDelegate can be called on the service itself to control all scrollViews.  Alternatively, one can control one specific scrollView using `forHandle` and `delegate-handle`. See the example below.
  *
  * @usage
  *
@@ -5487,10 +5537,10 @@ angular.module('ionic.ui.scroll')
  * ```js
  * function MainCtrl($scope, $ionicScrollDelegate) {
  *   $scope.scrollMainToTop = function() {
- *     $ionicScrollDelegate.withHandle('mainScroll').scrollTop();
+ *     $ionicScrollDelegate.forHandle('mainScroll').scrollTop();
  *   };
  *   $scope.scrollSmallToTop = function() {
- *     $ionicScrollDelegate.withHandle('small').scrollTop();
+ *     $ionicScrollDelegate.forHandle('small').scrollTop();
  *   };
  * }
  * ```
@@ -5562,7 +5612,7 @@ angular.module('ionic.ui.scroll')
    * ```
    * ```js
    * function ScrollCtrl($scope, $ionicScrollDelegate) {
-   *   var delegate = $ionicScrollDelegate.withHandle('myScroll');
+   *   var delegate = $ionicScrollDelegate.forHandle('myScroll');
    *
    *   // Put any unique ID here.  The point of this is: every time the controller is recreated
    *   // we want to load the correct remembered scroll values.
@@ -5598,7 +5648,7 @@ angular.module('ionic.ui.scroll')
   'scrollToRememberedPosition'
   /**
    * @ngdoc method
-   * @name $ionicScrollDelegate#withHandle
+   * @name $ionicScrollDelegate#forHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * scrollView with delegate-handle matching the given handle.
