@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1344
+ * Ionic, v0.9.27-nightly-1346
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4463,7 +4463,7 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
     replace: true,
     require: ['^ionTabs', '^ionTab'],
     template:
-    '<a ng-class="{active: isTabActive(), \'has-badge\':badge}" ' +
+    '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge}" ' +
       ' class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +

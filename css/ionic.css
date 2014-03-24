@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1344
+ * Ionic, v0.9.27-nightly-1346
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1344
+ * Ionic, v0.9.27-nightly-1346
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3026,25 +3026,25 @@ a.subdued {
 
 /* Navigational tab */
 /* Active state for tab */
-.tab-item.active {
+.tab-item.tab-item-active {
   opacity: 1; }
-  .tab-item.active.tab-item-light {
+  .tab-item.tab-item-active.tab-item-light {
     color: #fff; }
-  .tab-item.active.tab-item-stable {
+  .tab-item.tab-item-active.tab-item-stable {
     color: #f8f8f8; }
-  .tab-item.active.tab-item-positive {
+  .tab-item.tab-item-active.tab-item-positive {
     color: #4a87ee; }
-  .tab-item.active.tab-item-calm {
+  .tab-item.tab-item-active.tab-item-calm {
     color: #43cee6; }
-  .tab-item.active.tab-item-assertive {
+  .tab-item.tab-item-active.tab-item-assertive {
     color: #ef4e3a; }
-  .tab-item.active.tab-item-balanced {
+  .tab-item.tab-item-active.tab-item-balanced {
     color: #66cc33; }
-  .tab-item.active.tab-item-energized {
+  .tab-item.tab-item-active.tab-item-energized {
     color: #f0b840; }
-  .tab-item.active.tab-item-royal {
+  .tab-item.tab-item-active.tab-item-royal {
     color: #8a6de9; }
-  .tab-item.active.tab-item-dark {
+  .tab-item.tab-item-active.tab-item-dark {
     color: #444; }
 
 .item.tabs {
