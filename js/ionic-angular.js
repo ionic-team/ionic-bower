@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1356
+ * Ionic, v0.9.27-nightly-1359
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -118,6 +118,73 @@ angular.element.prototype.removeClass = function(cssClasses) {
   }
   return this;
 };
+
+
+function delegateService(methodNames) {
+  return ['$log', function($log) {
+    var delegate = this;
+
+    this._instances = {};
+    this._registerInstance = function(instance, handle) {
+      handle || (handle = ionic.Utils.nextUid());
+      delegate._instances[handle] = instance;
+
+      return function deregister() {
+        delete delegate._instances[handle];
+      };
+    };
+
+    this.withHandle = function(handle) {
+      if (!handle) {
+        return delegate;
+      }
+      return new InstanceWithHandle(handle);
+    };
+
+    /*
+     * Creates a new object that will have all the methodNames given,
+     * and call them on the given the controller instance matching given
+     * handle.
+     * The reason we don't just let withHandle return the controller instance
+     * itself is that the controller instance might not exist yet.
+     *
+     * We want people to be able to do
+     * `var instance = $ionicScrollDelegate.withHandle('foo')` on controller
+     * instantiation, but on controller instantiation a child directive
+     * may not have been compiled yet!
+     *
+     * So this is our way of solving this problem: we create an object
+     * that will only try to fetch the controller with given handle
+     * once the methods are actually called.
+     */
+    function InstanceWithHandle(handle) {
+      this.handle = handle;
+    }
+    methodNames.forEach(function(methodName) {
+      InstanceWithHandle.prototype[methodName] = function() {
+        var instance = delegate._instances[this.handle];
+        if (!instance) {
+          return $log.error(
+            'Delegate with handle "'+this.handle+'" could not find a',
+            'corresponding element with delegate-handle="'+this.handle+'"!',
+            methodName, 'was not called!');
+        }
+        return instance[methodName].apply(instance, arguments);
+      };
+      delegate[methodName] = function() {
+        var args = arguments;
+        var returnValue;
+        angular.forEach(delegate._instances, function(instance) {
+          var result = instance[methodName].apply(instance, args);
+          if (!angular.isDefined(returnValue)) {
+            returnValue = result;
+          }
+        });
+        return returnValue;
+      };
+    });
+  }];
+}
 
 angular.module('ionic.service.actionSheet', ['ionic.service.templateLoad', 'ionic.service.platform', 'ionic.ui.actionSheet', 'ngAnimate'])
 
@@ -2275,7 +2342,6 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * @ngdoc directive
  * @name ionContent
  * @module ionic
- * @controller ionicScroll as $scope.$ionicScrollController
  * @restrict E
  *
  * @description
@@ -2291,9 +2357,8 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll}
  * directive.
  *
- * @param {string=} controller-bind The scope variable to bind this element's scrollView's
- * {@link ionic.controller:ionicScroll ionicScroll controller} to.
- * Default: $scope.$ionicScrollController.
+ * @param {string=} delegate-handle The handle used to identify this scrollView
+ * with {@link ionic.service:$ionicScrollDelegate}.
  * @param {boolean=} padding Whether to add padding to the content.
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
@@ -2369,7 +2434,7 @@ function($parse, $timeout, $controller, $ionicBind) {
             $scope: $scope,
             scrollViewOptions: {
               el: $element[0],
-              controllerBind: $attr.controllerBind,
+              delegateHandle: attr.delegateHandle,
               bouncing: $scope.$eval($scope.hasBouncing),
               startX: $scope.$eval($scope.startX) || 0,
               startY: $scope.$eval($scope.startY) || 0,
@@ -3519,15 +3584,13 @@ angular.module('ionic.ui.scroll', [])
  * @ngdoc directive
  * @name ionScroll
  * @module ionic
- * @controller ionicScroll as $scope.$ionicScrollController
  * @restrict E
  *
  * @description
  * Creates a scrollable container for all content inside.
  *
- * @param {string=} controller-bind The scope variable to bind this element's scrollView's
- * {@link ionic.controller:ionicScroll ionicScroll controller} to.
- * Default: $scope.$ionicScrollController.
+ * @param {string=} delegate-handle The handle used to identify this scrollView
+ * with {@link ionic.service:$ionicScrollDelegate}.
  * @param {string=} direction Which way to scroll. 'x' or 'y'. Default 'y'.
  * @param {boolean=} paging Whether to scroll with paging.
  * @param {expression=} on-refresh Called on pull-to-refresh, triggered by an {@link ionic.directive:ionRefresher}.
@@ -3575,7 +3638,7 @@ angular.module('ionic.ui.scroll', [])
 
         var scrollViewOptions= {
           el: $element[0],
-          controllerBind: $attr.controllerBind,
+          delegateHandle: $attr.delegateHandle,
           paging: isPaging,
           scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
           scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
@@ -5332,10 +5395,175 @@ angular.module('ionic.ui.virtualRepeat', [])
 })(ionic);
 */
 
-(function() {
-'use strict';
-
 angular.module('ionic.ui.scroll')
+
+/**
+ * @ngdoc service
+ * @name $ionicScrollDelegate
+ * @module ionic
+ * @description
+ * Delegate for controlling scrollViews (created by
+ * {@link ionic.directive:ionContent} and
+ * {@link ionic.directive:ionScroll} directives).
+ *
+ * Each method on $ionicScrollDelegate can be called on the service itself to control all scrollViews.  Alternatively, one can control one specific scrollView using `withHandle` and `delegate-handle`. See the example below.
+ *
+ * @usage
+ *
+ * Basic Usage:
+ *
+ * ```html
+ * <body ng-controller="MainCtrl">
+ *   <ion-content>
+ *     <button ng-click="scrollTop()">Scroll to Top!</button>
+ *   </ion-content>
+ * </body>
+ * ```
+ * ```js
+ * function MainCtrl($scope, $ionicScrollDelegate) {
+ *   $scope.scrollTop = function() {
+ *     $ionicScrollDelegate.scrollTop();
+ *   };
+ * }
+ * ```
+ *
+ * Example of advanced usage, with two scroll areas using `delegate-handle`
+ * for fine control.
+ *
+ * ```html
+ * <body ng-controller="MainCtrl">
+ *   <ion-content delegate-handle="mainScroll">
+ *     <button ng-click="scrollMainToTop()">
+ *       Scroll content to top!
+ *     </button>
+ *     <ion-scroll delegate-handle="small" style="height: 100px;">
+ *       <button ng-click="scrollSmallToTop()">
+ *         Scroll small area to top!
+ *       </button>
+ *     </ion-scroll>
+ *   </ion-content>
+ * </body>
+ * ```
+ * ```js
+ * function MainCtrl($scope, $ionicScrollDelegate) {
+ *   $scope.scrollMainToTop = function() {
+ *     $ionicScrollDelegate.withHandle('mainScroll').scrollTop();
+ *   };
+ *   $scope.scrollSmallToTop = function() {
+ *     $ionicScrollDelegate.withHandle('small').scrollTop();
+ *   };
+ * }
+ * ```
+ */
+
+/**
+ * @ngdoc method
+ * @name $ionicScrollDelegate#withHandle
+ * @param {string} handle
+ * @returns `delegateInstance` A delegate instance that controls only the
+ * scrollView with delegate-handle matching the given handle.
+ */
+.service('$ionicScrollDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#resize
+   * @description Tell the scrollView to recalculate the size of its container.
+   */
+  'resize',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#scrollTop
+   * @param {boolean=} shouldAnimate Whether the scroll should animate.
+   */
+  'scrollTop',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#scrollBottom
+   * @param {boolean=} shouldAnimate Whether the scroll should animate.
+   */
+  'scrollBottom',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#scroll
+   * @param {number} left The x-value to scroll to.
+   * @param {number} top The y-value to scroll to.
+   * @param {boolean=} shouldAnimate Whether the scroll should animate.
+   */
+  'scrollTo',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#anchorScroll
+   * @description Tell the scrollView to scroll to the element with an id
+   * matching window.location.hash.
+   *
+   * If no matching element is found, it will scroll to top.
+   *
+   * @param {boolean=} shouldAnimate Whether the scroll should animate.
+   */
+  'anchorScroll',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#rememberScrollPosition
+   * @description
+   * Will make it so, when this scrollView is destroyed (user leaves the page),
+   * the last scroll position the page was on will be saved, indexed by the
+   * given id.
+   *
+   * Note: for pages associated with a view under an ion-nav-view,
+   * rememberScrollPosition automatically saves their scroll.
+   *
+   * Related methods: scrollToRememberedPosition, forgetScrollPosition (below).
+   *
+   * In the following example, the scroll position of the ion-scroll element
+   * will persist, even when the user changes the toggle switch.
+   *
+   * ```html
+   * <ion-toggle ng-model="shouldShowScrollView"></ion-toggle>
+   * <ion-scroll delegate-handle="myScroll" ng-if="shouldShowScrollView">
+   *   <div ng-controller="ScrollCtrl">
+   *     <ion-list>
+   *       <ion-item ng-repeat="i in items">{{i}}</ion-item>
+   *     </ion-list>
+   *   </div>
+   * </ion-scroll>
+   * ```
+   * ```js
+   * function ScrollCtrl($scope, $ionicScrollDelegate) {
+   *   var delegate = $ionicScrollDelegate.withHandle('myScroll');
+   *
+   *   // Put any unique ID here.  The point of this is: every time the controller is recreated
+   *   // we want to load the correct remembered scroll values.
+   *   delegate.rememberScrollPosition('my-scroll-id');
+   *   delegate.scrollToRememberedPosition();
+   *   $scope.items = [];
+   *   for (var i=0; i<100; i++) {
+   *     $scope.items.push(i);
+   *   }
+   * }
+   * ```
+   *
+   * @param {string} id The id to remember the scroll position of this
+   * scrollView by.
+   */
+  'rememberScrollPosition',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#forgetScrollPosition
+   * @description
+   * Stop remembering the scroll position for this scrollView.
+   */
+  'forgetScrollPosition',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#scrollToRememberedPosition
+   * @description
+   * If this scrollView has an id associated with its scroll position,
+   * (through calling rememberScrollPosition), and that position is remembered,
+   * load the position and scroll to it.
+   * @param {boolean=} shouldAnimate Whether to animate the scroll.
+   */
+  'scrollToRememberedPosition'
+]))
 
 /**
  * @private
@@ -5344,14 +5572,6 @@ angular.module('ionic.ui.scroll')
   return {};
 })
 
-/**
- * @ngdoc controller
- * @name ionicScroll
- * @module ionic
- * @description
- * Controller for the {@link ionic.directive:ionContent} and
- * {@link ionic.directive:ionScroll} directives.
- */
 .controller('$ionicScroll', [
   '$scope',
   'scrollViewOptions',
@@ -5359,12 +5579,17 @@ angular.module('ionic.ui.scroll')
   '$window',
   '$$scrollValueCache',
   '$location',
-  '$parse',
   '$rootScope',
   '$document',
-function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $parse, $rootScope, $document) {
+  '$ionicScrollDelegate',
+  '$parse', //DEPRECATED
+function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $rootScope, $document, $ionicScrollDelegate, $parse) {
 
   var self = this;
+
+  this._scrollViewOptions = scrollViewOptions; //for testing
+
+  $parse('$ionicScrollController').assign($scope.$parent || $scope, this);
 
   var element = this.element = scrollViewOptions.el;
   var $element = this.$element = angular.element(element);
@@ -5376,8 +5601,9 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   ($element.parent().length ? $element.parent() : $element)
     .data('$$ionicScrollController', this);
 
-  $parse(scrollViewOptions.controllerBind || '$ionicScrollController')
-    .assign($scope.$parent || $scope, this);
+  var deregisterInstance = $ionicScrollDelegate._registerInstance(
+    this, scrollViewOptions.delegateHandle
+  );
 
   if (!angular.isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
@@ -5392,6 +5618,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   var backListenDone = angular.noop;
 
   $scope.$on('$destroy', function() {
+    deregisterInstance();
     ionic.off('resize', resize, $window);
     $window.removeEventListener('resize', resize);
     backListenDone();
@@ -5435,31 +5662,16 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
   this._rememberScrollId = null;
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#resize
-   * @description Tell the scrollView to recalculate the size of its container.
-   */
   this.resize = function() {
     return $timeout(resize);
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#scrollTop
-   * @param {boolean=} shouldAnimate Whether the scroll should animate.
-   */
   this.scrollTop = function(shouldAnimate) {
     this.resize().then(function() {
       scrollView.scrollTo(0, 0, !!shouldAnimate);
     });
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#scrollBottom
-   * @param {boolean=} shouldAnimate Whether the scroll should animate.
-   */
   this.scrollBottom = function(shouldAnimate) {
     this.resize().then(function() {
       var max = scrollView.getScrollMax();
@@ -5467,29 +5679,12 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     });
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#scroll
-   * @param {number} left The x-value to scroll to.
-   * @param {number} top The y-value to scroll to.
-   * @param {boolean=} shouldAnimate Whether the scroll should animate.
-   */
   this.scrollTo = function(left, top, shouldAnimate) {
     this.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
     });
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#anchorScroll
-   * @description Tell the scrollView to scroll to the element with an id
-   * matching window.location.hash.
-   *
-   * If no matching element is found, it will scroll to top.
-   *
-   * @param {boolean=} shouldAnimate Whether the scroll should animate.
-   */
   this.anchorScroll = function(shouldAnimate) {
     this.resize().then(function() {
       var hash = $location.hash();
@@ -5503,75 +5698,16 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     });
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicScroll#rememberScrollPosition
-   * @description
-   * Will make it so, when this scrollView is destroyed (user leaves the page),
-   * the last scroll position the page was on will be saved, indexed by the
-   * given id.
-   *
-   * Note: for pages associated with a view under an ion-nav-view,
-   * rememberScrollPosition automatically saves their scroll.
-   *
-   * Related methods: scrollToRememberedPosition, forgetScrollPosition (below).
-   *
-   * In the following example, the scroll position of the ion-scroll element
-   * will persist, even when the user changes the toggle switch.
-   *
-   * ```html
-   * <ion-toggle ng-model="shouldShowScrollView"></ion-toggle>
-   * <ion-scroll ng-if="shouldShowScrollView">
-   *   <div ng-controller="ScrollCtrl">
-   *     <ion-list>
-   *       <ion-item ng-repeat="i in items">{{i}}</ion-item>
-   *     </ion-list>
-   *   </div>
-   * </ion-scroll>
-   * ```
-   * ```js
-   * function ScrollCtrl($scope) {
-   *   // Put any unique ID here.  The point of this is: every time the controller is recreated
-   *   // we want to load the correct remembered scroll values.
-   *   $scope.$ionicScrollController.rememberScrollPosition('my-scroll-id');
-   *
-   *   $scope.$ionicScrollController.scrollToRememberedPosition();
-
-   *   $scope.items = [];
-   *   for (var i=0; i<100; i++) {
-   *     $scope.items.push(i);
-   *   }
-   * }
-   * ```
-   *
-   * @param {string} id The id to remember the scroll position of this
-   * scrollView by.
-   */
   this.rememberScrollPosition = function(id) {
     if (!id) {
       throw new Error("Must supply an id to remember the scroll by!");
     }
     this._rememberScrollId = id;
   };
-  /**
-   * @ngdoc method
-   * @name ionicScroll#forgetScrollPosition
-   * @description
-   * Stop remembering the scroll position for this scrollView.
-   */
   this.forgetScrollPosition = function() {
     delete $$scrollValueCache[this._rememberScrollId];
     this._rememberScrollId = null;
   };
-  /**
-   * @ngdoc method
-   * @name ionicScroll#scrollToRememberedPosition
-   * @description
-   * If this scrollView has an id associated with its scroll position,
-   * (through calling rememberScrollPosition), and that position is remembered,
-   * load the position and scroll to it.
-   * @param {boolean=} shouldAnimate Whether to animate the scroll.
-   */
   this.scrollToRememberedPosition = function(shouldAnimate) {
     var values = $$scrollValueCache[this._rememberScrollId];
     if (values) {
@@ -5602,4 +5738,3 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 }]);
 
-})();
