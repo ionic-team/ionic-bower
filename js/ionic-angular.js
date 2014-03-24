@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1362
+ * Ionic, v0.9.27-nightly-1363
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3686,44 +3686,82 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 }])
 
 /**
- * @ngdoc controller
- * @name ionicSideMenus
+ * @ngdoc service
+ * @name $ionicSideMenuDelegate
  * @module ionic
  *
  * @description
- * Controller for the {@link ionic.directive:ionSideMenus} directive.
+ * Delegate for controlling the {@link ionic.directive:ionSideMenus} directive.
+ *
+ *
+ * @usage
+ *
+ * ```html
+ * <body ng-controller="MainCtrl">
+ *   <ion-side-menus>
+ *     <ion-pane ion-side-menu-content>
+ *       Content!
+ *       <button ng-click="toggleLeftSideMenu()">
+ *         Toggle Left Side Menu
+ *       </button>
+ *     </ion-pane>
+ *     <ion-side-menu side="left">
+ *       Left Menu!
+ *     <ion-side-menu>
+ *   </ion-side-menus>
+ * </body>
+ * ```
+ * ```js
+ * function MainCtrl($scope, $ionicSideMenuDelegate) {
+ *   $scope.toggleLeftSideMenu = function() {
+ *     $ionicSideMenuDelegate.toggleLeft();
+ *   };
+ * }
+ * ```
  */
-/**
- * @ngdoc method
- * @name ionicSideMenus#toggleLeft
- * @description Toggle the left side menu (if it exists).
- * @param {boolean=} isOpen Whether to open or close the menu.
- * Default: Toggles the menu.
- */
-/**
- * @ngdoc method
- * @name ionicSideMenus#toggleRight
- * @description Toggle the right side menu (if it exists).
- * @param {boolean=} isOpen Whether to open or close the menu.
- * Default: Toggles the menu.
- */
-/**
- * @ngdoc method
- * @name ionicSideMenus#isOpenLeft
- * @returns {boolean} Whether the left menu is currently opened.
- */
-/**
- * @ngdoc method
- * @name ionicSideMenus#isOpenRight
- * @returns {boolean} Whether the right menu is currently opened.
- */
+.service('$ionicSideMenuDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#toggleLeft
+   * @description Toggle the left side menu (if it exists).
+   * @param {boolean=} isOpen Whether to open or close the menu.
+   * Default: Toggles the menu.
+   */
+  'toggleLeft',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#toggleRight
+   * @description Toggle the right side menu (if it exists).
+   * @param {boolean=} isOpen Whether to open or close the menu.
+   * Default: Toggles the menu.
+   */
+  'toggleRight',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#isOpenLeft
+   * @returns {boolean} Whether the left menu is currently opened.
+   */
+  'isOpenLeft',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#isOpenRight
+   * @returns {boolean} Whether the right menu is currently opened.
+   */
+  'isOpenRight'
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#withHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * sideMenu with delegate-handle matching the given handle.
+   */
+]))
 
 /**
  * @ngdoc directive
  * @name ionSideMenus
  * @module ionic
  * @restrict E
- * @controller ionicSideMenus as $scope.$ionicSideMenusController
  *
  * @description
  * A container element for side menu(s) and the main content. Allows the left
@@ -3759,20 +3797,20 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * ```js
  * function ContentController($scope) {
  *   $scope.toggleLeft = function() {
- *     $scope.$ionicSideMenusController.toggleLeft();
+ *     $scope.$$ionicSideMenuDelegateController.toggleLeft();
  *   };
  * }
  * ```
  *
  * @param {string=} controller-bind The scope variable to bind these side menus'
- * {@link ionic.controller:ionicSideMenus ionicSideMenus controller} to.
- * Default: $scope.$ionicSideMenusController.
+ * {@link ionic.controller:$ionicSideMenuDelegate $ionicSideMenuDelegate controller} to.
+ * Default: $scope.$$ionicSideMenuDelegateController.
  *
  */
 .directive('ionSideMenus', function() {
   return {
     restrict: 'ECA',
-    controller: ['$scope', '$attrs', '$parse', function($scope, $attrs, $parse) {
+    controller: ['$scope', '$attrs', '$ionicSideMenuDelegate', function($scope, $attrs, $ionicSideMenuDelegate) {
       var _this = this;
 
       angular.extend(this, ionic.controllers.SideMenuController.prototype);
@@ -3784,8 +3822,11 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 
       $scope.sideMenuContentTranslateX = 0;
 
-      $parse($attrs.controllerBind || '$ionicSideMenusController')
-        .assign($scope, this);
+      var deregisterInstance = $ionicSideMenuDelegate._registerInstance(
+        this, $attrs.delegateHandle
+      );
+
+      $scope.$on('$destroy', deregisterInstance);
     }],
     replace: true,
     transclude: true,
@@ -5411,8 +5452,6 @@ angular.module('ionic.ui.scroll')
  *
  * @usage
  *
- * Basic Usage:
- *
  * ```html
  * <body ng-controller="MainCtrl">
  *   <ion-content>
@@ -5457,13 +5496,6 @@ angular.module('ionic.ui.scroll')
  * ```
  */
 
-/**
- * @ngdoc method
- * @name $ionicScrollDelegate#withHandle
- * @param {string} handle
- * @returns `delegateInstance` A delegate instance that controls only the
- * scrollView with delegate-handle matching the given handle.
- */
 .service('$ionicScrollDelegate', delegateService([
   /**
    * @ngdoc method
@@ -5564,6 +5596,13 @@ angular.module('ionic.ui.scroll')
    * @param {boolean=} shouldAnimate Whether to animate the scroll.
    */
   'scrollToRememberedPosition'
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#withHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * scrollView with delegate-handle matching the given handle.
+   */
 ]))
 
 /**
@@ -5589,8 +5628,6 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   var self = this;
 
   this._scrollViewOptions = scrollViewOptions; //for testing
-
-  $parse('$ionicScrollController').assign($scope.$parent || $scope, this);
 
   var element = this.element = scrollViewOptions.el;
   var $element = this.$element = angular.element(element);
