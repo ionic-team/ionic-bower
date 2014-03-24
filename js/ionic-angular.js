@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1350
+ * Ionic, v0.9.27-nightly-1351
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4634,14 +4634,14 @@ angular.module('ionic.ui.touch', [])
         });
       });
 
-      ionic.on('tap', onTap, element[0]);
+      element[0].addEventListener('touchend', onTap, false);
 
       // Hack for iOS Safari's benefit. It goes searching for onclick handlers and is liable to click
       // something else nearby.
       element.onclick = function(event) { };
 
       scope.$on('$destroy', function () {
-        ionic.off('tap', onTap, element[0]);
+        element[0].removeEventListener('touchend', onTap);
       });
     };
   }])
