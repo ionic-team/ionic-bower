@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1359
+ * Ionic, v0.9.27-nightly-1360
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12,6 +12,7 @@
  *
  */
 
+(function() {
 /**
  * Create a wrapping module to ease having to include too many
  * modules.
@@ -5738,3 +5739,5 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 }]);
 
+
+})();
