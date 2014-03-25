@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1367
+ * Ionic, v0.9.27-nightly-1368
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -140,7 +140,7 @@ function delegateService(methodNames) {
       };
     };
 
-    this.getByHandle = function(handle) {
+    this.$getByHandle = function(handle) {
       if (!handle) {
         return delegate;
       }
@@ -151,11 +151,11 @@ function delegateService(methodNames) {
      * Creates a new object that will have all the methodNames given,
      * and call them on the given the controller instance matching given
      * handle.
-     * The reason we don't just let getByHandle return the controller instance
+     * The reason we don't just let $getByHandle return the controller instance
      * itself is that the controller instance might not exist yet.
      *
      * We want people to be able to do
-     * `var instance = $ionicScrollDelegate.getByHandle('foo')` on controller
+     * `var instance = $ionicScrollDelegate.$getByHandle('foo')` on controller
      * instantiation, but on controller instantiation a child directive
      * may not have been compiled yet!
      *
@@ -2962,6 +2962,25 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
  * @module ionic
  * @description
  * Delegate for controlling the {@link ionic.directive:ionNavBar} directive.
+ *
+ * @usage
+ *
+ * ```html
+ * <body ng-controller="MyCtrl">
+ *   <ion-nav-bar>
+ *     <button ng-click="setNavTitle('banana')">
+ *       Set title to banana!
+ *     </button>
+ *   </ion-nav-bar>
+ * </body>
+ * ```
+ * ```js
+ * function MyCtrl($scope, $ionicNavBarDelegate) {
+ *   $scope.setNavTitle = function(title) {
+ *     $ionicNavBarDelegate.setTitle(title);
+ *   }
+ * }
+ * ```
  */
 .service('$ionicNavBarDelegate', delegateService([
   /**
@@ -2975,7 +2994,7 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
    * @ngdoc method
    * @name $ionicNavBarDelegate#align
    * @description Aligns the title with the buttons in a given direction.
-   * @param {string=} direction The direction to the align the title text towards. 
+   * @param {string=} direction The direction to the align the title text towards.
    * Available: 'left', 'right', 'center'. Default: 'center'.
    */
   'align',
@@ -2983,7 +3002,7 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
    * @ngdoc method
    * @name $ionicNavBarDelegate#showBackButton
    * @description
-   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown 
+   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown
    * (if it exists).
    * @param {boolean} show Whether to show the back button.
    */
@@ -3028,10 +3047,12 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
   'getPreviousTitle'
   /**
    * @ngdoc method
-   * @name $ionicNavBarDelegate#getByHandle
+   * @name $ionicNavBarDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * navBars with delegate-handle matching the given handle.
+   *
+   * Example: `$ionicNavBarDelegate.$getByHandle('myHandle').setTitle('newTitle')`
    */
 ]))
 
@@ -3724,7 +3745,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * Delegate for controlling the {@link ionic.directive:ionSideMenus} directive.
  *
  * Methods called directly on the $ionicSideMenuDelegate service will control all side
- * menus.  Use the {@link ionic.service:$ionicSideMenuDelegate#getByHandle getByHandle}
+ * menus.  Use the {@link ionic.service:$ionicSideMenuDelegate#$getByHandle $getByHandle}
  * method to control specific ionSideMenus instances.
  *
  * @usage
@@ -3791,13 +3812,13 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   'canDragContent',
   /**
    * @ngdoc method
-   * @name $ionicSideMenuDelegate#getByHandle
+   * @name $ionicSideMenuDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * {@link ionic.directive:ionSideMenus} directives with `delegate-handle` matching
    * the given handle.
    *
-   * Example: `$ionicSideMenuDelegate.getByHandle('my-handle').toggleLeft();`
+   * Example: `$ionicSideMenuDelegate.$getByHandle('my-handle').toggleLeft();`
    */
 ]))
 
@@ -4153,8 +4174,34 @@ angular.module('ionic.ui.slideBox', [])
  * Delegate that controls the {@link ionic.directive:ionSlideBox} directive.
  *
  * Methods called directly on the $ionicSlideBoxDelegate service will control all side
- * menus.  Use the {@link ionic.service:$ionicSlideBoxDelegate#getByHandle getByHandle}
+ * menus.  Use the {@link ionic.service:$ionicSlideBoxDelegate#$getByHandle $getByHandle}
  * method to control specific slide box instances.
+ *
+ * @usage
+ *
+ * ```html
+ * <body ng-controller="MyCtrl">
+ *   <ion-slide-box>
+ *     <ion-slide>
+ *       <div class="box blue">
+ *         <button ng-click="nextSlide()">Next slide!</button>
+ *       </div>
+ *     </ion-slide>
+ *     <ion-slide>
+ *       <div class="box red">
+ *         Slide 2!
+ *       </div>
+ *     </ion-slide>
+ *   </ion-slide-box>
+ * </body>
+ * ```
+ * ```js
+ * function MyCtrl($scope, $ionicSlideBoxDelegate) {
+ *   $scope.nextSlide = function() {
+ *     $ionicSlideBoxDelegate.next();
+ *   }
+ * }
+ * ```
  */
 .service('$ionicSlideBoxDelegate', delegateService([
   /**
@@ -4205,13 +4252,13 @@ angular.module('ionic.ui.slideBox', [])
   'slidesCount'
   /**
    * @ngdoc method
-   * @name $ionicSlideBoxDelegate#getByHandle
+   * @name $ionicSlideBoxDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * {@link ionic.directive:ionSlideBox} directives with `delegate-handle` matching
    * the given handle.
    *
-   * Example: `$ionicSlideBoxDelegate.getByHandle('my-handle').stop();`
+   * Example: `$ionicSlideBoxDelegate.$getByHandle('my-handle').stop();`
    */
 ]))
 
@@ -4409,8 +4456,31 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  * Delegate for controlling the {@link ionic.directive:ionTabs} directive.
  *
  * Methods called directly on the $ionicTabsDelegate service will control all ionTabs
- * directives. Use the {@link ionic.service:$ionicTabsDelegate#getByHandle getByHandle}
+ * directives. Use the {@link ionic.service:$ionicTabsDelegate#$getByHandle $getByHandle}
  * method to control specific ionTabs instances.
+ *
+ * @usage
+ *
+ * ```html
+ * <body ng-controller="MyCtrl">
+ *   <ion-tabs>
+ *
+ *     <ion-tab title="Tab 1">
+ *       Hello tab 1!
+ *       <button ng-click="selectTabWithIndex(1)">Select tab 2!</button>
+ *     </ion-tab>
+ *     <ion-tab title="Tab 2">Hello tab 2!</ion-tab>
+ *
+ *   </ion-tabs>
+ * </body>
+ * ```
+ * ```js
+ * function MyCtrl($scope, $ionicTabsDelegate) {
+ *   $scope.selectTabWithIndex = function(index) {
+ *     $ionicTabsDelegate.select(index);
+ *   }
+ * }
+ * ```
  */
 .service('$ionicTabsDelegate', delegateService([
   /**
@@ -4428,19 +4498,19 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
   'select',
   /**
    * @ngdoc method
-   * @name $ionicTabsDelegate#selectedTabIndex
+   * @name $ionicTabsDelegate#selectedIndex
    * @returns `number` The index of the selected tab, or -1.
    */
   'selectedIndex'
   /**
    * @ngdoc method
-   * @name $ionicTabsDelegate#getByHandle
+   * @name $ionicTabsDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * {@link ionic.directive:ionTabs} directives with `delegate-handle` matching
    * the given handle.
    *
-   * Example: `$ionicTabsDelegate.getByHandle('my-handle').select(0);`
+   * Example: `$ionicTabsDelegate.$getByHandle('my-handle').select(0);`
    */
 ]))
 
@@ -4449,7 +4519,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
   var self = this;
   self.tabs = [];
 
-  self.selectedTabIndex = function() {
+  self.selectedIndex = function() {
     return self.tabs.indexOf(_selectedTab);
   };
   self.selectedTab = function() {
@@ -5632,7 +5702,7 @@ angular.module('ionic.ui.scroll')
  * {@link ionic.directive:ionScroll} directives).
  *
  * Methods called directly on the $ionicScrollDelegate service will control all scroll
- * views.  Use the {@link ionic.service:$ionicScrollDelegate#getByHandle getByHandle}
+ * views.  Use the {@link ionic.service:$ionicScrollDelegate#$getByHandle $getByHandle}
  * method to control specific scrollViews.
  *
  * @usage
@@ -5672,10 +5742,10 @@ angular.module('ionic.ui.scroll')
  * ```js
  * function MainCtrl($scope, $ionicScrollDelegate) {
  *   $scope.scrollMainToTop = function() {
- *     $ionicScrollDelegate.getByHandle('mainScroll').scrollTop();
+ *     $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
  *   };
  *   $scope.scrollSmallToTop = function() {
- *     $ionicScrollDelegate.getByHandle('small').scrollTop();
+ *     $ionicScrollDelegate.$getByHandle('small').scrollTop();
  *   };
  * }
  * ```
@@ -5747,7 +5817,7 @@ angular.module('ionic.ui.scroll')
    * ```
    * ```js
    * function ScrollCtrl($scope, $ionicScrollDelegate) {
-   *   var delegate = $ionicScrollDelegate.getByHandle('myScroll');
+   *   var delegate = $ionicScrollDelegate.$getByHandle('myScroll');
    *
    *   // Put any unique ID here.  The point of this is: every time the controller is recreated
    *   // we want to load the correct remembered scroll values.
@@ -5783,12 +5853,12 @@ angular.module('ionic.ui.scroll')
   'scrollToRememberedPosition'
   /**
    * @ngdoc method
-   * @name $ionicScrollDelegate#getByHandle
+   * @name $ionicScrollDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * scrollViews with `delegate-handle` matching the given handle.
    *
-   * Example: `$ionicScrollDelegate.getByHandle('my-handle').scrollTop();`
+   * Example: `$ionicScrollDelegate.$getByHandle('my-handle').scrollTop();`
    */
 ]))
 
