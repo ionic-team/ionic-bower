@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1375
+ * Ionic, v0.9.27-nightly-1376
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -526,7 +526,6 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
  * @ngdoc service
  * @name $ionicModal
  * @module ionic
- * @controller ionicModal
  * @description
  * The Modal is a content pane that can go over the user's main view
  * temporarily.  Usually used for making a choice or editing an item.
