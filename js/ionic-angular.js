@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1365
+ * Ionic, v0.9.27-nightly-1366
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -140,7 +140,7 @@ function delegateService(methodNames) {
       };
     };
 
-    this.forHandle = function(handle) {
+    this.getByHandle = function(handle) {
       if (!handle) {
         return delegate;
       }
@@ -151,11 +151,11 @@ function delegateService(methodNames) {
      * Creates a new object that will have all the methodNames given,
      * and call them on the given the controller instance matching given
      * handle.
-     * The reason we don't just let forHandle return the controller instance
+     * The reason we don't just let getByHandle return the controller instance
      * itself is that the controller instance might not exist yet.
      *
      * We want people to be able to do
-     * `var instance = $ionicScrollDelegate.forHandle('foo')` on controller
+     * `var instance = $ionicScrollDelegate.getByHandle('foo')` on controller
      * instantiation, but on controller instantiation a child directive
      * may not have been compiled yet!
      *
@@ -187,9 +187,10 @@ function delegateService(methodNames) {
       function callMethod(instancesToUse, methodName, args) {
         var finalResult;
         var result;
-        instancesToUse.forEach(function(instance) {
+        instancesToUse.forEach(function(instance, index) {
           result = instance[methodName].apply(instance, args);
-          if (!angular.isDefined(finalResult)) {
+          //Make it so the first result is the one returned
+          if (index === 0) {
             finalResult = result;
           }
         });
@@ -2107,8 +2108,8 @@ angular.module('ionic.ui.actionSheet', [])
 
 angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
 
-.directive('ionNavBar', TapScrollToTopDirective())
-.directive('ionHeaderBar', TapScrollToTopDirective())
+.directive('ionNavBar', tapScrollToTopDirective())
+.directive('ionHeaderBar', tapScrollToTopDirective())
 
 /**
  * @ngdoc directive
@@ -2184,37 +2185,30 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  */
 .directive('ionFooterBar', barDirective(false));
 
-function TapScrollToTopDirective() {
-  return ['$document', function($document) {
+function tapScrollToTopDirective() {
+  return ['$ionicScrollDelegate', function($ionicScrollDelegate) {
     return {
       restrict: 'E',
-      link: function($scope, $element, $attr, scrollCtrl) {
-        ionic.requestAnimationFrame(function() {
-          var scrollCtrl = $element.controller('$ionicScroll');
-          if (!scrollCtrl) {
+      link: function($scope, $element, $attr) {
+        ionic.on('tap', onTap, $element[0]);
+        $scope.$on('$destroy', function() {
+          ionic.off('tap', onTap, $element[0]);
+        });
+
+        function onTap(e) {
+          if (ionic.DomUtil.getParentOrSelfWithClass(e.target, 'button', 4)) {
             return;
           }
-
-          ionic.on('tap', onTap, $element[0]);
-          $scope.$on('$destroy', function() {
-            ionic.off('tap', onTap, $element[0]);
-          });
-
-          function onTap(e) {
-            if (ionic.DomUtil.getParentOrSelfWithClass(e.target, 'button', 4)) {
-              return;
-            }
-            var touch = e.gesture && e.gesture.touches[0] || e.detail.touches[0];
-            var bounds = $element[0].getBoundingClientRect();
-            if(ionic.DomUtil.rectContains(
-              touch.pageX, touch.pageY,
-              bounds.left, bounds.top - 20,
-              bounds.left + bounds.width, bounds.top + bounds.height)
-            ) {
-              scrollCtrl.scrollTop(true);
-            }
+          var touch = e.gesture && e.gesture.touches[0] || e.detail.touches[0];
+          var bounds = $element[0].getBoundingClientRect();
+          if (ionic.DomUtil.rectContains(
+            touch.pageX, touch.pageY,
+            bounds.left, bounds.top - 20,
+            bounds.left + bounds.width, bounds.top + bounds.height
+          )) {
+            $ionicScrollDelegate.scrollTop(true);
           }
-        });
+        }
       }
     };
   }];
@@ -2980,22 +2974,98 @@ angular.module('ionic.ui.modal', [])
 angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
 
 /**
- * @ngdoc controller
- * @name ionicNavBar
+ * @ngdoc service
+ * @name $ionicNavBarDelegate
  * @module ionic
  * @description
- * Controller for the {@link ionic.directive:ionNavBar} directive.
+ * Delegate for controlling the {@link ionic.directive:ionNavBar} directive.
  */
+.service('$ionicNavBarDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#back
+   * @description Goes back in the view history.
+   * @param {DOMEvent=} event The event object (eg from a tap event)
+   */
+  'back',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#align
+   * @description Calls {@link ionic.controller:ionicBar#align ionicBar#align} for this navBar.
+   * @param {string=} direction The direction to the align the title text towards.
+   */
+  'align',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#showBackButton
+   * @description
+   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown (if it exists).
+   * @param {boolean} show Whether to show the back button.
+   */
+  'showBackButton',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#showBar
+   * @description
+   * Set whether the {@link ionic.directive:ionNavBar} should be shown.
+   * @param {boolean} show Whether to show the bar.
+   */
+  'showBar',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#setTitle
+   * @description
+   * Set the title for the {@link ionic.directive:ionNavBar}.
+   * @param {string} title The new title to show.
+   */
+  'setTitle',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#changeTitle
+   * @description
+   * Change the title, transitioning the new title in and the old one out in a given direction.
+   * @param {string} title The new title to show.
+   * @param {string} direction The direction to transition the new title in.
+   * Available: 'forward', 'back'.
+   */
+  'changeTitle',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#getTitle
+   * @returns {string} The current title of the navbar.
+   */
+  'getTitle',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#getPreviousTitle
+   * @returns {string} The previous title of the navbar.
+   */
+  'getPreviousTitle'
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#getByHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * navBars with delegate-handle matching the given handle.
+   */
+]))
+
 .controller('$ionicNavBar', [
   '$scope',
   '$element',
+  '$attrs',
   '$ionicViewService',
   '$animate',
   '$compile',
-function($scope, $element, $ionicViewService, $animate, $compile) {
+  '$ionicNavBarDelegate',
+function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionicNavBarDelegate) {
   //Let the parent know about our controller too so that children of
   //sibling content elements can know about us
   $element.parent().data('$ionNavBarController', this);
+
+  var deregisterInstance = $ionicNavBarDelegate._registerInstance(this, $attrs.delegateHandle);
+
+  $scope.$on('$destroy', deregisterInstance);
 
   var self = this;
 
@@ -3006,12 +3076,6 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
     $element[0].querySelector('.buttons.right-buttons')
   );
 
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#back
-   * @description Goes back in the view history.
-   * @param {DOMEvent=} event The event object (eg from a tap event)
-   */
   this.back = function(e) {
     var backView = $ionicViewService.getBackView();
     backView && backView.go();
@@ -3019,56 +3083,23 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
     return false;
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#align
-   * @description Calls {@link ionic.controller:ionicBar#align ionicBar#align} for this navBar.
-   * @param {string=} direction The direction to the align the title text towards.
-   */
   this.align = function(direction) {
     this._headerBarView.align(direction);
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#showBackButton
-   * @description
-   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown (if it exists).
-   * @param {boolean} show Whether to show the back button.
-   */
   this.showBackButton = function(show) {
     $scope.backButtonShown = !!show;
   };
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#showBar
-   * @description
-   * Set whether the {@link ionic.directive:ionNavBar} should be shown.
-   * @param {boolean} show Whether to show the bar.
-   */
+
   this.showBar = function(show) {
     $scope.isInvisible = !show;
   };
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#setTitle
-   * @description
-   * Set the title for the {@link ionic.directive:ionNavBar}.
-   * @param {string} title The new title to show.
-   */
+
   this.setTitle = function(title) {
     $scope.oldTitle = $scope.title;
     $scope.title = title || '';
   };
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#changeTitle
-   * @description
-   * Change the title, transitioning the new title in and the old one out in a given direction.
-   * @param {string} title The new title to show.
-   * @param {string} direction The direction to transition the new title in.
-   * Available: 'forward', 'back'.
-   */
+
   this.changeTitle = function(title, direction) {
     if ($scope.title === title) {
       return false;
@@ -3086,25 +3117,15 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
     return true;
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#getTitle
-   * @returns {string} The current title of the navbar.
-   */
   this.getTitle = function() {
     return $scope.title || '';
   };
-  /**
-   * @ngdoc method
-   * @name ionicNavBar#getPreviousTitle
-   * @returns {string} The previous title of the navbar.
-   */
+
   this.getPreviousTitle = function() {
     return $scope.oldTitle || '';
   };
 
   /**
-   * @private
    * Exposed for testing
    */
   this._animateTitles = function() {
@@ -3154,7 +3175,7 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
  * @ngdoc directive
  * @name ionNavBar
  * @module ionic
- * @controller ionicNavBar as $scope.$ionicNavBarController
+ * @controller $ionicNavBarDelegate as $scope.$$ionicNavBarDelegateController
  * @restrict E
  *
  * @description
@@ -3182,9 +3203,8 @@ function($scope, $element, $ionicViewService, $animate, $compile) {
  * </body>
  * ```
  *
- * @param controller-bind {string=} The scope expression to bind this element's
- * {@link ionic.controller:ionicNavBar ionicNavBar controller} to.
- * Default: $ionicNavBarController.
+ * @param {string=} delegate-handle The handle used to identify this navBar
+ * with {@link ionic.service:$ionicNavBarDelegate}.
  * @param align-title {string=} Where to align the title of the navbar.
  * Available: 'left', 'right', 'center'. Defaults to 'center'.
  */
@@ -3214,7 +3234,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
           alignTitle: $attr.alignTitle || 'center'
         });
 
-        $parse($attr.controllerBind || '$ionicNavBarController')
+        $parse($attr.controllerBind || '$$ionicNavBarDelegateController')
           .assign($scope, navBarCtrl);
 
         //defaults
@@ -3264,28 +3284,41 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
  * </ion-nav-bar>
  * ```
  *
- * With custom click action, using {@link ionic.controller:ionicNavBar ionicNavBar controller}:
+ * With custom click action, using {@link ionic.service:$ionicNavBarDelegate}:
  *
  * ```html
- * <ion-nav-bar>
+ * <ion-nav-bar ng-controller="MyCtrl">
  *   <ion-nav-back-button class="button-icon"
- *     ng-click="canGoBack && $ionicNavBarController.back()">
+ *     ng-click="canGoBack && goBack()">
  *     <i class="ion-arrow-left-c"></i> Back
  *   </ion-nav-back-button>
  * </ion-nav-bar>
  * ```
+ * ```js
+ * function MyCtrl($scope, $ionicNavBarDelegate) {
+ *   $scope.goBack = function() {
+ *     $ionicNavBarDelegate.back();
+ *   };
+ * }
+ * ```
  *
  * Displaying the previous title on the back button, again using
- * {@link ionic.controller:ionicNavBar ionicNavBar controller}.
+ * {@link ionic.service:$ionicNavBarDelegate}.
  *
  * ```html
- * <ion-nav-bar>
+ * <ion-nav-bar ng-controller="MyCtrl">
  *   <ion-nav-back-button class="button button-icon ion-arrow-left-c">
- *     {% raw %}{{$ionicNavBarController.getPreviousTitle() || 'Back'}}{% endraw %}
+ *     {% raw %}{{getPreviousTitle() || 'Back'}}{% endraw %}
  *   </ion-nav-back-button>
  * </ion-nav-bar>
  * ```
- *
+ * ```js
+ * function MyCtrl($scope, $ionicNavBarDelegate) {
+ *   $scope.getPreviousTitle = function() {
+ *     return $ionicNavBarDelegate.getPreviousTitle();
+ *   };
+ * }
+ * ```
  */
 .directive('ionNavBackButton', ['$ionicNgClick', function($ionicNgClick) {
   return {
@@ -3705,6 +3738,9 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @description
  * Delegate for controlling the {@link ionic.directive:ionSideMenus} directive.
  *
+ * Methods called directly on the $ionicSideMenuDelegate service will control all side
+ * menus.  Use the {@link ionic.service:$ionicSideMenuDelegate#getByHandle getByHandle}
+ * method to control specific ionSideMenus instances.
  *
  * @usage
  *
@@ -3762,10 +3798,11 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   'isOpenRight'
   /**
    * @ngdoc method
-   * @name $ionicSideMenuDelegate#forHandle
+   * @name $ionicSideMenuDelegate#getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
-   * sideMenu with delegate-handle matching the given handle.
+   * {@link ionic.directive:ionSideMenus} directives with `delegate-handle` matching
+   * the given handle.
    */
 ]))
 
@@ -3814,9 +3851,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * }
  * ```
  *
- * @param {string=} controller-bind The scope variable to bind these side menus'
- * {@link ionic.controller:$ionicSideMenuDelegate $ionicSideMenuDelegate controller} to.
- * Default: $scope.$$ionicSideMenuDelegateController.
+ * @param {string=} delegate-handle The handle used to identify this side menu
+ * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
 .directive('ionSideMenus', function() {
@@ -4108,6 +4144,74 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 angular.module('ionic.ui.slideBox', [])
 
 /**
+ * @ngdoc service
+ * @name $ionicSlideBoxDelegate
+ * @module ionic
+ * @description
+ * Delegate that controls the {@link ionic.directive:ionSlideBox} directive.
+ *
+ * Methods called directly on the $ionicSlideBoxDelegate service will control all side
+ * menus.  Use the {@link ionic.service:$ionicSlideBoxDelegate#getByHandle getByHandle}
+ * method to control specific slide box instances.
+ */
+.service('$ionicSlideBoxDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#update
+   * @description
+   * Update the slidebox (for example if using Angular with ng-repeat,
+   * resize it for the elements inside).
+   */
+  'update',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#slide
+   * @param {number} to The index to slide to.
+   * @param {number=} speed The number of milliseconds for the change to take.
+   */
+  'slide',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#prev
+   * @description Go to the previous slide. Wraps around if at the beginning.
+   */
+  'prev',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#next
+   * @description Go to the next slide. Wraps around if at the end.
+   */
+  'next',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#stop
+   * @description Stop sliding. The slideBox will not move again until
+   * explicitly told to do so.
+   */
+  'stop',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#currentIndex
+   * @returns number The index of the current slide.
+   */
+  'currentIndex',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#slidesCount
+   * @returns number The number of slides there are currently.
+   */
+  'slidesCount'
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#getByHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * {@link ionic.directive:ionSlideBox} directives with `delegate-handle` matching
+   * the given handle.
+   */
+]))
+
+/**
  * The internal controller for the slide box controller.
  */
 
@@ -4116,7 +4220,6 @@ angular.module('ionic.ui.slideBox', [])
  * @name ionSlideBox
  * @module ionic
  * @restrict E
- * @controller ionicSlideBox as $scope.$ionicSlideBoxController
  * @description
  * The Slide Box is a multi-page container where each page can be swiped or dragged between:
  *
@@ -4137,9 +4240,8 @@ angular.module('ionic.ui.slideBox', [])
  * </ion-slide-box>
  * ```
  *
- * @param {string=} controller-bind The scope variable to bind this slide box's
- * {@link ionic.controller:ionicSlideBox ionicSlideBox controller} to.
- * Default: $scope.$ionicSlideBoxController.
+ * @param {string=} delegate-handle The handle used to identify this slideBox
+ * with {@link ionic.service:$ionicSlideBoxDelegate}.
  * @param {boolean=} does-continue Whether the slide box should automatically slide.
  * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
@@ -4147,7 +4249,11 @@ angular.module('ionic.ui.slideBox', [])
  * @param {expression=} on-slide-changed Expression called whenever the slide is changed.
  * @param {expression=} active-slide Model to bind the current slide to.
  */
-.directive('ionSlideBox', ['$timeout', '$compile', function($timeout, $compile) {
+.directive('ionSlideBox', [
+  '$timeout',
+  '$compile',
+  '$ionicSlideBoxDelegate',
+function($timeout, $compile, $ionicSlideBoxDelegate) {
   return {
     restrict: 'E',
     replace: true,
@@ -4160,7 +4266,7 @@ angular.module('ionic.ui.slideBox', [])
       onSlideChanged: '&',
       activeSlide: '=?'
     },
-    controller: ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs, $parse) {
+    controller: ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs) {
       var _this = this;
 
       var continuous = $scope.$eval($scope.doesContinue) === true;
@@ -4206,7 +4312,12 @@ angular.module('ionic.ui.slideBox', [])
         slider.slide(index);
       });
 
-      $parse($attrs.controllerBind || '$ionicSlideBoxController').assign($scope.$parent, slider);
+      //Exposed for testing
+      this.__slider = slider;
+
+      var deregisterInstance = $ionicSlideBoxDelegate._registerInstance(slider, $attrs.delegateHandle);
+
+      $scope.$on('$destroy', deregisterInstance);
 
       this.slidesCount = function() {
         return slider.slidesCount();
@@ -5498,7 +5609,9 @@ angular.module('ionic.ui.scroll')
  * {@link ionic.directive:ionContent} and
  * {@link ionic.directive:ionScroll} directives).
  *
- * Each method on $ionicScrollDelegate can be called on the service itself to control all scrollViews.  Alternatively, one can control one specific scrollView using `forHandle` and `delegate-handle`. See the example below.
+ * Methods called directly on the $ionicScrollDelegate service will control all scroll
+ * views.  Use the {@link ionic.service:$ionicScrollDelegate#getByHandle getByHandle}
+ * method to control specific scrollViews.
  *
  * @usage
  *
@@ -5537,10 +5650,10 @@ angular.module('ionic.ui.scroll')
  * ```js
  * function MainCtrl($scope, $ionicScrollDelegate) {
  *   $scope.scrollMainToTop = function() {
- *     $ionicScrollDelegate.forHandle('mainScroll').scrollTop();
+ *     $ionicScrollDelegate.getByHandle('mainScroll').scrollTop();
  *   };
  *   $scope.scrollSmallToTop = function() {
- *     $ionicScrollDelegate.forHandle('small').scrollTop();
+ *     $ionicScrollDelegate.getByHandle('small').scrollTop();
  *   };
  * }
  * ```
@@ -5612,7 +5725,7 @@ angular.module('ionic.ui.scroll')
    * ```
    * ```js
    * function ScrollCtrl($scope, $ionicScrollDelegate) {
-   *   var delegate = $ionicScrollDelegate.forHandle('myScroll');
+   *   var delegate = $ionicScrollDelegate.getByHandle('myScroll');
    *
    *   // Put any unique ID here.  The point of this is: every time the controller is recreated
    *   // we want to load the correct remembered scroll values.
@@ -5648,10 +5761,10 @@ angular.module('ionic.ui.scroll')
   'scrollToRememberedPosition'
   /**
    * @ngdoc method
-   * @name $ionicScrollDelegate#forHandle
+   * @name $ionicScrollDelegate#getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
-   * scrollView with delegate-handle matching the given handle.
+   * scrollViews with `delegate-handle` matching the given handle.
    */
 ]))
 
