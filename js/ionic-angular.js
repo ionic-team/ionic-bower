@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1369
+ * Ionic, v0.9.27-nightly-1371
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2202,7 +2202,7 @@ function tapScrollToTopDirective() {
 
 
 function barDirective(isHeader) {
-  return [function($parse) {
+  return [function() {
     return {
       restrict: 'E',
       compile: function($element, $attr) {
@@ -2360,11 +2360,10 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * @param {expression=} on-scroll-complete Expression to evaluate when a scroll action completes.
  */
 .directive('ionContent', [
-  '$parse',
   '$timeout',
   '$controller',
   '$ionicBind',
-function($parse, $timeout, $controller, $ionicBind) {
+function($timeout, $controller, $ionicBind) {
   return {
     restrict: 'E',
     require: '^?ionNavView',
@@ -3214,8 +3213,8 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
  * @param align-title {string=} Where to align the title of the navbar.
  * Available: 'left', 'right', 'center'. Defaults to 'center'.
  */
-.directive('ionNavBar', ['$ionicViewService', '$rootScope', '$animate', '$compile', '$parse',
-function($ionicViewService, $rootScope, $animate, $compile, $parse) {
+.directive('ionNavBar', ['$ionicViewService', '$rootScope', '$animate', '$compile',
+function($ionicViewService, $rootScope, $animate, $compile) {
 
   return {
     restrict: 'E',
@@ -3240,15 +3239,16 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
           alignTitle: $attr.alignTitle || 'center'
         });
 
-        $parse($attr.controllerBind || '$$ionicNavBarDelegateController')
-          .assign($scope, navBarCtrl);
-
         //defaults
         $scope.backButtonShown = false;
         $scope.shouldAnimate = true;
         $scope.isReverse = false;
         $scope.isInvisible = true;
         $scope.$parent.$hasHeader = true;
+
+        $scope.$on('$destroy', function() {
+          $scope.$parent.$hasHeader = false;
+        });
 
         $scope.$watch(function() {
           return ($scope.isReverse ? ' reverse' : '') +
@@ -3350,8 +3350,8 @@ function($ionicViewService, $rootScope, $animate, $compile, $parse) {
 
         //Make sure both that a backButton is allowed in the first place,
         //and that it is shown by the current view.
-        $scope.$watch('!!(backButtonShown && hasBackButton)', function(val) {
-          $element.toggleClass('hide', !val);
+        $scope.$watch('!!(backButtonShown && hasBackButton)', function(show) {
+          $element.toggleClass('hide', !show);
         });
       };
     }
@@ -3650,7 +3650,11 @@ angular.module('ionic.ui.scroll', [])
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
  * @param {boolean=} scrollbar-x Whether to show the vertical scrollbar. Default true.
  */
-.directive('ionScroll', ['$parse', '$timeout', '$controller', '$ionicBind', function($parse, $timeout, $controller, $ionicBind) {
+.directive('ionScroll', [
+  '$timeout',
+  '$controller',
+  '$ionicBind',
+function($timeout, $controller, $ionicBind) {
   return {
     restrict: 'E',
     scope: true,
@@ -4317,7 +4321,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
       onSlideChanged: '&',
       activeSlide: '=?'
     },
-    controller: ['$scope', '$element', '$attrs', '$parse', function($scope, $element, $attrs) {
+    controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
       var _this = this;
 
       var continuous = $scope.$eval($scope.doesContinue) === true;
@@ -5772,7 +5776,7 @@ angular.module('ionic.ui.scroll')
   'scrollBottom',
   /**
    * @ngdoc method
-   * @name $ionicScrollDelegate#scroll
+   * @name $ionicScrollDelegate#scrollTo
    * @param {number} left The x-value to scroll to.
    * @param {number} top The y-value to scroll to.
    * @param {boolean=} shouldAnimate Whether the scroll should animate.
@@ -5879,8 +5883,7 @@ angular.module('ionic.ui.scroll')
   '$rootScope',
   '$document',
   '$ionicScrollDelegate',
-  '$parse', //DEPRECATED
-function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $rootScope, $document, $ionicScrollDelegate, $parse) {
+function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $rootScope, $document, $ionicScrollDelegate) {
 
   var self = this;
 
