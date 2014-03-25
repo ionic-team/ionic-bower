@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1376
+ * Ionic, v0.9.27-nightly-1378
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.27-nightly-1376'
+  version: '0.9.27-nightly-1378'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1376
+ * Ionic, v0.9.27-nightly-1378
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37252,7 +37252,15 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         if (!navBarCtrl) {
           return;
         }
-        navBarCtrl.changeTitle($attr.title, $scope.$navDirection);
+        var initialTitle = $attr.title;
+        navBarCtrl.changeTitle(initialTitle, $scope.$navDirection);
+
+        // watch for changes in the title, don't set initial value as changeTitle does that
+        $attr.$observe('title', function(val, oldVal) {
+          if (val !== initialTitle) {
+            navBarCtrl.setTitle(val);
+          }
+        });
 
         $scope.$watch($attr.hideBackButton, function(value) {
           // Should we hide a back button when this tab is shown
@@ -37264,12 +37272,6 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
           navBarCtrl.showBar(!value);
         });
 
-        // watch for changes in the title
-        $attr.$observe('title', function(val, oldVal) {
-          if (val) {
-            navBarCtrl.setTitle(val);
-          }
-        });
       };
     }
   };
