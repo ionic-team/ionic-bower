@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1373
+ * Ionic, v0.9.27-nightly-1375
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.27-nightly-1373'
+  version: '0.9.27-nightly-1375'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1373
+ * Ionic, v0.9.27-nightly-1375
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34507,11 +34507,12 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * @ngdoc directive
  * @name ionContent
  * @module ionic
+ * @delegate ionic.service:$ionicScrollDelegate
  * @restrict E
  *
  * @description
  * The ionContent directive provides an easy to use content area that can be configured
- * to use Ionic's custom Scroll View, or the built in overflow scorlling of the browser.
+ * to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.
  *
  * While we recommend using the custom Scroll features in Ionic in most cases, sometimes
  * (for performance reasons) only the browser's native overflow scrolling will suffice,
@@ -35350,7 +35351,7 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
  * @ngdoc directive
  * @name ionNavBar
  * @module ionic
- * @controller $ionicNavBarDelegate as $scope.$$ionicNavBarDelegateController
+ * @delegate ionic.service:$ionicNavBarDelegate
  * @restrict E
  *
  * @description
@@ -35806,6 +35807,7 @@ angular.module('ionic.ui.scroll', [])
  * @ngdoc directive
  * @name ionScroll
  * @module ionic
+ * @delegate ionic.service:$ionicScrollDelegate
  * @restrict E
  *
  * @description
@@ -36000,6 +36002,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @ngdoc directive
  * @name ionSideMenus
  * @module ionic
+ * @delegate ionic.service:$ionicSideMenuDelegate
  * @restrict E
  *
  * @description
@@ -36015,14 +36018,14 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  *
  * @usage
  * To use side menus, add an `<ion-side-menus>` parent element,
- * an `<ion-pane ion-side-menu-content>` for the center content,
+ * an `<ion-side-menu-content>` for the center content,
  * and one or more `<ion-side-menu>` directives.
  *
  * ```html
  * <ion-side-menus>
  *   <!-- Center content -->
- *   <ion-pane ion-side-menu-content ng-controller="ContentController">
- *   </ion-pane>
+ *   <ion-side-menu-content ng-controller="ContentController">
+ *   </io-side-menu-content>
  *
  *   <!-- Left menu -->
  *   <ion-side-menu side="left">
@@ -36083,20 +36086,18 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @ngdoc directive
  * @name ionSideMenuContent
  * @module ionic
- * @restrict A
+ * @restrict E
  * @parent ionic.directive:ionSideMenus
  *
  * @description
  * A container for the main visible content, sibling to one or more
  * {@link ionic.directive:ionSideMenu} directives.
  *
- * An attribute directive, recommended to be used as part of an `<ion-pane>` element.
- *
  * @usage
  * ```html
- * <div ion-side-menu-content
+ * <ion-side-menu-content
  *   drag-content="canDrag">
- * </div>
+ * </ion-side-menu-content>
  * ```
  * For a complete side menu example, see the
  * {@link ionic.directive:ionSideMenus} documentation.
@@ -36106,14 +36107,14 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  */
 .directive('ionSideMenuContent', ['$timeout', '$ionicGesture', function($timeout, $ionicGesture) {
   return {
-    restrict: 'AC',
+    restrict: 'EA', //DEPRECATED 'A'
     require: '^ionSideMenus',
     scope: true,
     compile: function(element, attr) {
       return { pre: prelink };
       function prelink($scope, $element, $attr, sideMenuCtrl) {
 
-        $element.addClass('menu-content');
+        $element.addClass('menu-content pane');
 
         if (angular.isDefined(attr.dragContent)) {
           $scope.$watch(attr.dragContent, function(value) {
@@ -36444,6 +36445,7 @@ angular.module('ionic.ui.slideBox', [])
  * @ngdoc directive
  * @name ionSlideBox
  * @module ionic
+ * @delegate ionic.service:$ionicSlideBoxDelegate
  * @restrict E
  * @description
  * The Slide Box is a multi-page container where each page can be swiped or dragged between:
@@ -36784,6 +36786,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  * @ngdoc directive
  * @name ionTabs
  * @module ionic
+ * @delegate ionic.service:$ionicTabsDelegate
  * @restrict E
  * @codepen KbrzJ
  *
