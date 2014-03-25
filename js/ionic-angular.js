@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1368
+ * Ionic, v0.9.27-nightly-1369
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4221,10 +4221,10 @@ angular.module('ionic.ui.slideBox', [])
   'slide',
   /**
    * @ngdoc method
-   * @name $ionicSlideBoxDelegate#prev
+   * @name $ionicSlideBoxDelegate#previous
    * @description Go to the previous slide. Wraps around if at the beginning.
    */
-  'prev',
+  'previous',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#next

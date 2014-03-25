@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1368
+ * Ionic, v0.9.27-nightly-1369
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.27-nightly-1368'
+  version: '0.9.27-nightly-1369'
 };
 
 (function(ionic) {
@@ -6353,7 +6353,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       slide(to, speed);
     };
 
-    this.prev = function() {
+    this.prev = this.previous = function() {
       // cancel slideshow
       stop();
 
