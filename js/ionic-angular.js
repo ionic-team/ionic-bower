@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1366
+ * Ionic, v0.9.27-nightly-1367
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2116,18 +2116,11 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @name ionHeaderBar
  * @module ionic
  * @restrict E
- * @controller ionicBar as $scope.$ionicHeaderBarController
  *
  * @description
  * Adds a fixed header bar above some content.
  *
- * Is able to have left or right buttons, and additionally its title can be
- * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
- *
- * @param {string=} controller-bind The scope variable to bind this header bar's
- * {@link ionic.controller:ionicBar ionicBar controller} to.
- * Default: $scope.$ionicHeaderBarController.
- * @param {string=} align-title Where to align the title at the start.
+ * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
  * @usage
@@ -2153,18 +2146,11 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @name ionFooterBar
  * @module ionic
  * @restrict E
- * @controller ionicBar as $scope.$ionicFooterBarController
  *
  * @description
  * Adds a fixed footer bar below some content.
  *
- * Is able to have left or right buttons, and additionally its title can be
- * aligned through the {@link ionic.controller:ionicBar ionicBar controller}.
- *
- * @param {string=} controller-bind The scope variable to bind this footer bar's
- * {@link ionic.controller:ionicBar ionicBar controller} to.
- * Default: $scope.$ionicFooterBarController.
- * @param {string=} align-title Where to align the title at the start.
+ * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
  * @usage
@@ -2216,21 +2202,18 @@ function tapScrollToTopDirective() {
 
 
 function barDirective(isHeader) {
-  return ['$parse', function($parse) {
+  return [function($parse) {
     return {
       restrict: 'E',
       compile: function($element, $attr) {
         $element.addClass(isHeader ? 'bar bar-header' : 'bar bar-footer');
+
         return { pre: prelink };
         function prelink($scope, $element, $attr) {
           var hb = new ionic.views.HeaderBar({
             el: $element[0],
             alignTitle: $attr.alignTitle || 'center'
           });
-
-          $parse($attr.controllerBind ||
-            (isHeader ? '$ionicHeaderBarController' : '$ionicFooterBarController')
-          ).assign($scope, hb);
 
           var el = $element[0];
           //just incase header is on rootscope
@@ -2991,15 +2974,17 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
   /**
    * @ngdoc method
    * @name $ionicNavBarDelegate#align
-   * @description Calls {@link ionic.controller:ionicBar#align ionicBar#align} for this navBar.
-   * @param {string=} direction The direction to the align the title text towards.
+   * @description Aligns the title with the buttons in a given direction.
+   * @param {string=} direction The direction to the align the title text towards. 
+   * Available: 'left', 'right', 'center'. Default: 'center'.
    */
   'align',
   /**
    * @ngdoc method
    * @name $ionicNavBarDelegate#showBackButton
    * @description
-   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown (if it exists).
+   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown 
+   * (if it exists).
    * @param {boolean} show Whether to show the back button.
    */
   'showBackButton',
@@ -3795,7 +3780,15 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * @name $ionicSideMenuDelegate#isOpenRight
    * @returns {boolean} Whether the right menu is currently opened.
    */
-  'isOpenRight'
+  'isOpenRight',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#canDragContent
+   * @param {boolean=} canDrag Set whether the content can or cannot be dragged to open
+   * side menus.
+   * @returns {boolean} Whether the content can be dragged to open side menus.
+   */
+  'canDragContent',
   /**
    * @ngdoc method
    * @name $ionicSideMenuDelegate#getByHandle
@@ -3803,6 +3796,8 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * @returns `delegateInstance` A delegate instance that controls only the
    * {@link ionic.directive:ionSideMenus} directives with `delegate-handle` matching
    * the given handle.
+   *
+   * Example: `$ionicSideMenuDelegate.getByHandle('my-handle').toggleLeft();`
    */
 ]))
 
@@ -3844,9 +3839,9 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * </ion-side-menus>
  * ```
  * ```js
- * function ContentController($scope) {
+ * function ContentController($scope, $ionicSideMenuDelegate) {
  *   $scope.toggleLeft = function() {
- *     $scope.$$ionicSideMenuDelegateController.toggleLeft();
+ *     $ionicSideMenuDelegate.toggleLeft();
  *   };
  * }
  * ```
@@ -3867,6 +3862,13 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
         left: { width: 275 },
         right: { width: 275 }
       });
+
+      this.canDragContent = function(canDrag) {
+        if (arguments.length) {
+          $scope.dragContent = !!canDrag;
+        }
+        return $scope.dragContent;
+      };
 
       $scope.sideMenuContentTranslateX = 0;
 
@@ -3898,7 +3900,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @usage
  * ```html
  * <div ion-side-menu-content
- *   drag-content="canDragContent()">
+ *   drag-content="canDrag">
  * </div>
  * ```
  * For a complete side menu example, see the
@@ -3920,10 +3922,10 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
 
         if (angular.isDefined(attr.dragContent)) {
           $scope.$watch(attr.dragContent, function(value) {
-            $scope.dragContent = value;
+            sideMenuCtrl.canDragContent(value);
           });
         } else {
-          $scope.dragContent = true;
+          sideMenuCtrl.canDragContent(true);
         }
 
         var defaultPrevented = false;
@@ -4208,6 +4210,8 @@ angular.module('ionic.ui.slideBox', [])
    * @returns `delegateInstance` A delegate instance that controls only the
    * {@link ionic.directive:ionSlideBox} directives with `delegate-handle` matching
    * the given handle.
+   *
+   * Example: `$ionicSlideBoxDelegate.getByHandle('my-handle').stop();`
    */
 ]))
 
@@ -4397,31 +4401,57 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
 }])
 
 /**
- * @ngdoc controller
- * @name ionicTabs
+ * @ngdoc service
+ * @name $ionicTabsDelegate
  * @module ionic
  *
  * @description
- * Controller for the {@link ionic.directive:ionTabs} directive.
+ * Delegate for controlling the {@link ionic.directive:ionTabs} directive.
+ *
+ * Methods called directly on the $ionicTabsDelegate service will control all ionTabs
+ * directives. Use the {@link ionic.service:$ionicTabsDelegate#getByHandle getByHandle}
+ * method to control specific ionTabs instances.
  */
+.service('$ionicTabsDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicTabsDelegate#select
+   * @description Select the tab matching the given index.
+   *
+   * @param {number} index Index of the tab to select.
+   * @param {boolean=} shouldChangeHistory Whether this selection should load this tab's
+   * view history (if it exists) and use it, or just load the default page.
+   * Default false.
+   * Hint: you probably want this to be true if you have an
+   * {@link ionic.directive:ionNavView} inside your tab.
+   */
+  'select',
+  /**
+   * @ngdoc method
+   * @name $ionicTabsDelegate#selectedTabIndex
+   * @returns `number` The index of the selected tab, or -1.
+   */
+  'selectedIndex'
+  /**
+   * @ngdoc method
+   * @name $ionicTabsDelegate#getByHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * {@link ionic.directive:ionTabs} directives with `delegate-handle` matching
+   * the given handle.
+   *
+   * Example: `$ionicTabsDelegate.getByHandle('my-handle').select(0);`
+   */
+]))
+
 .controller('ionicTabs', ['$scope', '$ionicViewService', '$element', function($scope, $ionicViewService, $element) {
   var _selectedTab = null;
   var self = this;
   self.tabs = [];
 
-  /**
-   * @ngdoc method
-   * @name ionicTabs#selectedTabIndex
-   * @returns `number` The index of the selected tab, or -1.
-   */
   self.selectedTabIndex = function() {
     return self.tabs.indexOf(_selectedTab);
   };
-  /**
-   * @ngdoc method
-   * @name ionicTabs#selectedTab
-   * @returns `ionTab` The selected tab or null if none selected.
-   */
   self.selectedTab = function() {
     return _selectedTab;
   };
@@ -4462,17 +4492,6 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
     }
   };
 
-  /**
-   * @ngdoc method
-   * @name ionicTabs#select
-   * @description Select the given tab or tab index.
-   *
-   * @param {ionTab|number} tabOrIndex A tab object or index of a tab to select
-   * @param {boolean=} shouldChangeHistory Whether this selection should load this tab's view history
-   * (if it exists) and use it, or just loading the default page. Default false.
-   * Hint: you probably want this to be true if you have an
-   * {@link ionic.directive:ionNavView} inside your tab.
-   */
   self.select = function(tab, shouldEmitEvent) {
     var tabIndex;
     if (angular.isNumber(tab)) {
@@ -4522,7 +4541,6 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  * @name ionTabs
  * @module ionic
  * @restrict E
- * @controller ionicTabs as $scope.$ionicTabsController
  * @codepen KbrzJ
  *
  * @description
@@ -4551,15 +4569,15 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
  *   <ion-tab title="Settings" icon-on="ion-ios7-gear" icon-off="ion-ios7-gear-outline">
  *     <!-- Tab 3 content -->
  *   </ion-tab>
+ *
  * </ion-tabs>
  * ```
  *
- * @param {string=} controller-bind The scope variable to bind these tabs'
- * {@link ionic.controller:ionicTabs ionicTabs controller} to.
- * Default: $scope.$ionicTabsController.
+ * @param {string=} delegate-handle The handle used to identify these tabs
+ * with {@link ionic.service:$ionicTabsDelegate}.
  */
 
-.directive('ionTabs', ['$ionicViewService', '$parse', function($ionicViewService, $parse) {
+.directive('ionTabs', ['$ionicViewService', '$ionicTabsDelegate', function($ionicViewService, $ionicTabsDelegate) {
   return {
     restrict: 'E',
     scope: true,
@@ -4573,7 +4591,11 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
 
       return { pre: prelink };
       function prelink($scope, $element, $attr, tabsCtrl) {
-        $parse(attr.model || '$ionicTabsController').assign($scope, tabsCtrl);
+        var deregisterInstance = $ionicTabsDelegate._registerInstance(
+          tabsCtrl, $attr.delegateHandle
+        );
+
+        $scope.$on('$destroy', deregisterInstance);
 
         tabsCtrl.$scope = $scope;
         tabsCtrl.$element = $element;
@@ -4632,7 +4654,7 @@ function($scope, $ionicViewService, $rootScope, $element) {
  * @param {expression=} badge-style The style of badge to put on this tab (eg tabs-positive).
  * @param {expression=} on-select Called when this tab is selected.
  * @param {expression=} on-deselect Called when this tab is deselected.
- * @param {expression=} ng-click By default, the tab will be selected on click. If ngClick is set, it will not.  You can explicitly switch tabs using {@link ionic.controller:ionicTabs#select ionicTabBar controller's select method}.
+ * @param {expression=} ng-click By default, the tab will be selected on click. If ngClick is set, it will not.  You can explicitly switch tabs using {@link ionic.service:$ionicTabsDelegate#select $ionicTabsDelegate.select()}.
  */
 .directive('ionTab', ['$rootScope', '$animate', '$ionicBind', '$compile', '$ionicViewService',
 function($rootScope, $animate, $ionicBind, $compile, $ionicViewService) {
@@ -5765,6 +5787,8 @@ angular.module('ionic.ui.scroll')
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
    * scrollViews with `delegate-handle` matching the given handle.
+   *
+   * Example: `$ionicScrollDelegate.getByHandle('my-handle').scrollTop();`
    */
 ]))
 

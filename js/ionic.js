@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v0.9.27-nightly-1366
+ * Ionic, v0.9.27-nightly-1367
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '0.9.27-nightly-1366'
+  version: '0.9.27-nightly-1367'
 };
 
 (function(ionic) {
@@ -5030,14 +5030,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
 (function(ionic) {
 'use strict';
 
-  /**
-   * @ngdoc controller
-   * @name ionicBar
-   * @module ionic
-   * @description
-   * Controller for the {@link ionic.directive:ionHeaderBar} and
-   * {@link ionic.directive:ionFooterBar} directives.
-   */
   ionic.views.HeaderBar = ionic.views.View.inherit({
     initialize: function(opts) {
       this.el = opts.el;
@@ -5049,16 +5041,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
       this.align();
     },
 
-    /**
-     * @ngdoc method
-     * @name ionicBar#align
-     * @description
-     * Aligns the title text with the buttons in the bar
-     * so that the title size is maximized and aligned correctly
-     * as much as possible.
-     * @param {string=} direction Which direction to align the title towards.
-     * Available: 'left', 'right', 'center'. Default: 'center'.
-     */
     align: function(align) {
 
       align || (align = this.alignTitle);
