@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1388
+ * Ionic, v1.0.0-beta.1-nightly-1390
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1388'
+  version: '1.0.0-beta.1-nightly-1390'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1388
+ * Ionic, v1.0.0-beta.1-nightly-1390
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34857,7 +34857,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  *   ```
  *
  * @param {expression=} item The 'object' representing this item, to be passed in to swipe, delete, and reorder callbacks.
- * @param {boolean=} can-swipe Whether or not this item can be swiped. Defaults ot hte ionList parent's can-swipe setting.
+ * @param {boolean=} can-swipe Whether or not this item can be swiped. Defaults ot the ionList parent's can-swipe setting.
  * @param {boolean=} can-delete Whether or not this item can be deleted. Defaults to the ionList parent's can-delete setting.
  * @param {boolean=} can-reorder Whether or not this item can be reordered. Defaults to the ionList parent's can-reorder setting.
  * @param {expression=} on-delete The expression to call when this item is deleted.
