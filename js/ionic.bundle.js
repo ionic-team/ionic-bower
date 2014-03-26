@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1398
+ * Ionic, v1.0.0-beta.1-nightly-1399
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1398'
+  version: '1.0.0-beta.1-nightly-1399'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1398
+ * Ionic, v1.0.0-beta.1-nightly-1399
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35015,7 +35015,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * @param {boolean=} can-swipe Whether child items can be swiped to reveal option buttons.
  * @param {string=} delete-icon The class name of the icon to show on child items while deleting.  Defaults to `ion-minus-circled`.
  * @param {string=} reorder-icon The class name to show on child items while reordering. Defaults to `ion-navicon`.
- * @param {string=} animation An animation class to apply to the list for animating when child items enter or exit the list.
+ * @param {string=} animation An animation class to apply to the list for animating when child items enter or exit the list. See [the animation CSS page](/docs/components/#animations) for available animation classes.
  */
 .directive('ionList', ['$timeout', function($timeout) {
   return {
