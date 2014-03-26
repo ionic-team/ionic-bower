@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1399
+ * Ionic, v1.0.0-beta.1-nightly-1400
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2508,9 +2508,9 @@ function($timeout, $controller, $ionicBind) {
     '<div class="scroll-refresher">' +
     '<div class="ionic-refresher-content">' +
         '<i class="icon {{pullingIcon}} icon-pulling"></i>' +
-        '<span class="icon-pulling" ng-bind-html="pullingText"></span>' +
+        '<div class="icon-pulling pulling-text" ng-bind-html="pullingText"></div>' +
         '<i class="icon {{refreshingIcon}} icon-refreshing"></i>' +
-        '<span class="icon-refreshing" ng-bind-html="refreshingText"></span>' +
+        '<div class="icon-refreshing refreshing-text" ng-bind-html="refreshingText"></div>' +
       '</div>' +
     '</div>',
     compile: function($element, $attrs) {
@@ -3764,12 +3764,12 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * ```html
  * <body ng-controller="MainCtrl">
  *   <ion-side-menus>
- *     <ion-pane ion-side-menu-content>
+ *     <ion-side-menu-content>
  *       Content!
  *       <button ng-click="toggleLeftSideMenu()">
  *         Toggle Left Side Menu
  *       </button>
- *     </ion-pane>
+ *     </ion-side-menu-content>
  *     <ion-side-menu side="left">
  *       Left Menu!
  *     <ion-side-menu>
@@ -3860,7 +3860,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * <ion-side-menus>
  *   <!-- Center content -->
  *   <ion-side-menu-content ng-controller="ContentController">
- *   </io-side-menu-content>
+ *   </ion-side-menu-content>
  *
  *   <!-- Left menu -->
  *   <ion-side-menu side="left">
