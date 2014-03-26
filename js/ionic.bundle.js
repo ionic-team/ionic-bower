@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1397
+ * Ionic, v1.0.0-beta.1-nightly-1398
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1397'
+  version: '1.0.0-beta.1-nightly-1398'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1397
+ * Ionic, v1.0.0-beta.1-nightly-1398
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34841,7 +34841,7 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  *   <ion-item ng-repeat="item in items"
  *     item="item"
  *     can-swipe="true"
- *     option-buttons="myItemButtons">
+ *     option-buttons="itemButtons">
  *   </ion-item>
  * </ion-list>
  * ```
@@ -34849,11 +34849,22 @@ angular.module('ionic.ui.list', ['ngAnimate'])
  * @param {string=} item-type The type of this item.  See [the list CSS page](/docs/components/#list) for available item types.
  * @param {expression=} option-buttons The option buttons to show when swiping the item to the left (if swiping is enabled).  Defaults to the ionList parent's option-buttons setting.  The format of each button object is:
  *   ```js
- *   {
- *     text: 'Edit',
- *     type: 'Button',
- *     onTap: function(item) {}
- *   }
+ *   $scope.itemButtons = [
+ *      {
+ *        text: 'Edit',
+ *        type: 'Button',
+ *        onTap: function(item) {
+ *          alert('Edit Item: ' + item.id);
+ *        }
+ *      },
+ *      {
+ *        text: 'Share',
+ *        type: 'Button',
+ *        onTap: function(item) {
+ *          alert('Share Item: ' + item.id);
+ *        }
+ *      }
+ *   ];
  *   ```
  *
  * @param {expression=} item The 'object' representing this item, to be passed in to swipe, delete, and reorder callbacks.
