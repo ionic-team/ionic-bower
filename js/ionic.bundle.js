@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1431
+ * Ionic, v1.0.0-beta.1-nightly-1434
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1431'
+  version: '1.0.0-beta.1-nightly-1434'
 };
 
 (function(ionic) {
@@ -32185,7 +32185,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1431
+ * Ionic, v1.0.0-beta.1-nightly-1434
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32717,7 +32717,9 @@ angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.serv
  * ```html
  * <script id="my-modal.html" type="text/ng-template">
  *   <div class="modal">
- *     <ion-header-bar title="My Modal Title"></ion-header-bar>
+ *     <ion-header-bar>
+ *       <h1 class="title">My Modal title</h1>
+ *     </ion-header-bar>
  *     <ion-content>
  *       Hello!
  *     </ion-content>
@@ -34543,7 +34545,7 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * with {@link ionic.service:$ionicScrollDelegate}.
  * @param {boolean=} padding Whether to add padding to the content.
  * of the content.  Defaults to true on iOS, false on Android.
- * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true. Note: scroll="false" removes the .scroll child element on element compilation, not on scope change
+ * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll.
  * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
@@ -37292,15 +37294,20 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
         if (!navBarCtrl) {
           return;
         }
-        var initialTitle = $attr.title;
-        navBarCtrl.changeTitle(initialTitle, $scope.$navDirection);
 
-        // watch for changes in the title, don't set initial value as changeTitle does that
-        $attr.$observe('title', function(val, oldVal) {
-          if (val !== initialTitle) {
-            navBarCtrl.setTitle(val);
-          }
-        });
+        if (angular.isDefined($attr.title)) {
+
+          var initialTitle = $attr.title;
+          navBarCtrl.changeTitle(initialTitle, $scope.$navDirection);
+
+          // watch for changes in the title, don't set initial value as changeTitle does that
+          $attr.$observe('title', function(val, oldVal) {
+            if (val !== initialTitle) {
+              navBarCtrl.setTitle(val);
+            }
+          });
+
+        }
 
         $scope.$watch($attr.hideBackButton, function(value) {
           // Should we hide a back button when this tab is shown
