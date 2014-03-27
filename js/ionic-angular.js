@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1422
+ * Ionic, v1.0.0-beta.1-nightly-1424
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2383,7 +2383,7 @@ function($timeout, $controller, $ionicBind) {
       element.addClass('scroll-content');
 
       if (attr.scroll != 'false') {
-        //We cannot use normal transclude here because it breaks element.data() 
+        //We cannot use normal transclude here because it breaks element.data()
         //inheritance on compile
         innerElement = angular.element('<div class="scroll"></div>');
         innerElement.append(element.contents());
@@ -2520,11 +2520,11 @@ function($timeout, $controller, $ionicBind) {
     require: '^$ionicScroll',
     template:
     '<div class="scroll-refresher">' +
-    '<div class="ionic-refresher-content">' +
+      '<div class="ionic-refresher-content">' +
         '<i class="icon {{pullingIcon}} icon-pulling"></i>' +
-        '<div class="icon-pulling pulling-text" ng-bind-html="pullingText"></div>' +
+        '<div class="text-pulling" ng-bind-html="pullingText"></div>' +
         '<i class="icon {{refreshingIcon}} icon-refreshing"></i>' +
-        '<div class="icon-refreshing refreshing-text" ng-bind-html="refreshingText"></div>' +
+        '<div class="text-refreshing" ng-bind-html="refreshingText"></div>' +
       '</div>' +
     '</div>',
     compile: function($element, $attrs) {

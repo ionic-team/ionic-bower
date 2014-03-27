@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1422
+ * Ionic, v1.0.0-beta.1-nightly-1424
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1422
+ * Ionic, v1.0.0-beta.1-nightly-1424
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2084,51 +2084,6 @@ body.grade-b, body.grade-c {
     -moz-transition: none;
     transition: none; }
 
-.scroll-refresher {
-  position: absolute;
-  top: -60px;
-  right: 0;
-  left: 0;
-  overflow: hidden;
-  margin: auto;
-  height: 60px; }
-  .scroll-refresher .icon-refreshing {
-    -webkit-animation-duration: 1.5s;
-    -moz-animation-duration: 1.5s;
-    animation-duration: 1.5s;
-    display: none; }
-
-.scroll-refresher-content {
-  position: absolute;
-  bottom: 15px;
-  left: 0;
-  width: 100%;
-  color: #666666;
-  text-align: center;
-  font-size: 30px; }
-
-.ionic-refresher-content {
-  position: absolute;
-  bottom: 15px;
-  left: 0;
-  width: 100%;
-  color: #666666;
-  text-align: center;
-  font-size: 30px; }
-  .ionic-refresher-content .icon-pulling {
-    -webkit-animation-name: refresh-spin-back;
-    -moz-animation-name: refresh-spin-back;
-    animation-name: refresh-spin-back;
-    -webkit-animation-duration: 200ms;
-    -moz-animation-duration: 200ms;
-    animation-duration: 200ms;
-    -webkit-animation-timing-function: linear;
-    -moz-animation-timing-function: linear;
-    animation-timing-function: linear;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both; }
-
 @keyframes refresh-spin {
   0% {
     transform: rotate(0); }
@@ -2157,18 +2112,65 @@ body.grade-b, body.grade-c {
   100% {
     -webkit-transform: rotate(0); } }
 
-.scroll-refresher.active .icon-pulling {
-  display: block; }
-.scroll-refresher.active .icon-refreshing {
-  display: none; }
-.scroll-refresher.active.refreshing .icon-pulling {
-  display: none; }
-.scroll-refresher.active.refreshing .icon-refreshing {
-  display: block; }
-.scroll-refresher.active .ionic-refresher-content i.icon.icon-pulling {
-  -webkit-animation-name: refresh-spin;
-  -moz-animation-name: refresh-spin;
-  animation-name: refresh-spin; }
+.scroll-refresher {
+  position: absolute;
+  top: -60px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  margin: auto;
+  height: 60px; }
+  .scroll-refresher .ionic-refresher-content {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    color: #666666;
+    text-align: center;
+    font-size: 30px; }
+    .scroll-refresher .ionic-refresher-content .text-refreshing, .scroll-refresher .ionic-refresher-content .text-pulling {
+      line-height: 16px;
+      font-size: 16px; }
+  .scroll-refresher .icon-pulling {
+    -webkit-animation-name: refresh-spin-back;
+    -moz-animation-name: refresh-spin-back;
+    animation-name: refresh-spin-back;
+    -webkit-animation-duration: 200ms;
+    -moz-animation-duration: 200ms;
+    animation-duration: 200ms;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+  .scroll-refresher .icon-refreshing, .scroll-refresher .text-refreshing {
+    display: none; }
+  .scroll-refresher .icon-refreshing {
+    -webkit-animation-duration: 1.5s;
+    -moz-animation-duration: 1.5s;
+    animation-duration: 1.5s; }
+  .scroll-refresher.active .icon-pulling, .scroll-refresher.active .text-pulling {
+    display: block; }
+  .scroll-refresher.active .icon-pulling {
+    -webkit-animation-name: refresh-spin;
+    -moz-animation-name: refresh-spin;
+    animation-name: refresh-spin; }
+  .scroll-refresher.active .icon-refreshing, .scroll-refresher.active .text-refreshing {
+    display: none; }
+  .scroll-refresher.active.refreshing .icon-pulling, .scroll-refresher.active.refreshing .text-pulling {
+    display: none; }
+  .scroll-refresher.active.refreshing .icon-refreshing, .scroll-refresher.active.refreshing .text-refreshing {
+    display: block; }
+
+.scroll-refresher-content {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  color: #666666;
+  text-align: center;
+  font-size: 30px; }
 
 ion-infinite-scroll .scroll-infinite {
   position: relative;
