@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1426
+ * Ionic, v1.0.0-beta.1-nightly-1428
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1426'
+  version: '1.0.0-beta.1-nightly-1428'
 };
 
 (function(ionic) {
@@ -32185,7 +32185,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1426
+ * Ionic, v1.0.0-beta.1-nightly-1428
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34575,17 +34575,24 @@ function($timeout, $controller, $ionicBind) {
 
       return { pre: prelink };
       function prelink($scope, $element, $attr, navViewCtrl) {
+        var parentScope = $scope.$parent;
         $scope.$watch(function() {
-          return ($scope.$hasHeader ? ' has-header' : '')  +
-            ($scope.$hasSubheader ? ' has-subheader' : '') +
-            ($scope.$hasFooter ? ' has-footer' : '') +
-            ($scope.$hasSubfooter ? ' has-subfooter' : '') +
-            ($scope.$hasTabs ? ' has-tabs' : '') +
-            ($scope.$hasTabsTop ? ' has-tabs-top' : '');
+          return (parentScope.$hasHeader ? ' has-header' : '')  +
+            (parentScope.$hasSubheader ? ' has-subheader' : '') +
+            (parentScope.$hasFooter ? ' has-footer' : '') +
+            (parentScope.$hasSubfooter ? ' has-subfooter' : '') +
+            (parentScope.$hasTabs ? ' has-tabs' : '') +
+            (parentScope.$hasTabsTop ? ' has-tabs-top' : '');
         }, function(className, oldClassName) {
           $element.removeClass(oldClassName);
           $element.addClass(className);
         });
+
+        //Only this ionContent should use these variables from parent scopes
+        $scope.$hasHeader = $scope.$hasSubheader =
+          $scope.$hasFooter = $scope.$hasSubfooter =
+          $scope.$hasTabs = $scope.$hasTabsTop =
+          false;
 
         $ionicBind($scope, $attr, {
           $onScroll: '&onScroll',
