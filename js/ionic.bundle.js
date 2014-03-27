@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1407
+ * Ionic, v1.0.0-beta.1-nightly-1412
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1407'
+  version: '1.0.0-beta.1-nightly-1412'
 };
 
 (function(ionic) {
@@ -32177,7 +32177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1407
+ * Ionic, v1.0.0-beta.1-nightly-1412
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36303,7 +36303,6 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
     restrict: 'AC',
     require: '^ionSideMenus',
     link: function($scope, $element, $attr, sideMenuCtrl) {
-      //This is always left because scope.$eval('right') will try to read scope.right
       var side = $attr.menuToggle || 'left';
       $element.bind('click', function(){
         if(side === 'left') {
