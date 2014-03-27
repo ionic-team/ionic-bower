@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1429
+ * Ionic, v1.0.0-beta.1-nightly-1430
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1429'
+  version: '1.0.0-beta.1-nightly-1430'
 };
 
 (function(ionic) {
@@ -32185,7 +32185,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1429
+ * Ionic, v1.0.0-beta.1-nightly-1430
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36135,13 +36135,13 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  * @usage
  * ```html
  * <ion-side-menu-content
- *   drag-content="canDrag">
+ *   drag-content="true">
  * </ion-side-menu-content>
  * ```
  * For a complete side menu example, see the
  * {@link ionic.directive:ionSideMenus} documentation.
  *
- * @param {boolean=} drag-content Whether the content can be dragged.
+ * @param {boolean=} drag-content Whether the content can be dragged. Defaul true.
  *
  */
 .directive('ionSideMenuContent', ['$timeout', '$ionicGesture', function($timeout, $ionicGesture) {
