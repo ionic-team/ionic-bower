@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1415
+ * Ionic, v1.0.0-beta.1-nightly-1417
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2351,7 +2351,7 @@ angular.module('ionic.ui.content', ['ionic.ui.scroll'])
  * with {@link ionic.service:$ionicScrollDelegate}.
  * @param {boolean=} padding Whether to add padding to the content.
  * of the content.  Defaults to true on iOS, false on Android.
- * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
+ * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true. Note: scroll="false" removes the .scroll child element on element compilation, not on scope change
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll.
  * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
@@ -2369,12 +2369,17 @@ function($timeout, $controller, $ionicBind) {
     require: '^?ionNavView',
     scope: true,
     compile: function(element, attr) {
+      var innerElement;
+
       element.addClass('scroll-content');
 
-      //We cannot transclude here because it breaks element.data() inheritance on compile
-      var innerElement = angular.element('<div class="scroll"></div>');
-      innerElement.append(element.contents());
-      element.append(innerElement);
+      if (attr.scroll != 'false') {
+        //We cannot use normal transclude here because it breaks element.data() 
+        //inheritance on compile
+        innerElement = angular.element('<div class="scroll"></div>');
+        innerElement.append(element.contents());
+        element.append(innerElement);
+      }
 
       return { pre: prelink };
       function prelink($scope, $element, $attr, navViewCtrl) {
@@ -2407,7 +2412,7 @@ function($timeout, $controller, $ionicBind) {
 
         if (angular.isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
-            innerElement.toggleClass('padding', !!newVal);
+              (innerElement || $element).toggleClass('padding', !!newVal);
           });
         }
 
