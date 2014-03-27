@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1419
+ * Ionic, v1.0.0-beta.1-nightly-1422
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1419'
+  version: '1.0.0-beta.1-nightly-1422'
 };
 
 (function(ionic) {
@@ -499,6 +499,14 @@ window.ionic = {
      * @name ionic.EventController#onGesture
      * @alias ionic.onGesture
      * @description Add an event listener for a gesture on an element.
+     *
+     * Available eventTypes (from [hammer.js](http://eightmedia.github.io/hammer.js/)):
+     *
+     * `hold`, `tap`, `doubletap`, `drag`, `dragstart`, `dragend`, `dragup`, `dragdown`, <br/>
+     * `dragleft`, `dragright`, `swipe`, `swipeup`, `swipedown`, `swipeleft`, `swiperight`, <br/>
+     * `transform`, `transformstart`, `transformend`, `rotate`, `pinch`, `pinchin`, `pinchout`, </br>
+     * `touch`, `release`
+     *
      * @param {string} eventType The gesture event to listen for.
      * @param {function(e)} callback The function to call when the gesture
      * happens.
