@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1424
+ * Ionic, v1.0.0-beta.1-nightly-1425
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1424'
+  version: '1.0.0-beta.1-nightly-1425'
 };
 
 (function(ionic) {
@@ -32185,7 +32185,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1424
+ * Ionic, v1.0.0-beta.1-nightly-1425
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35301,6 +35301,7 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
 
   this.showBar = function(show) {
     $scope.isInvisible = !show;
+    $scope.$parent.$hasHeader = !!show;
   };
 
   this.setTitle = function(title) {
@@ -35447,7 +35448,6 @@ function($ionicViewService, $rootScope, $animate, $compile) {
         $scope.shouldAnimate = true;
         $scope.isReverse = false;
         $scope.isInvisible = true;
-        $scope.$parent.$hasHeader = true;
 
         $scope.$on('$destroy', function() {
           $scope.$parent.$hasHeader = false;
