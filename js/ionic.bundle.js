@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1439
+ * Ionic, v1.0.0-beta.1-nightly-1444
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1439'
+  version: '1.0.0-beta.1-nightly-1444'
 };
 
 (function(ionic) {
@@ -32186,7 +32186,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1439
+ * Ionic, v1.0.0-beta.1-nightly-1444
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34472,6 +34472,7 @@ angular.module('ionic.ui.checkbox', [])
       ngModel: '=?',
       ngValue: '=?',
       ngChecked: '=?',
+      ngDisabled: '=?',
       ngChange: '&'
     },
     transclude: true,
@@ -34486,7 +34487,8 @@ angular.module('ionic.ui.checkbox', [])
     compile: function(element, attr) {
       var input = element.find('input');
       if(attr.name) input.attr('name', attr.name);
-      if(attr.ngChecked) input.attr('ng-checked', 'ngChecked');
+      if(attr.ngChecked) input.attr('ng-checked', attr.ngChecked);
+      if(attr.ngDisabled) input.attr('ng-disabled', attr.ngDisabled);
       if(attr.ngTrueValue) input.attr('ng-true-value', attr.ngTrueValue);
       if(attr.ngFalseValue) input.attr('ng-false-value', attr.ngFalseValue);
     }
