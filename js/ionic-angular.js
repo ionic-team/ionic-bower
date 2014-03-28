@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1448
+ * Ionic, v1.0.0-beta.1-nightly-1457
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2298,9 +2298,9 @@ angular.module('ionic.ui.checkbox', [])
  * @restrict E
  * @codepen hqcju
  * @description
- * No different than the HTML checkbox input, except it's styled differently.
+ * The checkbox is no different than the HTML checkbox input, except it's styled differently.
  *
- * Behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]).
+ * The checkbox behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]).
  *
  * @usage
  * ```html
@@ -3571,9 +3571,9 @@ angular.module('ionic.ui.radio', [])
  * @restrict E
  * @codepen saoBG
  * @description
- * No different than the HTML radio input, except it's styled differently.
+ * The radio directive is no different than the HTML radio input, except it's styled differently.
  *
- * Behaves like any [AngularJS radio](http://docs.angularjs.org/api/ng/input/input[radio]).
+ * Radio behaves like any [AngularJS radio](http://docs.angularjs.org/api/ng/input/input[radio]).
  *
  * @usage
  * ```html
@@ -4967,11 +4967,11 @@ angular.module('ionic.ui.toggle', [])
  * @restrict E
  *
  * @description
- * An animated switch which binds a given model to a boolean.
+ * A toggle is an animated switch which binds a given model to a boolean.
  *
  * Allows dragging of the switch's nub.
  *
- * Behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]) otherwise.
+ * The toggle behaves like any [AngularJS checkbox](http://docs.angularjs.org/api/ng/input/input[checkbox]) otherwise.
  *
  */
 .directive('ionToggle', ['$ionicGesture', '$timeout', function($ionicGesture, $timeout) {
