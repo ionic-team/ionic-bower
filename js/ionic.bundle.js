@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1447
+ * Ionic, v1.0.0-beta.1-nightly-1448
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1447'
+  version: '1.0.0-beta.1-nightly-1448'
 };
 
 (function(ionic) {
@@ -32186,7 +32186,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1447
+ * Ionic, v1.0.0-beta.1-nightly-1448
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34480,6 +34480,7 @@ angular.module('ionic.ui.checkbox', [])
  * @name ionCheckbox
  * @module ionic
  * @restrict E
+ * @codepen hqcju
  * @description
  * No different than the HTML checkbox input, except it's styled differently.
  *
@@ -35752,6 +35753,7 @@ angular.module('ionic.ui.radio', [])
  * @name ionRadio
  * @module ionic
  * @restrict E
+ * @codepen saoBG
  * @description
  * No different than the HTML radio input, except it's styled differently.
  *
@@ -37145,6 +37147,7 @@ angular.module('ionic.ui.toggle', [])
  * @ngdoc directive
  * @name ionToggle
  * @module ionic
+ * @codepen tfAzj
  * @restrict E
  *
  * @description
@@ -37193,7 +37196,7 @@ angular.module('ionic.ui.toggle', [])
          checkbox = el.children[0];
          track = el.children[1];
          handle = track.children[0];
-         
+
          var ngModelController = angular.element(checkbox).controller('ngModel');
 
          $scope.toggle = new ionic.views.Toggle({
