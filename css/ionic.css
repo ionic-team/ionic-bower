@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1437
+ * Ionic, v1.0.0-beta.1-nightly-1439
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1437
+ * Ionic, v1.0.0-beta.1-nightly-1439
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2598,7 +2598,7 @@ a.subdued {
       .bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before {
         font-size: 32px;
         line-height: 32px; }
-    .bar .button.back-button.active {
+    .bar .button.back-button.active, .bar .button.back-button.activated {
       opacity: 1; }
   .bar .button-bar > .button, .bar .buttons > .button {
     min-height: 31px;
@@ -2618,7 +2618,7 @@ a.subdued {
   .bar-light .button:hover {
     color: #444;
     text-decoration: none; }
-  .bar-light .button.active {
+  .bar-light .button.active, .bar-light .button.activated {
     border-color: #ccc;
     background-color: #fafafa;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2639,7 +2639,7 @@ a.subdued {
   .bar-stable .button:hover {
     color: #444;
     text-decoration: none; }
-  .bar-stable .button.active {
+  .bar-stable .button.active, .bar-stable .button.activated {
     border-color: #a2a2a2;
     background-color: #e5e5e5;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2660,7 +2660,7 @@ a.subdued {
   .bar-positive .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-positive .button.active {
+  .bar-positive .button.active, .bar-positive .button.activated {
     border-color: #145fd7;
     background-color: #145fd7;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2681,7 +2681,7 @@ a.subdued {
   .bar-calm .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-calm .button.active {
+  .bar-calm .button.active, .bar-calm .button.activated {
     border-color: #1aacc3;
     background-color: #1aacc3;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2702,7 +2702,7 @@ a.subdued {
   .bar-assertive .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-assertive .button.active {
+  .bar-assertive .button.active, .bar-assertive .button.activated {
     border-color: #cc2311;
     background-color: #cc2311;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2723,7 +2723,7 @@ a.subdued {
   .bar-balanced .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-balanced .button.active {
+  .bar-balanced .button.active, .bar-balanced .button.activated {
     border-color: #498f24;
     background-color: #498f24;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2744,7 +2744,7 @@ a.subdued {
   .bar-energized .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-energized .button.active {
+  .bar-energized .button.active, .bar-energized .button.activated {
     border-color: #d39211;
     background-color: #d39211;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2765,7 +2765,7 @@ a.subdued {
   .bar-royal .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-royal .button.active {
+  .bar-royal .button.active, .bar-royal .button.activated {
     border-color: #552bdf;
     background-color: #552bdf;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -2786,7 +2786,7 @@ a.subdued {
   .bar-dark .button:hover {
     color: #fff;
     text-decoration: none; }
-  .bar-dark .button.active {
+  .bar-dark .button.active, .bar-dark .button.activated {
     border-color: #000;
     background-color: #262626;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -3373,34 +3373,34 @@ a.subdued {
   .item[ng-click]:hover {
     cursor: pointer; }
 
-.item.active:not(.item-divider):not(.item-input):not(.item-input-inset), .item-complex.active .item-content {
+.item.active, .item.activated, .item-complex.active .item-content, .item-complex.activated .item-content {
   border-color: #ccc;
   background-color: #D9D9D9; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-light, .item-complex.active .item-content.item-light {
+  .item.active.item-light, .item.activated.item-light, .item-complex.active .item-content.item-light, .item-complex.activated .item-content.item-light {
     border-color: #ccc;
     background-color: #fafafa; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-stable, .item-complex.active .item-content.item-stable {
+  .item.active.item-stable, .item.activated.item-stable, .item-complex.active .item-content.item-stable, .item-complex.activated .item-content.item-stable {
     border-color: #a2a2a2;
     background-color: #e5e5e5; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-positive, .item-complex.active .item-content.item-positive {
+  .item.active.item-positive, .item.activated.item-positive, .item-complex.active .item-content.item-positive, .item-complex.activated .item-content.item-positive {
     border-color: #145fd7;
     background-color: #145fd7; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-calm, .item-complex.active .item-content.item-calm {
+  .item.active.item-calm, .item.activated.item-calm, .item-complex.active .item-content.item-calm, .item-complex.activated .item-content.item-calm {
     border-color: #1aacc3;
     background-color: #1aacc3; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-assertive, .item-complex.active .item-content.item-assertive {
+  .item.active.item-assertive, .item.activated.item-assertive, .item-complex.active .item-content.item-assertive, .item-complex.activated .item-content.item-assertive {
     border-color: #cc2311;
     background-color: #cc2311; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-balanced, .item-complex.active .item-content.item-balanced {
+  .item.active.item-balanced, .item.activated.item-balanced, .item-complex.active .item-content.item-balanced, .item-complex.activated .item-content.item-balanced {
     border-color: #498f24;
     background-color: #498f24; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-energized, .item-complex.active .item-content.item-energized {
+  .item.active.item-energized, .item.activated.item-energized, .item-complex.active .item-content.item-energized, .item-complex.activated .item-content.item-energized {
     border-color: #d39211;
     background-color: #d39211; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-royal, .item-complex.active .item-content.item-royal {
+  .item.active.item-royal, .item.activated.item-royal, .item-complex.active .item-content.item-royal, .item-complex.activated .item-content.item-royal {
     border-color: #552bdf;
     background-color: #552bdf; }
-  .item.active:not(.item-divider):not(.item-input):not(.item-input-inset).item-dark, .item-complex.active .item-content.item-dark {
+  .item.active.item-dark, .item.activated.item-dark, .item-complex.active .item-content.item-dark, .item-complex.activated .item-content.item-dark {
     border-color: #000;
     background-color: #262626; }
 
@@ -4707,7 +4707,7 @@ progress {
   .button:hover {
     color: #444;
     text-decoration: none; }
-  .button.active {
+  .button.active, .button.activated {
     border-color: #a2a2a2;
     background-color: #e5e5e5;
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4744,7 +4744,7 @@ progress {
     .button.button-light:hover {
       color: #444;
       text-decoration: none; }
-    .button.button-light.active {
+    .button.button-light.active, .button.button-light.activated {
       border-color: #ccc;
       background-color: #fafafa;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4760,7 +4760,7 @@ progress {
       border-color: #ddd;
       background: transparent;
       color: #ddd; }
-      .button.button-light.button-outline.active {
+      .button.button-light.button-outline.active, .button.button-light.button-outline.activated {
         background-color: #ddd;
         box-shadow: none;
         color: #fff; }
@@ -4771,7 +4771,7 @@ progress {
     .button.button-stable:hover {
       color: #444;
       text-decoration: none; }
-    .button.button-stable.active {
+    .button.button-stable.active, .button.button-stable.activated {
       border-color: #a2a2a2;
       background-color: #e5e5e5;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4787,7 +4787,7 @@ progress {
       border-color: #b2b2b2;
       background: transparent;
       color: #b2b2b2; }
-      .button.button-stable.button-outline.active {
+      .button.button-stable.button-outline.active, .button.button-stable.button-outline.activated {
         background-color: #b2b2b2;
         box-shadow: none;
         color: #fff; }
@@ -4798,7 +4798,7 @@ progress {
     .button.button-positive:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-positive.active {
+    .button.button-positive.active, .button.button-positive.activated {
       border-color: #145fd7;
       background-color: #145fd7;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4814,7 +4814,7 @@ progress {
       border-color: #4a87ee;
       background: transparent;
       color: #4a87ee; }
-      .button.button-positive.button-outline.active {
+      .button.button-positive.button-outline.active, .button.button-positive.button-outline.activated {
         background-color: #4a87ee;
         box-shadow: none;
         color: #fff; }
@@ -4825,7 +4825,7 @@ progress {
     .button.button-calm:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-calm.active {
+    .button.button-calm.active, .button.button-calm.activated {
       border-color: #1aacc3;
       background-color: #1aacc3;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4841,7 +4841,7 @@ progress {
       border-color: #43cee6;
       background: transparent;
       color: #43cee6; }
-      .button.button-calm.button-outline.active {
+      .button.button-calm.button-outline.active, .button.button-calm.button-outline.activated {
         background-color: #43cee6;
         box-shadow: none;
         color: #fff; }
@@ -4852,7 +4852,7 @@ progress {
     .button.button-assertive:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-assertive.active {
+    .button.button-assertive.active, .button.button-assertive.activated {
       border-color: #cc2311;
       background-color: #cc2311;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4868,7 +4868,7 @@ progress {
       border-color: #ef4e3a;
       background: transparent;
       color: #ef4e3a; }
-      .button.button-assertive.button-outline.active {
+      .button.button-assertive.button-outline.active, .button.button-assertive.button-outline.activated {
         background-color: #ef4e3a;
         box-shadow: none;
         color: #fff; }
@@ -4879,7 +4879,7 @@ progress {
     .button.button-balanced:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-balanced.active {
+    .button.button-balanced.active, .button.button-balanced.activated {
       border-color: #498f24;
       background-color: #498f24;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4895,7 +4895,7 @@ progress {
       border-color: #66cc33;
       background: transparent;
       color: #66cc33; }
-      .button.button-balanced.button-outline.active {
+      .button.button-balanced.button-outline.active, .button.button-balanced.button-outline.activated {
         background-color: #66cc33;
         box-shadow: none;
         color: #fff; }
@@ -4906,7 +4906,7 @@ progress {
     .button.button-energized:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-energized.active {
+    .button.button-energized.active, .button.button-energized.activated {
       border-color: #d39211;
       background-color: #d39211;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4922,7 +4922,7 @@ progress {
       border-color: #f0b840;
       background: transparent;
       color: #f0b840; }
-      .button.button-energized.button-outline.active {
+      .button.button-energized.button-outline.active, .button.button-energized.button-outline.activated {
         background-color: #f0b840;
         box-shadow: none;
         color: #fff; }
@@ -4933,7 +4933,7 @@ progress {
     .button.button-royal:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-royal.active {
+    .button.button-royal.active, .button.button-royal.activated {
       border-color: #552bdf;
       background-color: #552bdf;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4949,7 +4949,7 @@ progress {
       border-color: #8a6de9;
       background: transparent;
       color: #8a6de9; }
-      .button.button-royal.button-outline.active {
+      .button.button-royal.button-outline.active, .button.button-royal.button-outline.activated {
         background-color: #8a6de9;
         box-shadow: none;
         color: #fff; }
@@ -4960,7 +4960,7 @@ progress {
     .button.button-dark:hover {
       color: #fff;
       text-decoration: none; }
-    .button.button-dark.active {
+    .button.button-dark.active, .button.button-dark.activated {
       border-color: #000;
       background-color: #262626;
       box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15); }
@@ -4976,7 +4976,7 @@ progress {
       border-color: #444;
       background: transparent;
       color: #444; }
-      .button.button-dark.button-outline.active {
+      .button.button-dark.button-outline.active, .button.button-dark.button-outline.activated {
         background-color: #444;
         box-shadow: none;
         color: #fff; }
@@ -5010,7 +5010,7 @@ progress {
   min-width: initial;
   border-color: transparent;
   background: none; }
-  .button-icon.button.active {
+  .button-icon.button.active, .button-icon.button.activated {
     border-color: transparent;
     background: none;
     box-shadow: none;
@@ -5035,7 +5035,7 @@ progress {
   .button-clear.button-icon {
     border-color: transparent;
     background: none; }
-  .button-clear.active {
+  .button-clear.active, .button-clear.activated {
     opacity: 0.3; }
 
 .button-outline {
@@ -5048,7 +5048,7 @@ progress {
     border-color: #b2b2b2;
     background: transparent;
     color: #b2b2b2; }
-    .button-outline.button-outline.active {
+    .button-outline.button-outline.active, .button-outline.button-outline.activated {
       background-color: #b2b2b2;
       box-shadow: none;
       color: #fff; }

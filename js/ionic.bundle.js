@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1437
+ * Ionic, v1.0.0-beta.1-nightly-1439
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1437'
+  version: '1.0.0-beta.1-nightly-1439'
 };
 
 (function(ionic) {
@@ -2578,6 +2578,7 @@ window.ionic = {
   var queueElements = {};   // elements that should get an active state in XX milliseconds
   var activeElements = {};  // elements that are currently active
   var keyId = 0;            // a counter for unique keys for the above ojects
+  var ACTIVATED_CLASS = 'activated';
 
   ionic.activator = {
 
@@ -2630,7 +2631,7 @@ window.ionic = {
     // activate all elements in the queue
     for(var key in queueElements) {
       if(queueElements[key]) {
-        queueElements[key].classList.add('active');
+        queueElements[key].classList.add(ACTIVATED_CLASS);
         activeElements[key] = queueElements[key];
       }
     }
@@ -2640,7 +2641,7 @@ window.ionic = {
   function deactivateElements() {
     for(var key in activeElements) {
       if(activeElements[key]) {
-        activeElements[key].classList.remove('active');
+        activeElements[key].classList.remove(ACTIVATED_CLASS);
         delete activeElements[key];
       }
     }
@@ -32185,7 +32186,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1437
+ * Ionic, v1.0.0-beta.1-nightly-1439
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
