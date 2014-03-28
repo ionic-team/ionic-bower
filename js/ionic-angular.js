@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1444
+ * Ionic, v1.0.0-beta.1-nightly-1445
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3829,6 +3829,14 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * Default: Toggles the menu.
    */
   'toggleRight',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#getOpenRatio
+   * @returns {float} The ratio of open amount over menu width. For example, a
+   * menu of width 100 open 50 pixels would be open 50% or a ratio of 0.5. Value is negative
+   * for right menu.
+   */
+  'getOpenRatio',
   /**
    * @ngdoc method
    * @name $ionicSideMenuDelegate#isOpenLeft
