@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1469
+ * Ionic, v1.0.0-beta.1-nightly-1470
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5226,7 +5226,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * Recommended for page transitions: 'slide-left-right', 'slide-left-right-ios7', 'slide-in-up'.
  *
  * ```html
- * <ion-nav-view animation="slide-left-right">
+ * <ion-nav-view class="slide-left-right">
  *   <!-- Center content -->
  *   <ion-nav-bar>
  *   </ion-nav-bar>
