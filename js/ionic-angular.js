@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1470
+ * Ionic, v1.0.0-beta.1-nightly-1483
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5218,18 +5218,17 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * @usage
  * In this example, we will create a navigation view that contains our different states for the app.
  *
- * To do this, in our markup use the ionNavView top level directive, adding an
- * {@link ionic.directive:ionNavBar} directive which will render a header bar that updates as we
- * navigate through the navigation stack.
+ * To do this, in our markup we use ionNavView top level directive. To display a header bar we use
+ * the {@link ionic.directive:ionNavBar} directive that updates as we navigate through the
+ * navigation stack.
  *
  * You can any [animation class](/docs/components#animation) on the navView to have its pages slide.
  * Recommended for page transitions: 'slide-left-right', 'slide-left-right-ios7', 'slide-in-up'.
  *
  * ```html
+ * <ion-nav-bar></ion-nav-bar>
  * <ion-nav-view class="slide-left-right">
  *   <!-- Center content -->
- *   <ion-nav-bar>
- *   </ion-nav-bar>
  * </ion-nav-view>
  * ```
  *
