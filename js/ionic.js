@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1485
+ * Ionic, v1.0.0-beta.1-nightly-1489
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1485'
+  version: '1.0.0-beta.1-nightly-1489'
 };
 
 (function(ionic) {
@@ -4239,7 +4239,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * Scroll by the given offset
    *
    * @param left {Number} Scroll x-axis by given offset
-   * @param top {Number} Scroll x-axis by given offset
+   * @param top {Number} Scroll y-axis by given offset
    * @param animate {Boolean} Whether to animate the given change
    */
   scrollBy: function(left, top, animate) {
