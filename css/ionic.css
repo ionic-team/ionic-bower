@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1494
+ * Ionic, v1.0.0-beta.1-nightly-1495
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1494
+ * Ionic, v1.0.0-beta.1-nightly-1495
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6320,25 +6320,7 @@ a.button {
  * --------------------------------------------------
  * Platform specific tweaks when in Cordova.
  */
-.platform-ios7.platform-cordova:not(.fullscreen) .bar-header {
-  height: 64px; }
-  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header.item-input-inset .item-input-wrapper {
-    margin-top: 19px !important; }
-  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header > * {
-    margin-top: 20px; }
-.platform-ios7.platform-cordova:not(.fullscreen) .has-header, .platform-ios7.platform-cordova:not(.fullscreen) .bar-subheader {
-  top: 64px; }
-.platform-ios7.platform-cordova:not(.fullscreen) .has-subheader {
-  top: 108px; }
-
-.platform-ios7.status-bar-hide {
+.platform-ios7.platform-cordova:not(.fullscreen) {
+  margin-top: 20px; }
+.platform-ios7.platform-cordova.status-bar-hide {
   margin-bottom: 20px; }
-
-.platform-android.platform-cordova .bar-header {
-  height: 48px; }
-.platform-android.platform-cordova .has-header, .platform-android.platform-cordova .bar-subheader {
-  top: 48px; }
-.platform-android.platform-cordova .has-subheader {
-  top: 96px; }
-.platform-android.platform-cordova .title {
-  line-height: 48px; }
