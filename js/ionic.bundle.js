@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1491
+ * Ionic, v1.0.0-beta.1-nightly-1493
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1491'
+  version: '1.0.0-beta.1-nightly-1493'
 };
 
 (function(ionic) {
@@ -32186,7 +32186,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1491
+ * Ionic, v1.0.0-beta.1-nightly-1493
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37396,7 +37396,7 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  *
  * The ionNavView directive is used to render templates in your application. Each template
  * is part of a state. States are usually mapped to a url, and are defined programatically
- * using angular-ui-router (see [their docs](https://github.com/angular-ui/ui-router/wiki)),
+ * using angular-ui-router (see [their docs](https://github.com/angular-ui/ui-router/wiki),
  * and remember to replace ui-view with ion-nav-view in examples).
  *
  * @usage
