@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1484
+ * Ionic, v1.0.0-beta.1-nightly-1485
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1484'
+  version: '1.0.0-beta.1-nightly-1485'
 };
 
 (function(ionic) {
@@ -2472,10 +2472,10 @@ window.ionic = {
       return false;
     }
 
-    return (c.x > startCoordinates.x + 2 ||
-            c.x < startCoordinates.x - 2 ||
-            c.y > startCoordinates.y + 2 ||
-            c.y < startCoordinates.y - 2);
+    return (c.x > startCoordinates.x + HIT_RADIUS ||
+            c.x < startCoordinates.x - HIT_RADIUS ||
+            c.y > startCoordinates.y + HIT_RADIUS ||
+            c.y < startCoordinates.y - HIT_RADIUS);
   }
 
   function recordCoordinates(event) {
@@ -32186,7 +32186,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1484
+ * Ionic, v1.0.0-beta.1-nightly-1485
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
