@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1498
+ * Ionic, v1.0.0-beta.1-nightly-1500
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1498'
+  version: '1.0.0-beta.1-nightly-1500'
 };
 
 (function(ionic) {
@@ -2930,8 +2930,6 @@ function androidKeyboardFix() {
 
 })(window.ionic);
 
-var IS_INPUT_LIKE_REGEX = /input|textarea|select/i;
-var IS_EMBEDDED_OBJECT_REGEX = /object|embed/i;
 /*
  * Scroller
  * http://github.com/zynga/scroller
@@ -3552,10 +3550,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     function shouldIgnorePress(e) {
       // Don't react if initial down happens on a form element
-      return e.target.tagName.match(IS_INPUT_LIKE_REGEX) ||
+      return e.target.tagName.match(/input|textarea|select|object|embed/i) ||
              e.target.isContentEditable ||
-             e.target.tagName.match(IS_EMBEDDED_OBJECT_REGEX) ||
-             e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default') == 'true';
+             (e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default') == 'true');
     }
 
 
@@ -32186,7 +32183,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1498
+ * Ionic, v1.0.0-beta.1-nightly-1500
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36047,9 +36044,9 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * @name $ionicSideMenuDelegate#getOpenRatio
    * @description Gets the ratio of open amount over menu width. For example, a
    * menu of width 100 that is opened by 50 pixels is 50% opened, and would return
-   * a ratio of 0.5. 
+   * a ratio of 0.5.
    *
-   * @returns {float} 0 if nothing is open, between 0 and 1 if left menu is 
+   * @returns {float} 0 if nothing is open, between 0 and 1 if left menu is
    * opened/opening, and between 0 and -1 if right menu is opened/opening.
    */
   'getOpenRatio',
@@ -36072,7 +36069,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * side menus.
    * @returns {boolean} Whether the content can be dragged to open side menus.
    */
-  'canDragContent',
+  'canDragContent'
   /**
    * @ngdoc method
    * @name $ionicSideMenuDelegate#$getByHandle
@@ -36139,8 +36136,6 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
   return {
     restrict: 'ECA',
     controller: ['$scope', '$attrs', '$ionicSideMenuDelegate', function($scope, $attrs, $ionicSideMenuDelegate) {
-      var _this = this;
-
       angular.extend(this, ionic.controllers.SideMenuController.prototype);
 
       ionic.controllers.SideMenuController.call(this, {
@@ -36153,6 +36148,14 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
           $scope.dragContent = !!canDrag;
         }
         return $scope.dragContent;
+      };
+
+      this.isDraggableTarget = function(e) {
+        return $scope.dragContent &&
+               (!e.gesture.srcEvent.defaultPrevented &&
+                !e.target.tagName.match(/input|textarea|select|object|embed/i) &&
+                !e.target.isContentEditable &&
+                !(e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default') == 'true'));
       };
 
       $scope.sideMenuContentTranslateX = 0;
@@ -36193,6 +36196,7 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
  *
  */
 .directive('ionSideMenuContent', ['$timeout', '$ionicGesture', function($timeout, $ionicGesture) {
+
   return {
     restrict: 'EA', //DEPRECATED 'A'
     require: '^ionSideMenus',
@@ -36224,14 +36228,10 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
         ionic.on('tap', contentTap, $element[0]);
 
         var dragFn = function(e) {
-          if($scope.dragContent) {
-            if(defaultPrevented || e.gesture.srcEvent.defaultPrevented) {
-              return;
-            }
-            isDragging = true;
-            sideMenuCtrl._handleDrag(e);
-            e.gesture.srcEvent.preventDefault();
-          }
+          if(defaultPrevented || !sideMenuCtrl.isDraggableTarget(e)) return;
+          isDragging = true;
+          sideMenuCtrl._handleDrag(e);
+          e.gesture.srcEvent.preventDefault();
         };
 
         var dragVertFn = function(e) {
