@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1512
+ * Ionic, v1.0.0-beta.1-nightly-1513
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1512
+ * Ionic, v1.0.0-beta.1-nightly-1513
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6321,6 +6321,14 @@ a.button {
  * Platform specific tweaks when in Cordova.
  */
 .platform-ios7.platform-cordova:not(.fullscreen) {
-  margin-top: 20px; }
+  margin-top: 20px;
+  /*
+     * Make header bar go under the status bar
+     */ }
+  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
+    top: -20px;
+    height: 64px; }
+    .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
+      margin-top: 20px; }
 .platform-ios7.platform-cordova.status-bar-hide {
   margin-bottom: 20px; }
