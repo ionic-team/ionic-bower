@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1514
+ * Ionic, v1.0.0-beta.1-nightly-1515
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1514
+ * Ionic, v1.0.0-beta.1-nightly-1515
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2206,6 +2206,7 @@ ion-infinite-scroll.active .scroll-infinite {
     position: static;
     height: 100%; }
 
+/* If you change these, change platform.scss as well */
 .has-header {
   top: 44px; }
 
@@ -2956,6 +2957,7 @@ a.subdued {
     color: #444; }
 
 /* Allow parent element to have tabs-top */
+/* If you change this, change platform.scss as well */
 .tabs-top > .tabs, .tabs.tabs-top {
   top: 44px;
   padding-top: 0;
@@ -6320,15 +6322,21 @@ a.button {
  * --------------------------------------------------
  * Platform specific tweaks when in Cordova.
  */
-.platform-ios7.platform-cordova:not(.fullscreen) {
-  margin-top: 20px;
-  /*
-     * Make header bar go under the status bar
-     */ }
-  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
-    top: -20px;
-    height: 64px; }
-    .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
-      margin-top: 20px; }
-.platform-ios7.platform-cordova.status-bar-hide {
+.platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
+  height: 64px; }
+  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader).item-input-inset .item-input-wrapper {
+    margin-top: 19px !important; }
+  .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
+    margin-top: 20px; }
+.platform-ios7.platform-cordova:not(.fullscreen) .tabs-top > .tabs, .platform-ios7.platform-cordova:not(.fullscreen) .tabs.tabs-top {
+  top: 64px; }
+.platform-ios7.platform-cordova:not(.fullscreen) .has-header, .platform-ios7.platform-cordova:not(.fullscreen) .bar-subheader {
+  top: 64px; }
+.platform-ios7.platform-cordova:not(.fullscreen) .has-subheader {
+  top: 108px; }
+.platform-ios7.platform-cordova:not(.fullscreen) .has-tabs-top {
+  top: 113px; }
+.platform-ios7.platform-cordova:not(.fullscreen) .has-header.has-subheader.has-tabs-top {
+  top: 157px; }
+.platform-ios7.platform-cordova.statusbar-hide {
   margin-bottom: 20px; }
