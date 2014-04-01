@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1518
+ * Ionic, v1.0.0-beta.1-nightly-1519
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1518
+ * Ionic, v1.0.0-beta.1-nightly-1519
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2022,8 +2022,7 @@ body.grade-b, body.grade-c {
   display: block;
   position: relative;
   overflow: hidden;
-  margin-top: -1px;
-  height: 100%; }
+  margin-top: -1px; }
 
 /**
  * Scroll is the scroll view component available for complex and custom
@@ -2210,6 +2209,9 @@ ion-infinite-scroll.active .scroll-infinite {
 /* If you change these, change platform.scss as well */
 .has-header {
   top: 44px; }
+
+.no-header {
+  top: 0; }
 
 .has-subheader {
   top: 88px; }
