@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1507
+ * Ionic, v1.0.0-beta.1-nightly-1508
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -905,6 +905,7 @@ angular.module('ionic.service.platform', [])
          * Trigger a callback once the device is ready,
          * or immediately if the device is already ready.
          * @param {function=} callback The function to call.
+         * @returns {promise} A promise which is resolved when the device is ready.
          */
         ready: function(cb) {
           var q = $q.defer();
