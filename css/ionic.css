@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1519
+ * Ionic, v1.0.0-beta.1-nightly-1520
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1519
+ * Ionic, v1.0.0-beta.1-nightly-1520
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3593,23 +3593,13 @@ a.item-content {
 a.item, button.item, .item[href] .item-content, .item[ng-click] .item-content {
   padding-right: 40px; }
   a.item:after, button.item:after, .item[href] .item-content:after, .item[ng-click] .item-content:after {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    -moz-align-items: center;
-    align-items: center;
     -webkit-font-smoothing: antialiased;
     font-smoothing: antialiased;
     position: absolute;
-    top: 0;
+    top: 50%;
     right: 11px;
-    height: 100%;
+    display: block;
+    margin-top: -8px;
     color: #ccc;
     content: "\f125";
     text-transform: none;
@@ -3621,11 +3611,9 @@ a.item, button.item, .item[href] .item-content, .item[ng-click] .item-content {
     line-height: 1;
     speak: none; }
 
-.grade-b a.item:after, .grade-b button.item:after, .grade-b .item[href] .item-content:after, .grade-b .item[ng-click] .item-content:after, .grade-c a.item:after, .grade-c button.item:after, .grade-c .item[href] .item-content:after, .grade-c .item[ng-click] .item-content:after {
+.grade-c a.item:after, .grade-c button.item:after, .grade-c .item[href] .item-content:after, .grade-c .item[ng-click] .item-content:after {
   -webkit-font-smoothing: none;
-  font-smoothing: none;
-  content: '>';
-  font-family: 'monospace'; }
+  font-smoothing: none; }
 
 a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after, .item a.item-content:after {
   display: none; }
@@ -4372,9 +4360,9 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   left: 4px;
   border: none;
   color: #fff;
+  content: '\2713';
   font-weight: bold;
-  font-size: 20px;
-  content: '\2713'; }
+  font-size: 20px; }
 
 /* what the checkmark looks like when its checked */
 .checkbox input:checked:after {
@@ -4388,22 +4376,11 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 
 /* position the checkbox to the left within an item */
 .item-checkbox .checkbox {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 7.5px;
   z-index: 3;
-  height: 100%; }
+  margin-top: -21px; }
 
 /**
  * Toggle
@@ -4553,7 +4530,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     /* show the checkmark icon when its checked */
     visibility: visible; }
 
-.item-radio {
+.platform-android.grade-b .item-radio, .platform-android.grade-c .item-radio {
   -webkit-animation: androidCheckedbugfix infinite 1s; }
 
 @-webkit-keyframes androidCheckedbugfix {
