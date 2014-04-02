@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1523
+ * Ionic, v1.0.0-beta.1-nightly-1525
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1523'
+  version: '1.0.0-beta.1-nightly-1525'
 };
 
 (function(ionic) {
@@ -2372,7 +2372,10 @@ window.ionic = {
     ele.dispatchEvent(clickEvent);
 
     if(ele.tagName === 'INPUT' || ele.tagName === 'TEXTAREA') {
-      ele.focus();
+      if(ele.selectionStart === 0 && ele.selectionEnd === 0 && !isScrolledSinceStart(e)) {
+        ele.focus();
+        ele.setSelectionRange && ele.setSelectionRange(ele.value.length, ele.value.length);
+      }
       e.preventDefault();
     } else {
       blurActive();
@@ -3544,12 +3547,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
     });
 
     function shouldIgnorePress(e) {
-      // Don't react if initial down happens on a form element
-      return e.target.tagName.match(/object|embed/i) ||
+      return e.target.tagName.match(/input|textarea|select|object|embed/i) ||
              e.target.isContentEditable ||
              (e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default') == 'true');
     }
-
 
     if ('ontouchstart' in window) {
 
