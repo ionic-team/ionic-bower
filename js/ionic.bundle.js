@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1528
+ * Ionic, v1.0.0-beta.1-nightly-1529
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1528'
+  version: '1.0.0-beta.1-nightly-1529'
 };
 
 (function(ionic) {
@@ -32185,7 +32185,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1528
+ * Ionic, v1.0.0-beta.1-nightly-1529
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32634,7 +32634,7 @@ angular.module('ionic.service.gesture', [])
     },
     /**
      * @ngdoc method
-     * @name $ionicGesture#on
+     * @name $ionicGesture#off
      * @description Remove an event listener for a gesture on an element. See {@link ionic.utility:ionic.EventController#offGesture}.
      * @param {string} eventType The gesture event to remove the listener for.
      * @param {function(e)} callback The listener to remove.
