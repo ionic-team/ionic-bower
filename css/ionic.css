@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1525
+ * Ionic, v1.0.0-beta.1-nightly-1528
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1525
+ * Ionic, v1.0.0-beta.1-nightly-1528
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4181,8 +4181,10 @@ input, button, select, textarea {
   -moz-flex: 1 0 100px;
   -ms-flex: 1 0 100px;
   flex: 1 0 100px;
+  display: table;
   padding: 7px 10px 7px 3px;
   max-width: 200px;
+  width: 35%;
   color: #444;
   font-weight: bold;
   font-size: 14px; }

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1525
+ * Ionic, v1.0.0-beta.1-nightly-1528
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3578,9 +3578,9 @@ angular.module('ionic.ui.radio', [])
  *
  * @usage
  * ```html
- * <ion-radio ng-model="choice" value="A">Choose A</ion-radio>
- * <ion-radio ng-model="choice" value="B">Choose B</ion-radio>
- * <ion-radio ng-model="choice" value="C">Choose C</ion-radio>
+ * <ion-radio ng-model="choice" ng-value="A">Choose A</ion-radio>
+ * <ion-radio ng-model="choice" ng-value="B">Choose B</ion-radio>
+ * <ion-radio ng-model="choice" ng-value="C">Choose C</ion-radio>
  * ```
  */
 .directive('ionRadio', function() {
