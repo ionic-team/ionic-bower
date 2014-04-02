@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1522
+ * Ionic, v1.0.0-beta.1-nightly-1523
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1522'
+  version: '1.0.0-beta.1-nightly-1523'
 };
 
 (function(ionic) {
@@ -1613,7 +1613,7 @@ window.ionic = {
       doubletap_interval	: 300
     },
     handler: function tapGesture(ev, inst) {
-      if(ev.eventType == ionic.Gestures.EVENT_END) {
+      if(ev.eventType == ionic.Gestures.EVENT_END && ev.srcEvent.type != 'touchcancel') {
         // previous gesture, for the double tap since these are two different gesture detections
         var prev = ionic.Gestures.detection.previous,
         did_doubletap = false;
@@ -2397,8 +2397,9 @@ window.ionic = {
     var e = orgEvent.gesture.srcEvent; // evaluate the actual source event, not the created event by gestures.js
     var ele = e.target;
 
-    if( isRecentTap(e) ) {
-      // if a tap in the same area just happened, don't continue
+    if( isRecentTap(e) || e.type === 'touchcancel' ) {
+      // if a tap in the same area just happened,
+      // or it was a touchcanel event, don't continue
       void 0;
       return stopEvent(e);
     }
