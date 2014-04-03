@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1546
+ * Ionic, v1.0.0-beta.1-nightly-1547
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1546
+ * Ionic, v1.0.0-beta.1-nightly-1547
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5873,7 +5873,7 @@ a.button {
 /**
  * Some component specific animations
  */
-.nav-title-slide-ios7 .button.back-button {
+.nav-title-slide-ios7:not(.no-animation) .button.back-button {
   -webkit-transition: all 250ms;
   -moz-transition: all 250ms;
   transition: all 250ms;
@@ -5884,12 +5884,12 @@ a.button {
   -moz-transform: translate3d(0%, 0, 0);
   transform: translate3d(0%, 0, 0);
   opacity: 1; }
-  .nav-title-slide-ios7 .button.back-button.ng-hide {
+  .nav-title-slide-ios7:not(.no-animation) .button.back-button.ng-hide {
     opacity: 0;
     -webkit-transform: translate3d(30%, 0, 0);
     -moz-transform: translate3d(30%, 0, 0);
     transform: translate3d(30%, 0, 0); }
-  .nav-title-slide-ios7 .button.back-button.ng-hide-add, .nav-title-slide-ios7 .button.back-button.ng-hide-remove {
+  .nav-title-slide-ios7:not(.no-animation) .button.back-button.ng-hide-add, .nav-title-slide-ios7:not(.no-animation) .button.back-button.ng-hide-remove {
     display: block !important; }
 .nav-title-slide-ios7 > .ng-enter, .nav-title-slide-ios7.ng-enter, .nav-title-slide-ios7 > .ng-leave, .nav-title-slide-ios7.ng-leave {
   -webkit-transition: all 250ms;
