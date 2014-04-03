@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1535
+ * Ionic, v1.0.0-beta.1-nightly-1536
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1535
+ * Ionic, v1.0.0-beta.1-nightly-1536
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4217,7 +4217,7 @@ input, button, select, textarea {
 .item-stacked-label input {
   height: 46px; }
 
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   display: block;
   padding-top: 2px;
   height: 34px;
@@ -4242,15 +4242,8 @@ input[type="radio"], input[type="checkbox"] {
 input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
   width: auto; }
 
-select[multiple], select[size] {
-  height: auto; }
-
-select, input[type="file"] {
+input[type="file"] {
   line-height: 34px; }
-
-select {
-  border: 1px solid #ddd;
-  background-color: #fff; }
 
 input:-moz-placeholder, textarea:-moz-placeholder {
   color: #aaaaaa; }
@@ -4659,6 +4652,74 @@ input[type="range"] {
 .range input + .range-label {
   padding-right: 5px;
   padding-left: 0; }
+
+/**
+ * Select
+ * --------------------------------------------------
+ */
+.select-inline select, .item-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #333;
+  text-indent: 1px;
+  text-overflow: '';
+  white-space: nowrap;
+  font-size: 14px; }
+
+.select-inline {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #111;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 16px; }
+  .select-inline select {
+    padding: 6px 25px 7px 8px; }
+
+.select-inline + .select-inline {
+  margin-left: 6px; }
+
+.item-select {
+  position: static; }
+  .item-select select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 13px 45px 15px 5px;
+    width: 100%;
+    direction: rtl; }
+    .item-select select:focus {
+      min-width: 20%;
+      width: auto; }
+
+.select-inline:after, .item-select:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid;
+  border-right: 5px solid rgba(0, 0, 0, 0);
+  border-left: 5px solid rgba(0, 0, 0, 0);
+  color: #999;
+  content: "";
+  pointer-events: none; }
+
+.select-inline:after {
+  right: 7px; }
+
+.item-select:after {
+  right: 15px; }
+
+select[multiple], select[size] {
+  height: auto; }
 
 /**
  * Progress
