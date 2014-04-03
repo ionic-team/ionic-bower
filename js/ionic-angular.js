@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1547
+ * Ionic, v1.0.0-beta.1-nightly-1548
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3548,7 +3548,7 @@ angular.module('ionic.ui.popup', [])
         var result = button.onTap && button.onTap(event);
 
         // A way to return false
-        if(event.defaultPrevented) {
+        if((event.originalEvent || event).defaultPrevented) {
           return $scope.$onClose({button: button, result: false, event: event });
         }
 
