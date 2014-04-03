@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1541
+ * Ionic, v1.0.0-beta.1-nightly-1542
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1541
+ * Ionic, v1.0.0-beta.1-nightly-1542
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2196,15 +2196,8 @@ ion-infinite-scroll.active .scroll-infinite {
   -webkit-overflow-scrolling: touch; }
   .overflow-scroll .scroll {
     position: static;
-    height: 100%; }
-
-.overflow-scroll {
-  overflow-x: hidden;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch; }
-  .overflow-scroll .scroll {
-    position: static;
-    height: 100%; }
+    height: 100%;
+    -webkit-transform: translate3d(0, 0, 0); }
 
 /* If you change these, change platform.scss as well */
 .has-header {
