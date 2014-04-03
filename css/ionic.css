@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1545
+ * Ionic, v1.0.0-beta.1-nightly-1546
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -16,7 +16,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1545
+ * Ionic, v1.0.0-beta.1-nightly-1546
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2086,31 +2086,31 @@ body.grade-b, body.grade-c {
 
 @keyframes refresh-spin {
   0% {
-    transform: rotate(0); }
+    transform: translate3d(0, 0, 0) rotate(0); }
 
   100% {
-    transform: rotate(-180deg); } }
+    transform: translate3d(0, 0, 0) rotate(-180deg); } }
 
 @-webkit-keyframes refresh-spin {
   0% {
-    -webkit-transform: rotate(0); }
+    -webkit-transform: translate3d(0, 0, 0) rotate(0); }
 
   100% {
-    -webkit-transform: rotate(-180deg); } }
+    -webkit-transform: translate3d(0, 0, 0) rotate(-180deg); } }
 
 @keyframes refresh-spin-back {
   0% {
-    transform: rotate(-180deg); }
+    transform: translate3d(0, 0, 0) rotate(-180deg); }
 
   100% {
-    transform: rotate(0); } }
+    transform: translate3d(0, 0, 0) rotate(0); } }
 
 @-webkit-keyframes refresh-spin-back {
   0% {
-    -webkit-transform: rotate(-180deg); }
+    -webkit-transform: translate3d(0, 0, 0) rotate(-180deg); }
 
   100% {
-    -webkit-transform: rotate(0); } }
+    -webkit-transform: translate3d(0, 0, 0) rotate(0); } }
 
 .scroll-refresher {
   position: absolute;
@@ -2131,7 +2131,15 @@ body.grade-b, body.grade-c {
     .scroll-refresher .ionic-refresher-content .text-refreshing, .scroll-refresher .ionic-refresher-content .text-pulling {
       line-height: 16px;
       font-size: 16px; }
+  .scroll-refresher .icon-refreshing, .scroll-refresher .icon-pulling {
+    width: 100%;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-style: preserve-3d; }
   .scroll-refresher .icon-pulling {
+    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
     -webkit-animation-name: refresh-spin-back;
     -moz-animation-name: refresh-spin-back;
     animation-name: refresh-spin-back;
@@ -2141,23 +2149,21 @@ body.grade-b, body.grade-c {
     -webkit-animation-timing-function: linear;
     -moz-animation-timing-function: linear;
     animation-timing-function: linear;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    animation-fill-mode: both; }
+    -webkit-animation-fill-mode: none;
+    -moz-animation-fill-mode: none;
+    animation-fill-mode: none; }
   .scroll-refresher .icon-refreshing, .scroll-refresher .text-refreshing {
     display: none; }
   .scroll-refresher .icon-refreshing {
     -webkit-animation-duration: 1.5s;
     -moz-animation-duration: 1.5s;
     animation-duration: 1.5s; }
-  .scroll-refresher.active .icon-pulling, .scroll-refresher.active .text-pulling {
-    display: block; }
   .scroll-refresher.active .icon-pulling {
     -webkit-animation-name: refresh-spin;
     -moz-animation-name: refresh-spin;
-    animation-name: refresh-spin; }
-  .scroll-refresher.active .icon-refreshing, .scroll-refresher.active .text-refreshing {
-    display: none; }
+    animation-name: refresh-spin;
+    -webkit-transform: translate3d(0, 0, 0) rotate(-180deg);
+    transform: translate3d(0, 0, 0) rotate(-180deg); }
   .scroll-refresher.active.refreshing .icon-pulling, .scroll-refresher.active.refreshing .text-pulling {
     display: none; }
   .scroll-refresher.active.refreshing .icon-refreshing, .scroll-refresher.active.refreshing .text-refreshing {
