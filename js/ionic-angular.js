@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1542
+ * Ionic, v1.0.0-beta.1-nightly-1543
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3717,7 +3717,7 @@ angular.module('ionic.ui.scroll', [])
  * @param {expression=} on-refresh Called on pull-to-refresh, triggered by an {@link ionic.directive:ionRefresher}.
  * @param {expression=} on-scroll Called whenever the user scrolls.
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
- * @param {boolean=} scrollbar-x Whether to show the vertical scrollbar. Default true.
+ * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  */
 .directive('ionScroll', [
   '$timeout',
