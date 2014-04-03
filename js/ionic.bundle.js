@@ -1,14 +1,15 @@
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /*!
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1549
+ * Ionic, v1.0.0-beta.1-nightly-1551
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1549'
+  version: '1.0.0-beta.1-nightly-1551'
 };
 
 (function(ionic) {
@@ -7491,7 +7492,8 @@ ionic.controllers.TabBarController = ionic.controllers.ViewController.inherit({
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /**
@@ -28295,7 +28297,8 @@ var styleDirective = valueFn({
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /**
@@ -29788,7 +29791,8 @@ angular.module('ngAnimate', ['ng'])
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /**
@@ -30420,7 +30424,8 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /**
@@ -32196,14 +32201,15 @@ angular.module('ui.router.compat')
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
- * angular-ui-router.js, and ionic-angular.js
+ * angular-sanitize.js, angular-ui-router.js,
+ * and ionic-angular.js
  */
 
 /*!
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1549
+ * Ionic, v1.0.0-beta.1-nightly-1551
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
