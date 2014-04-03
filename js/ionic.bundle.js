@@ -8,7 +8,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1531
+ * Ionic, v1.0.0-beta.1-nightly-1535
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1531'
+  version: '1.0.0-beta.1-nightly-1535'
 };
 
 (function(ionic) {
@@ -32184,7 +32184,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1531
+ * Ionic, v1.0.0-beta.1-nightly-1535
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35571,12 +35571,15 @@ function($ionicViewService, $rootScope, $animate, $compile) {
  * }
  * ```
  */
-.directive('ionNavBackButton', ['$ionicNgClick', function($ionicNgClick) {
+.directive('ionNavBackButton', [
+  '$ionicNgClick',
+  '$animate',
+function($ionicNgClick, $animate) {
   return {
     restrict: 'E',
     require: '^ionNavBar',
     compile: function(tElement, tAttrs) {
-      tElement.addClass('button back-button');
+      tElement.addClass('button back-button ng-hide');
       return function($scope, $element, $attr, navBarCtrl) {
         if (!$attr.ngClick) {
           $scope.$navBack = navBarCtrl.back;
@@ -35595,9 +35598,10 @@ function($ionicViewService, $rootScope, $animate, $compile) {
 
         //Make sure both that a backButton is allowed in the first place,
         //and that it is shown by the current view.
-        $scope.$watch('!!(backButtonShown && hasBackButton)', function(show) {
-          $element.toggleClass('hide', !show);
-        });
+        $scope.$watch('!!(backButtonShown && hasBackButton)', ionic.animationFrameThrottle(function(show) {
+          if (show) $animate.removeClass($element, 'ng-hide');
+          else $animate.addClass($element, 'ng-hide');
+        }));
       };
     }
   };
