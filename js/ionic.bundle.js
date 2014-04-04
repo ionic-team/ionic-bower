@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1553
+ * Ionic, v1.0.0-beta.1-nightly-1554
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1553'
+  version: '1.0.0-beta.1-nightly-1554'
 };
 
 (function(ionic) {
@@ -2362,8 +2362,8 @@ window.ionic = {
   var REMOVE_PREVENT_DELAY = 380; // delay after a touchend/mouseup before removing the ghostclick prevent
   var REMOVE_PREVENT_DELAY_GRADE_C = 800; // same as REMOVE_PREVENT_DELAY, but for grade c devices
   var HIT_RADIUS = 15; // surrounding area of a click that if a ghostclick happens it would get ignored
-  var TOUCH_TOLERANCE_X = 4; // how much the X coordinates can be off between start/end, but still a click
-  var TOUCH_TOLERANCE_Y = 2; // how much the Y coordinates can be off between start/end, but still a click
+  var TOUCH_TOLERANCE_X = 10; // how much the X coordinates can be off between start/end, but still a click
+  var TOUCH_TOLERANCE_Y = 6; // how much the Y coordinates can be off between start/end, but still a click
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
   var startCoordinates = {}; // used to remember where the coordinates of the start of a touch
   var clickPreventTimerId;
@@ -2491,6 +2491,7 @@ window.ionic = {
         return false;
       }
 
+      // the allowed distance between touchstart/mousedown and
       return (c.x > startCoordinates.x + TOUCH_TOLERANCE_X ||
               c.x < startCoordinates.x - TOUCH_TOLERANCE_X ||
               c.y > startCoordinates.y + TOUCH_TOLERANCE_Y ||
@@ -2602,10 +2603,13 @@ window.ionic = {
   var activeElements = {};  // elements that are currently active
   var keyId = 0;            // a counter for unique keys for the above ojects
   var ACTIVATED_CLASS = 'activated';
+  var touchMoveClearTimer;
 
   ionic.activator = {
 
     start: function(e) {
+      clearTimeout(touchMoveClearTimer);
+
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
       ionic.requestAnimationFrame(function(){
@@ -2636,7 +2640,9 @@ window.ionic = {
           // add listeners to clear all queued/active elements onMove
           if(e.type === 'touchstart') {
             document.body.removeEventListener('mousedown', ionic.activator.start);
-            document.body.addEventListener('touchmove', clear, false);
+            touchMoveClearTimer = setTimeout(function(){
+              document.body.addEventListener('touchmove', onTouchMove, false);
+            }, 85);
             setTimeout(activateElements, 85);
           } else {
             document.body.addEventListener('mousemove', clear, false);
@@ -2670,12 +2676,20 @@ window.ionic = {
     }
   }
 
+  function onTouchMove(e) {
+    if( ionic.tap.hasScrolled(e) ) {
+      clear();
+    }
+  }
+
   function onEnd(e) {
     // clear out any active/queued elements after XX milliseconds
     setTimeout(clear, 200);
   }
 
   function clear() {
+    clearTimeout(touchMoveClearTimer);
+
     // clear out any elements that are queued to be set to active
     queueElements = {};
 
@@ -32209,7 +32223,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1553
+ * Ionic, v1.0.0-beta.1-nightly-1554
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
