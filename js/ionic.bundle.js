@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1555
+ * Ionic, v1.0.0-beta.1-nightly-1556
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1555'
+  version: '1.0.0-beta.1-nightly-1556'
 };
 
 (function(ionic) {
@@ -32223,7 +32223,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1555
+ * Ionic, v1.0.0-beta.1-nightly-1556
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37651,15 +37651,12 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  */
 .directive('navClear', [
   '$ionicViewService',
-  '$location',
-  '$timeout',
-function($ionicViewService, $location, $timeout) {
+function($ionicViewService) {
   return {
-    priority: Number.MAX_VALUE,
+    priority: 100,
     restrict: 'AC',
     compile: function($element) {
       return { pre: prelink };
-
       function prelink($scope, $element) {
         $element.on('click', function(e){
           $ionicViewService.nextViewOptions({
