@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1556
+ * Ionic, v1.0.0-beta.1-nightly-1559
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1556'
+  version: '1.0.0-beta.1-nightly-1559'
 };
 
 (function(ionic) {
@@ -5179,17 +5179,20 @@ ionic.views.Scroll = ionic.views.View.inherit({
     }
   };
 
-
-
   var SlideDrag = function(opts) {
     this.dragThresholdX = opts.dragThresholdX || 10;
     this.el = opts.el;
+    this.canSwipe = opts.canSwipe;
   };
 
   SlideDrag.prototype = new DragOp();
 
   SlideDrag.prototype.start = function(e) {
     var content, buttons, offsetX, buttonsWidth;
+
+    if (!this.canSwipe()) {
+      return;
+    }
 
     if(e.target.classList.contains(ITEM_CONTENT_CLASS)) {
       content = e.target;
@@ -5215,10 +5218,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
     if(!buttons) {
       return;
     }
+    buttons.classList.remove('invisible');
 
     buttonsWidth = buttons.offsetWidth;
 
     this._currentDrag = {
+      buttons: buttons,
       buttonsWidth: buttonsWidth,
       content: content,
       startOffsetX: offsetX
@@ -5242,7 +5247,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     ionic.requestAnimationFrame(function() {
       lastDrag.content.style[ionic.CSS.TRANSITION] = '';
-      lastDrag.content.style[ionic.CSS.TRANSFORM] = 'translate3d(0, 0, 0)';
+      lastDrag.content.style[ionic.CSS.TRANSFORM] = '';
+      setTimeout(function() {
+        lastDrag.buttons && lastDrag.buttons.classList.add('invisible');
+      }, 250);
     });
   };
 
@@ -5309,6 +5317,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
     ionic.requestAnimationFrame(function() {
       if(restingPoint === 0) {
         _this._currentDrag.content.style[ionic.CSS.TRANSFORM] = '';
+        var buttons = _this._currentDrag.buttons;
+        setTimeout(function() {
+          buttons && buttons.classList.add('invisible');
+        }, 250);
       } else {
         _this._currentDrag.content.style[ionic.CSS.TRANSFORM] = 'translate3d(' + restingPoint + 'px, 0, 0)';
       }
@@ -5335,40 +5347,29 @@ ionic.views.Scroll = ionic.views.View.inherit({
   ReorderDrag.prototype = new DragOp();
 
   ReorderDrag.prototype._moveElement = function(e) {
-    var y = (e.gesture.center.pageY - this._currentDrag.elementHeight/2);
+    var y = e.gesture.center.pageY - this._currentDrag.elementHeight + this._currentDrag.scrollDelta;
     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
 
   ReorderDrag.prototype.start = function(e) {
     var content;
 
-
-    // Grab the starting Y point for the item
-    var offsetY = this.el.offsetTop;//parseFloat(this.el.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[1]) || 0;
-
     var startIndex = ionic.DomUtil.getChildIndex(this.el, this.el.nodeName.toLowerCase());
-    var elementHeight = this.el.offsetHeight;
+    var elementHeight = this.el.scrollHeight;
     var placeholder = this.el.cloneNode(true);
-
-    // If we have a scroll pane, move our draggable element outside of it
-    // We do this because when we drag our element down below the edge of the page
-    // and scroll the scroll-pane, if the element is *part* of the scroll-pane,
-    // it will scroll 'with' the scroll-pane's contents and change position.
-    var appendToElement = (this.scrollEl || this.el).parentNode;
 
     placeholder.classList.add(ITEM_PLACEHOLDER_CLASS);
 
     this.el.parentNode.insertBefore(placeholder, this.el);
     this.el.classList.add(ITEM_REORDERING_CLASS);
 
-    appendToElement.parentNode.appendChild(this.el);
-
     this._currentDrag = {
       elementHeight: elementHeight,
       startIndex: startIndex,
       placeholder: placeholder,
       scrollHeight: scroll,
-      list: placeholder.parentNode
+      list: placeholder.parentNode,
+      scrollDelta: 0
     };
 
     this._moveElement(e);
@@ -5395,10 +5396,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       if (e.gesture.deltaY < 0 && pixelsPastTop > 0 && scrollY > 0) {
         this.scrollView.scrollBy(null, -pixelsPastTop);
+        this._currentDrag.scrollDelta -= pixelsPastTop;
       }
       if (e.gesture.deltaY > 0 && pixelsPastBottom > 0) {
         if (scrollY < this.scrollView.getScrollMax().top) {
           this.scrollView.scrollBy(null, pixelsPastBottom);
+          this._currentDrag.scrollDelta += pixelsPastBottom;
         }
       }
     }
@@ -5420,8 +5423,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
   // When an item is dragged, we need to reorder any items for sorting purposes
   ReorderDrag.prototype._reorderItems = function() {
+    var self = this;
     var placeholder = this._currentDrag.placeholder;
-    var siblings = Array.prototype.slice.call(this._currentDrag.placeholder.parentNode.children);
+    var siblings = Array.prototype.slice.call(this._currentDrag.placeholder.parentNode.children)
+      .filter(function(el) {
+        return el !== self.el;
+      });
 
     var index = siblings.indexOf(this._currentDrag.placeholder);
     var topSibling = siblings[Math.max(0, index - 1)];
@@ -5473,7 +5480,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
         onReorder: function(el, oldIndex, newIndex) {},
         virtualRemoveThreshold: -200,
         virtualAddThreshold: 200,
-        canSwipe: false
+        canSwipe: function() {
+          return true;
+        }
       }, opts);
 
       ionic.extend(this, opts);
@@ -5629,7 +5638,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         // Make sure this is an item with buttons
         var item = this._getItem(e.target);
         if(item && item.querySelector('.item-options')) {
-          this._dragOp = new SlideDrag({ el: this.el });
+          this._dragOp = new SlideDrag({ el: this.el, canSwipe: this.canSwipe });
           this._dragOp.start(e);
           e.preventDefault();
         }
@@ -5662,10 +5671,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
      */
     _handleDrag: function(e) {
       var _this = this, content, buttons;
-
-      if (!this.canSwipe) {
-        return;
-      }
 
       if(Math.abs(e.gesture.deltaY) > 5) {
         this._didDragUpOrDown = true;
