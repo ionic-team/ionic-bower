@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1554
+ * Ionic, v1.0.0-beta.1-nightly-1555
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1554'
+  version: '1.0.0-beta.1-nightly-1555'
 };
 
 (function(ionic) {
@@ -32223,7 +32223,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1554
+ * Ionic, v1.0.0-beta.1-nightly-1555
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37649,16 +37649,25 @@ angular.module('ionic.ui.viewState', ['ionic.service.view', 'ionic.service.gestu
  * <a nav-clear menu-close href="#/home" class="item">Home</a>
  * ```
  */
-.directive('navClear', ['$ionicViewService', function($ionicViewService) {
+.directive('navClear', [
+  '$ionicViewService',
+  '$location',
+  '$timeout',
+function($ionicViewService, $location, $timeout) {
   return {
+    priority: Number.MAX_VALUE,
     restrict: 'AC',
-    link: function($scope, $element, $attr) {
-      $element.bind('click', function(){
-        $ionicViewService.nextViewOptions({
-          disableAnimate: true,
-          disableBack: true
+    compile: function($element) {
+      return { pre: prelink };
+
+      function prelink($scope, $element) {
+        $element.on('click', function(e){
+          $ionicViewService.nextViewOptions({
+            disableAnimate: true,
+            disableBack: true
+          });
         });
-      });
+      }
     }
   };
 }]);
