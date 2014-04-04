@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1561
+ * Ionic, v1.0.0-beta.1-nightly-1562
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1561'
+  version: '1.0.0-beta.1-nightly-1562'
 };
 
 (function(ionic) {
@@ -2367,6 +2367,7 @@ window.ionic = {
   var tapCoordinates = {}; // used to remember coordinates to ignore if they happen again quickly
   var startCoordinates = {}; // used to remember where the coordinates of the start of a touch
   var clickPreventTimerId;
+  var _hasTouchScrolled = false; // if the touchmove already exceeded the touchmove tolerance
 
 
   ionic.tap = {
@@ -2378,7 +2379,7 @@ window.ionic = {
       var e = orgEvent.gesture.srcEvent; // evaluate the actual source event, not the created event by gestures.js
       var ele = e.target; // get the target element that was actually tapped
 
-      if( ionic.tap.isRecentTap(e) || e.type === 'touchcancel' ) {
+      if( ionic.tap.isRecentTap(e) || ionic.tap.hasTouchScrolled(e) || e.type === 'touchcancel') {
         // if a tap in the same area just happened,
         // or it was a touchcanel event, don't continue
         void 0;
@@ -2430,9 +2431,7 @@ window.ionic = {
       ele.dispatchEvent(clickEvent);
 
       if(ele.tagName === 'INPUT' || ele.tagName === 'TEXTAREA') {
-        if(!ionic.tap.hasScrolled(e)) {
-          ele.focus();
-        }
+        ele.focus();
         e.preventDefault();
       } else {
         ionic.tap.blurActive();
@@ -2456,7 +2455,7 @@ window.ionic = {
       void 0;
 
 
-      if(e.target.control || ionic.tap.isRecentTap(e) || ionic.tap.hasScrolled(e)) {
+      if(e.target.control || ionic.tap.isRecentTap(e) || ionic.tap.hasTouchScrolled(e)) {
         return stopEvent(e);
       }
 
@@ -2482,7 +2481,9 @@ window.ionic = {
       return { x:0, y:0 };
     },
 
-    hasScrolled: function(event) {
+    hasTouchScrolled: function(event) {
+      if(_hasTouchScrolled) return true;
+
       // check if this click's coordinates are different than its touchstart/mousedown
       var c = ionic.tap.getCoordinates(event);
 
@@ -2556,8 +2557,18 @@ window.ionic = {
       }
     },
 
-    setStart: function(e) {
+    setTouchStart: function(e) {
+      _hasTouchScrolled = false;
       startCoordinates = ionic.tap.getCoordinates(e);
+      document.body.addEventListener('touchmove', ionic.tap.onTouchMove, false);
+    },
+
+    onTouchMove: function(e) {
+      if( ionic.tap.hasTouchScrolled(e) ) {
+        _hasTouchScrolled = true;
+        document.body.removeEventListener('touchmove', ionic.tap.onTouchMove);
+        void 0;
+      }
     },
 
     reset: function() {
@@ -2592,7 +2603,7 @@ window.ionic = {
 
   // remember where the user first started touching the screen
   // so that if they scrolled, it shouldn't fire the click
-  document.addEventListener('touchstart', ionic.tap.setStart, false);
+  document.addEventListener('touchstart', ionic.tap.setTouchStart, false);
 
 })(this, document, ionic);
 
@@ -2642,8 +2653,8 @@ window.ionic = {
             document.body.removeEventListener('mousedown', ionic.activator.start);
             touchMoveClearTimer = setTimeout(function(){
               document.body.addEventListener('touchmove', onTouchMove, false);
-            }, 85);
-            setTimeout(activateElements, 85);
+            }, 80);
+            setTimeout(activateElements, 80);
           } else {
             document.body.addEventListener('mousemove', clear, false);
             ionic.requestAnimationFrame(activateElements);
@@ -2677,7 +2688,7 @@ window.ionic = {
   }
 
   function onTouchMove(e) {
-    if( ionic.tap.hasScrolled(e) ) {
+    if( ionic.tap.hasTouchScrolled(e) ) {
       clear();
     }
   }
@@ -32228,7 +32239,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1561
+ * Ionic, v1.0.0-beta.1-nightly-1562
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
