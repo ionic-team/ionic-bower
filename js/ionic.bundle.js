@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1572
+ * Ionic, v1.0.0-beta.1-nightly-1573
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1572'
+  version: '1.0.0-beta.1-nightly-1573'
 };
 
 (function(ionic) {
@@ -1988,8 +1988,12 @@ window.ionic = {
      * @ngdoc method
      * @name ionic.Platform#ready
      * @description
-     * Trigger a callback once the device is ready,
-     * or immediately if the device is already ready.
+     * Trigger a callback once the device is ready, or immediately
+     * if the device is already ready. This method can be ran from
+     * anywhere and does not need to be wrapped by any additonal methods.
+     * When the app is within a WebView (Cordova), it'll fire
+     * the callback once the device is ready. If the app is within
+     * a web browser, it'll fire the callback after `window.load`.
      * @param {function} callback The function to call.
      */
     ready: function(cb) {
@@ -32239,7 +32243,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1572
+ * Ionic, v1.0.0-beta.1-nightly-1573
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
