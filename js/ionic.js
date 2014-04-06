@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1573
+ * Ionic, v1.0.0-beta.1-nightly-1576
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1573'
+  version: '1.0.0-beta.1-nightly-1576'
 };
 
 (function(ionic) {
@@ -1982,7 +1982,7 @@ window.ionic = {
      * @name ionic.Platform#ready
      * @description
      * Trigger a callback once the device is ready, or immediately
-     * if the device is already ready. This method can be ran from
+     * if the device is already ready. This method can be run from
      * anywhere and does not need to be wrapped by any additonal methods.
      * When the app is within a WebView (Cordova), it'll fire
      * the callback once the device is ready. If the app is within
@@ -2388,12 +2388,7 @@ window.ionic = {
         // only climb up a max of 5 parents, anything more probably isn't beneficial
         if(!ele) break;
 
-        if( ele.tagName === "INPUT" ||
-            ele.tagName === "A" ||
-            ele.tagName === "BUTTON" ||
-            ele.tagName === "LABEL" ||
-            ele.tagName === "TEXTAREA" ) {
-
+        if( ele.tagName.match(/a|input|button|label|textarea|select/i) ) {
           return ionic.tap.simulateClick(ele, e);
         }
         ele = ele.parentElement;
@@ -2427,9 +2422,12 @@ window.ionic = {
 
       ele.dispatchEvent(clickEvent);
 
-      if(ele.tagName === 'INPUT' || ele.tagName === 'TEXTAREA') {
+      if( ele.tagName.match(/input|textarea/i) ) {
         ele.focus();
         e.preventDefault();
+      } else if( ele.tagName == 'SELECT' ) {
+        // select simulateClick should not preventDefault or else no options dialog
+        ele.focus();
       } else {
         ionic.tap.blurActive();
       }
