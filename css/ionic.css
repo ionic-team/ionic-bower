@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1599
+ * Ionic, v1.0.0-beta.1-nightly-1600
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3498,6 +3498,16 @@ a.item-content {
 .item-icon-left.item-icon-right .icon:last-child, .item-icon-left .item-delete .icon {
   left: auto; }
 
+.item-icon-left .icon-accessory, .item-icon-right .icon-accessory {
+  color: #ccc;
+  font-size: 16px; }
+
+.item-icon-left .icon-accessory {
+  left: 3px; }
+
+.item-icon-right .icon-accessory {
+  right: 3px; }
+
 /**
  * Item Button
  * --------------------------------------------------
@@ -3569,40 +3579,6 @@ a.item-content {
     min-height: 34px;
     font-size: 18px;
     line-height: 32px; }
-
-/**
- * Auto Right Arrow Icon
- * --------------------------------------------------
- * By default, if an .item is created out of an <a> or <button>
- * then a arrow will be added to the right side of the item.
- */
-a.item, button.item, .item[href] .item-content, .item[ng-click] .item-content {
-  padding-right: 40px; }
-  a.item:after, button.item:after, .item[href] .item-content:after, .item[ng-click] .item-content:after {
-    -webkit-font-smoothing: antialiased;
-    font-smoothing: antialiased;
-    position: absolute;
-    top: 50%;
-    right: 11px;
-    display: block;
-    margin-top: -8px;
-    color: #ccc;
-    content: "\f125";
-    text-transform: none;
-    font-weight: normal;
-    font-style: normal;
-    font-variant: normal;
-    font-size: 16px;
-    font-family: 'Ionicons';
-    line-height: 1;
-    speak: none; }
-
-.grade-c a.item:after, .grade-c button.item:after, .grade-c .item[href] .item-content:after, .grade-c .item[ng-click] .item-content:after {
-  -webkit-font-smoothing: none;
-  font-smoothing: none; }
-
-a.item-icon-right:after, button.item-icon-right:after, a.item-button-right:after, button.item-button-right:after, .item a.item-content:after {
-  display: none; }
 
 .item-avatar, .item-avatar .item-content, .item-avatar-left, .item-avatar-left .item-content {
   padding-left: 70px;
