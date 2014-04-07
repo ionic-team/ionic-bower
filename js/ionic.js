@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1576
+ * Ionic, v1.0.0-beta.1-nightly-1578
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1576'
+  version: '1.0.0-beta.1-nightly-1578'
 };
 
 (function(ionic) {
@@ -2388,7 +2388,7 @@ window.ionic = {
         // only climb up a max of 5 parents, anything more probably isn't beneficial
         if(!ele) break;
 
-        if( ele.tagName.match(/a|input|button|label|textarea|select/i) ) {
+        if( ionic.tap.isTapElement(ele.tagName) ) {
           return ionic.tap.simulateClick(ele, e);
         }
         ele = ele.parentElement;
@@ -2400,15 +2400,21 @@ window.ionic = {
       ionic.tap.blurActive();
     },
 
+    isTapElement: function(tagName) {
+      return tagName == 'A' ||
+             tagName == 'INPUT' ||
+             tagName == 'BUTTON' ||
+             tagName == 'LABEL' ||
+             tagName == 'TEXTAREA' ||
+             tagName == 'SELECT';
+    },
+
     simulateClick: function(target, e) {
       // simulate a normal click by running the element's click method then focus on it
 
       var ele = target.control || target;
 
-      if(ele.disabled || ele.type === 'file' || ele.type === 'range') {
-        e.tapIgnored = true;
-        return;
-      }
+      if( ionic.tap.ignoreSimulateClick(ele) ) return;
 
       void 0;
 
@@ -2443,6 +2449,10 @@ window.ionic = {
         return stopEvent(e);
       }
 
+    },
+
+    ignoreSimulateClick: function(ele) {
+      return ele.disabled || ele.type === 'file' || ele.type === 'range';
     },
 
     preventGhostClick: function(e) {
