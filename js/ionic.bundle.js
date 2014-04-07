@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1579
+ * Ionic, v1.0.0-beta.1-nightly-1580
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1579'
+  version: '1.0.0-beta.1-nightly-1580'
 };
 
 (function(ionic) {
@@ -32251,7 +32251,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1579
+ * Ionic, v1.0.0-beta.1-nightly-1580
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32860,6 +32860,9 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
    *
    * Hint: Be sure to call [remove()](#remove) when you are done with each modal
    * to clean it up and avoid memory leaks.
+   *
+   * Note: a modal will broadcast 'modal.shown' and 'modal.hidden' events from its originating
+   * scope, passing in itself as an event argument.
    */
   var ModalView = ionic.views.Modal.inherit({
     /**
@@ -32911,7 +32914,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
 
       $timeout(function(){
         modalEl.addClass('ng-enter-active');
-        self.scope.$parent && self.scope.$parent.$broadcast('modal.shown');
+        self.scope.$parent && self.scope.$parent.$broadcast('modal.shown', self);
         self.el.classList.add('active');
       }, 20);
 
@@ -32937,7 +32940,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       }, 20);
 
       self._isShown = false;
-      self.scope.$parent && self.scope.$parent.$broadcast('modal.hidden');
+      self.scope.$parent && self.scope.$parent.$broadcast('modal.hidden', self);
       self._deregisterBackButton && self._deregisterBackButton();
 
       ionic.views.Modal.prototype.hide.call(self);
