@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1591
+ * Ionic, v1.0.0-beta.1-nightly-1596
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2326,9 +2326,9 @@ angular.module('ionic.ui.checkbox', [])
     transclude: true,
 
     template: '<label class="item item-checkbox">' +
-                '<div class="checkbox checkbox-input-hidden">' +
+                '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
                   '<input type="checkbox" ng-model="ngModel" ng-value="ngValue" ng-change="ngChange()">' +
-                  '<div class="checkbox-handle"></div>' +
+                  '<i class="checkbox-icon"></i>' +
                 '</div>' +
                 '<div class="item-content disable-pointer-events" ng-transclude></div>' +
               '</label>',
