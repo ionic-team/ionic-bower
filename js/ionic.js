@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1582
+ * Ionic, v1.0.0-beta.1-nightly-1584
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1582'
+  version: '1.0.0-beta.1-nightly-1584'
 };
 
 (function(ionic) {
@@ -2377,7 +2377,7 @@ window.ionic = {
       var e = orgEvent.gesture.srcEvent; // evaluate the actual source event, not the created event by gestures.js
       var ele = e.target; // get the target element that was actually tapped
 
-      if( ionic.tap.isRecentTap(e) || ionic.tap.hasTouchScrolled(e) || e.type === 'touchcancel') {
+      if( ionic.tap.ignoreTapInspect(e) ) {
         // if a tap in the same area just happened,
         // or it was a touchcanel event, don't continue
         void 0;
@@ -2399,6 +2399,12 @@ window.ionic = {
       // if the currently active element is an input, and they tapped outside
       // of the current input, then unset its focus (blur) so the keyboard goes away
       ionic.tap.blurActive();
+    },
+
+    ignoreTapInspect: function(e) {
+      return !!ionic.tap.isRecentTap(e) ||
+             ionic.tap.hasTouchScrolled(e) ||
+             e.type === 'touchcancel';
     },
 
     isTapElement: function(tagName) {
