@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1588
+ * Ionic, v1.0.0-beta.1-nightly-1589
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4997,7 +4997,7 @@ angular.module('ionic.ui.tabs', ['ionic.service.view'])
     controller: 'ionicTabs',
     compile: function(element, attr) {
       element.addClass('view');
-      //We cannot use regular transclude here because it breaks element.data() 
+      //We cannot use regular transclude here because it breaks element.data()
       //inheritance on compile
       var innerElement = angular.element('<div class="tabs"></div>');
       innerElement.append(element.contents());
@@ -5101,9 +5101,25 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService, $state, 
     controller: 'ionicTab',
     scope: true,
     compile: function(element, attr) {
-      var navView = element[0].querySelector('ion-nav-view') || 
+      var navView = element[0].querySelector('ion-nav-view') ||
         element[0].querySelector('data-ion-nav-view');
       var navViewName = navView && navView.getAttribute('name');
+
+
+      //We create the tabNavElement in the compile phase so that the
+      //attributes we pass down won't be interpolated yet - we want
+      //to pass down the 'raw' versions of the attributes
+      var tabNavElement = angular.element(
+        '<ion-tab-nav' +
+        attrStr('ng-click', attr.ngClick) +
+        attrStr('title', attr.title) +
+        attrStr('icon', attr.icon) +
+        attrStr('icon-on', attr.iconOn) +
+        attrStr('icon-off', attr.iconOff) +
+        attrStr('badge', attr.badge) +
+        attrStr('badge-style', attr.badgeStyle) +
+        '></ion-tab-nav>'
+      );
 
       //Remove the contents of the element so we can compile them later, if tab is selected
       //We don't use regular transclusion because it breaks element inheritance
@@ -5111,9 +5127,10 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService, $state, 
         .append( element.contents().remove() );
 
       return function link($scope, $element, $attr, ctrls) {
-        var childScope, childElement, tabNavElement;
-          tabsCtrl = ctrls[0],
-          tabCtrl = ctrls[1];
+        var childScope;
+        var childElement;
+        var tabsCtrl = ctrls[0];
+        var tabCtrl = ctrls[1];
 
         $ionicBind($scope, $attr, {
           animate: '=',
@@ -5145,17 +5162,6 @@ function($rootScope, $animate, $ionicBind, $compile, $ionicViewService, $state, 
           }
         }
 
-        tabNavElement = angular.element(
-          '<ion-tab-nav' +
-          attrStr('ng-click', attr.ngClick) +
-          attrStr('title', attr.title) +
-          attrStr('icon', attr.icon) +
-          attrStr('icon-on', attr.iconOn) +
-          attrStr('icon-off', attr.iconOff) +
-          attrStr('badge', attr.badge) +
-          attrStr('badge-style', attr.badgeStyle) +
-          '></ion-tab-nav>'
-        );
         tabNavElement.data('$ionTabsController', tabsCtrl);
         tabNavElement.data('$ionTabController', tabCtrl);
         tabsCtrl.$tabsElement.append($compile(tabNavElement)($scope));
