@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1596
+ * Ionic, v1.0.0-beta.1-nightly-1599
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4119,6 +4119,12 @@ angular.module('ionic.ui.sideMenu', ['ionic.service.gesture', 'ionic.service.vie
    * opened/opening, and between 0 and -1 if right menu is opened/opening.
    */
   'getOpenRatio',
+  /**
+   * @ngdoc method
+   * @name $ionicSideMenuDelegate#isOpen
+   * @returns {boolean} Whether either the left or right menu is currently opened.
+   */
+  'isOpen',
   /**
    * @ngdoc method
    * @name $ionicSideMenuDelegate#isOpenLeft
