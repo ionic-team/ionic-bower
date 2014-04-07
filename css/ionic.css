@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1589
+ * Ionic, v1.0.0-beta.1-nightly-1591
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4261,48 +4261,51 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   display: inline-block;
   padding: 7px 7px;
   cursor: pointer; }
-  .checkbox input:before {
+  .checkbox input:before, .checkbox .checkbox-handle:before {
     border: 1px solid #4a87ee; }
-  .checkbox input:checked:before {
+  .checkbox input:checked:before, .checkbox input:checked + .checkbox-handle:before {
     background: #4a87ee; }
-  .checkbox.checkbox-light input:before {
+  .checkbox.checkbox-light input:before, .checkbox.checkbox-light .checkbox-handle:before {
     border: 1px solid #ddd; }
-  .checkbox.checkbox-light input:checked:before {
+  .checkbox.checkbox-light input:checked:before, .checkbox.checkbox-light input:checked + .checkbox-handle:before {
     background: #ddd; }
-  .checkbox.checkbox-stable input:before {
+  .checkbox.checkbox-stable input:before, .checkbox.checkbox-stable .checkbox-handle:before {
     border: 1px solid #b2b2b2; }
-  .checkbox.checkbox-stable input:checked:before {
+  .checkbox.checkbox-stable input:checked:before, .checkbox.checkbox-stable input:checked + .checkbox-handle:before {
     background: #b2b2b2; }
-  .checkbox.checkbox-positive input:before {
+  .checkbox.checkbox-positive input:before, .checkbox.checkbox-positive .checkbox-handle:before {
     border: 1px solid #4a87ee; }
-  .checkbox.checkbox-positive input:checked:before {
+  .checkbox.checkbox-positive input:checked:before, .checkbox.checkbox-positive input:checked + .checkbox-handle:before {
     background: #4a87ee; }
-  .checkbox.checkbox-calm input:before {
+  .checkbox.checkbox-calm input:before, .checkbox.checkbox-calm .checkbox-handle:before {
     border: 1px solid #43cee6; }
-  .checkbox.checkbox-calm input:checked:before {
+  .checkbox.checkbox-calm input:checked:before, .checkbox.checkbox-calm input:checked + .checkbox-handle:before {
     background: #43cee6; }
-  .checkbox.checkbox-assertive input:before {
+  .checkbox.checkbox-assertive input:before, .checkbox.checkbox-assertive .checkbox-handle:before {
     border: 1px solid #ef4e3a; }
-  .checkbox.checkbox-assertive input:checked:before {
+  .checkbox.checkbox-assertive input:checked:before, .checkbox.checkbox-assertive input:checked + .checkbox-handle:before {
     background: #ef4e3a; }
-  .checkbox.checkbox-balanced input:before {
+  .checkbox.checkbox-balanced input:before, .checkbox.checkbox-balanced .checkbox-handle:before {
     border: 1px solid #66cc33; }
-  .checkbox.checkbox-balanced input:checked:before {
+  .checkbox.checkbox-balanced input:checked:before, .checkbox.checkbox-balanced input:checked + .checkbox-handle:before {
     background: #66cc33; }
-  .checkbox.checkbox-energized input:before {
+  .checkbox.checkbox-energized input:before, .checkbox.checkbox-energized .checkbox-handle:before {
     border: 1px solid #f0b840; }
-  .checkbox.checkbox-energized input:checked:before {
+  .checkbox.checkbox-energized input:checked:before, .checkbox.checkbox-energized input:checked + .checkbox-handle:before {
     background: #f0b840; }
-  .checkbox.checkbox-royal input:before {
+  .checkbox.checkbox-royal input:before, .checkbox.checkbox-royal .checkbox-handle:before {
     border: 1px solid #8a6de9; }
-  .checkbox.checkbox-royal input:checked:before {
+  .checkbox.checkbox-royal input:checked:before, .checkbox.checkbox-royal input:checked + .checkbox-handle:before {
     background: #8a6de9; }
-  .checkbox.checkbox-dark input:before {
+  .checkbox.checkbox-dark input:before, .checkbox.checkbox-dark .checkbox-handle:before {
     border: 1px solid #444; }
-  .checkbox.checkbox-dark input:checked:before {
+  .checkbox.checkbox-dark input:checked:before, .checkbox.checkbox-dark input:checked + .checkbox-handle:before {
     background: #444; }
 
-.checkbox input {
+.checkbox-input-hidden input {
+  display: none; }
+
+.checkbox input, .checkbox .checkbox-handle {
   position: relative;
   width: 28px;
   height: 28px;
@@ -4310,7 +4313,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   background: transparent;
   cursor: pointer;
   -webkit-appearance: none; }
-  .checkbox input:before {
+  .checkbox input:before, .checkbox .checkbox-handle:before {
     /* what the checkbox looks like when its not checked */
     display: table;
     width: 100%;
@@ -4321,7 +4324,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     transition: background-color 0.1s ease-in-out; }
 
 /* the checkmark within the box */
-.checkbox input:after {
+.checkbox input:after, .checkbox .checkbox-handle:after {
   -webkit-transition: opacity 0.05s ease-in-out;
   -moz-transition: opacity 0.05s ease-in-out;
   transition: opacity 0.05s ease-in-out;
@@ -4340,7 +4343,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   content: ' ';
   opacity: 0; }
 
-.grade-c .checkbox input:after {
+.grade-c .checkbox input:after, .grade-c .checkbox .checkbox-handle:after {
   -webkit-transform: rotate(0);
   -moz-transform: rotate(0);
   transform: rotate(0);
@@ -4353,7 +4356,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   font-size: 20px; }
 
 /* what the checkmark looks like when its checked */
-.checkbox input:checked:after {
+.checkbox input:checked:after, .checkbox input:checked + .checkbox-handle:after {
   opacity: 1; }
 
 /* make sure item content have enough padding on left to fit the checkbox */
