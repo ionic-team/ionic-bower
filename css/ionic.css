@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1606
+ * Ionic, v1.0.0-beta.1-nightly-1607
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3322,11 +3322,11 @@ a.subdued {
     display: flex;
     position: absolute;
     top: 15px;
-    right: 35px; }
+    right: 30px; }
   .item.item-button-right .badge {
     right: 65px; }
   .item.item-divider .badge {
-    top: 7.5px; }
+    top: 8px; }
   .item .badge + .badge {
     margin-right: 5px; }
   .item.item-light {
@@ -3425,7 +3425,7 @@ a.item {
 .item-complex .item-content, .item-radio .item-content {
   position: relative;
   z-index: 2;
-  padding: 15px 40px 15px 15px;
+  padding: 15px 45px 15px 15px;
   border: none;
   background-color: white; }
 
@@ -3473,24 +3473,24 @@ a.item-content {
   font-size: 28px; }
 
 .item-icon-left {
-  padding-left: 45px; }
+  padding-left: 50px; }
   .item-icon-left .icon {
-    left: 7.5px; }
+    left: 10px; }
 
 .item-complex.item-icon-left {
   padding-left: 0; }
   .item-complex.item-icon-left .item-content {
-    padding-left: 45px; }
+    padding-left: 50px; }
 
 .item-icon-right {
-  padding-right: 45px; }
+  padding-right: 50px; }
   .item-icon-right .icon {
-    right: 7.5px; }
+    right: 10px; }
 
 .item-complex.item-icon-right {
   padding-right: 0; }
   .item-complex.item-icon-right .item-content {
-    padding-right: 45px; }
+    padding-right: 50px; }
 
 .item-icon-left.item-icon-right .icon:first-child {
   right: auto; }
@@ -3514,7 +3514,7 @@ a.item-content {
  * An item button is a child button inside an .item (not the entire .item)
  */
 .item-button-left {
-  padding-left: 67.5px; }
+  padding-left: 68px; }
 
 .item-button-left > .button, .item-button-left .item-content > .button {
   display: -webkit-box;
@@ -3529,8 +3529,8 @@ a.item-content {
   -moz-align-items: center;
   align-items: center;
   position: absolute;
-  top: 7.5px;
-  left: 7.5px;
+  top: 8px;
+  left: 10px;
   min-width: 34px;
   min-height: 34px;
   font-size: 18px;
@@ -3562,7 +3562,7 @@ a.item-content {
   -moz-align-items: center;
   align-items: center;
   position: absolute;
-  top: 7.5px;
+  top: 8px;
   right: 15px;
   min-width: 34px;
   min-height: 34px;
@@ -3587,6 +3587,18 @@ a.item-content {
     position: absolute;
     top: 15px;
     left: 15px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    border-radius: 4px; }
+
+.item-avatar-right, .item-avatar-right .item-content {
+  padding-right: 70px;
+  min-height: 70px; }
+  .item-avatar-right > img:first-child, .item-avatar-right .item-image, .item-avatar-right .item-content > img:first-child, .item-avatar-right .item-content .item-image {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     max-width: 40px;
     max-height: 40px;
     width: 100%;
@@ -3617,7 +3629,7 @@ a.item-content {
     max-height: 80px;
     width: 100%; }
 
-.item-thumbnail-right.item-complex {
+.item-avatar-right.item-complex, .item-thumbnail-right.item-complex {
   padding-right: 0; }
 
 .item-image {
@@ -3637,8 +3649,8 @@ a.item-content {
     margin-bottom: 15px; }
 
 .item-divider {
-  padding-top: 7.5px;
-  padding-bottom: 7.5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   min-height: 30px;
   background-color: #f5f5f5;
   color: #222;
