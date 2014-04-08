@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1607
+ * Ionic, v1.0.0-beta.1-nightly-1608
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1607'
+  version: '1.0.0-beta.1-nightly-1608'
 };
 
 (function(ionic) {
@@ -5143,39 +5143,40 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return;
       }
 
-      var i, c, childSize;
-      var childNodes = this.el.childNodes;
-      var leftWidth = 0;
-      var rightWidth = 0;
-      var isCountingRightWidth = false;
+      var self = this;
+      //We have to rAF here so all of the elements have time to initialize
+      ionic.requestAnimationFrame(function() {
+        var i, c, childSize;
+        var childNodes = self.el.childNodes;
+        var leftWidth = 0;
+        var rightWidth = 0;
+        var isCountingRightWidth = false;
 
-      // Compute how wide the left children are
-      // Skip all titles (there may still be two titles, one leaving the dom)
-      // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
-      for(i = 0; i < childNodes.length; i++) {
-        c = childNodes[i];
-        if (c.tagName && c.tagName.toLowerCase() == 'h1') {
-          isCountingRightWidth = true;
-          continue;
-        }
+        // Compute how wide the left children are
+        // Skip all titles (there may still be two titles, one leaving the dom)
+        // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
+        for(i = 0; i < childNodes.length; i++) {
+          c = childNodes[i];
+          if (c.tagName && c.tagName.toLowerCase() == 'h1') {
+            isCountingRightWidth = true;
+            continue;
+          }
 
-        childSize = null;
-        if(c.nodeType == 3) {
-          childSize = ionic.DomUtil.getTextBounds(c);
-        } else if(c.nodeType == 1) {
-          childSize = c.getBoundingClientRect();
-        }
-        if(childSize) {
-          if (isCountingRightWidth) {
-            rightWidth += childSize.width;
-          } else {
-            leftWidth += childSize.width;
+          childSize = null;
+          if(c.nodeType == 3) {
+            childSize = ionic.DomUtil.getTextBounds(c).width;
+          } else if(c.nodeType == 1) {
+            childSize = c.offsetWidth;
+          }
+          if(childSize) {
+            if (isCountingRightWidth) {
+              rightWidth += childSize;
+            } else {
+              leftWidth += childSize;
+            }
           }
         }
-      }
 
-      var self = this;
-      ionic.requestAnimationFrame(function() {
         var margin = Math.max(leftWidth, rightWidth) + 10;
 
         // Size and align the header titleEl based on the sizes of the left and
@@ -32273,7 +32274,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1607
+ * Ionic, v1.0.0-beta.1-nightly-1608
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
