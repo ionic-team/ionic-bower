@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1608
+ * Ionic, v1.0.0-beta.1-nightly-1609
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1608'
+  version: '1.0.0-beta.1-nightly-1609'
 };
 
 (function(ionic) {
@@ -2601,6 +2601,14 @@ window.ionic = {
     reset: function() {
       tapCoordinates = {};
       startCoordinates = {};
+    },
+
+    ignoreScrollStart: function(e) {
+      return (e.defaultPrevented) ||  // defaultPrevented has been assigned by another component handling the event
+             (e.target.tagName.match(/input|textarea/i) && ionic.tap.activeElement() === e.target) || // target is the active element, so its a second tap to select input text
+             (e.target.isContentEditable) ||
+             (e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default')) == 'true' || // manually set within an elements attributes
+             (!!e.target.tagName.match(/object|embed/i));  // flash/movie/object touches should not try to scroll
     }
 
   };
@@ -3623,16 +3631,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
       e.stopPropagation();
     });
 
-    function shouldIgnorePress(e) {
-      return e.target.tagName.match(/input|textarea|select|object|embed/i) ||
-             e.target.isContentEditable ||
-             (e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default') == 'true');
-    }
-
     if ('ontouchstart' in window) {
 
       container.addEventListener("touchstart", function(e) {
-        if (e.defaultPrevented || shouldIgnorePress(e)) {
+        if ( ionic.tap.ignoreScrollStart(e) ) {
           return;
         }
         self.doTouchStart(e.touches, e.timeStamp);
@@ -3655,7 +3657,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       var mousedown = false;
 
       container.addEventListener("mousedown", function(e) {
-        if (e.defaultPrevented || shouldIgnorePress(e)) {
+        if ( ionic.tap.ignoreScrollStart(e) ) {
           return;
         }
         self.doTouchStart([{
