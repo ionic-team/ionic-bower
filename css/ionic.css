@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1609
+ * Ionic, v1.0.0-beta.1-nightly-1610
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2425,6 +2425,23 @@ a.subdued {
   .action-sheet-open .action-sheet-backdrop {
     pointer-events: auto; }
 
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  -webkit-transition: opacity 0.15s ease-out;
+  -moz-transition: opacity 0.15s ease-out;
+  transition: opacity 0.15s ease-out;
+  opacity: 1; }
+  .backdrop.ng-hide {
+    opacity: 0; }
+  .backdrop.ng-hide-remove, .backdrop.ng-hide-add {
+    display: block !important; }
+
 /**
  * Bar (Headers and Footers)
  * --------------------------------------------------
@@ -3222,54 +3239,19 @@ a.subdued {
   .popup-open .popup-backdrop, .popup-open .popup {
     pointer-events: auto; }
 
-.popup-backdrop {
-  -webkit-animation-name: fadeIn;
-  -moz-animation-name: fadeIn;
-  animation-name: fadeIn;
-  -webkit-animation-duration: 0.1s;
-  -moz-animation-duration: 0.1s;
-  animation-duration: 0.1s;
-  -webkit-animation-timing-function: linear;
-  -moz-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  animation-fill-mode: both;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); }
-
 /**
  * Loading
  * --------------------------------------------------
  */
-.loading-backdrop {
-  -webkit-transition: visibility 0s linear 0.3s;
-  -moz-transition: visibility 0s linear 0.3s;
-  transition: visibility 0s linear 0.3s;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 11;
-  visibility: hidden;
-  width: 100%;
-  height: 100%; }
-  .loading-backdrop.active {
-    -webkit-transition-delay: 0s;
-    -moz-transition-delay: 0s;
-    transition-delay: 0s;
-    visibility: visible; }
-    .loading-backdrop.active.show-backdrop {
-      background-color: rgba(0, 0, 0, 0.7); }
-
 .loading {
+  -webkit-transition: opacity 0.2s ease-out;
+  -moz-transition: opacity 0.2s ease-out;
+  transition: opacity 0.2s ease-out;
+  opacity: 1;
   position: fixed;
   top: 50%;
   left: 50%;
+  z-index: 11;
   padding: 20px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.7);
@@ -3277,6 +3259,10 @@ a.subdued {
   text-align: center;
   text-overflow: ellipsis;
   font-size: 15px; }
+  .loading.ng-hide {
+    opacity: 0; }
+  .loading.ng-hide-remove, .loading.ng-hide-add {
+    display: block !important; }
   .loading h1, .loading h2, .loading h3, .loading h4, .loading h5, .loading h6 {
     color: #fff; }
 

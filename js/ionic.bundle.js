@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1609
+ * Ionic, v1.0.0-beta.1-nightly-1610
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1609'
+  version: '1.0.0-beta.1-nightly-1610'
 };
 
 (function(ionic) {
@@ -324,6 +324,15 @@ window.ionic = {
     swapNodes: function(src, dest) {
       dest.parentNode.insertBefore(src, dest);
     },
+
+    /**
+     * @private
+     */
+    centerElementByMargin: function(el) {
+      el.style.marginLeft = (-el.offsetWidth) / 2 + 'px';
+      el.style.marginTop = (-el.offsetHeight) / 2 + 'px';
+    },
+
     /**
      * @ngdoc method
      * @name ionic.DomUtil#getParentWithClass
@@ -32276,7 +32285,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1609
+ * Ionic, v1.0.0-beta.1-nightly-1610
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32287,6 +32296,52 @@ angular.module('ui.router.compat')
  */
 
 (function() {
+/*
+ * deprecated.js
+ * https://github.com/wearefractal/deprecated/
+ * Copyright (c) 2014 Fractal <contact@wearefractal.com>
+ * License MIT
+ */
+//Interval object
+var deprecated = {
+  method: function(msg, log, fn) {
+    var called = false;
+    return function deprecatedMethod(){
+      if (!called) {
+        called = true;
+        log(msg);
+      }
+      return fn.apply(this, arguments);
+    };
+  },
+
+  field: function(msg, log, parent, field, val) {
+    var called = false;
+    var getter = function(){
+      if (!called) {
+        called = true;
+        log(msg);
+      }
+      return val;
+    };
+    var setter = function(v) {
+      if (!called) {
+        called = true;
+        log(msg);
+      }
+      val = v;
+      return v;
+    };
+    Object.defineProperty(parent, field, {
+      get: getter,
+      set: setter,
+      enumerable: true
+    });
+    return;
+  }
+};
+
+
 /**
  * Create a wrapping module to ease having to include too many
  * modules.
@@ -32318,7 +32373,6 @@ angular.module('ionic.ui', [
     'ionic.ui.header',
     'ionic.ui.list',
     'ionic.ui.navBar',
-    'ionic.ui.popup',
     'ionic.ui.radio',
     'ionic.ui.scroll',
     'ionic.ui.sideMenu',
@@ -32643,6 +32697,44 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
 
 }]);
 
+angular.module('ionic')
+
+/**
+ * @private
+ */
+.factory('$ionicBackdrop', [
+  '$animate',
+  '$document',
+function($animate, $document) {
+
+  var el;
+  var backdropHolds = 0;
+
+  return {
+    retain: retain,
+    release: release,
+    _getElement: getElement
+  };
+
+  function getElement() {
+    if (!el) {
+      el = angular.element('<div class="backdrop ng-hide">');
+      $document[0].body.appendChild(el[0]);
+    }
+    return el;
+  }
+  function retain() {
+    if ( (++backdropHolds) === 1 ) {
+      $animate.removeClass(getElement(), 'ng-hide');
+    }
+  }
+  function release() {
+    if ( (--backdropHolds) === 0 ) {
+      $animate.addClass(getElement(), 'ng-hide');
+    }
+  }
+}]);
+
 angular.module('ionic.service.bind', [])
 /**
  * @private
@@ -32737,7 +32829,18 @@ angular.module('ionic.service.gesture', [])
   };
 }]);
 
-angular.module('ionic.service.loading', ['ionic.ui.loading'])
+
+var TPL_LOADING =
+  '<div class="loading ng-hide" ng-bind-html="html">' +
+  '</div>';
+
+var HIDE_LOADING_DEPRECATED = '$ionicLoading instance.hide() has been deprecated. Use $ionicLoading.hide().';
+var SHOW_LOADING_DEPRECATED = '$ionicLoading instance.show() has been deprecated. Use $ionicLoading.show().';
+var SET_LOADING_DEPRECATED = '$ionicLoading instance.setContent() has been deprecated. Use $ionicLoading.show({ content: \'my content\' }).';
+var SHOW_DELAY_LOADING_DEPRECATED = '$ionicLoading options.showDelay has been deprecated. Use options.delay instead.';
+var SHOW_BACKDROP_LOADING_DEPRECATED = '$ionicLoading options.showBackdrop has been deprecated. Use options.noBackdrop instead.';
+
+angular.module('ionic.service.loading', [])
 
 /**
  * @ngdoc service
@@ -32752,73 +32855,138 @@ angular.module('ionic.service.loading', ['ionic.ui.loading'])
  * angular.module('LoadingApp', ['ionic'])
  * .controller('LoadingCtrl', function($scope, $ionicLoading) {
  *   $scope.show = function() {
- *     $scope.loading = $ionicLoading.show({
- *       content: 'Loading',
+ *     $ionicLoading.show({
+ *       content: 'Loading...'
  *     });
  *   };
  *   $scope.hide = function(){
- *     $scope.loading.hide();
+ *     $ionicLoading.hide();
  *   };
  * });
  * ```
  */
-.factory('$ionicLoading', ['$rootScope', '$document', '$compile', function($rootScope, $document, $compile) {
+.factory('$ionicLoading', [
+  '$animate',
+  '$document',
+  '$ionicTemplateLoader',
+  '$ionicBackdrop',
+  '$timeout',
+  '$q',
+  '$log',
+function($animate, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log) {
+
+  var loaderInstance;
+
   return {
     /**
      * @ngdoc method
      * @name $ionicLoading#show
-     * @param {object} opts The options for the indicator. Available properties:
-     *  - `{string=}` `content` The content of the indicator. Default: none.
-     *  - `{string=}` `animation` The animation of the indicator.
-     *    Default: 'fade-in'.
-     *  - `{boolean=}` `showBackdrop` Whether to show a backdrop. Default: true.
-     *  - `{number=}` `maxWidth` The maximum width of the indicator, in pixels.
-     *    Default: 200.
-     *  - `{number=}` `showDelay` How many milliseconds to delay showing the
-     *    indicator.  Default: 0.
-     * @returns {object} A shown loader with the following methods:
-     *  - `hide()` - Hides the loader.
-     *  - `show()` - Shows the loader.
-     *  - `setContent(string)` - Sets the html content of the loader.
+     * @description Shows a loading indicator. If the indicator is already shown,
+     * it will set the options given and keep the indicator shown.
+     * @param {object} opts The options for the loading indicator. Available properties:
+     *  - `{string=}` `content` The html content of the indicator.
+     *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop.
+     *  - `{number=}` `delay` How many milliseconds to delay showing the indicator.
+     *  - `{number=} `duration` How many milliseconds to wait until automatically
+     *  hiding the indicator.
      */
-    show: function(opts) {
-      var defaults = {
-        content: '',
-        animation: 'fade-in',
-        showBackdrop: true,
-        maxWidth: 200,
-        showDelay: 0
-      };
-
-      opts = angular.extend(defaults, opts);
-
-      var scope = $rootScope.$new(true);
-      angular.extend(scope, opts);
-
-      // Make sure there is only one loading element on the page at one point in time
-      var existing = angular.element($document[0].querySelector('.loading-backdrop'));
-      if(existing.length) {
-        existing.remove();
-      }
-
-      // Compile the template
-      var element = $compile('<ion-loading>' + opts.content + '</ion-loading>')(scope);
-
-      $document[0].body.appendChild(element[0]);
-
-      var loading = new ionic.views.Loading({
-        el: element[0],
-        maxWidth: opts.maxWidth,
-        showDelay: opts.showDelay
-      });
-
-      loading.show();
-
-      scope.loading = loading;
-
-      return loading;
-    }
+    show: showLoader,
+    /**
+     * @ngdoc method
+     * @name $ionicLoading#hide
+     * @description Hides the loading indicator, if shown.
+     */
+    hide: hideLoader,
+    /**
+     * @private for testing
+     */
+    _getLoader: getLoader
   };
+
+  function getLoader() {
+    if (!loaderInstance) {
+      loaderInstance = $ionicTemplateLoader.compile({
+        template: TPL_LOADING,
+        appendTo: $document[0].body
+      })
+      .then(function(loader) {
+        loader.show = function(options) {
+          if (!this.isShown) {
+            this.hasBackdrop = !options.noBackdrop || options.showBackdrop === false;
+            if (this.hasBackdrop) {
+              $ionicBackdrop.retain();
+            }
+          }
+
+          if (options.duration) {
+            $timeout.cancel(this.durationTimeout);
+            this.durationTimeout = $timeout(angular.bind(this, this.hide),
+                                            +options.duration);
+          }
+          if (options.content) {
+            this.scope.html = options.content;
+          }
+
+          var el = this.element;
+          var scope = this.scope;
+          ionic.requestAnimationFrame(function() {
+            $animate.removeClass(el, 'ng-hide');
+            //Fix for ios: if we center the element twice, it always gets 
+            //position right. Otherwise, it doesn't
+            ionic.DomUtil.centerElementByMargin(el[0]);
+            //One frame after it's visible, position it
+            ionic.requestAnimationFrame(function() {
+              ionic.DomUtil.centerElementByMargin(el[0]);
+            });
+          });
+
+          this.isShown = true;
+        };
+        loader.hide = function() {
+          if (this.isShown) {
+            if (this.hasBackdrop) {
+              $ionicBackdrop.release();
+            }
+            $animate.addClass(this.element, 'ng-hide');
+          }
+          $timeout.cancel(this.durationTimeout);
+          this.isShown = false;
+        };
+        return loader;
+      });
+    }
+    return $q.when(loaderInstance);
+  }
+
+  function showLoader(options) {
+    options || (options = {});
+
+    deprecated.field(SHOW_DELAY_LOADING_DEPRECATED, $log.warn, options, 'showDelay', options.showDelay);
+    deprecated.field(SHOW_BACKDROP_LOADING_DEPRECATED, $log.warn, options, 'showBackdrop', options.showBackdrop);
+
+    $timeout(getLoader, options.delay || options.showDelay || 0)
+    .then(function(loader) {
+      return loader.show(options);
+    });
+
+    return {
+      hide: deprecated.method(HIDE_LOADING_DEPRECATED, $log.warn, hideLoader),
+      show: deprecated.method(SHOW_LOADING_DEPRECATED, $log.warn, function() {
+        showLoader(options);
+      }),
+      setContent: deprecated.method(SET_LOADING_DEPRECATED, $log.warn, function(content) {
+        getLoader().then(function(loader) {
+          loader.scope.html = content;
+        });
+      })
+    };
+  }
+
+  function hideLoader() {
+    getLoader().then(function(loader) {
+      loader.hide();
+    });
+  }
 }]);
 
 angular.module('ionic.service.modal', ['ionic.service.templateLoad', 'ionic.service.platform', 'ionic.ui.modal'])
@@ -33202,8 +33370,21 @@ angular.module('ionic.service.platform', [])
 
 })(ionic);
 
-(function(ionic) {
-'use strict';
+
+var TPL_POPUP =
+  '<div class="popup">' +
+    '<div class="popup-head">' +
+      '<h3 class="popup-title" ng-bind-html="title"></h3>' +
+      '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
+    '</div>' +
+    '<div class="popup-body">' +
+    '</div>' +
+    '<div class="popup-buttons row">' +
+      '<button ng-repeat="button in buttons" ng-click="$buttonTapped(button, $event)" class="button col" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
+    '</div>' +
+  '</div>';
+
+var CONTENT_POPUP_DEPRECATED = '$ionicPopup options.content has been deprecated. Use options.template instead.';
 
 angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
 
@@ -33215,564 +33396,524 @@ angular.module('ionic.service.popup', ['ionic.service.templateLoad'])
  * @codepen zkmhJ
  * @description
  *
- * The Ionic Popup service makes it easy to programatically create and show popup
- * windows that require the user to respond in order to continue:
+ * The Ionic Popup service allows programmatically creating and showing popup
+ * windows that require the user to respond in order to continue.
  *
- * The popup system has support for nicer versions of the built in `alert()` `prompt()` and `confirm()` functions
- * you are used to in the browser, but with more powerful support for customizing input types in the case of
- * prompt, or customizing the look of the window.
- *
- * But the true power of the Popup is when a built-in popup just won't cut it. Luckily, the popup window
- * has full support for arbitrary popup content, and a simple promise-based system for returning data
- * entered by the user.
+ * The popup system has support for more flexible versions of the built in `alert()`, `prompt()`,
+ * and `confirm()` functions that users are used to, in addition to allowing popups with completely
+ * custom content and look.
  *
  * @usage
- * To trigger a Popup in your code, use the $ionicPopup service in your angular controllers:
+ * A few basic examples, see below for details about all of the options available.
  *
  * ```js
  * angular.module('mySuperApp', ['ionic'])
- * .controller(function($scope, $ionicPopup) {
+ * .controller(function($scope, $ionicPopup, $timeout) {
  *
  *  // Triggered on a button click, or some other target
-    $scope.showPopup = function() {
-      $scope.data = {}
-
-      // An elaborate, custom popup
-      $ionicPopup.show({
-        templateUrl: 'popup-template.html',
-        title: 'Enter Wi-Fi Password',
-        subTitle: 'Please use normal things',
-        scope: $scope,
-        buttons: [
-          { text: 'Cancel', onTap: function(e) { return true; } },
-          {
-            text: '<b>Save</b>',
-            type: 'button-positive',
-            onTap: function(e) {
-              return $scope.data.wifi;
-            }
-          },
-        ]
-      }).then(function(res) {
-        console.log('Tapped!', res);
-      }, function(err) {
-        console.log('Err:', err);
-      }, function(popup) {
-        // If you need to access the popup directly, do it in the notify method
-        // This is also where you can programatically close the popup:
-        // popup.close();
-      });
-
-      // A confirm dialog
-      $scope.showConfirm = function() {
-        $ionicPopup.confirm({
-          title: 'Consume Ice Cream',
-          content: 'Are you sure you want to eat this ice cream?'
-        }).then(function(res) {
-          if(res) {
-            console.log('You are sure');
-          } else {
-            console.log('You are not sure');
-          }
-        });
-      };
-
-      // A prompt dialog
-      $scope.showPrompt = function() {
-        $ionicPopup.prompt({
-          title: 'ID Check',
-          content: 'What is your name?'
-        }).then(function(res) {
-          console.log('Your name is', res);
-        });
-      };
-
-      // A prompt with password input dialog
-      $scope.showPasswordPrompt = function() {
-        $ionicPopup.prompt({
-          title: 'Password Check',
-          content: 'Enter your secret password',
-          inputType: 'password',
-          inputPlaceholder: 'Your password'
-        }).then(function(res) {
-          console.log('Your password is', res);
-        });
-      };
-
-      // An alert dialog
-      $scope.showAlert = function() {
-        $ionicPopup.alert({
-          title: 'Don\'t eat that!',
-          content: 'It might taste good'
-        }).then(function(res) {
-          console.log('Thank you for not eating my delicious ice cream cone');
-        });
-      };
-    };
-  });
-  ```
+ *  $scope.showPopup = function() {
+ *    $scope.data = {}
+ *
+ *    // An elaborate, custom popup
+ *    var myPopup = $ionicPopup.show({
+ *      template: '<input type="password" ng-model="data.wifi">',
+ *      title: 'Enter Wi-Fi Password',
+ *      subTitle: 'Please use normal things',
+ *      scope: $scope,
+ *      buttons: [
+ *        { text: 'Cancel' },
+ *        {
+ *          text: '<b>Save</b>',
+ *          type: 'button-positive',
+ *          onTap: function(e) {
+ *            if (!$scope.data.wifi) {
+ *              //don't allow the user to close unless he enters wifi password
+ *              e.preventDefault();
+ *            } else {
+ *              return $scope.data.wifi;
+ *            }
+ *          }
+ *        },
+ *      ]
+ *    });
+ *    myPopup.then(function(res) {
+ *      console.log('Tapped!', res);
+ *    });
+ *    $timeout(function() {
+ *       myPopup.close(); //close the popup after 3 seconds for some reason
+ *    }, 3000);
+ *
+ *    // A confirm dialog
+ *    $scope.showConfirm = function() {
+ *      var confirmPopup = $ionicPopup.confirm({
+ *        title: 'Consume Ice Cream',
+ *        template: 'Are you sure you want to eat this ice cream?'
+ *      });
+ *      confirmPopup.then(function(res) {
+ *        if(res) {
+ *          console.log('You are sure');
+ *        } else {
+ *          console.log('You are not sure');
+ *        }
+ *      });
+ *    };
+ *
+ *    // An alert dialog
+ *    $scope.showAlert = function() {
+ *      var alertPopup = $ionicPopup.alert({
+ *        title: 'Don\'t eat that!',
+ *        template: 'It might taste good'
+ *      });
+ *      alertPopup.then(function(res) {
+ *        console.log('Thank you for not eating my delicious ice cream cone');
+ *      });
+ *    };
+ *  };
+ *});
+ *```
 
 
  */
-.factory('$ionicPopup', ['$rootScope', '$q', '$document', '$compile', '$timeout', '$ionicTemplateLoader',
-  function($rootScope, $q, $document, $compile, $timeout, $ionicTemplateLoader) {
-
-  // TODO: Make this configurable
-  var popupOptions = {
-    // How long to wait after a popup is already shown to show another one
+.factory('$ionicPopup', [
+  '$animate',
+  '$ionicTemplateLoader',
+  '$ionicBackdrop',
+  '$log',
+  '$q',
+  '$timeout',
+  '$rootScope',
+  '$document',
+  '$compile',
+function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $rootScope, $document, $compile) {
+  //TODO allow this to be configured
+  var config = {
     stackPushDelay: 50
-  }
-
-  // Center the given popup
-  var positionPopup = function(popup) {
-    popup.el.style.marginLeft = (-popup.el.offsetWidth) / 2 + 'px';
-    popup.el.style.marginTop = (-popup.el.offsetHeight) / 2 + 'px';
   };
-
-  // Hide the body of the given popup if it's empty
-  var hideBody = function(popup) {
-    var bodyEl = popup.el.querySelector('.popup-body');
-    if(bodyEl && bodyEl.innerHTML.trim() == '') {
-      bodyEl.style.display = 'none';
-    }
-  };
-
-  var focusLastButton = function(popup) {
-    var buttons, lastButton;
-    buttons = popup.el.querySelectorAll('button');
-    lastButton = buttons[buttons.length-1];
-    if(lastButton) {
-      lastButton.focus();
-    }
-  }
-
-  // Show a single popup
-  var showSinglePopup = function(popup, opts) {
-    var _this = this;
-
-    ionic.requestAnimationFrame(function() {
-      hideBody(popup);
-      positionPopup(popup);
-      popup.el.classList.remove('popup-hidden');
-      popup.el.classList.add('popup-showing');
-      popup.el.classList.add('active');
-
-      focusLastButton(popup);
-    });
-  };
-
-  // Show a popup that was already shown at one point in the past
-  var reshowSinglePopup = function(popup) {
-    ionic.requestAnimationFrame(function() {
-      popup.el.classList.remove('popup-hidden');
-      popup.el.classList.add('popup-showing');
-      popup.el.classList.add('active');
-      focusLastButton(popup);
-    });
-  };
-
-  // Hide a single popup
-  var hideSinglePopup = function(popup) {
-    ionic.requestAnimationFrame(function() {
-      popup.el.classList.remove('active');
-      popup.el.classList.add('popup-hidden');
-    });
-  };
-
-  // Remove a popup once and for all
-  var removeSinglePopup = function(popup) {
-    // Force a reflow so the animation will actually run
-    popup.el.offsetWidth;
-
-    popup.el.classList.remove('active');
-    popup.el.classList.add('popup-hidden');
-
-    $timeout(function() {
-      popup.el.parentNode.removeChild(popup.el);
-    }, 400);
-  };
-
-
-  /**
-   * Popup stack and directive
-   */
-
   var popupStack = [];
-  var backdropEl = null;
-
-  // Show the backdrop element
-  var showBackdrop = function() {
-    var el = $compile('<ion-popup-backdrop></ion-popup-backdrop>')($rootScope.$new(true));
-    $document[0].body.appendChild(el[0]);
-    backdropEl = el;
-    $document[0].body.classList.add('popup-open');
-  };
-
-  // Remove the backdrop element
-  var removeBackdrop = function() {
-    backdropEl.remove();
-    $timeout(function(){
-      $document[0].body.classList.remove('popup-open');
-    }, 300);
-  };
-
-  // Push the new popup onto the stack with the given data and scope.
-  // If this is the first one in the stack, show the backdrop, otherwise don't.
-  var pushAndShow = function(popup, data) {
-    var lastPopup = popupStack[popupStack.length-1];
-
-    popupStack.push(popup);
-
-    // If this is the first popup, show the backdrop
-    if(popupStack.length == 1) {
-      showBackdrop();
-    }
-
-    // If we have an existing popup, add a delay between hiding and showing it
-    if(lastPopup) {
-      hideSinglePopup(lastPopup);
-      $timeout(function() {
-        showSinglePopup(popup);
-      }, popupOptions.stackPushDelay);
-    } else {
-      // Otherwise, immediately show it
-      showSinglePopup(popup);
-    }
-
-  };
-
-  // Pop the current popup off the stack. If there are other popups, show them
-  // otherwise hide the backdrop.
-  var popAndRemove = function(popup) {
-    var lastPopup = popupStack.pop();
-    var nextPopup = popupStack[popupStack.length-1];
-    removeSinglePopup(lastPopup);
-
-    if(nextPopup) {
-      reshowSinglePopup(nextPopup);
-    } else {
-      removeBackdrop();
-    }
-  };
-
-  // Append the element to the screen, create the popup view,
-  // and add the popup to the scope
-  var constructPopupOnScope = function(element, scope) {
-    var popup = {
-      el: element[0],
-      scope: scope,
-      close: function() {
-        popAndRemove(this);
-      }
-    };
-
-    scope.popup = popup;
-
-    return popup;
-  }
-
-  var buildPopupTemplate = function(opts, content) {
-    return '<ion-popup title="' + opts.title + '" buttons="buttons" on-button-tap="onButtonTap(button, event)" on-close="onClose(button, result, event)">'
-        + (content || '') +
-      '</ion-popup>';
-  };
-
-
-  // Given an options object, build a new popup window and return a promise
-  // which will contain the constructed popup at a later date. Perhaps at a later
-  // year even. At this point, it's hard to say.
-  var createPopup = function(opts, responseDeferred) {
-    var q = $q.defer();
-
-    // Create some defaults
-    var defaults = {
-      title: '',
-      animation: 'fade-in',
-    };
-
-    opts = angular.extend(defaults, opts);
-
-    // Create a new scope, and bind some of the options stuff to that scope
-    var scope = opts.scope && opts.scope.$new() || $rootScope.$new(true);
-    angular.extend(scope, opts);
-
-    scope.onClose = function(button, result, event) {
-      popAndRemove(scope.popup);
-      responseDeferred.resolve(result);
-    };
-
-    // Check if we need to load a template for the content of the popup
-    if(opts.templateUrl) {
-
-      // Load the template externally
-      $ionicTemplateLoader.load(opts.templateUrl).then(function(templateString) {
-
-        var popupTemplate = buildPopupTemplate(opts, templateString);
-        var element = $compile(popupTemplate)(scope);
-        $document[0].body.appendChild(element[0]);
-        q.resolve(constructPopupOnScope(element, scope));
-
-      }, function(err) {
-        // Error building the popup
-        q.reject(err);
-      });
-
-    } else {
-      // Compile the template
-      var popupTemplate = buildPopupTemplate(opts, opts.content);
-      var element = $compile(popupTemplate)(scope);
-      $document[0].body.appendChild(element[0]);
-      q.resolve(constructPopupOnScope(element, scope));
-    }
-
-    return q.promise;
-  };
-
-
-
-  // Public API
-  return {
-    /**
-     * @private
-     */
-    showPopup: function(data) {
-      var q = $q.defer();
-
-      createPopup(data, q).then(function(popup, scope) {
-
-        // Send the popup back
-        q.notify(popup);
-
-        // We constructed the popup, push it on the stack and show it
-        pushAndShow(popup, data);
-
-      }, function(err) {
-        void 0;
-      });
-
-      return q.promise;
-    },
-
+  var $ionicPopup = {
     /**
      * @ngdoc method
+     * @description
+     * Show a complex popup. This is the master show function for all popups.
+     *
+     * A complex popup has a `buttons` array, with each button having a `text` and `type`
+     * field, in addition to an `onTap` function.  The `onTap` function, called when
+     * the correspondingbutton on the popup is tapped, will by default close the popup
+     * and resolve the popup promise with its return value.  If you wish to prevent the
+     * default and keep the popup open on button tap, call `event.preventDefault()` on the
+     * passed in tap event.  Details below.
+     *
      * @name $ionicPopup#show
-     * @description show a complex popup. This is the master show function for all popups
-     * @param {data} object The options for showing a popup, of the form:
-     * @returns {Promise} an Angular promise which resolves when the user enters the correct data, and also
-     * sends the constructed popup in the notify function (for programatic closing, as shown in the example above).
+     * @param {object} options The options for the new popup, of the form:
+     *
      * ```
      * {
-     *   content: '', // String. The content of the popup
-     *   title: '', // String. The title of the popup
-     *   subTitle: '', // String (optional). The sub-title of the popup
-     *   templateUrl: '', // URL String (optional). The URL of a template to load as the content (instead of the `content` field)
-     *   scope: null, // Scope (optional). A scope to apply to the popup content (for using ng-model in a template, for example)
-     *   buttons:
-     *     [
-     *       {
-     *         text: 'Cancel',
-     *         type: 'button-default',
-     *         onTap: function(e) {
-     *           // e.preventDefault() is the only way to return a false value
-     *           e.preventDefault();
-     *         }
-     *       },
-     *       {
-     *         text: 'OK',
-     *         type: 'button-positive',
-     *         onTap: function(e) {
-     *           // When the user taps one of the buttons, you need to return the
-     *           // Data you want back to the popup service which will then resolve
-     *           // the promise waiting for a response.
-     *           //
-     *           // To return "false", call e.preventDefault();
-     *           return scope.data.response;
-     *         }
-     *       }
-     *     ]
-     *
+     *   title: '', // String. The title of the popup.
+     *   subTitle: '', // String (optional). The sub-title of the popup.
+     *   template: '', // String (optional). The html template to place in the popup body.
+     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
+     *   scope: null, // Scope (optional). A scope to link to the popup content.
+     *   buttons: [{ //Array[Object] (optional). Buttons to place in the popup footer.
+     *     text: 'Cancel',
+     *     type: 'button-default',
+     *     onTap: function(e) {
+     *       // e.preventDefault() will stop the popup from closing when tapped.
+     *       e.preventDefault();
+     *     }
+     *   }, {
+     *     text: 'OK',
+     *     type: 'button-positive',
+     *     onTap: function(e) {
+     *       // Returning a value will cause the promise to resolve with the given value.
+     *       return scope.data.response;
+     *     }
+     *   }]
      * }
      * ```
-    */
-    show: function(data) {
-      return this.showPopup(data);
-    },
+     *
+     * @returns {object} A promise which is resolved when the popup is closed. Has an additional
+     * `close` function, which can be used to programmatically close the popup.
+     */
+    show: showPopup,
 
     /**
      * @ngdoc method
      * @name $ionicPopup#alert
-     * @description show a simple popup with one button that the user has to tap
+     * @description Show a simple alert popup with a message and one button that the user can
+     * tap to close the popup.
      *
-     * Show a simple alert dialog
-     *
-     * ```javascript
-     *  $ionicPopup.alert({
-     *    title: 'Hey!',
-     *    content: 'Don\'t do that!'
-     *  }).then(function(res) {
-     *    // Accepted
-     *  });
-     * ```
-     *
-     * @returns {Promise} that resolves when the alert is accepted
-     * @param {data} object The options for showing an alert, of the form:
+     * @param {object} options The options for showing the alert, of the form:
      *
      * ```
      * {
-     *   content: '', // String. The content of the popup
-     *   title: '', // String. The title of the popup
-     *   okText: '', // String. The text of the OK button
-     *   okType: '', // String (default: button-positive). The type of the OK button
+     *   title: '', // String. The title of the popup.
+     *   subTitle: '', // String (optional). The sub-title of the popup.
+     *   template: '', // String (optional). The html template to place in the popup body.
+     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
+     *   okText: '', // String (default: 'OK'). The text of the OK button.
+     *   okType: '', // String (default: 'button-positive'). The type of the OK button.
      * }
      * ```
-    */
-    alert: function(opts) {
-      return this.showPopup({
-        content: opts.content || '',
-        title: opts.title || '',
-        buttons: [
-          {
-            text: opts.okText || 'OK',
-            type: opts.okType || 'button-positive',
-            onTap: function(e) {
-              return true;
-            }
-          }
-        ]
-      });
-    },
+     *
+     * @returns {object} A promise which is resolved when the popup is closed. Has one additional
+     * function `close`, which can be called with any value to programmatically close the popup
+     * with the given value.
+     */
+    alert: showAlert,
 
     /**
      * @ngdoc method
      * @name $ionicPopup#confirm
      * @description
-     * Show a simple confirm popup with a cancel and accept button:
+     * Show a simple confirm popup with a Cancel and OK button.
      *
-     * ```javascript
-     *  $ionicPopup.confirm({
-     *    title: 'Consume Ice Cream',
-     *    content: 'Are you sure you want to eat this ice cream?'
-     *  }).then(function(res) {
-     *    if(res) {
-     *      console.log('You are sure');
-     *    } else {
-     *      console.log('You are not sure');
-     *    }
-     *  });
-     * ```
+     * Resolves the promise with true if the user presses the OK button, and false if the
+     * user presses the Cancel button.
      *
-     * @returns {Promise} that resolves with the chosen option
-     * @param {data} object The options for showing a confirm dialog, of the form:
+     * @param {object} options The options for showing the confirm popup, of the form:
      *
      * ```
      * {
-     *   content: '', // String. The content of the popup
-     *   title: '', // String. The title of the popup
-     *   cancelText: '', // String. The text of the Cancel button
-     *   cancelType: '', // String (default: button-default). The type of the kCancel button
-     *   okText: '', // String. The text of the OK button
-     *   okType: '', // String (default: button-positive). The type of the OK button
+     *   title: '', // String. The title of the popup.
+     *   subTitle: '', // String (optional). The sub-title of the popup.
+     *   template: '', // String (optional). The html template to place in the popup body.
+     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
+     *   cancelText: '', // String (default: 'Cancel'). The text of the Cancel button.
+     *   cancelType: '', // String (default: 'button-default'). The type of the Cancel button.
+     *   okText: '', // String (default: 'OK'). The text of the OK button.
+     *   okType: '', // String (default: 'button-positive'). The type of the OK button.
      * }
      * ```
-    */
-    confirm: function(opts) {
-      return this.showPopup({
-        content: opts.content || '',
-        title: opts.title || '',
-        buttons: [
-          {
-            text: opts.cancelText || 'Cancel' ,
-            type: opts.cancelType || 'button-default',
-            onTap: function(e) { e.preventDefault(); }
-          },
-          {
-            text: opts.okText || 'OK',
-            type: opts.okType || 'button-positive',
-            onTap: function(e) {
-              return true;
-            }
-          }
-        ]
-      });
-    },
+     *
+     * @returns {object} A promise which is resolved when the popup is closed. Has one additional
+     * function `close`, which can be called with any value to programmatically close the popup
+     * with the given value.
+     */
+    confirm: showConfirm,
 
     /**
      * @ngdoc method
      * @name $ionicPopup#prompt
-     * @description show a simple prompt dialog.
+     * @description Show a simple prompt popup, which has an input, OK button, and Cancel button.
+     * Resolves the promise with the value of the input if the user presses OK, and with undefined
+     * if the user presses Cancel.
      *
      * ```javascript
      *  $ionicPopup.prompt({
      *    title: 'Password Check',
-     *    content: 'Enter your secret password',
+     *    template: 'Enter your secret password',
      *    inputType: 'password',
      *    inputPlaceholder: 'Your password'
      *  }).then(function(res) {
      *    console.log('Your password is', res);
      *  });
      * ```
-     *
-     * @returns {Promise} that resolves with the entered data
-     * @param {data} object The options for showing a prompt dialog, of the form:
+     * @param {object} options The options for showing the prompt popup, of the form:
      *
      * ```
      * {
-     *   content: // String. The content of the popup
-     *   title: // String. The title of the popup
-     *   subTitle: // String. The sub title of the popup
-     *   inputType: // String (default: "text"). The type of input to use
-     *   inputPlaceholder: // String (default: ""). A placeholder to use for the input.
-     *   cancelText: // String. The text of the Cancel button
-     *   cancelType: // String (default: button-default). The type of the kCancel button
-     *   okText: // String. The text of the OK button
-     *   okType: // String (default: button-positive). The type of the OK button
+     *   title: '', // String. The title of the popup.
+     *   subTitle: '', // String (optional). The sub-title of the popup.
+     *   template: '', // String (optional). The html template to place in the popup body.
+     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
+     *   inputType: // String (default: 'text'). The type of input to use
+     *   inputPlaceholder: // String (default: ''). A placeholder to use for the input.
+     *   cancelText: // String (default: 'Cancel'. The text of the Cancel button.
+     *   cancelType: // String (default: 'button-default'). The type of the Cancel button.
+     *   okText: // String (default: 'OK'). The text of the OK button.
+     *   okType: // String (default: 'button-positive'). The type of the OK button.
      * }
      * ```
-    */
-    prompt: function(opts) {
-      var scope = $rootScope.$new(true);
-      scope.data = {};
-      return this.showPopup({
-        content: opts.content || '<input ng-model="data.response" type="' + (opts.inputType || 'text') + '" placeholder="' + (opts.inputPlaceholder || '') + '">',
-        title: opts.title || '',
-        subTitle: opts.subTitle || '',
-        scope: scope,
-        buttons: [
-          {
-            text: opts.cancelText || 'Cancel',
-            type: opts.cancelType|| 'button-default',
-            onTap: function(e) { e.preventDefault(); }
-          },
-          {
-            text: opts.okText || 'OK',
-            type: opts.okType || 'button-positive',
-            onTap: function(e) {
-              return scope.data.response;
-            }
+     *
+     * @returns {object} A promise which is resolved when the popup is closed. Has one additional
+     * function `close`, which can be called with any value to programmatically close the popup
+     * with the given value.
+     */
+    prompt: showPrompt,
+    /**
+     * @private for testing
+     */
+    _createPopup: createPopup,
+    _popupStack: popupStack
+  };
+
+  return $ionicPopup;
+
+  function createPopup(options) {
+    options = angular.extend({
+      scope: null,
+      title: '',
+      buttons: [],
+    }, options || {});
+
+    deprecated.field(CONTENT_POPUP_DEPRECATED, $log.warn, options, 'content', options.content);
+
+    var popupPromise = $ionicTemplateLoader.compile({
+      template: TPL_POPUP,
+      scope: options.scope && options.scope.$new(),
+      appendTo: $document[0].body
+    });
+    var contentPromise = options.templateUrl ?
+      $ionicTemplateLoader.load(options.templateUrl) :
+      $q.when(options.template || options.content || '');
+
+    return $q.all([popupPromise, contentPromise])
+    .then(function(results) {
+      var self = results[0];
+      var content = results[1];
+      var responseDeferred = $q.defer();
+
+      self.responseDeferred = responseDeferred;
+
+      //Can't ng-bind-html for popup-body because it can be insecure html
+      //(eg an input in case of prompt)
+      var body = angular.element(self.element[0].querySelector('.popup-body'));
+      if (content) {
+        body.html(content);
+        $compile(body.contents())(self.scope);
+      } else {
+        body.remove();
+      }
+
+      angular.extend(self.scope, {
+        title: options.title,
+        buttons: options.buttons,
+        subTitle: options.subTitle,
+        $buttonTapped: function(button, event) {
+          var result = (button.onTap || angular.noop)(event);
+          event = event.originalEvent || event; //jquery events
+
+          if (!event.defaultPrevented) {
+            responseDeferred.resolve(result);
           }
-        ]
+        }
       });
+
+      self.show = function() {
+        if (self.isShown) return;
+
+        ionic.requestAnimationFrame(function() {
+          self.element.removeClass('popup-hidden');
+          self.element.addClass('popup-showing active');
+          focusLastButton(self.element);
+          //Fix for ios: if we center the element twice, it always gets
+          //position right. Otherwise, it doesn't
+          ionic.DomUtil.centerElementByMargin(self.element[0]);
+          //One frame after it's visible, position it
+          ionic.requestAnimationFrame(function() {
+            ionic.DomUtil.centerElementByMargin(self.element[0]);
+          });
+        });
+
+        self.isShown = true;
+      };
+      self.hide = function(callback) {
+        callback = callback || angular.noop;
+        if (!self.isShown) return callback();
+
+        self.element.removeClass('active');
+        self.element.addClass('popup-hidden');
+        $timeout(callback, 250);
+
+        self.isShown = false;
+      };
+      self.remove = function() {
+        if (self.removed) return;
+
+        self.hide(function() {
+          self.element.remove();
+          self.scope.$destroy();
+        });
+
+        self.removed = true;
+      };
+
+      return self;
+    });
+  }
+
+  function showPopup(options) {
+    var popupPromise = $ionicPopup._createPopup(options);
+    var previousPopup = popupStack[0];
+
+    if (previousPopup) {
+      previousPopup.hide();
     }
 
-  };
+    var resultPromise = $timeout(angular.noop, previousPopup ? config.stackPushDelay : 0)
+    .then(function() { return popupPromise; })
+    .then(function(popup) {
+      if (!previousPopup) {
+        //Add popup-open & backdrop if this is first popup
+        document.body.classList.add('popup-open');
+        $ionicBackdrop.retain();
+      }
+      popupStack.unshift(popup);
+      popup.show();
+
+      //DEPRECATED: notify the promise with an object with a close method
+      popup.responseDeferred.notify({
+        close: resultPromise.close
+      });
+
+      return popup.responseDeferred.promise.then(function(result) {
+        var index = popupStack.indexOf(popup);
+        if (index !== -1) {
+          popupStack.splice(index, 1);
+        }
+        popup.remove();
+
+        var previousPopup = popupStack[0];
+        if (previousPopup) {
+          previousPopup.show();
+        } else {
+          //Remove popup-open & backdrop if this is last popup
+          document.body.classList.remove('popup-open');
+          $ionicBackdrop.release();
+        }
+
+        return result;
+      });
+    });
+
+    function close(result) {
+      popupPromise.then(function(popup) {
+        if (!popup.removed) {
+          popup.responseDeferred.resolve(result);
+        }
+      });
+    }
+    resultPromise.close = close;
+
+    return resultPromise;
+  }
+
+  function focusLastButton(element) {
+    var buttons = element[0].querySelectorAll('button');
+    var lastButton = buttons[buttons.length-1];
+    if(lastButton) {
+      lastButton.focus();
+    }
+  }
+
+  function showAlert(opts) {
+    return showPopup( angular.extend({
+      buttons: [{
+        text: opts.okText || 'OK',
+        type: opts.okType || 'button-positive',
+        onTap: function(e) {
+          return true;
+        }
+      }]
+    }, opts || {}) );
+  }
+
+  function showConfirm(opts) {
+    return showPopup( angular.extend({
+      buttons: [{
+        text: opts.cancelText || 'Cancel' ,
+        type: opts.cancelType || 'button-default',
+        onTap: function(e) { return false; }
+      }, {
+        text: opts.okText || 'OK',
+        type: opts.okType || 'button-positive',
+        onTap: function(e) { return true; }
+      }]
+    }, opts || {}) );
+  }
+
+  function showPrompt(opts) {
+    var scope = $rootScope.$new(true);
+    scope.data = {};
+    return showPopup( angular.extend({
+      template: '<input ng-model="data.response" type="' + (opts.inputType || 'text') +
+        '" placeholder="' + (opts.inputPlaceholder || '') + '">',
+      scope: scope,
+      buttons: [{
+        text: opts.cancelText || 'Cancel',
+        type: opts.cancelType|| 'button-default',
+        onTap: function(e) { e.preventDefault(); }
+      }, {
+        text: opts.okText || 'OK',
+        type: opts.okType || 'button-positive',
+        onTap: function(e) {
+          return scope.data.response || '';
+        }
+      }]
+    }, opts || {}) );
+  }
 }]);
 
-})(ionic);
 
 angular.module('ionic.service.templateLoad', [])
 
 /**
  * @private
  */
-.factory('$ionicTemplateLoader', ['$q', '$http', '$templateCache', function($q, $http, $templateCache) {
+.factory('$ionicTemplateLoader', [
+  '$compile',
+  '$controller',
+  '$http',
+  '$q',
+  '$rootScope',
+  '$templateCache',
+function($compile, $controller, $http, $q, $rootScope, $templateCache) {
+
   return {
-    load: function(url) {
-      return $http.get(url, {cache: $templateCache})
-      .then(function(response) {
-        return response.data && response.data.trim();
-      });
-    }
+    load: fetchTemplate,
+    compile: loadAndCompile
   };
+
+  function fetchTemplate(url) {
+    return $http.get(url, {cache: $templateCache})
+    .then(function(response) {
+      return response.data && response.data.trim();
+    });
+  }
+
+  function loadAndCompile(options) {
+    options = angular.extend({
+      template: '',
+      templateUrl: '',
+      scope: null,
+      controller: null,
+      locals: {},
+      appendTo: null
+    }, options || {});
+
+    var templatePromise = options.templateUrl ?
+      this.load(options.templateUrl) :
+      $q.when(options.template);
+
+    return templatePromise.then(function(template) {
+      var controller;
+      var scope = options.scope || $rootScope.$new();
+
+      //Incase template doesn't have just one root element, do this
+      var element = angular.element('<div>').html(template).contents();
+
+      if (options.controller) {
+        controller = $controller(
+          options.controller,
+          angular.extend(options.locals, {
+            $scope: scope
+          })
+        );
+        element.children().data('$ngControllerController', controller);
+      }
+      if (options.appendTo) {
+        angular.element(options.appendTo).append(element);
+      }
+
+      $compile(element)(scope);
+
+      return {
+        element: element,
+        scope: scope
+      };
+    });
+  }
+
 }]);
 
 angular.module('ionic.service.view', ['ui.router', 'ionic.service.platform'])
@@ -35503,32 +35644,6 @@ function($scope, $element) {
 (function() {
 'use strict';
 
-angular.module('ionic.ui.loading', [])
-
-/**
- * @private
- * $ionicLoading service is documented
- */
-.directive('ionLoading', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    link: function($scope, $element){
-      $element.addClass($scope.animation || '');
-    },
-    template: '<div class="loading-backdrop" ng-class="{\'show-backdrop\': showBackdrop}">' +
-                '<div class="loading" ng-transclude>' +
-                '</div>' +
-              '</div>'
-  };
-});
-
-})();
-
-(function() {
-'use strict';
-
 angular.module('ionic.ui.modal', [])
 
 /*
@@ -36039,71 +36154,6 @@ function($ionicNgClick, $animate) {
     }
   };
 }]);
-
-(function() {
-'use strict';
-
-angular.module('ionic.ui.popup', [])
-
-/**
- * @private
- */
-.directive('ionPopupBackdrop', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    template: '<div class="popup-backdrop"></div>'
-  }
-})
-
-/**
- * @private
- */
-.directive('ionPopup', ['$ionicBind', function($ionicBind) {
-  return {
-    restrict: 'E',
-    replace: true,
-    transclude: true,
-    scope: true,
-    template:
-      '<div class="popup">' +
-        '<div class="popup-head">' +
-          '<h3 class="popup-title" ng-bind-html="title"></h3>' +
-          '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
-        '</div>' +
-        '<div class="popup-body" ng-transclude>' +
-        '</div>' +
-        '<div class="popup-buttons row">' +
-          '<button ng-repeat="button in buttons" ng-click="_buttonTapped(button, $event)" class="button col" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
-        '</div>' +
-      '</div>',
-    link: function($scope, $element, $attr) {
-      $ionicBind($scope, $attr, {
-        title: '@',
-        buttons: '=',
-        $onButtonTap: '&onButtonTap',
-        $onClose: '&onClose'
-      });
-
-      $scope._buttonTapped = function(button, event) {
-        var result = button.onTap && button.onTap(event);
-
-        // A way to return false
-        if((event.originalEvent || event).defaultPrevented) {
-          return $scope.$onClose({button: button, result: false, event: event });
-        }
-
-        // Truthy test to see if we should close the window
-        if(result) {
-          return $scope.$onClose({button: button, result: result, event: event });
-        }
-        $scope.$onButtonTap({button: button, event: event});
-      }
-    }
-  };
-}]);
-
-})();
 
 (function(ionic) {
 'use strict';
