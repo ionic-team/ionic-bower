@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1600
+ * Ionic, v1.0.0-beta.1-nightly-1605
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1600'
+  version: '1.0.0-beta.1-nightly-1605'
 };
 
 (function(ionic) {
@@ -32273,7 +32273,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1600
+ * Ionic, v1.0.0-beta.1-nightly-1605
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35580,17 +35580,19 @@ angular.module('ionic.ui.navBar', ['ionic.service.view', 'ngSanitize'])
    * @ngdoc method
    * @name $ionicNavBarDelegate#showBackButton
    * @description
-   * Set whether the {@link ionic.directive:ionNavBackButton} should be shown
+   * Set/get whether the {@link ionic.directive:ionNavBackButton} is shown
    * (if it exists).
-   * @param {boolean} show Whether to show the back button.
+   * @param {boolean=} show Whether to show the back button.
+   * @returns {boolean} Whether the back button is shown.
    */
   'showBackButton',
   /**
    * @ngdoc method
    * @name $ionicNavBarDelegate#showBar
    * @description
-   * Set whether the {@link ionic.directive:ionNavBar} should be shown.
+   * Set/get whether the {@link ionic.directive:ionNavBar} is shown.
    * @param {boolean} show Whether to show the bar.
+   * @returns {boolean} Whether the bar is shown.
    */
   'showBar',
   /**
@@ -35672,12 +35674,18 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
   };
 
   this.showBackButton = function(show) {
-    $scope.backButtonShown = !!show;
+    if (arguments.length) {
+      $scope.backButtonShown = !!show;
+    }
+    return !!($scope.hasBackButton && $scope.backButtonShown);
   };
 
   this.showBar = function(show) {
-    $scope.isInvisible = !show;
-    $scope.$parent.$hasHeader = !!show;
+    if (arguments.length) {
+      $scope.isInvisible = !show;
+      $scope.$parent.$hasHeader = !!show;
+    }
+    return !$scope.isInvisible;
   };
 
   this.setTitle = function(title) {
