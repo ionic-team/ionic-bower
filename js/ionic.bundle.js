@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1619
+ * Ionic, v1.0.0-beta.1-nightly-1620
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1619'
+  version: '1.0.0-beta.1-nightly-1620'
 };
 
 (function(ionic) {
@@ -32285,7 +32285,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1619
+ * Ionic, v1.0.0-beta.1-nightly-1620
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35079,6 +35079,11 @@ function($timeout, $controller, $ionicBind) {
  * ```
  */
 .directive('ionInfiniteScroll', ['$timeout', function($timeout) {
+  function calculateMaxValue(distance, maximum, isPercent) {
+    return isPercent ?
+      maximum * (1 - parseInt(distance,10) / 100) :
+      maximum - parseInt(distance, 10);
+  }
   return {
     restrict: 'E',
     require: ['^$ionicScroll', 'ionInfiniteScroll'],
@@ -35093,10 +35098,17 @@ function($timeout, $controller, $ionicBind) {
       this.isLoading = false;
       this.scrollView = null; //given by link function
       this.getMaxScroll = function() {
-        var dist = $attrs.distance || '1%';
-        return dist.indexOf('%') > -1 ?
-          this.scrollView.getScrollMax().top * (1 - parseInt(dist,10) / 100) :
-          this.scrollView.getScrollMax().top - parseInt(dist, 10);
+        var distance = ($attrs.distance || '1%').trim();
+        var isPercent = distance.indexOf('%') !== -1;
+        var maxValues = this.scrollView.getScrollMax();
+        return {
+          left: this.scrollView.options.scrollingX ?
+            calculateMaxValue(distance, maxValues.left, isPercent) :
+            -1,
+          top: this.scrollView.options.scrollingY ?
+            calculateMaxValue(distance, maxValues.top, isPercent) :
+            -1
+        };
       };
     }],
     link: function($scope, $element, $attrs, ctrls) {
@@ -35116,14 +35128,22 @@ function($timeout, $controller, $ionicBind) {
         infiniteScrollCtrl.isLoading = false;
       });
 
-      scrollCtrl.$element.on('scroll', ionic.animationFrameThrottle(function() {
-        if (!infiniteScrollCtrl.isLoading &&
-            scrollView.getValues().top >= infiniteScrollCtrl.getMaxScroll()) {
+      scrollCtrl.$element.on('scroll', ionic.animationFrameThrottle(checkInfiniteBounds));
+      setTimeout(checkInfiniteBounds);
+      
+      function checkInfiniteBounds() {
+        if (infiniteScrollCtrl.isLoading) return;
+
+        var scrollValues = scrollView.getValues();
+        var maxScroll = infiniteScrollCtrl.getMaxScroll();
+
+        if ((maxScroll.left !== -1 && scrollValues.left >= maxScroll.left) ||
+            (maxScroll.top !== -1 && scrollValues.top >= maxScroll.top)) {
           $element[0].classList.add('active');
           infiniteScrollCtrl.isLoading = true;
           $scope.$parent.$apply($attrs.onInfinite || '');
         }
-      }));
+      }
     }
   };
 }]);
