@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1618
+ * Ionic, v1.0.0-beta.1-nightly-1619
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -633,10 +633,12 @@ function($animate, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q
           var self = this;
           var templatePromise = options.templateUrl ?
             $ionicTemplateLoader.load(options.templateUrl) :
+            //options.content: deprecated
             $q.when(options.template || options.content || '');
 
           if (!this.isShown) {
-            this.hasBackdrop = !options.noBackdrop;
+            //options.showBackdrop: deprecated
+            this.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
             if (this.hasBackdrop) {
               $ionicBackdrop.retain();
             }
