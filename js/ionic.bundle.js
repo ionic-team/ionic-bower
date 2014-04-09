@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1622
+ * Ionic, v1.0.0-beta.1-nightly-1623
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1622'
+  version: '1.0.0-beta.1-nightly-1623'
 };
 
 (function(ionic) {
@@ -32285,7 +32285,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1622
+ * Ionic, v1.0.0-beta.1-nightly-1623
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34994,9 +34994,9 @@ function($timeout, $controller, $ionicBind) {
     '<div class="scroll-refresher">' +
       '<div class="ionic-refresher-content">' +
         '<i class="icon {{pullingIcon}} icon-pulling"></i>' +
-        '<div class="text-pulling" ng-bind-html="pullingText"></div>' +
+        '<div class="text-pulling" ng-bind-html="pullingText || \'&nbsp;\'"></div>' +
         '<i class="icon {{refreshingIcon}} icon-refreshing"></i>' +
-        '<div class="text-refreshing" ng-bind-html="refreshingText"></div>' +
+        '<div class="text-refreshing" ng-bind-html="refreshingText || \'&nbsp;\'"></div>' +
       '</div>' +
     '</div>',
     compile: function($element, $attrs) {
@@ -35136,7 +35136,7 @@ function($timeout, $controller, $ionicBind) {
       //Check bounds on start, after scrollView is fully rendered
       setTimeout(checkBounds);
       scrollCtrl.$element.on('scroll', checkBounds);
-      
+
       function checkInfiniteBounds() {
         if (infiniteScrollCtrl.isLoading) return;
 
