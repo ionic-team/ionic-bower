@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1623
+ * Ionic, v1.0.0-beta.1-nightly-1624
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1623'
+  version: '1.0.0-beta.1-nightly-1624'
 };
 
 (function(ionic) {
@@ -32285,7 +32285,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1623
+ * Ionic, v1.0.0-beta.1-nightly-1624
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35892,6 +35892,8 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
   this._animateTitles = function() {
     var oldTitleEl, newTitleEl, currentTitles;
 
+    void 0;
+
     //If we have any title right now
     //(or more than one, they could be transitioning on switch),
     //replace the first one with an oldTitle element
@@ -35949,7 +35951,7 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
  * {@link ionic.directive:ionNavButtons}.
  *
  * Assign an [animation class](/docs/components#animations) to the element to
- * enable animated changing of titles (recommended: 'slide-left-right' or 'nav-title-slide-ios7')
+ * enable animated changing of titles (recommended: 'nav-title-slide-ios7')
  *
  * @usage
  *
