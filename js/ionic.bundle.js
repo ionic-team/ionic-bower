@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1624
+ * Ionic, v1.0.0-beta.1-nightly-1627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1624'
+  version: '1.0.0-beta.1-nightly-1627'
 };
 
 (function(ionic) {
@@ -32285,7 +32285,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1624
+ * Ionic, v1.0.0-beta.1-nightly-1627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32942,18 +32942,19 @@ function($animate, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q
             }
           });
 
-          ionic.requestAnimationFrame(function() {
-            $animate.removeClass(self.element, 'ng-hide');
-            //Fix for ios: if we center the element twice, it always gets
-            //position right. Otherwise, it doesn't
-            ionic.DomUtil.centerElementByMargin(self.element[0]);
-            //One frame after it's visible, position it
-            ionic.requestAnimationFrame(function() {
-              ionic.DomUtil.centerElementByMargin(self.element[0]);
-            });
-          });
-
           this.isShown = true;
+          ionic.requestAnimationFrame(function() {
+            if (self.isShown) {
+              $animate.removeClass(self.element, 'ng-hide');
+              //Fix for ios: if we center the element twice, it always gets
+              //position right. Otherwise, it doesn't
+              ionic.DomUtil.centerElementByMargin(self.element[0]);
+              //One frame after it's visible, position it
+              ionic.requestAnimationFrame(function() {
+                ionic.DomUtil.centerElementByMargin(self.element[0]);
+              });
+            }
+          });
         };
         loader.hide = function() {
           if (this.isShown) {
@@ -33382,7 +33383,7 @@ angular.module('ionic.service.platform', [])
 
 
 var TPL_POPUP =
-  '<div class="popup">' +
+  '<div class="popup popup-hidden">' +
     '<div class="popup-head">' +
       '<h3 class="popup-title" ng-bind-html="title"></h3>' +
       '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
@@ -33702,7 +33703,11 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
       self.show = function() {
         if (self.isShown) return;
 
+        self.isShown = true;
         ionic.requestAnimationFrame(function() {
+          //if hidden while waiting for raf, don't show
+          if (!self.isShown) return;
+
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
           focusLastButton(self.element);
@@ -33714,18 +33719,15 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
             ionic.DomUtil.centerElementByMargin(self.element[0]);
           });
         });
-
-        self.isShown = true;
       };
       self.hide = function(callback) {
         callback = callback || angular.noop;
         if (!self.isShown) return callback();
 
+        self.isShown = false;
         self.element.removeClass('active');
         self.element.addClass('popup-hidden');
         $timeout(callback, 250);
-
-        self.isShown = false;
       };
       self.remove = function() {
         if (self.removed) return;
@@ -35147,7 +35149,7 @@ function($timeout, $controller, $ionicBind) {
             (maxScroll.top !== -1 && scrollValues.top >= maxScroll.top)) {
           $element[0].classList.add('active');
           infiniteScrollCtrl.isLoading = true;
-          $scope.$parent.$apply($attrs.onInfinite || '');
+          $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
         }
       }
     }
@@ -35891,8 +35893,6 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
    */
   this._animateTitles = function() {
     var oldTitleEl, newTitleEl, currentTitles;
-
-    void 0;
 
     //If we have any title right now
     //(or more than one, they could be transitioning on switch),
