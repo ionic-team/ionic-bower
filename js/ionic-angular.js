@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1627
+ * Ionic, v1.0.0-beta.1-nightly-1628
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1100,7 +1100,7 @@ angular.module('ionic.service.platform', [])
 
 
 var TPL_POPUP =
-  '<div class="popup popup-hidden">' +
+  '<div class="popup">' +
     '<div class="popup-head">' +
       '<h3 class="popup-title" ng-bind-html="title"></h3>' +
       '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
