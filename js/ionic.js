@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1635
+ * Ionic, v1.0.0-beta.1-nightly-1637
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1635'
+  version: '1.0.0-beta.1-nightly-1637'
 };
 
 (function(ionic) {
@@ -324,6 +324,16 @@ window.ionic = {
     centerElementByMargin: function(el) {
       el.style.marginLeft = (-el.offsetWidth) / 2 + 'px';
       el.style.marginTop = (-el.offsetHeight) / 2 + 'px';
+    },
+    //Center twice, after raf, to fix a bug with ios and showing elements
+    //that have just been attached to the DOM.
+    centerElementByMarginTwice: function(el) {
+      ionic.requestAnimationFrame(function() {
+        ionic.DomUtil.centerElementByMargin(el);
+        ionic.requestAnimationFrame(function() {
+          ionic.DomUtil.centerElementByMargin(el);
+        });
+      });
     },
 
     /**
