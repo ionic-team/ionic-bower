@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1647
+ * Ionic, v1.0.0-beta.1-nightly-1650
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1647'
+  version: '1.0.0-beta.1-nightly-1650'
 };
 
 (function(ionic) {
@@ -32295,7 +32295,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1647
+ * Ionic, v1.0.0-beta.1-nightly-1650
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -34641,6 +34641,9 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  * @description
  * Adds a fixed header bar above some content.
  *
+ * Can also be a subheader (lower down) if the 'bar-subheader' class is applied.
+ * See [the header CSS docs](/docs/components/#subheader).
+ *
  * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
@@ -34670,6 +34673,9 @@ angular.module('ionic.ui.header', ['ngAnimate', 'ngSanitize'])
  *
  * @description
  * Adds a fixed footer bar below some content.
+ *
+ * Can also be a subfooter (higher up) if the 'bar-subfooter' class is applied.
+ * See [the footer CSS docs](/docs/components/#footer).
  *
  * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
