@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1645
+ * Ionic, v1.0.0-beta.1-nightly-1646
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -417,7 +417,38 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
 angular.module('ionic')
 
 /**
- * @private
+ * @ngdoc service
+ * @name $ionicBackdrop
+ * @module ionic
+ * @description
+ * Shows and hides a backdrop over the UI.  Appears behind popups, loading,
+ * and other overlays.
+ *
+ * Often, multiple UI components require a backdrop, but only one backdrop is
+ * ever needed in the DOM at a time.
+ *
+ * Therefore, each component that requires the backdrop to be shown calls
+ * `$ionicBackdrop.retain()` when it wants the backdrop, then `$ionicBackdrop.release()`
+ * when it is done with the backdrop.
+ *
+ * For each time `retain` is called, the backdrop will be shown until `release` is called.
+ *
+ * For example, if `retain` is called three times, the backdrop will be shown until `release` 
+ * is called three times.
+ *
+ * @usage
+ *
+ * ```js
+ * function MyController($scope, $ionicBackdrop, $timeout) {
+ *   //Show a backdrop for one second
+ *   $scope.action = function() {
+ *     $ionicBackdrop.retain();
+ *     $timeout(function() {
+ *       $ionicBackdrop.release();
+ *     }, 1000);
+ *   };
+ * }
+ * ```
  */
 .factory('$ionicBackdrop', [
   '$document',
@@ -429,7 +460,18 @@ function($document) {
   $document[0].body.appendChild(el[0]);
 
   return {
+    /**
+     * @ngdoc method
+     * @name $ionicBackdrop#retain
+     * @description Retains the backdrop.
+     */
     retain: retain,
+    /**
+     * @ngdoc method
+     * @name $ionicBackdrop#retain
+     * @description
+     * Releases the backdrop.
+     */
     release: release,
     // exposed for testing
     _element: el
