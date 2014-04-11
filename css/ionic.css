@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1637
+ * Ionic, v1.0.0-beta.1-nightly-1644
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2433,14 +2433,15 @@ a.subdued {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  -webkit-transition: opacity 0.15s ease-out;
-  -moz-transition: opacity 0.15s ease-out;
-  transition: opacity 0.15s ease-out;
-  opacity: 1; }
-  .backdrop.ng-hide {
-    opacity: 0; }
-  .backdrop.ng-hide-remove, .backdrop.ng-hide-add {
-    display: block !important; }
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: 0.1s opacity linear;
+  -moz-transition: 0.1s opacity linear;
+  transition: 0.1s opacity linear; }
+  .backdrop.visible {
+    visibility: visible; }
+  .backdrop.active {
+    opacity: 1; }
 
 /**
  * Bar (Headers and Footers)
@@ -3246,10 +3247,11 @@ a.subdued {
  * --------------------------------------------------
  */
 .loading {
-  -webkit-transition: opacity 0.2s ease-out;
-  -moz-transition: opacity 0.2s ease-out;
-  transition: opacity 0.2s ease-out;
-  opacity: 1;
+  -webkit-transition: 0.2s opacity linear;
+  -moz-transition: 0.2s opacity linear;
+  transition: 0.2s opacity linear;
+  visibility: hidden;
+  opacity: 0;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -3261,10 +3263,10 @@ a.subdued {
   text-align: center;
   text-overflow: ellipsis;
   font-size: 15px; }
-  .loading.ng-hide {
-    opacity: 0; }
-  .loading.ng-hide-remove, .loading.ng-hide-add {
-    display: block !important; }
+  .loading.visible {
+    visibility: visible; }
+  .loading.active {
+    opacity: 1; }
   .loading h1, .loading h2, .loading h3, .loading h4, .loading h5, .loading h6 {
     color: #fff; }
 
