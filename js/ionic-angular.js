@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1646
+ * Ionic, v1.0.0-beta.1-nightly-1647
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -345,7 +345,11 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
     show: function(opts) {
       var scope = $rootScope.$new(true);
 
-      angular.extend(scope, opts);
+      angular.extend(scope, {
+        cancel: angular.noop,
+        buttonClicked: angular.noop,
+        destructiveButtonClicked: angular.noop
+      }, opts);
 
       // Compile the template
       var element = $compile('<ion-action-sheet buttons="buttons"></ion-action-sheet>')(scope);
