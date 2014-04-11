@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1650
+ * Ionic, v1.0.0-beta.1-nightly-1651
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1650'
+  version: '1.0.0-beta.1-nightly-1651'
 };
 
 (function(ionic) {
@@ -32295,7 +32295,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1650
+ * Ionic, v1.0.0-beta.1-nightly-1651
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38627,6 +38627,14 @@ angular.module('ionic.ui.scroll')
   'scrollBy',
   /**
    * @ngdoc method
+   * @name $ionicScrollDelegate#getScrollPosition
+   * @returns {object} The scroll position of this view, with the following properties:
+   *  - `{number}` `left` The distance the user has scrolled from the left (starts at 0).
+   *  - `{number}` `top` The distance the user has scrolled from the top (starts at 0).
+   */
+  'getScrollPosition',
+  /**
+   * @ngdoc method
    * @name $ionicScrollDelegate#anchorScroll
    * @description Tell the scrollView to scroll to the element with an id
    * matching window.location.hash.
@@ -38636,6 +38644,12 @@ angular.module('ionic.ui.scroll')
    * @param {boolean=} shouldAnimate Whether the scroll should animate.
    */
   'anchorScroll',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate.#getScrollView
+   * @returns {object} The scrollView associated with this delegate.
+   */
+  'getScrollView',
   /**
    * @ngdoc method
    * @name $ionicScrollDelegate#rememberScrollPosition
@@ -38802,6 +38816,14 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   });
 
   this._rememberScrollId = null;
+
+  this.getScrollView = function() {
+    return this.scrollView;
+  };
+
+  this.getScrollPosition = function() {
+    return this.scrollView.getValues();
+  };
 
   this.resize = function() {
     return $timeout(resize);
