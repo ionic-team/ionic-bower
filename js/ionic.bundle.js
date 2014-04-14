@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1661
+ * Ionic, v1.0.0-beta.1-nightly-1662
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1661'
+  version: '1.0.0-beta.1-nightly-1662'
 };
 
 (function(ionic) {
@@ -31662,7 +31662,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1661
+ * Ionic, v1.0.0-beta.1-nightly-1662
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32365,7 +32365,11 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
     options || (options = {});
     var delay = options.delay || options.showDelay || 0;
 
-    loadingShowDelay = $timeout(getLoader, delay).then(function(loader) {
+    //If loading.show() was called previously, cancel it and show with our new options
+    $timeout.cancel(loadingShowDelay);
+    loadingShowDelay = $timeout(angular.noop, delay);
+
+    loadingShowDelay.then(getLoader).then(function(loader) {
       return loader.show(options);
     });
 
@@ -32383,7 +32387,8 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
   }
 
   function hideLoader() {
-    loadingShowDelay.then(getLoader).then(function(loader) {
+    $timeout.cancel(loadingShowDelay);
+    getLoader().then(function(loader) {
       loader.hide();
     });
   }
