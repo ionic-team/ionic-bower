@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1663
+ * Ionic, v1.0.0-beta.1-nightly-1664
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1663'
+  version: '1.0.0-beta.1-nightly-1664'
 };
 
 (function(ionic) {
@@ -31662,7 +31662,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1663
+ * Ionic, v1.0.0-beta.1-nightly-1664
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32074,7 +32074,6 @@ IonicModule
   };
 }]);
 
-
 function delegateService(methodNames) {
   return ['$log', function($log) {
     var delegate = this;
@@ -32145,7 +32144,7 @@ function delegateService(methodNames) {
             'corresponding element with delegate-handle="'+this.handle+'"!' +
             methodName + '() was not called!\n' +
             'Possible cause: If you are calling ' + methodName + '() immediately, and ' +
-            'your element with delegate-handle="messagesScroll" is a child of your ' +
+            'your element with delegate-handle="' + methodName + '" is a child of your ' +
             'controller, then your element may not be compiled yet. Put a $timeout ' +
             'around your call to ' + methodName + '() and try again.'
           );
