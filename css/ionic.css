@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1688
+ * Ionic, v1.0.0-beta.1-nightly-1689
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6216,9 +6216,9 @@ a.button {
 .invisible {
   visibility: hidden; }
 
-.footer-hide .bar-footer, .footer-hide .tabs {
+.keyboard-open .bar-footer, .keyboard-open .tabs, .footer-hide .bar-footer, .footer-hide .tabs {
   display: none; }
-.footer-hide .has-footer, .footer-hide .has-tabs {
+.keyboard-open .has-footer, .keyboard-open .has-tabs, .footer-hide .has-footer, .footer-hide .has-tabs {
   bottom: 0; }
 
 .inline {
