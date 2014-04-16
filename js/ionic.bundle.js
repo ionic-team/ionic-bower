@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1679
+ * Ionic, v1.0.0-beta.1-nightly-1680
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1679'
+  version: '1.0.0-beta.1-nightly-1680'
 };
 
 (function(ionic) {
@@ -31662,7 +31662,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1679
+ * Ionic, v1.0.0-beta.1-nightly-1680
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32891,8 +32891,6 @@ var POPUP_TPL =
     '</div>' +
   '</div>';
 
-var POPUP_CONTENT_DEPRECATED = '$ionicPopup options.content has been deprecated. Use options.template instead.';
-
 /**
  * @ngdoc service
  * @name $ionicPopup
@@ -33149,8 +33147,6 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
       title: '',
       buttons: [],
     }, options || {});
-
-    deprecated.field(POPUP_CONTENT_DEPRECATED, $log.warn, options, 'content', options.content);
 
     var popupPromise = $ionicTemplateLoader.compile({
       template: POPUP_TPL,
