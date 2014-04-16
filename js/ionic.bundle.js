@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1675
+ * Ionic, v1.0.0-beta.1-nightly-1677
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1675'
+  version: '1.0.0-beta.1-nightly-1677'
 };
 
 (function(ionic) {
@@ -31662,7 +31662,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1675
+ * Ionic, v1.0.0-beta.1-nightly-1677
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32141,10 +32141,10 @@ function delegateService(methodNames) {
         if (!matchingInstancesFound) {
           return $log.warn(
             'Delegate for handle "'+this.handle+'" could not find a ' +
-            'corresponding element with delegate-handle="'+this.handle+'"!' +
+            'corresponding element with delegate-handle="'+this.handle+'"! ' +
             methodName + '() was not called!\n' +
             'Possible cause: If you are calling ' + methodName + '() immediately, and ' +
-            'your element with delegate-handle="' + methodName + '" is a child of your ' +
+            'your element with delegate-handle="' + this.handle + '" is a child of your ' +
             'controller, then your element may not be compiled yet. Put a $timeout ' +
             'around your call to ' + methodName + '() and try again.'
           );
