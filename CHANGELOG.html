@@ -1,12 +1,11 @@
-<p><a name="1.0.0-beta.1-nightly-1680"></a></p>
-<h3 id="1-0-0-beta-1-nightly-1680-changes-since-1-0-0-beta-1-2014-04-16-">1.0.0-beta.1-nightly-1680 (changes since 1.0.0-beta.1) (2014-04-16)</h3>
+<p><a name="1.0.0-beta.1-nightly-1687"></a></p>
+<h3 id="1-0-0-beta-1-nightly-1687-changes-since-1-0-0-beta-1-2014-04-16-">1.0.0-beta.1-nightly-1687 (changes since 1.0.0-beta.1) (2014-04-16)</h3>
 <h4 id="bug-fixes">Bug Fixes</h4>
 <ul>
 <li><strong>$ionicActionSheet:</strong> provide default functions for options (<a href="https://github.com/driftyco/ionic/commit/ba39fb0046cf9ff8b3d18fb8ac7d10d734afe192">ba39fb00</a>, closes <a href="https://github.com/driftyco/ionic/issues/1013">#1013</a>)</li>
 <li><strong>$ionicLoading:</strong> stop race condition with show and hide (<a href="https://github.com/driftyco/ionic/commit/eb1dee9303177d47315a02cf327e909c14c05b22">eb1dee93</a>, closes <a href="https://github.com/driftyco/ionic/issues/1100">#1100</a>)</li>
 <li><strong>$ionicModal:</strong> make it use jqLite#remove() (<a href="https://github.com/driftyco/ionic/commit/104c642019a05ef70dee8de84a51b99272266d63">104c6420</a>, closes <a href="https://github.com/driftyco/ionic/issues/1138">#1138</a>)</li>
 <li><strong>$ionicPopup:</strong> stop race condition with show then hide (<a href="https://github.com/driftyco/ionic/commit/698c93fcaf5def44cc01783faa6e188c15379e40">698c93fc</a>)</li>
-<li><strong>checkbox:</strong> Remove tap highlight and fix checkbox appearance in Firefox, closes #496 (<a href="https://github.com/driftyco/ionic/commit/b0b446d5d93cbfca027c828bc38bf827b998b6c5">b0b446d5</a>)</li>
 <li><strong>header:</strong> Header input too long on Android 4.2, closes #1081 (<a href="https://github.com/driftyco/ionic/commit/b654e02e0a8b852875509753eb106f60c11fa3c4">b654e02e</a>)</li>
 <li><strong>ionHeaderBar:</strong> make it align after elements properly load (<a href="https://github.com/driftyco/ionic/commit/d00aaa59455fdd6b4e34ac4547e86e1049734954">d00aaa59</a>)</li>
 <li><strong>ionInfiniteScroll:</strong><ul>
@@ -14,8 +13,8 @@
 <li>work properly if past horizontal boundaries (<a href="https://github.com/driftyco/ionic/commit/d58fff72ded2a74c1d4e757adfb256b7e74fb578">d58fff72</a>, closes <a href="https://github.com/driftyco/ionic/issues/1073">#1073</a>)</li>
 </ul>
 </li>
-<li><strong>ionTab:</strong> make sure all tab-nav attributes are re-interpolated on change (<a href="https://github.com/driftyco/ionic/commit/757f1819313de58a3d419d0ec6075c80e40f3d61">757f1819</a>, closes <a href="https://github.com/driftyco/ionic/issues/955">#955</a>, <a href="https://github.com/driftyco/ionic/issues/1071">#1071</a>)</li>
 <li><strong>loading:</strong> fix not hiding after two shows, always cancel delay (<a href="https://github.com/driftyco/ionic/commit/4216266f2108f0b3c348b0888d37a59440099be4">4216266f</a>, closes <a href="https://github.com/driftyco/ionic/issues/1130">#1130</a>)</li>
+<li><strong>modal:</strong> Increase delay of removing .modal-open to prevent focus under modals (<a href="https://github.com/driftyco/ionic/commit/83fd11c5655e38226029fc00c43b921430fb6b32">83fd11c5</a>)</li>
 <li><strong>scroll:</strong> Allow scrolling when touchstart target is an input, #1078 (<a href="https://github.com/driftyco/ionic/commit/8af018b1facff1dee753f0cf4c341f0a91285d6a">8af018b1</a>)</li>
 </ul>
 <h4 id="features">Features</h4>
@@ -82,8 +81,3 @@ reusable.</p>
   &lt;i class=&quot;icon ion-chevron-right icon-accessory&quot;&gt;&lt;/i&gt;
 &lt;/a&gt;
 </code></pre><p> (<a href="https://github.com/driftyco/ionic/commit/c7e3defca51f03368be84e7f86d71e7ec2fb374c">c7e3defc</a>)</p>
-<ul>
-<li>ionic.Platform.isCordova() has been renamed to
-ionic.Platform.isWebView()
-(<a href="https://github.com/driftyco/ionic/commit/5c300dd3e094e20ca90a311a704dfa0864b320f4">5c300dd3</a>)</li>
-</ul>
