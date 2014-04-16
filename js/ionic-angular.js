@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1677
+ * Ionic, v1.0.0-beta.1-nightly-1679
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1671,7 +1671,7 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
       buttons: [{
         text: opts.cancelText || 'Cancel',
         type: opts.cancelType|| 'button-default',
-        onTap: function(e) { e.preventDefault(); }
+        onTap: function(e) {}
       }, {
         text: opts.okText || 'OK',
         type: opts.okType || 'button-positive',
