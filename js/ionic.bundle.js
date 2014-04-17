@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1706
+ * Ionic, v1.0.0-beta.1-nightly-1709
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1706'
+  version: '1.0.0-beta.1-nightly-1709'
 };
 
 (function(ionic) {
@@ -31667,7 +31667,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1706
+ * Ionic, v1.0.0-beta.1-nightly-1709
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35556,10 +35556,6 @@ IonicModule
         $element[0].classList.remove('active');
         $timeout(function() {
           scrollView.resize();
-          $timeout(function() {
-            var max = scrollView.getScrollMax();
-            scrollView.scrollTo(max.left, max.top, true, null, true);
-          }, 5, false);
         }, 0, false);
         infiniteScrollCtrl.isLoading = false;
       };
