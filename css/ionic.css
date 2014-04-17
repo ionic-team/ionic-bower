@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1709
+ * Ionic, v1.0.0-beta.1-nightly-1711
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4206,6 +4206,13 @@ textarea {
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   border: 0; }
 
+.platform-android2 textarea, .platform-android2 input[type="text"], .platform-android2 input[type="password"], .platform-android2 input[type="datetime"], .platform-android2 input[type="datetime-local"], .platform-android2 input[type="date"], .platform-android2 input[type="month"], .platform-android2 input[type="time"], .platform-android2 input[type="week"], .platform-android2 input[type="number"], .platform-android2 input[type="email"], .platform-android2 input[type="url"], .platform-android2 input[type="search"], .platform-android2 input[type="tel"], .platform-android2 input[type="color"], .platform-android4_0 textarea, .platform-android4_0 input[type="text"], .platform-android4_0 input[type="password"], .platform-android4_0 input[type="datetime"], .platform-android4_0 input[type="datetime-local"], .platform-android4_0 input[type="date"], .platform-android4_0 input[type="month"], .platform-android4_0 input[type="time"], .platform-android4_0 input[type="week"], .platform-android4_0 input[type="number"], .platform-android4_0 input[type="email"], .platform-android4_0 input[type="url"], .platform-android4_0 input[type="search"], .platform-android4_0 input[type="tel"], .platform-android4_0 input[type="color"] {
+  position: relative;
+  top: -9999px;
+  -webkit-transform: translate3d(0, 9999px, 0);
+  -moz-transform: translate3d(0, 9999px, 0);
+  transform: translate3d(0, 9999px, 0); }
+
 input[type="radio"], input[type="checkbox"] {
   margin: 0;
   line-height: normal; }
@@ -4301,7 +4308,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     border-radius: 28px;
     background: #fff;
     content: ' ';
-    transition: background-color 0.1s ease-in-out; }
+    transition: background-color 20ms ease-in-out; }
 
 .checkbox input:checked:before, input:checked + .checkbox-icon:before {
   border-width: 2px; }
@@ -6209,9 +6216,9 @@ a.button {
 .invisible {
   visibility: hidden; }
 
-.footer-hide .bar-footer, .footer-hide .tabs {
+.keyboard-open .bar-footer, .keyboard-open .tabs, .footer-hide .bar-footer, .footer-hide .tabs {
   display: none; }
-.footer-hide .has-footer, .footer-hide .has-tabs {
+.keyboard-open .has-footer, .keyboard-open .has-tabs, .footer-hide .has-footer, .footer-hide .has-tabs {
   bottom: 0; }
 
 .inline {

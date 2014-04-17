@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1709
+ * Ionic, v1.0.0-beta.1-nightly-1711
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -888,7 +888,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       return $timeout(function(){
         $document[0].body.classList.remove('modal-open');
         self.el.classList.add('hide');
-      }, 350);
+      }, 500);
     },
 
     /**
