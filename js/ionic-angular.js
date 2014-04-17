@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1696
+ * Ionic, v1.0.0-beta.1-nightly-1706
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3881,13 +3881,28 @@ IonicModule
         return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-loading-d';
       };
 
-      $scope.$on('scroll.infiniteScrollComplete', function() {
+      var onInfinite = function() {
+        $element[0].classList.add('active');
+        infiniteScrollCtrl.isLoading = true;
+        $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+      }
+
+      var finishInfiniteScroll = function() {
         $element[0].classList.remove('active');
         $timeout(function() {
           scrollView.resize();
+          $timeout(function() {
+            var max = scrollView.getScrollMax();
+            scrollView.scrollTo(max.left, max.top, true, null, true);
+          }, 5, false);
         }, 0, false);
         infiniteScrollCtrl.isLoading = false;
+      };
+
+      $scope.$on('scroll.infiniteScrollComplete', function() {
+        finishInfiniteScroll();
       });
+
       $scope.$on('$destroy', function() {
         scrollCtrl.$element.off('scroll', checkBounds);
       });
@@ -3904,11 +3919,13 @@ IonicModule
         var scrollValues = scrollView.getValues();
         var maxScroll = infiniteScrollCtrl.getMaxScroll();
 
+        if(maxScroll.top === 0) {
+          return;
+        }
+             
         if ((maxScroll.left !== -1 && scrollValues.left >= maxScroll.left) ||
             (maxScroll.top !== -1 && scrollValues.top >= maxScroll.top)) {
-          $element[0].classList.add('active');
-          infiniteScrollCtrl.isLoading = true;
-          $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+          onInfinite();
         }
       }
     }

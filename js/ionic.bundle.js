@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1696
+ * Ionic, v1.0.0-beta.1-nightly-1706
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1696'
+  version: '1.0.0-beta.1-nightly-1706'
 };
 
 (function(ionic) {
@@ -3987,28 +3987,34 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     if (helperElem.style[perspectiveProperty] !== undef) {
 
-      return function(left, top, zoom) {
+      return function(left, top, zoom, wasResize) {
         content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0)';
         self.__repositionScrollbars();
-        self.triggerScrollEvent();
+        if(!wasResize) {
+          self.triggerScrollEvent();
+        }
       };
 
     } else if (helperElem.style[transformProperty] !== undef) {
 
-      return function(left, top, zoom) {
+      return function(left, top, zoom, wasResize) {
         content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px)';
         self.__repositionScrollbars();
-        self.triggerScrollEvent();
+        if(!wasResize) {
+          self.triggerScrollEvent();
+        }
       };
 
     } else {
 
-      return function(left, top, zoom) {
+      return function(left, top, zoom, wasResize) {
         content.style.marginLeft = left ? (-left/zoom) + 'px' : '';
         content.style.marginTop = top ? (-top/zoom) + 'px' : '';
         content.style.zoom = zoom || '';
         self.__repositionScrollbars();
-        self.triggerScrollEvent();
+        if(!wasResize) {
+          self.triggerScrollEvent();
+        }
       };
 
     }
@@ -4051,7 +4057,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     self.__resizeScrollbars();
 
     // Refresh scroll position
-    self.scrollTo(self.__scrollLeft, self.__scrollTop, true);
+    self.scrollTo(self.__scrollLeft, self.__scrollTop, true, null, true);
 
   },
 
@@ -4265,8 +4271,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param animate {Boolean} Whether the scrolling should happen using an animation
    * @param zoom {Number} Zoom level to go to
    */
-  scrollTo: function(left, top, animate, zoom) {
-
+  scrollTo: function(left, top, animate, zoom, wasResize) {
     var self = this;
 
     // Stop deceleration
@@ -4334,7 +4339,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     }
 
     // Publish new values
-    self.__publish(left, top, zoom, animate);
+    self.__publish(left, top, zoom, animate, wasResize);
 
   },
 
@@ -4786,7 +4791,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param top {Number} Top scroll position
    * @param animate {Boolean} Whether animation should be used to move to the new coordinates
    */
-  __publish: function(left, top, zoom, animate) {
+  __publish: function(left, top, zoom, animate, wasResize) {
 
     var self = this;
 
@@ -4822,7 +4827,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
           // Push values out
           if (self.__callback) {
-            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel);
+            self.__callback(self.__scrollLeft, self.__scrollTop, self.__zoomLevel, wasResize);
           }
 
         }
@@ -4856,7 +4861,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       // Push values out
       if (self.__callback) {
-        self.__callback(left, top, zoom);
+        self.__callback(left, top, zoom, wasResize);
       }
 
       // Fix max scroll ranges
@@ -31662,7 +31667,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1696
+ * Ionic, v1.0.0-beta.1-nightly-1706
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35541,13 +35546,28 @@ IonicModule
         return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-loading-d';
       };
 
-      $scope.$on('scroll.infiniteScrollComplete', function() {
+      var onInfinite = function() {
+        $element[0].classList.add('active');
+        infiniteScrollCtrl.isLoading = true;
+        $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+      }
+
+      var finishInfiniteScroll = function() {
         $element[0].classList.remove('active');
         $timeout(function() {
           scrollView.resize();
+          $timeout(function() {
+            var max = scrollView.getScrollMax();
+            scrollView.scrollTo(max.left, max.top, true, null, true);
+          }, 5, false);
         }, 0, false);
         infiniteScrollCtrl.isLoading = false;
+      };
+
+      $scope.$on('scroll.infiniteScrollComplete', function() {
+        finishInfiniteScroll();
       });
+
       $scope.$on('$destroy', function() {
         scrollCtrl.$element.off('scroll', checkBounds);
       });
@@ -35564,11 +35584,13 @@ IonicModule
         var scrollValues = scrollView.getValues();
         var maxScroll = infiniteScrollCtrl.getMaxScroll();
 
+        if(maxScroll.top === 0) {
+          return;
+        }
+             
         if ((maxScroll.left !== -1 && scrollValues.left >= maxScroll.left) ||
             (maxScroll.top !== -1 && scrollValues.top >= maxScroll.top)) {
-          $element[0].classList.add('active');
-          infiniteScrollCtrl.isLoading = true;
-          $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+          onInfinite();
         }
       }
     }
