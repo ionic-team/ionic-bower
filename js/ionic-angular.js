@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1711
+ * Ionic, v1.0.0-beta.1-nightly-1712
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4483,9 +4483,8 @@ IonicModule
  */
 IonicModule
 .directive('ionNavBackButton', [
-  '$ionicNgClick',
   '$animate',
-function($ionicNgClick, $animate) {
+function($animate) {
   return {
     restrict: 'E',
     require: '^ionNavBar',
@@ -4494,7 +4493,11 @@ function($ionicNgClick, $animate) {
       return function($scope, $element, $attr, navBarCtrl) {
         if (!$attr.ngClick) {
           $scope.$navBack = navBarCtrl.back;
-          $ionicNgClick($scope, $element, '$navBack($event)');
+          $element.on('click', function(event){
+            $scope.$apply(function() {
+              $scope.$navBack(event);
+            });
+          });
         }
 
         //If the current viewstate does not allow a back button,
@@ -4947,9 +4950,6 @@ function( $ionicViewService,   $state,   $compile,   $controller,   $animate) {
 }]);
 
 
-// Similar to Angular's ngTouch, however it uses Ionic's tap detection
-// and click simulation. ngClick
-
 IonicModule
 
 .config(['$provide', function($provide) {
@@ -4964,10 +4964,6 @@ IonicModule
  * @private
  */
 .factory('$ionicNgClick', ['$parse', function($parse) {
-  function onRelease(e) {
-    // wire this up to Ionic's tap/click simulation
-    ionic.tap.simulateClick(e.target, e);
-  }
   return function(scope, element, clickExpr) {
     var clickHandler = $parse(clickExpr);
 
@@ -4977,15 +4973,9 @@ IonicModule
       });
     });
 
-    ionic.on("release", onRelease, element[0]);
-
     // Hack for iOS Safari's benefit. It goes searching for onclick handlers and is liable to click
     // something else nearby.
     element.onclick = function(event) { };
-
-    scope.$on('$destroy', function () {
-      ionic.off("release", onRelease, element[0]);
-    });
   };
 }])
 
@@ -5828,7 +5818,7 @@ function($rootScope, $animate, $ionicBind, $compile) {
 }]);
 
 IonicModule
-.directive('ionTabNav', ['$ionicNgClick', function($ionicNgClick) {
+.directive('ionTabNav', [function() {
   return {
     restrict: 'E',
     replace: true,
@@ -5862,7 +5852,11 @@ IonicModule
           tabsCtrl.select(tabCtrl.$scope, true);
         };
         if (!$attrs.ngClick) {
-          $ionicNgClick($scope, $element, 'selectTab($event)');
+          $element.on('click', function(event) {
+            $scope.$apply(function() {
+              $scope.selectTab(event);
+            });
+          });
         }
 
         $scope.getIconOn = function() {
@@ -6047,72 +6041,6 @@ function($ionicGesture, $timeout) {
 
   };
 }]);
-
-
-// Similar to Angular's ngTouch, however it uses Ionic's tap detection
-// and click simulation. ngClick
-
-(function(angular, ionic) {'use strict';
-
-angular.module('ionic.ui.touch', [])
-
-  .config(['$provide', function($provide) {
-    $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
-      // drop the default ngClick directive
-      $delegate.shift();
-      return $delegate;
-    }]);
-  }])
-
-  /**
-   * @private
-   */
-  .factory('$ionicNgClick', ['$parse', function($parse) {
-    function onRelease(e) {
-      // wire this up to Ionic's tap/click simulation
-      ionic.tap.simulateClick(e.target, e);
-    }
-    return function(scope, element, clickExpr) {
-      var clickHandler = $parse(clickExpr);
-
-      element.on('click', function(event) {
-        scope.$apply(function() {
-          clickHandler(scope, {$event: (event)});
-        });
-      });
-
-      ionic.on("release", onRelease, element[0]);
-
-      // Hack for iOS Safari's benefit. It goes searching for onclick handlers and is liable to click
-      // something else nearby.
-      element.onclick = function(event) { };
-
-      scope.$on('$destroy', function () {
-        ionic.off("release", onRelease, element[0]);
-      });
-    };
-  }])
-
-  .directive('ngClick', ['$ionicNgClick', function($ionicNgClick) {
-    return function(scope, element, attr) {
-      $ionicNgClick(scope, element, attr.ngClick);
-    };
-  }])
-
-  .directive('ionStopEvent', function () {
-    function stopEvent(e) {
-      e.stopPropagation();
-    }
-    return {
-      restrict: 'A',
-      link: function (scope, element, attr) {
-        element.bind(attr.ionStopEvent, stopEvent);
-      }
-    };
-  });
-
-
-})(window.angular, window.ionic);
 
 /**
  * @ngdoc directive
