@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1716
+ * Ionic, v1.0.0-beta.1-nightly-1717
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2997,7 +2997,7 @@ a.subdued {
 .tabs-item-hide, .tabs-item-hide > .tabs {
   display: none; }
 
-.tabs-icon-top .tab-item, .tabs-icon-bottom .tab-item {
+.tabs-icon-top > .tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item {
   font-size: 12px;
   line-height: 14px; }
 
@@ -3007,12 +3007,12 @@ a.subdued {
   height: 32px;
   font-size: 32px; }
 
-.tabs-icon-left .tab-item, .tabs-icon-right .tab-item {
+.tabs-icon-left > .tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
   font-size: 12px; }
-  .tabs-icon-left .tab-item .icon, .tabs-icon-right .tab-item .icon {
+  .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
     display: inline-block;
     vertical-align: top; }
-    .tabs-icon-left .tab-item .icon:before, .tabs-icon-right .tab-item .icon:before {
+    .tabs-icon-left > .tabs .tab-item .icon:before, .tabs-icon-right > .tabs .tab-item .icon:before {
       font-size: 24px;
       line-height: 49px; }
 

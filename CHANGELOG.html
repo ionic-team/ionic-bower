@@ -1,5 +1,5 @@
-<p><a name="1.0.0-beta.1-nightly-1716"></a></p>
-<h3 id="1-0-0-beta-1-nightly-1716-changes-since-1-0-0-beta-1-2014-04-18-">1.0.0-beta.1-nightly-1716 (changes since 1.0.0-beta.1) (2014-04-18)</h3>
+<p><a name="1.0.0-beta.1-nightly-1717"></a></p>
+<h3 id="1-0-0-beta-1-nightly-1717-changes-since-1-0-0-beta-1-2014-04-18-">1.0.0-beta.1-nightly-1717 (changes since 1.0.0-beta.1) (2014-04-18)</h3>
 <h4 id="bug-fixes">Bug Fixes</h4>
 <ul>
 <li><strong>$ionicActionSheet:</strong> provide default functions for options (<a href="https://github.com/driftyco/ionic/commit/ba39fb0046cf9ff8b3d18fb8ac7d10d734afe192">ba39fb00</a>, closes <a href="https://github.com/driftyco/ionic/issues/1013">#1013</a>)</li>
@@ -17,6 +17,7 @@
 <li><strong>loading:</strong> fix not hiding after two shows, always cancel delay (<a href="https://github.com/driftyco/ionic/commit/4216266f2108f0b3c348b0888d37a59440099be4">4216266f</a>, closes <a href="https://github.com/driftyco/ionic/issues/1130">#1130</a>)</li>
 <li><strong>modal:</strong> Increase delay of removing .modal-open to prevent focus under modals (<a href="https://github.com/driftyco/ionic/commit/83fd11c5655e38226029fc00c43b921430fb6b32">83fd11c5</a>)</li>
 <li><strong>scroll:</strong> Allow scrolling when touchstart target is an input, #1078 (<a href="https://github.com/driftyco/ionic/commit/8af018b1facff1dee753f0cf4c341f0a91285d6a">8af018b1</a>)</li>
+<li><strong>tabs:</strong> Tab icon align within nested tabs, closes #1093 (<a href="https://github.com/driftyco/ionic/commit/2a6f7029805596e56373213cf3c4139cc7d7d70c">2a6f7029</a>)</li>
 </ul>
 <h4 id="features">Features</h4>
 <ul>
@@ -62,22 +63,3 @@ way to prevent the popup from closing is to call
 });
 </code></pre>
 <p> (<a href="https://github.com/driftyco/ionic/commit/cb1a5f62285fe5939274bdda9db169af69eddf35">cb1a5f62</a>)</p>
-<ul>
-<li>The developer should be stating exactly how an icon
-should show, but previously the right nav arrow icon violates this by
-automatically showing a right arrow when an item was an anchor or
-button. Instead of using the <code>:after</code> item selector, which was always
-applied by default, it uses the same markup as <code>item-icon-right</code>, which
-is easier to understand, customizable and not a hard coded default.</li>
-</ul>
-<p>This change removes the <code>:after</code> nav icon styling, and creates a new
-class, <code>icon-accessory</code>, based off of similar CSS. The change makes a
-nav arrow highly customizable, allows RTL developers to easily control
-the arrow direction, and the accessory class is something that&#39;s
-reusable.</p>
-<p>An example of right side arrow using <code>ion-chevron-right</code> as the icon:</p>
-<pre><code>&lt;a class=&quot;item item-icon-right&quot; href=&quot;#&quot;&gt;
-  Check mail
-  &lt;i class=&quot;icon ion-chevron-right icon-accessory&quot;&gt;&lt;/i&gt;
-&lt;/a&gt;
-</code></pre><p> (<a href="https://github.com/driftyco/ionic/commit/c7e3defca51f03368be84e7f86d71e7ec2fb374c">c7e3defc</a>)</p>
