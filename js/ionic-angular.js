@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1764
+ * Ionic, v1.0.0-beta.1-nightly-1765
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3555,6 +3555,7 @@ function($timeout, $controller, $ionicBind) {
     restrict: 'E',
     require: '^?ionNavView',
     scope: true,
+    priority: 800,
     compile: function(element, attr) {
       var innerElement;
 
