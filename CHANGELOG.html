@@ -1,5 +1,5 @@
-<p><a name="1.0.0-beta.1-nightly-1747"></a></p>
-<h3 id="1-0-0-beta-1-nightly-1747-changes-since-1-0-0-beta-1-2014-04-21-">1.0.0-beta.1-nightly-1747 (changes since 1.0.0-beta.1) (2014-04-21)</h3>
+<p><a name="1.0.0-beta.1-nightly-1761"></a></p>
+<h3 id="1-0-0-beta-1-nightly-1761-changes-since-1-0-0-beta-1-2014-04-21-">1.0.0-beta.1-nightly-1761 (changes since 1.0.0-beta.1) (2014-04-21)</h3>
 <h4 id="bug-fixes">Bug Fixes</h4>
 <ul>
 <li><strong>$ionicActionSheet:</strong> provide default functions for options (<a href="https://github.com/driftyco/ionic/commit/ba39fb0046cf9ff8b3d18fb8ac7d10d734afe192">ba39fb00</a>, closes <a href="https://github.com/driftyco/ionic/issues/1013">#1013</a>)</li>
@@ -13,6 +13,7 @@
 <li>work properly if past horizontal boundaries (<a href="https://github.com/driftyco/ionic/commit/d58fff72ded2a74c1d4e757adfb256b7e74fb578">d58fff72</a>, closes <a href="https://github.com/driftyco/ionic/issues/1073">#1073</a>)</li>
 </ul>
 </li>
+<li><strong>ionList:</strong> show reorder/delete on item creation if list is showing (<a href="https://github.com/driftyco/ionic/commit/09a7729914ee3e24fe12535f223f9f755c8791e1">09a77299</a>, closes <a href="https://github.com/driftyco/ionic/issues/1181">#1181</a>)</li>
 <li><strong>loading:</strong> fix not hiding after two shows, always cancel delay (<a href="https://github.com/driftyco/ionic/commit/4216266f2108f0b3c348b0888d37a59440099be4">4216266f</a>, closes <a href="https://github.com/driftyco/ionic/issues/1130">#1130</a>)</li>
 <li><strong>modal:</strong> Increase delay of removing .modal-open to prevent focus under modals (<a href="https://github.com/driftyco/ionic/commit/83fd11c5655e38226029fc00c43b921430fb6b32">83fd11c5</a>)</li>
 <li><strong>tabs:</strong> Tab icon align within nested tabs, closes #1093 (<a href="https://github.com/driftyco/ionic/commit/2a6f7029805596e56373213cf3c4139cc7d7d70c">2a6f7029</a>)</li>
@@ -22,37 +23,3 @@
 <li><strong>$ionicBackdrop:</strong> add backdrop show/hide service (<a href="https://github.com/driftyco/ionic/commit/730a33b9c34babaa7f4c861fa172935eaabea740">730a33b9</a>, closes <a href="https://github.com/driftyco/ionic/issues/1084">#1084</a>)</li>
 <li><strong>$ionicScrollDelegate:</strong> add getScrollView(), getScrollPosition() (<a href="https://github.com/driftyco/ionic/commit/b5ef9313cfd227c716a2096a5ca40d38179ba50f">b5ef9313</a>, closes <a href="https://github.com/driftyco/ionic/issues/1117">#1117</a>)</li>
 </ul>
-<h4 id="breaking-changes">Breaking Changes</h4>
-<ul>
-<li>$ionicPopup.show()&#39;s button onTap function has changed.</li>
-</ul>
-<p>When using <code>$ionicPopup.show()</code>, previously a button&#39;s onTap function
-would only result in closing the popup and resolving the promise if the
- <code>onTap(event)</code> function returned a truthy value.</p>
-<p>Now, a button&#39;s onTap event will <em>always</em> close the popup and resolve
-the popup&#39;s promise, no matter the return value, by default. The only
-way to prevent the popup from closing is to call
-<code>event.preventDefault()</code>.</p>
-<p>Change your code from this:</p>
-<pre><code class="lang-js">$ionicPopup.show({
-  buttons: [{
-    onTap: function(event) {
-      if (!shouldClosePopup) {
-        return false;
-      }
-    }
-  }]
-});
-</code></pre>
-<p>To this:</p>
-<pre><code class="lang-js">$ionicPopup.show({
-  buttons: [{
-    onTap: function(event) {
-      if (!shouldClosePopup) {
-        event.preventDefault();
-      }
-    }
-  }]
-});
-</code></pre>
-<p> (<a href="https://github.com/driftyco/ionic/commit/cb1a5f62285fe5939274bdda9db169af69eddf35">cb1a5f62</a>)</p>
