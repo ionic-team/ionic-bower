@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1762
+ * Ionic, v1.0.0-beta.1-nightly-1763
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1762'
+  version: '1.0.0-beta.1-nightly-1763'
 };
 
 (function(ionic) {
@@ -31959,7 +31959,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1762
+ * Ionic, v1.0.0-beta.1-nightly-1763
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -33497,7 +33497,7 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
           ionic.DomUtil.centerElementByMarginTwice(self.element[0]);
-          focusLastButton(self.element);
+          focusInputOrButton(self.element);
         });
       };
       self.hide = function(callback) {
@@ -33580,11 +33580,14 @@ function($animate, $ionicTemplateLoader, $ionicBackdrop, $log, $q, $timeout, $ro
     return resultPromise;
   }
 
-  function focusLastButton(element) {
-    var buttons = element[0].querySelectorAll('button');
-    var lastButton = buttons[buttons.length-1];
-    if(lastButton) {
-      lastButton.focus();
+  function focusInputOrButton(element) {
+    var inputs = element[0].querySelectorAll('input');
+    if (!inputs.length) {
+      inputs = element[0].querySelectorAll('button');
+    }
+    var last = inputs[inputs.length-1];
+    if(last) {
+      last.focus();
     }
   }
 
