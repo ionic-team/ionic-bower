@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1761
+ * Ionic, v1.0.0-beta.1-nightly-1762
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1761'
+  version: '1.0.0-beta.1-nightly-1762'
 };
 
 (function(ionic) {
@@ -31959,7 +31959,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1761
+ * Ionic, v1.0.0-beta.1-nightly-1762
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37103,9 +37103,9 @@ IonicModule
     '<div class="scroll-refresher">' +
       '<div class="ionic-refresher-content">' +
         '<i class="icon {{pullingIcon}} icon-pulling"></i>' +
-        '<div class="text-pulling" ng-bind-html="pullingText || \'&nbsp;\'"></div>' +
+        '<div class="text-pulling" ng-bind-html="pullingText"></div>' +
         '<i class="icon {{refreshingIcon}} icon-refreshing"></i>' +
-        '<div class="text-refreshing" ng-bind-html="refreshingText || \'&nbsp;\'"></div>' +
+        '<div class="text-refreshing" ng-bind-html="refreshingText"></div>' +
       '</div>' +
     '</div>',
     compile: function($element, $attrs) {
