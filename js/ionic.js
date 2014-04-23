@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1793
+ * Ionic, v1.0.0-beta.1-nightly-1803
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1793'
+  version: '1.0.0-beta.1-nightly-1803'
 };
 
 (function(ionic) {
@@ -3563,8 +3563,15 @@ ionic.views.Scroll = ionic.views.View.inherit({
       penetrationAcceleration : 0.08,
 
       // The ms interval for triggering scroll events
-      scrollEventInterval: 10
-    };
+      scrollEventInterval: 10,
+
+      getContentWidth: function() {
+        return Math.max(self.__content.scrollWidth, self.__content.offsetWidth);
+      },
+      getContentHeight: function() {
+        return Math.max(self.__content.scrollHeight, self.__content.offsetHeight);
+      }
+		};
 
     for (var key in options) {
       this.options[key] = options[key];
@@ -3597,9 +3604,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
     };
 
     this.triggerScrollEvent = ionic.throttle(function() {
-
-      self.onScroll();
-
       ionic.trigger('scroll', {
         scrollTop: self.__scrollTop,
         scrollLeft: self.__scrollLeft,
@@ -4219,10 +4223,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // Update Scroller dimensions for changed content
     // Add padding to bottom of content
     this.setDimensions(
-      this.__container.clientWidth,
-      this.__container.clientHeight,
-      Math.max(this.__content.scrollWidth, this.__content.offsetWidth),
-      Math.max(this.__content.scrollHeight, this.__content.offsetHeight)
+    	this.__container.clientWidth,
+    	this.__container.clientHeight,
+      this.options.getContentWidth(),
+      this.options.getContentHeight()
     );
   },
   /*
@@ -4312,7 +4316,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param contentHeight {Integer} Outer height of inner element
    */
   setDimensions: function(clientWidth, clientHeight, contentWidth, contentHeight) {
-
     var self = this;
 
     // Only update values which are defined

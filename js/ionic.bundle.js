@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1793
+ * Ionic, v1.0.0-beta.1-nightly-1803
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1793'
+  version: '1.0.0-beta.1-nightly-1803'
 };
 
 (function(ionic) {
@@ -3570,8 +3570,15 @@ ionic.views.Scroll = ionic.views.View.inherit({
       penetrationAcceleration : 0.08,
 
       // The ms interval for triggering scroll events
-      scrollEventInterval: 10
-    };
+      scrollEventInterval: 10,
+
+      getContentWidth: function() {
+        return Math.max(self.__content.scrollWidth, self.__content.offsetWidth);
+      },
+      getContentHeight: function() {
+        return Math.max(self.__content.scrollHeight, self.__content.offsetHeight);
+      }
+		};
 
     for (var key in options) {
       this.options[key] = options[key];
@@ -3604,9 +3611,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
     };
 
     this.triggerScrollEvent = ionic.throttle(function() {
-
-      self.onScroll();
-
       ionic.trigger('scroll', {
         scrollTop: self.__scrollTop,
         scrollLeft: self.__scrollLeft,
@@ -4226,10 +4230,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // Update Scroller dimensions for changed content
     // Add padding to bottom of content
     this.setDimensions(
-      this.__container.clientWidth,
-      this.__container.clientHeight,
-      Math.max(this.__content.scrollWidth, this.__content.offsetWidth),
-      Math.max(this.__content.scrollHeight, this.__content.offsetHeight)
+    	this.__container.clientWidth,
+    	this.__container.clientHeight,
+      this.options.getContentWidth(),
+      this.options.getContentHeight()
     );
   },
   /*
@@ -4319,7 +4323,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param contentHeight {Integer} Outer height of inner element
    */
   setDimensions: function(clientWidth, clientHeight, contentWidth, contentHeight) {
-
     var self = this;
 
     // Only update values which are defined
@@ -31959,7 +31962,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1793
+ * Ionic, v1.0.0-beta.1-nightly-1803
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32370,6 +32373,430 @@ IonicModule
     });
   };
 }]);
+
+IonicModule
+.factory('$collectionRepeatDataSource', [
+  '$cacheFactory',
+  '$parse',
+function($cacheFactory, $parse) {
+  var nextCacheId = 0;
+  function CollectionRepeatDataSource(options) {
+    var self = this;
+    this.scope = options.scope;
+    this.transcludeFn = options.transcludeFn;
+    this.transcludeParent = options.transcludeParent;
+
+    this.keyExpr = options.keyExpr;
+    this.listExpr = options.listExpr;
+    this.trackByExpr = options.trackByExpr;
+
+    this.heightGetter = options.heightGetter;
+    this.widthGetter = options.widthGetter;
+
+    if (this.trackByExpr) {
+      var trackByGetter = $parse(this.trackByExpr);
+      var hashFnLocals = {$id: hashKey};
+      this.trackByIdGetter = function(index, value) {
+        hashFnLocals[self.keyExpr] = value;
+        hashFnLocals.$index = index;
+        return trackByGetter(self.scope, hashFnLocals);
+      };
+    } else {
+      this.trackByIdGetter = function(index, value) {
+        return hashKey(value);
+      };
+    }
+
+    var cacheKeys = {};
+    this.itemCache = $cacheFactory(nextCacheId++, {size: 500});
+
+    var _put = this.itemCache.put;
+    this.itemCache.put = function(key, value) {
+      cacheKeys[key] = true;
+      return _put(key, value);
+    };
+
+    var _remove = this.itemCache.remove;
+    this.itemCache.remove = function(key) {
+      delete cacheKeys[key];
+      return _remove(key);
+    };
+    this.itemCache.keys = function() {
+      return cacheKeys;
+    };
+  }
+  CollectionRepeatDataSource.prototype = {
+    destroy: function() {
+      this.dimensions.length = 0;
+      for (var key in this.itemCache.keys()) {
+        var item = this.itemCache.get(key);
+        item.element.remove();
+        item.scope.$destroy();
+      }
+      this.itemCache.removeAll();
+    },
+    calculateDataDimensions: function() {
+      var totalWidth = 0;
+      var totalHeight = 0;
+      var locals = {};
+
+      this.dimensions = this.data.map(function(value, index) {
+        locals[this.keyExpr] = value;
+        locals.$index = index;
+        var ret = {
+          width: this.widthGetter(this.scope, locals),
+          height: this.heightGetter(this.scope, locals),
+          totalWidth: totalWidth,
+          totalHeight: totalHeight
+        };
+        totalWidth += ret.width;
+        totalHeight += ret.height;
+        return ret;
+      }, this);
+      this.totalWidth = totalWidth;
+      this.totalHeight = totalHeight;
+    },
+    compileItem: function(index, value) {
+      var key = this.trackByIdGetter(index, value);
+      var cachedItem = this.itemCache.get(key);
+      if (cachedItem) return cachedItem;
+
+      var item = {};
+      item.scope = this.scope.$new();
+      item.scope[this.keyExpr] = value;
+
+      this.transcludeFn(item.scope, function(clone) {
+        item.element = clone;
+        item.element[0].classList.add('scroll-collection-item');
+      });
+
+      return this.itemCache.put(key, item);
+    },
+    getItem: function(index) {
+      var value = this.data[index];
+      var item = this.compileItem(index, value);
+
+      if (item.scope.$index !== index) {
+        item.scope.$index = item.index = index;
+        item.scope.$first = (index === 0);
+        item.scope.$last = (index === (this.getLength() - 1));
+        item.scope.$middle = !(item.scope.$first || item.scope.$last);
+        item.scope.$odd = !(item.scope.$even = (index&1) === 0);
+      }
+
+      return item;
+    },
+    detachItem: function(item) {
+      var i, node, parent;
+      //Don't .remove(), that will destroy element data
+      for (i = 0; i < item.element.length; i++) {
+        node = item.element[i];
+        parent = node.parentNode;
+        parent && parent.removeChild(node);
+      }
+      //Don't .$destroy(), just stop watchers and events firing
+      disconnectScope(item.scope);
+    },
+    attachItem: function(item) {
+      if (!item.element[0].parentNode) {
+        this.transcludeParent[0].appendChild(item.element[0]);
+      }
+      reconnectScope(item.scope);
+    },
+    getLength: function() {
+      return this.data && this.data.length || 0;
+    },
+    setData: function(value) {
+      this.data = value;
+      this.calculateDataDimensions();
+    },
+  };
+
+  return CollectionRepeatDataSource;
+}]);
+
+/**
+* Computes a hash of an 'obj'.
+ * Hash of a:
+ *  string is string
+ *  number is number as string
+ *  object is either result of calling $$hashKey function on the object or uniquely generated id,
+ *         that is also assigned to the $$hashKey property of the object.
+ *
+ * @param obj
+ * @returns {string} hash string such that the same input will have the same hash string.
+ *         The resulting string key is in 'type:hashKey' format.
+ */
+function hashKey(obj) {
+  var objType = typeof obj,
+      key;
+
+  if (objType == 'object' && obj !== null) {
+    if (typeof (key = obj.$$hashKey) == 'function') {
+      // must invoke on object to keep the right this
+      key = obj.$$hashKey();
+    } else if (key === undefined) {
+      key = obj.$$hashKey = ionic.Utils.nextUid();
+    }
+  } else {
+    key = obj;
+  }
+
+  return objType + ':' + key;
+}
+
+function disconnectScope(scope) {
+  if (scope.$root === scope) {
+    return; // we can't disconnect the root node;
+  }
+  var parent = scope.$parent;
+  scope.$$disconnected = true;
+  // See Scope.$destroy
+  if (parent.$$childHead === scope) {
+    parent.$$childHead = scope.$$nextSibling;
+  }
+  if (parent.$$childTail === scope) {
+    parent.$$childTail = scope.$$prevSibling;
+  }
+  if (scope.$$prevSibling) {
+    scope.$$prevSibling.$$nextSibling = scope.$$nextSibling;
+  }
+  if (scope.$$nextSibling) {
+    scope.$$nextSibling.$$prevSibling = scope.$$prevSibling;
+  }
+  scope.$$nextSibling = scope.$$prevSibling = null;
+}
+
+function reconnectScope(scope) {
+  if (scope.$root === scope) {
+    return; // we can't disconnect the root node;
+  }
+  if (!scope.$$disconnected) {
+    return;
+  }
+  var parent = scope.$parent;
+  scope.$$disconnected = false;
+  // See Scope.$new for this logic...
+  scope.$$prevSibling = parent.$$childTail;
+  if (parent.$$childHead) {
+    parent.$$childTail.$$nextSibling = scope;
+    parent.$$childTail = scope;
+  } else {
+    parent.$$childHead = parent.$$childTail = scope;
+  }
+}
+
+
+IonicModule
+.factory('$collectionRepeatManager', [
+  '$rootScope',
+  '$timeout',
+function($rootScope, $timeout) {
+  var BUFFER_SPACES = 1;
+  function CollectionRepeatManager(options) {
+    var self = this;
+    this.dataSource = options.dataSource;
+    this.element = options.element;
+    this.scrollView = options.scrollView;
+    this.itemSizePrimary = options.itemSizePrimary;
+    this.itemSizeSecondary = options.itemSizeSecondary;
+
+    if (this.scrollView.options.scrollingX && this.scrollView.options.scrollingY) {
+      throw new Error("TODO MOVE THIS ERROR TO THE DIRECTIVE. Cannot create a scrollCollectionRepeatManager on an element that scrolls both x and y. Choose one, yo!");
+    }
+
+    this.isVertical = !!this.scrollView.options.scrollingY;
+    this.renderedItems = {};
+
+    this.lastRenderScrollValue = this.bufferTransformOffset = this.hasBufferStartIndex =
+      this.hasBufferEndIndex = this.bufferItemsLength = 0;
+
+    this.scrollView.__$callback = this.scrollView.__callback;
+    this.scrollView.__callback = angular.bind(this, this.renderScroll);
+
+    function getter(prop) {
+      return self[prop];
+    }
+
+    function getItemHeight(item) { return item.height; }
+    function getItemWidth(item) { return item.width; }
+    function getItemTotalHeight(item) { return item.totalHeight; }
+    function getItemTotalWidth(item) { return item.totalWidth; }
+    function getViewportSize() { return self.viewportSize; }
+    if (this.isVertical) {
+      this.scrollView.options.getContentHeight = getViewportSize;
+      this.itemSizePrimary = getItemHeight;
+      this.itemSizeSecondary = getItemWidth;
+      this.itemTotalSizePrimary = getItemTotalHeight;
+      this.itemTotalSizeSecondary = getItemTotalWidth;
+
+      this.getScrollValue = function() {
+        return this.scrollView.__scrollTop;
+      };
+      this.getScrollMaxValue = function() {
+        return this.scrollView.__maxScrollTop;
+      };
+      this.getScrollSize = function() {
+        return this.scrollView.__clientHeight;
+      };
+      this.getScrollSizeSecondary = function() {
+        return this.scrollView.__clientWidth;
+      };
+      this.transformString = function(y, x) {
+        return 'translate3d('+x+'px,'+y+'px,0)';
+      };
+    } else {
+      this.scrollView.options.getContentWidth = getViewportSize;
+      this.itemSizePrimary = getItemWidth;
+      this.itemSizeSecondary = getItemHeight;
+      this.itemTotalSizePrimary = getItemTotalWidth;
+      this.itemTotalSizeSecondary = getItemTotalHeight;
+
+      this.getScrollValue = function() { return this.scrollView.__scrollLeft; };
+      this.getScrollMaxValue = function() {
+        return this.scrollView.__maxScrollLeft;
+      };
+      this.getScrollSize = function() {
+        return this.scrollView.__clientWidth;
+      };
+      this.getScrollSizeSecondary = function() {
+        return this.scrollView.__clientHeight;
+      };
+      this.transformString = function(x, y) {
+        return 'translate3d('+x+'px,'+y+'px,0)';
+      };
+    }
+  }
+
+  CollectionRepeatManager.prototype = {
+    destroy: function() {
+      for (var i in this.renderedItems) {
+        this.removeItem(i);
+      }
+    },
+    resize: function() {
+      this.viewportSize = this.isVertical ?
+        this.dataSource.totalHeight :
+        this.dataSource.totalWidth;
+      this.scrollView.resize();
+      this.setCurrentIndex(0);
+      this.lastRenderScrollValue = 0;
+      this.render(true);
+    },
+    setCurrentIndex: function(index, height) {
+      var dimensions = this.dataSource.dimensions;
+      this.currentIndex = index;
+
+      this.hasPrevIndex = index > 0;
+      if (this.hasPrevIndex) {
+        this.prevTotalHeight = dimensions[index - 1].totalHeight;
+      }
+      this.hasNextIndex = index + 1 < this.dataSource.getLength();
+      if (this.hasNextIndex) {
+        this.nextTotalHeight = dimensions[index + 1].totalHeight;
+        this.nextHeight = dimensions[index + 1].height;
+      }
+    },
+    renderScroll: ionic.animationFrameThrottle(function(transformLeft, transformTop, zoom, wasResize) {
+      if (this.isVertical) {
+        transformTop = this.getTransformPosition(transformTop);
+      } else {
+        transformLeft = this.getTransformPosition(transformLeft);
+      }
+      return this.scrollView.__$callback(transformLeft, transformTop, zoom, wasResize);
+    }),
+    getTransformPosition: function(transformPos) {
+      if ((this.hasNextIndex && transformPos >= this.nextTotalHeight) ||
+          (this.hasPrevIndex && transformPos < this.prevTotalHeight) ||
+           Math.abs(transformPos - this.lastRenderScrollValue) > 100) {
+        this.render();
+      }
+      return transformPos - this.lastRenderScrollValue;
+    },
+    getIndexForScrollValue: function(i, scrollValue) {
+      var dimensions = this.dataSource.dimensions;
+      var rect;
+      //Scrolling up
+      if (scrollValue <= dimensions[i].totalHeight) {
+        while ( (rect = dimensions[i - 1]) && rect.totalHeight > scrollValue) {
+          i--;
+        }
+      //Scrolling down
+      } else {
+        while ( (rect = dimensions[i + 1]) && rect.totalHeight < scrollValue) {
+          i++;
+        }
+      }
+      return i;
+    },
+    render: function(shouldRedrawAll) {
+      var i;
+      if (shouldRedrawAll) {
+        for (i in this.renderedItems) {
+          this.removeItem(i);
+        }
+      }
+      var scrollValue = this.getScrollValue();
+      var scrollDelta = scrollValue - this.lastRenderScrollValue;
+      var scrollSize = this.getScrollSize();
+      var scrollSizeEnd = scrollSize + scrollValue;
+
+      var dimensions = this.dataSource.dimensions;
+
+      var startIndex = this.getIndexForScrollValue(this.currentIndex, scrollValue);
+      var bufferStartIndex = Math.max(0, startIndex - 1);
+      var startHeight = dimensions[bufferStartIndex].totalHeight;
+
+      i = bufferStartIndex;
+      var rect;
+      while ( (rect = dimensions[i]) && (rect.totalHeight - rect.height) < scrollSizeEnd) {
+        this.renderItem(i, rect.totalHeight - startHeight, 0);
+        i++;
+      }
+      var endIndex = i - 1;
+      var bufferEndIndex = Math.min(this.dataSource.getLength() - 1, endIndex + 1);
+      if (bufferEndIndex !== endIndex) {
+        this.renderItem(bufferEndIndex, dimensions[bufferEndIndex].totalHeight - startHeight, 0);
+      }
+
+      for (i in this.renderedItems) {
+        if (i < bufferStartIndex || i > bufferEndIndex) {
+          this.removeItem(i);
+        }
+      }
+
+      this.setCurrentIndex(startIndex);
+      this.lastRenderScrollValue = startHeight;
+
+      if (!this.dataSource.scope.$$phase) {
+        this.dataSource.scope.$digest();
+      }
+    },
+    renderItem: function(dataIndex, primaryPos, secondaryPos) {
+      var self = this;
+      var item = this.dataSource.getItem(dataIndex);
+      if (item) {
+        this.dataSource.attachItem(item);
+        item.element[0].style[ionic.CSS.TRANSFORM] = this.transformString(
+          primaryPos, secondaryPos, secondaryPos
+        );
+        this.renderedItems[dataIndex] = item;
+      } else {
+        delete this.renderedItems[dataIndex];
+      }
+    },
+    removeItem: function(dataIndex) {
+      var item = this.renderedItems[dataIndex];
+      if (item) {
+        this.dataSource.detachItem(item);
+        delete this.renderedItems[dataIndex];
+      }
+    }
+  };
+
+  return CollectionRepeatManager;
+}]);
+
 
 function delegateService(methodNames) {
   return ['$log', function($log) {
@@ -35469,6 +35896,77 @@ IonicModule
 
   };
 });
+
+IonicModule
+.directive('collectionRepeat', [
+  '$collectionRepeatManager',
+  '$collectionRepeatDataSource',
+  '$parse',
+function($collectionRepeatManager, $collectionRepeatDataSource, $parse) {
+  return {
+    priority: 1000,
+    transclude: 'element',
+    terminal: true,
+    $$tlb: true,
+    require: '^$ionicScroll',
+    link: function($scope, $element, $attr, scrollCtrl, $transclude) {
+      var scrollView = scrollCtrl.scrollView;
+      if (scrollView.options.scrollingX && scrollView.options.scrollingY) {
+        throw new Error("Cannot create a collection-repeat within a scrollView that is scrollable on both x and y axis.  Choose only one.");
+      }
+
+      var isVertical = !!scrollView.options.scrollingY;
+      if (isVertical && !$attr.collectionItemHeight) {
+        throw new Error("collection-repeat expected attribute collection-item-height to be a an expression that returns a number.");
+      } else if (!isVertical && !$attr.collectionItemWidth) {
+        throw new Error("collection-repeat expected attribute collection-item-width to be a an expression that returns a number.");
+      }
+      var heightGetter = $attr.collectionItemHeight ?
+        $parse($attr.collectionItemHeight) :
+        function() { return scrollView.__clientHeight; };
+      var widthGetter = $attr.collectionItemWidth ?
+        $parse($attr.collectionItemWidth) :
+        function() { return scrollView.__clientWidth; };
+
+      var match = $attr.collectionRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+      if (!match) {
+        throw new Error("collection-repeat expected expression in form of '_item_ in _collection_[ track by _id_]' but got '" + $attr.collectionRepeat + "'.");
+      }
+
+      var dataSource = new $collectionRepeatDataSource({
+        scope: $scope,
+        transcludeFn: $transclude,
+        transcludeParent: $element.parent(),
+        keyExpr: match[1],
+        listExpr: match[2],
+        trackByExpr: match[3],
+        heightGetter: heightGetter,
+        widthGetter: widthGetter
+      });
+      var collectionRepeatManager = new $collectionRepeatManager({
+        dataSource: dataSource,
+        element: scrollCtrl.$element,
+        scrollView: scrollCtrl.scrollView,
+      });
+
+      $scope.$watchCollection(dataSource.listExpr, function(value) {
+        if (value && !angular.isArray(value)) {
+          throw new Error("collection-repeat expects an array to repeat over, but instead got '" + typeof value + "'.");
+        }
+        dataSource.setData(value);
+        collectionRepeatManager.resize();
+      });
+      ionic.on('resize', function() {
+        collectionRepeatManager.resize();
+      }, window);
+
+      $scope.$on('$destroy', function() {
+        collectionRepeatManager.destroy();
+        dataSource.destroy();
+      });
+    }
+  };
+}]);
 
 /**
  * @ngdoc directive
