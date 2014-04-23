@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1768
+ * Ionic, v1.0.0-beta.1-nightly-1789
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3980,7 +3980,7 @@ function($animate, $compile) {
       var isAnchor = angular.isDefined($attrs.href) || angular.isDefined($attrs.ngHref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
-        /ion-(delete|option|reorder)-button/.test($element.html());
+        /ion-(delete|option|reorder)-button/i.test($element.html());
 
         if (isComplexItem) {
           var innerElement = angular.element(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
