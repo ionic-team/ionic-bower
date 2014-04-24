@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1818
+ * Ionic, v1.0.0-beta.1-nightly-1820
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1818'
+  version: '1.0.0-beta.1-nightly-1820'
 };
 
 (function(ionic) {
@@ -31962,7 +31962,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1818
+ * Ionic, v1.0.0-beta.1-nightly-1820
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36181,8 +36181,16 @@ function tapScrollToTopDirective() {
         });
 
         function onTap(e) {
-          if (ionic.DomUtil.getParentOrSelfWithClass(e.target, 'button', 4)) {
-            return;
+          var depth = 3;
+          var current = e.target;
+          //Don't scroll to top in certain cases
+          while (depth-- && current) {
+            if (current.classList.contains('button') ||
+                current.tagName.match(/input|textarea|select/i) ||
+                current.isContentEditable) {
+              return;
+            } 
+            current = current.parentNode;
           }
           var touch = e.gesture && e.gesture.touches[0] || e.detail.touches[0];
           var bounds = $element[0].getBoundingClientRect();
