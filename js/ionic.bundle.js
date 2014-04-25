@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1836
+ * Ionic, v1.0.0-beta.1-nightly-1837
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1836'
+  version: '1.0.0-beta.1-nightly-1837'
 };
 
 (function(ionic) {
@@ -2866,9 +2866,11 @@ ionic.DomUtil.ready(function(){
   ionic.activator = {
 
     start: function(e) {
+
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
       ionic.requestAnimationFrame(function(){
+        if (tapRequiresNativeClick(e.target)) return;
         var ele = e.target;
         var eleToActivate;
 
@@ -5912,6 +5914,7 @@ ionic.scroll = {
   var ReorderDrag = function(opts) {
     this.dragThresholdY = opts.dragThresholdY || 0;
     this.onReorder = opts.onReorder;
+    this.listEl = opts.listEl;
     this.el = opts.el;
     this.scrollEl = opts.scrollEl;
     this.scrollView = opts.scrollView;
@@ -5920,7 +5923,10 @@ ionic.scroll = {
   ReorderDrag.prototype = new DragOp();
 
   ReorderDrag.prototype._moveElement = function(e) {
-    var y = e.gesture.center.pageY - this._currentDrag.elementHeight + this._currentDrag.scrollDelta;
+    var y = e.gesture.center.pageY -
+      this._currentDrag.elementHeight + 
+      this._currentDrag.scrollDelta - 
+      this.listEl.offsetTop;
     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
 
@@ -6193,6 +6199,7 @@ ionic.scroll = {
 
         if(item) {
           this._dragOp = new ReorderDrag({
+            listEl: this.el,
             el: item,
             scrollEl: this.scrollEl,
             scrollView: this.scrollView,
@@ -32161,7 +32168,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1836
+ * Ionic, v1.0.0-beta.1-nightly-1837
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36769,6 +36776,8 @@ return {
         itemCtrl.$element.append(itemCtrl.optionsContainer);
       }
       itemCtrl.optionsContainer.append($element);
+
+      $element.on('click', eventStopPropagation);
     };
   }
 };
@@ -36988,9 +36997,11 @@ function($animate, $timeout) {
             if (!isShown && !wasShown) { return; }
 
             if (isShown) listCtrl.closeOptionButtons();
+            listCtrl.canSwipeItems(!isShown);
 
             $element.children().toggleClass('list-left-editing', isShown);
             toggleNgHide('.item-delete.item-left-edit', isShown);
+            toggleTapDisabled('.item-content', isShown);
           });
           $scope.$watch(function() {
             return listCtrl.showReorder();
@@ -36999,17 +37010,29 @@ function($animate, $timeout) {
             if (!isShown && !wasShown) { return; }
 
             if (isShown) listCtrl.closeOptionButtons();
-            listCtrl.showReorder(isShown);
+            listCtrl.canSwipeItems(!isShown);
 
             $element.children().toggleClass('list-right-editing', isShown);
             toggleNgHide('.item-reorder.item-right-edit', isShown);
+            toggleTapDisabled('.item-content', isShown);
           });
 
           function toggleNgHide(selector, shouldShow) {
             angular.forEach($element[0].querySelectorAll(selector), function(node) {
-              if (shouldShow) $animate.removeClass(angular.element(node), 'ng-hide');
-              else $animate.addClass(angular.element(node), 'ng-hide');
+              if (shouldShow) {
+                $animate.removeClass(angular.element(node), 'ng-hide');
+              } else {
+                $animate.addClass(angular.element(node), 'ng-hide');
+              }
             });
+          }
+          function toggleTapDisabled(selector, shouldDisable) {
+            var el = angular.element($element[0].querySelectorAll(selector));
+            if (shouldDisable) {
+              el.attr('data-tap-disabled', 'true');
+            } else {
+              el.removeAttr('data-tap-disabled');
+            }
           }
         }
 
@@ -37672,16 +37695,16 @@ IonicModule
 }])
 
 .directive('ionStopEvent', function () {
-  function stopEvent(e) {
-    e.stopPropagation();
-  }
   return {
     restrict: 'A',
     link: function (scope, element, attr) {
-      element.bind(attr.ionStopEvent, stopEvent);
+      element.bind(attr.ionStopEvent, eventStopPropagation);
     }
   };
 });
+function eventStopPropagation(e) {
+  e.stopPropagation();
+}
 
 
 /**
