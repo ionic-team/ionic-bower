@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1831
+ * Ionic, v1.0.0-beta.1-nightly-1836
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1831'
+  version: '1.0.0-beta.1-nightly-1836'
 };
 
 (function(ionic) {
@@ -479,7 +479,7 @@ window.ionic = {
 
       // Make sure to trigger the event on the given target, or dispatch it from
       // the window if we don't have an event target
-      data && data.target && data.target.dispatchEvent(event) || window.dispatchEvent(event);
+      data && data.target && data.target.dispatchEvent && data.target.dispatchEvent(event) || window.dispatchEvent(event);
     },
 
     /**
@@ -2475,7 +2475,8 @@ ionic.tap = {
   isTextInput: function(ele) {
     return !!ele &&
            (ele.tagName == 'TEXTAREA' ||
-           (ele.tagName == 'INPUT' && !(/radio|checkbox|range|file|submit|reset/i).test(ele.type)));
+            ele.contentEditable === 'true' ||
+            (ele.tagName == 'INPUT' && !(/radio|checkbox|range|file|submit|reset/i).test(ele.type)) );
   },
 
   isLabelWithTextInput: function(ele) {
@@ -2489,7 +2490,7 @@ ionic.tap = {
     return ionic.tap.isTextInput(ele) || ionic.tap.isLabelWithTextInput(ele);
   },
 
-  cloneFocusedInput: function(container, instance) {
+  cloneFocusedInput: function(container, scrollIntance) {
     if(ionic.tap.hasCheckedClone) return;
     ionic.tap.hasCheckedClone = true;
 
@@ -2502,6 +2503,7 @@ ionic.tap = {
           clonedInput.type = focusInput.type;
           clonedInput.value = focusInput.value;
           clonedInput.className = 'cloned-text-input';
+          clonedInput.readOnly = true;
           focusInput.parentElement.insertBefore(clonedInput, focusInput);
           focusInput.style.top = focusInput.offsetTop;
           focusInput.classList.add('previous-input-focus');
@@ -2512,7 +2514,7 @@ ionic.tap = {
 
   hasCheckedClone: false,
 
-  removeClonedInputs: function(container) {
+  removeClonedInputs: function(container, scrollIntance) {
     ionic.tap.hasCheckedClone = false;
 
     ionic.requestAnimationFrame(function(){
@@ -2567,6 +2569,11 @@ function triggerMouseEvent(type, ele, x, y) {
 }
 
 function tapClickGateKeeper(e) {
+  if(e.target.type == 'submit' && e.detail === 0) {
+    // do not prevent click if it came from an "Enter" or "Go" keypress submit
+    return;
+  }
+
   // do not allow through any click events that were not created by ionic.tap
   if( (ionic.scroll.isScrolling && ionic.tap.containsOrIsTextInput(e.target) ) ||
       (!e.isIonicTap && !tapRequiresNativeClick(e.target)) ) {
@@ -2624,6 +2631,12 @@ function tapMouseDown(e) {
 }
 
 function tapMouseUp(e) {
+  if(tapEnabledTouchEvents) {
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
+  }
+
   if( tapIgnoreEvent(e) ) return;
 
   if( !tapHasPointerMoved(e) ) {
@@ -2655,6 +2668,19 @@ function tapTouchStart(e) {
 
   tapEventListener('touchmove');
   ionic.activator.start(e);
+
+  if( ionic.Platform.isIOS() && ionic.tap.isLabelWithTextInput(e.target) ) {
+    // if the tapped element is a label, which has a child input
+    // then preventDefault so iOS doesn't ugly auto scroll to the input
+    // but do not prevent default on Android or else you cannot move the text caret
+    // and do not prevent default on Android or else no virtual keyboard shows up
+
+    var textInput = tapTargetElement( tapContainingElement(e.target) );
+    if( textInput !== tapActiveEle ) {
+      // don't preventDefault on an already focused input or else iOS's text caret isn't usable
+      e.preventDefault();
+    }
+  }
 }
 
 function tapTouchEnd(e) {
@@ -2684,17 +2710,11 @@ function tapTouchCancel(e) {
 }
 
 function tapEnableTouchEvents() {
-  if(!tapEnabledTouchEvents) {
-    tapEventListener('mouseup', false);
-    tapEnabledTouchEvents = true;
-  }
+  tapEnabledTouchEvents = true;
   clearTimeout(tapMouseResetTimer);
-  tapMouseResetTimer = setTimeout(tapResetMouseEvent, 2500);
-}
-
-function tapResetMouseEvent() {
-  tapEventListener('mouseup', false);
-  tapEnabledTouchEvents = false;
+  tapMouseResetTimer = setTimeout(function(){
+    tapEnabledTouchEvents = false;
+  }, 2000);
 }
 
 function tapIgnoreEvent(e) {
@@ -2710,25 +2730,35 @@ function tapIgnoreEvent(e) {
 function tapHandleFocus(ele) {
   tapTouchFocusedInput = null;
 
+  var triggerFocusIn = false;
+
   if(ele.tagName == 'SELECT') {
     // trick to force Android options to show up
-    void 0;
     triggerMouseEvent('mousedown', ele, 0, 0);
-    tapActiveElement(ele);
     ele.focus && ele.focus();
+    triggerFocusIn = true;
 
-  } else if(tapActiveElement() !== ele) {
-    if( (/input|textarea/i).test(ele.tagName) ) {
-      void 0;
-      tapActiveElement(ele);
-      ele.focus && ele.focus();
-      ele.value = ele.value;
-      if( tapEnabledTouchEvents ) {
-        tapTouchFocusedInput = ele;
-      }
-    } else {
-      tapFocusOutActive();
+  } else if(tapActiveElement() === ele) {
+    // already is the active element and has focus
+    triggerFocusIn = true;
+
+  } else if( (/input|textarea/i).test(ele.tagName) ) {
+    triggerFocusIn = true;
+    ele.focus && ele.focus();
+    ele.value = ele.value;
+    if( tapEnabledTouchEvents ) {
+      tapTouchFocusedInput = ele;
     }
+
+  } else {
+    tapFocusOutActive();
+  }
+
+  if(triggerFocusIn) {
+    tapActiveElement(ele);
+    ionic.trigger('ionic.focusin', {
+      target: ele
+    }, true);
   }
 }
 
@@ -2822,9 +2852,7 @@ function tapTargetElement(ele) {
 }
 
 ionic.DomUtil.ready(function(){
-
-  ionic.tap.register(document.body);
-
+  ionic.tap.register(document);
 });
 
 (function(document, ionic) {
@@ -3100,90 +3128,278 @@ ionic.DomUtil.ready(function(){
 
 })(window.ionic);
 
-(function(ionic) {
+
+/*
+IONIC KEYBOARD
+---------------
+
+*/
+
+var keyboardViewportHeight = window.innerHeight;
+var keyboardIsOpen;
+var keyboardActiveElement;
+var keyboardFocusOutTimer;
+var keyboardFocusInTimer;
+
+var KEYBOARD_OPEN_CSS = 'keyboard-open';
+var SCROLL_CONTAINER_CSS = 'scroll';
+
+ionic.keyboard = {
+  isOpen: false,
+  height: null
+};
+
+function keyboardInit() {
+  if( keyboardHasPlugin() ) {
+    window.addEventListener('native.showkeyboard', keyboardNativeShow);
+  }
+
+  document.body.addEventListener('ionic.focusin', keyboardBrowserFocusIn);
+  document.body.addEventListener('focusin', keyboardBrowserFocusIn);
+
+  document.body.addEventListener('focusout', keyboardFocusOut);
+  document.body.addEventListener('orientationchange', keyboardOrientationChange);
+
+  document.removeEventListener('touchstart', keyboardInit);
+}
+
+function keyboardNativeShow(e) {
+  ionic.keyboard.height = e.keyboardHeight;
+}
+
+function keyboardBrowserFocusIn(e) {
+  if( !e.target || !ionic.tap.isTextInput(e.target) || !keyboardIsWithinScroll(e.target) ) return;
+
+  document.addEventListener('keydown', keyboardOnKeyDown, false);
+
+  document.body.scrollTop = 0;
+  document.body.querySelector('.scroll-content').scrollTop = 0;
+
+  keyboardActiveElement = e.target;
+
+  keyboardSetShow(e);
+}
+
+function keyboardSetShow(e) {
+  clearTimeout(keyboardFocusInTimer);
+  clearTimeout(keyboardFocusOutTimer);
+
+  keyboardFocusInTimer = setTimeout(function(){
+    var keyboardHeight = keyboardGetHeight();
+    var elementBounds = keyboardActiveElement.getBoundingClientRect();
+
+    keyboardShow(e.target, elementBounds.top, elementBounds.bottom, keyboardViewportHeight, keyboardHeight);
+  }, 32);
+}
+
+function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboardHeight) {
+  var details = {
+    target: element,
+    elementTop: Math.round(elementTop),
+    elementBottom: Math.round(elementBottom),
+    keyboardHeight: keyboardHeight
+  };
+
+  if( keyboardIsOverWebView() ) {
+    // keyboard sits on top of the view, but doesn't adjust the view's height
+    // lower the content height by subtracting the keyboard height from the view height
+    details.contentHeight = viewportHeight - keyboardHeight;
+  } else {
+    // view's height was shrunk down and the keyboard takes up the space the view doesn't fill
+    // do not add extra padding at the bottom of the scroll view, native already did that
+    details.contentHeight = viewportHeight;
+  }
+
+  void 0;
+
+  // distance from top of input to the top of the keyboard
+  details.keyboardTopOffset = details.elementTop - details.contentHeight;
+
+  void 0;
+
+  // figure out if the element is under the keyboard
+  details.isElementUnderKeyboard = (details.elementBottom > details.contentHeight);
+
+  ionic.keyboard.isOpen = true;
+
+  // send event so the scroll view adjusts
+  keyboardActiveElement = element;
+  ionic.trigger('scrollChildIntoView', details, true);
+
+  ionic.requestAnimationFrame(function(){
+    document.body.classList.add(KEYBOARD_OPEN_CSS);
+  });
+
+  // any showing part of the document that isn't within the scroll the user
+  // could touchmove and cause some ugly changes to the app, so disable
+  // any touchmove events while the keyboard is open using e.preventDefault()
+  document.addEventListener('touchmove', keyboardPreventDefault, false);
+
+  return details;
+}
+
+function keyboardFocusOut(e) {
+  clearTimeout(keyboardFocusInTimer);
+  clearTimeout(keyboardFocusOutTimer);
+
+  keyboardFocusOutTimer = setTimeout(keyboardHide, 350);
+}
+
+function keyboardHide() {
+  void 0;
+  ionic.keyboard.isOpen = false;
+
+  ionic.trigger('resetScrollView', {
+    target: keyboardActiveElement
+  }, true);
+
+  ionic.requestAnimationFrame(function(){
+    document.body.classList.remove(KEYBOARD_OPEN_CSS);
+  });
+
+  // the keyboard is gone now, remove the touchmove that disables native scroll
+  document.removeEventListener('touchmove', keyboardPreventDefault);
+  document.removeEventListener('keydown', keyboardOnKeyDown);
+}
+
+function keyboardUpdateViewportHeight() {
+  if( window.innerHeight > keyboardViewportHeight ) {
+    keyboardViewportHeight = window.innerHeight;
+  }
+}
+
+function keyboardOnKeyDown(e) {
+  if( ionic.scroll.isScrolling ) {
+    keyboardPreventDefault(e);
+  }
+}
+
+function keyboardPreventDefault(e) {
+  e.preventDefault();
+}
+
+function keyboardOrientationChange() {
+  keyboardViewportHeight = window.innerHeight;
+  setTimeout(function(){
+    keyboardViewportHeight = window.innerHeight;
+  }, 999);
+}
+
+function keyboardGetHeight() {
+  // check if we are already have a keyboard height from the plugin
+  if (ionic.keyboard.height ) {
+    return ionic.keyboard.height;
+  }
+
+  // fallback for when its the webview without the plugin
+  // or for just the standard web browser
+  if( ionic.Platform.isIOS() ) {
+    if( ionic.Platform.isWebView() ) {
+      return 260;
+    }
+    return 216;
+  } else if( ionic.Platform.isAndroid() ) {
+    if( ionic.Platform.isWebView() ) {
+      return 220;
+    }
+    if( ionic.Platform.version() <= 4.3) {
+      return 230;
+    }
+  }
+
+  // safe guess
+  return 275;
+}
+
+function keyboardIsWithinScroll(ele) {
+  while(ele) {
+    if(ele.classList.contains(SCROLL_CONTAINER_CSS)) {
+      return true;
+    }
+    ele = ele.parentElement;
+  }
+  return false;
+}
+
+function keyboardIsOverWebView() {
+  return ( ionic.Platform.isIOS() ) ||
+         ( ionic.Platform.isAndroid() && !ionic.Platform.isWebView() );
+}
+
+function keyboardHasPlugin() {
+  return !!(window.cordova && cordova.plugins && cordova.plugins.Keyboard);
+}
 
 ionic.Platform.ready(function() {
-  var rememberedDeviceWidth = window.innerWidth;
-  var rememberedDeviceHeight = window.innerHeight;
-  var keyboardHeight;
-  var rememberedActiveEl;
-  var alreadyOpen = false;
+  keyboardUpdateViewportHeight();
 
-  window.addEventListener('focusin', onBrowserFocusIn);
+  // Android sometimes reports bad innerHeight on window.load
+  // try it again in a lil bit to play it safe
+  setTimeout(keyboardUpdateViewportHeight, 999);
 
-  if(ionic.Platform.isWebView() && window.cordova && cordova.plugins && cordova.plugins.Keyboard) {
-    window.addEventListener('native.showkeyboard', onNativeKeyboardShow);
-    window.addEventListener('native.hidekeyboard', onNativeKeyboardHide);
-
-  } else if (ionic.Platform.isAndroid()){
-    window.addEventListener('resize', onBrowserResize);
-  }
-
-  function onBrowserFocusIn(e) {
-      if (ionic.tap.containsOrIsTextInput(e.target) || e.srcElement.isContentEditable){
-        document.body.scrollTop = 0;
-      }
-
-      rememberedActiveEl = e.srcElement;
-  }
-
-  function onBrowserResize() {
-    if(rememberedDeviceWidth !== window.innerWidth) {
-      // If the width of the window changes, we have an orientation change
-      rememberedDeviceWidth = window.innerWidth;
-      rememberedDeviceHeight = window.innerHeight;
-
-    } else if(rememberedDeviceHeight !== window.innerHeight &&
-               window.innerHeight < rememberedDeviceHeight) {
-      // If the height changes, and it's less than before, we have a keyboard open
-      document.body.classList.add('keyboard-open');
-
-      keyboardHeight = rememberedDeviceHeight - window.innerHeight;
-      setTimeout(function() {
-        ionic.trigger('scrollChildIntoView', {
-          target: rememberedActiveEl, 
-        }, true);
-      }, 100);
-
-    } else {
-      // Otherwise we have a keyboard close or a *really* weird resize
-      document.body.classList.remove('keyboard-open');
-    }
-  }
-
-  function onNativeKeyboardShow(e) {
-    if(rememberedActiveEl) {
-      // This event is caught by the nearest parent scrollView
-      // of the activeElement
-      if(cordova.plugins.Keyboard.isVisible) {
-        document.body.classList.add('keyboard-open');
-        ionic.trigger('scrollChildIntoView', {
-          keyboardHeight: e.keyboardHeight,
-          target: rememberedActiveEl,
-          firstKeyboardShow: !alreadyOpen
-        }, true);
-
-        if(!alreadyOpen) alreadyOpen = true;
-      }
-    }
-  }
-
-  function onNativeKeyboardHide() {
-    // wait to see if we're just switching inputs
-    setTimeout(function() {
-      if(!cordova.plugins.Keyboard.isVisible) {
-        document.body.classList.remove('keyboard-open');
-        alreadyOpen = false;
-        ionic.trigger('resetScrollView', {
-          target: rememberedActiveEl
-        }, true);
-      }
-    }, 100);
-  }
-
+  // only initialize the adjustments for the virtual keyboard
+  // if a touchstart event happens
+  document.addEventListener('touchstart', keyboardInit, false);
 });
 
-})(window.ionic);
+
+
+var viewportTag;
+var viewportProperties = {};
+
+
+function viewportLoadTag() {
+  var x;
+
+  for(x=0; x<document.head.children.length; x++) {
+    if(document.head.children[x].name == 'viewport') {
+      viewportTag = document.head.children[x];
+      break;
+    }
+  }
+
+  if(viewportTag) {
+    var props = viewportTag.content.toLowerCase().replace(/\s+/g, '').split(',');
+    var keyValue;
+    for(x=0; x<props.length; x++) {
+      keyValue = props[x].split('=');
+      if(keyValue.length == 2) viewportProperties[ keyValue[0] ] = keyValue[1];
+    }
+    viewportInitWebView();
+  }
+}
+
+function viewportInitWebView() {
+  var hasViewportChange = false;
+
+  if( ionic.Platform.isWebView() ) {
+    if( viewportProperties.height != 'device-height' ) {
+      viewportProperties.height = 'device-height';
+      hasViewportChange = true;
+    }
+  } else if( viewportProperties.height ) {
+    delete viewportProperties.height;
+    hasViewportChange = true;
+  }
+  if(hasViewportChange) viewportUpdate();
+}
+
+function viewportUpdate(updates) {
+  if(!viewportTag) return;
+
+  ionic.Utils.extend(viewportProperties, updates);
+
+  var key, props = [];
+  for(key in viewportProperties) {
+    if(viewportProperties[key]) props.push(key + '=' + viewportProperties[key]);
+  }
+
+  viewportTag.content = props.join(',');
+}
+
+ionic.DomUtil.ready(function() {
+  viewportLoadTag();
+});
 
 (function(ionic) {
 'use strict';
@@ -3827,50 +4043,31 @@ ionic.views.Scroll = ionic.views.View.inherit({
     //Broadcasted when keyboard is shown on some platforms.
     //See js/utils/keyboard.js
     container.addEventListener('scrollChildIntoView', function(e) {
-      var keyboardHeight = e.detail.keyboardHeight || 0;
-      var deviceHeight = window.innerHeight;
-
-      var frameHeight;
-      if (ionic.Platform.isIOS() && ionic.Platform.version() >= 7.0  || (!ionic.Platform.isWebView() && ionic.Platform.isAndroid())){
-        frameHeight = deviceHeight;
-      }
-      else {
-        frameHeight = deviceHeight - keyboardHeight;
-      }
-
-      var element = e.target;
-
-      //getBoundingClientRect() will give us position relative to the viewport
-      var elementDeviceBottom = element.getBoundingClientRect().bottom;
-
-      if (e.detail.firstKeyboardShow){
-        //shrink scrollview so we can actually scroll if the input is hidden
-        //if it isn't shrink so we can scroll to inputs under the keyboard
-        container.style.height = (container.clientHeight - keyboardHeight) + "px";
+      if( !self.isScrolledIntoView ) {
+        // shrink scrollview so we can actually scroll if the input is hidden
+        // if it isn't shrink so we can scroll to inputs under the keyboard
+        container.style.height = (container.clientHeight - e.detail.keyboardHeight) + "px";
         container.style.overflow = "visible";
-
+        self.isScrolledIntoView = true;
         //update scroll view
         self.resize();
       }
 
       //If the element is positioned under the keyboard...
-      if (elementDeviceBottom > frameHeight) {
+      if( e.detail.isElementUnderKeyboard ) {
         //Put element in middle of visible screen
         //Wait for resize() to reset scroll position
+        ionic.scroll.isScrolling = true;
         setTimeout(function(){
-          //distance from top of input to the top of the keyboard
-          var keyboardTopOffset = element.getBoundingClientRect().top - frameHeight;
           //middle of the scrollview, where we want to scroll to
           var scrollViewMidpointOffset = container.clientHeight * 0.5;
-          var scrollOffset = keyboardTopOffset + scrollViewMidpointOffset;
-          self.scrollBy(0, scrollOffset, true);
-
-          //please someone tell me there's a better way to do this
-          //wait until input is scrolled into view, then fix focus
-          setTimeout(function(){
-            element.value = element.value; //thanks @adambradley 1337h4x
-          }, 600);
-        }, 32);
+          var scrollTop = e.detail.keyboardTopOffset + scrollViewMidpointOffset;
+          void 0;
+          ionic.tap.cloneFocusedInput(container, self);
+          self.scrollBy(0, scrollTop, true);
+        },
+          (ionic.Platform.isIOS() ? 80 : 350)
+        );
       }
 
       //Only the first scrollView parent of the element that broadcasted this event
@@ -3880,9 +4077,11 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     container.addEventListener('resetScrollView', function(e) {
       //return scrollview to original height once keyboard has hidden
+      self.isScrolledIntoView = false;
       container.style.height = "";
       container.style.overflow = "";
       self.resize();
+      ionic.scroll.isScrolling = false;
     });
 
 
@@ -3938,7 +4137,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
           // disabled being able to select text on an input
           // hide the input which has focus, and show a cloned one that doesn't have focus
           self.__isSelectable = false;
-          ionic.tap.cloneFocusedInput(self.__container);
+          ionic.tap.cloneFocusedInput(container, self);
         }
       }
 
@@ -3952,13 +4151,13 @@ ionic.views.Scroll = ionic.views.View.inherit({
       self.__enableScrollY = true;
 
       if( !self.__isDragging && !self.__isDecelerating && !self.__isAnimating ) {
-        ionic.tap.removeClonedInputs(self.__container);
+        ionic.tap.removeClonedInputs(container, self);
       }
     };
 
     self.options.orgScrollingComplete = self.options.scrollingComplete;
     self.options.scrollingComplete = function() {
-      ionic.tap.removeClonedInputs(self.__container);
+      ionic.tap.removeClonedInputs(container, self);
       self.options.orgScrollingComplete();
     };
 
@@ -31962,7 +32161,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1831
+ * Ionic, v1.0.0-beta.1-nightly-1836
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *

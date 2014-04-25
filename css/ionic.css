@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1831
+ * Ionic, v1.0.0-beta.1-nightly-1836
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4232,7 +4232,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
   color: #aaaaaa; }
 
-input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.cloned-text-input), textarea[readonly]:not(.cloned-text-input), select[readonly] {
   background-color: #f8f8f8;
   cursor: not-allowed; }
 
