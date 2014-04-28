@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1848
+ * Ionic, v1.0.0-beta.1-nightly-1849
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1848'
+  version: '1.0.0-beta.1-nightly-1849'
 };
 
 (function(ionic) {
@@ -2859,6 +2859,7 @@ ionic.DomUtil.ready(function(){
   ionic.activator = {
 
     start: function(e) {
+      var self = this;
 
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
@@ -2889,7 +2890,7 @@ ionic.DomUtil.ready(function(){
 
           // in XX milliseconds, set the queued elements to active
           if(e.type === 'touchstart') {
-            setTimeout(activateElements, 80);
+            self._activateTimeout = setTimeout(activateElements, 80);
           } else {
             ionic.requestAnimationFrame(activateElements);
           }
@@ -2902,6 +2903,7 @@ ionic.DomUtil.ready(function(){
 
     end: function() {
       // clear out any active/queued elements after XX milliseconds
+      clearTimeout(this._activateTimeout)
       setTimeout(clear, 200);
     }
 
@@ -2916,6 +2918,7 @@ ionic.DomUtil.ready(function(){
   }
 
   function activateElements() {
+    void 0;
     // activate all elements in the queue
     for(var key in queueElements) {
       if(queueElements[key]) {
