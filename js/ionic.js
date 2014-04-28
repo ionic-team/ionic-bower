@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1851
+ * Ionic, v1.0.0-beta.1-nightly-1854
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1851'
+  version: '1.0.0-beta.1-nightly-1854'
 };
 
 (function(ionic) {
@@ -3185,8 +3185,10 @@ function keyboardSetShow(e) {
   keyboardFocusInTimer = setTimeout(function(){
     var keyboardHeight = keyboardGetHeight();
     var elementBounds = keyboardActiveElement.getBoundingClientRect();
-
-    keyboardShow(e.target, elementBounds.top, elementBounds.bottom, keyboardViewportHeight, keyboardHeight);
+    
+    setTimeout(function(){
+      keyboardShow(e.target, elementBounds.top, elementBounds.bottom, keyboardViewportHeight, keyboardHeight);
+    }, (ionic.Platform.isIOS() ? 0 : 350)); 
   }, 32);
 }
 
@@ -3205,7 +3207,7 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
   } else {
     // view's height was shrunk down and the keyboard takes up the space the view doesn't fill
     // do not add extra padding at the bottom of the scroll view, native already did that
-    details.contentHeight = viewportHeight;
+    details.contentHeight = window.innerHeight;
   }
 
   void 0;
@@ -3297,12 +3299,8 @@ function keyboardGetHeight() {
     }
     return 216;
   } else if( ionic.Platform.isAndroid() ) {
-    if( ionic.Platform.isWebView() ) {
-      return 220;
-    }
-    if( ionic.Platform.version() <= 4.3) {
-      return 230;
-    }
+    //guess for now
+    return 275;
   }
 
   // safe guess
@@ -3320,8 +3318,24 @@ function keyboardIsWithinScroll(ele) {
 }
 
 function keyboardIsOverWebView() {
-  return ( ionic.Platform.isIOS() ) ||
-         ( ionic.Platform.isAndroid() && !ionic.Platform.isWebView() );
+  if (ionic.Platform.isIOS()){
+    if ( ionic.Platform.isWebView() ){
+      //6.1 is over webview
+      return (ionic.Platform.version() < 7.0); 
+    }
+    else {
+      //safari is always over webview
+      return true;
+    }
+  }
+
+  if ( ionic.Platform.isAndroid() && ionic.Platform.isWebView() ){
+    return ionic.Platform.isFullScreen;
+  }
+
+  return false;
+
+  
 }
 
 function keyboardHasPlugin() {
@@ -4044,8 +4058,10 @@ ionic.views.Scroll = ionic.views.View.inherit({
       if( !self.isScrolledIntoView ) {
         // shrink scrollview so we can actually scroll if the input is hidden
         // if it isn't shrink so we can scroll to inputs under the keyboard
-        container.style.height = (container.clientHeight - e.detail.keyboardHeight) + "px";
-        container.style.overflow = "visible";
+        if (ionic.Platform.isIOS() || ionic.Platform.isFullScreen){
+          container.style.height = (container.clientHeight - e.detail.keyboardHeight) + "px";
+          container.style.overflow = "visible";
+        }
         self.isScrolledIntoView = true;
         //update scroll view
         self.resize();
