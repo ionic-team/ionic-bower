@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1849
+ * Ionic, v1.0.0-beta.1-nightly-1851
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.1-nightly-1849'
+  version: '1.0.0-beta.1-nightly-1851'
 };
 
 (function(ionic) {
@@ -32172,7 +32172,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1849
+ * Ionic, v1.0.0-beta.1-nightly-1851
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37313,8 +37313,8 @@ IonicModule
  *
  * ```html
  * <ion-nav-bar>
- *   <ion-nav-back-button class="button-icon">
- *     <i class="ion-arrow-left-c"></i> Back!
+ *   <ion-nav-back-button class="button-clear">
+ *     <i class="ion-arrow-left-c"></i> Back
  *   </ion-nav-back-button>
  * </ion-nav-bar>
  * ```
@@ -37323,7 +37323,7 @@ IonicModule
  *
  * ```html
  * <ion-nav-bar ng-controller="MyCtrl">
- *   <ion-nav-back-button class="button-icon"
+ *   <ion-nav-back-button class="button-clear"
  *     ng-click="canGoBack && goBack()">
  *     <i class="ion-arrow-left-c"></i> Back
  *   </ion-nav-back-button>
@@ -37342,8 +37342,8 @@ IonicModule
  *
  * ```html
  * <ion-nav-bar ng-controller="MyCtrl">
- *   <ion-nav-back-button class="button button-icon ion-arrow-left-c">
- *     {% raw %}{{getPreviousTitle() || 'Back'}}{% endraw %}
+ *   <ion-nav-back-button class="button-icon">
+ *     <i class="icon ion-arrow-left-c"></i>{% raw %}{{getPreviousTitle() || 'Back'}}{% endraw %}
  *   </ion-nav-back-button>
  * </ion-nav-bar>
  * ```
