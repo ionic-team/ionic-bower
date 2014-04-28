@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1847
+ * Ionic, v1.0.0-beta.1-nightly-1848
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4651,6 +4651,7 @@ input[type="range"] {
     top: 0;
     right: 0;
     padding: 13px 45px 15px 15px;
+    max-width: 65%;
     border: none;
     background: transparent;
     color: #333;
@@ -4660,6 +4661,8 @@ input[type="range"] {
     font-size: 14px;
     cursor: pointer;
     direction: rtl; }
+  .item-select option {
+    direction: ltr; }
   .item-select:after {
     position: absolute;
     top: 50%;
