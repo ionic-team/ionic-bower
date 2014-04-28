@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1846
+ * Ionic, v1.0.0-beta.1-nightly-1847
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4366,10 +4366,13 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
  * Toggle
  * --------------------------------------------------
  */
-/* the overall container of the toggle */
+.item-toggle {
+  pointer-events: none; }
+
 .toggle {
   position: relative;
   display: inline-block;
+  pointer-events: auto;
   margin: -5px;
   padding: 5px; }
   .toggle input:checked + .track {
@@ -4405,7 +4408,6 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     border-color: #444;
     background-color: #444; }
 
-/* hide the actual input checkbox */
 .toggle input {
   display: none; }
 
@@ -4428,7 +4430,8 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   border-radius: 20px;
   background-color: #E5E5E5;
   content: ' ';
-  cursor: pointer; }
+  cursor: pointer;
+  pointer-events: none; }
 
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
@@ -4437,14 +4440,13 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   -moz-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   position: absolute;
-  top: 7px;
-  left: 7px;
   display: block;
   width: 28px;
   height: 28px;
   border-radius: 28px;
   background-color: #fff;
-  /* used to create a larger (but hidden) hit area to slide the handle */ }
+  top: 7px;
+  left: 7px; }
   .toggle .handle:before {
     position: absolute;
     top: -4px;
@@ -4452,20 +4454,17 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     padding: 19px 35px;
     content: " "; }
 
-/* the handle when the toggle is "on" */
 .toggle input:checked + .track .handle {
   -webkit-transform: translate3d(22px, 0, 0);
   -moz-transform: translate3d(22px, 0, 0);
   transform: translate3d(22px, 0, 0);
   background-color: #fff; }
 
-/* make sure list item content have enough padding on right to fit the toggle */
 .item-toggle {
   padding-right: 99px; }
   .item-toggle.active {
     box-shadow: none; }
 
-/* position the toggle to the right within a list item */
 .item-toggle .toggle {
   position: absolute;
   top: 7.5px;

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1846
+ * Ionic, v1.0.0-beta.1-nightly-1847
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6697,11 +6697,11 @@ function($ionicGesture, $timeout) {
       ngDisabled: '=?'
     },
     transclude: true,
-    template: '<div class="item item-toggle disable-pointer-events">' +
+    template: '<div class="item item-toggle">' +
                 '<div ng-transclude></div>' +
-                '<label class="toggle enable-pointer-events">' +
+                '<label class="toggle">' +
                   '<input type="checkbox" ng-model="ngModel" ng-value="ngValue" ng-change="ngChange()" ng-disabled="ngDisabled">' +
-                  '<div class="track disable-pointer-events">' +
+                  '<div class="track">' +
                     '<div class="handle"></div>' +
                   '</div>' +
                 '</label>' +
