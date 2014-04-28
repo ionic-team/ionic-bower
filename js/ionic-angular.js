@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.1-nightly-1845
+ * Ionic, v1.0.0-beta.1-nightly-1846
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5378,7 +5378,9 @@ IonicModule
         $compile(buttons)($scope);
 
         //Append buttons to navbar
-        $animate.enter(buttons, navElement);
+        ionic.requestAnimationFrame(function() {
+          $animate.enter(buttons, navElement);
+        });
 
         //When our ion-nav-buttons container is destroyed,
         //destroy everything in the navbar
