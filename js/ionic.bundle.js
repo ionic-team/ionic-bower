@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1891
+ * Ionic, v1.0.0-beta.2-nightly-1893
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1891'
+  version: '1.0.0-beta.2-nightly-1893'
 };
 
 (function(ionic) {
@@ -32169,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1891
+ * Ionic, v1.0.0-beta.2-nightly-1893
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38077,6 +38077,9 @@ IonicModule
  * @param {expression=} on-scroll Called whenever the user scrolls.
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
  * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
+ * @param {boolean=} zooming Whether to support pinch-to-zoom
+ * @param {integer=} min-zoom The smallest zoom amount allowed (default is 0.5)
+ * @param {integer=} max-zoom The largest zoom amount allowed (default is 3)
  */
 IonicModule
 .directive('ionScroll', [
