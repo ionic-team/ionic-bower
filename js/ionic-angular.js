@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1884
+ * Ionic, v1.0.0-beta.2-nightly-1886
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4521,7 +4521,7 @@ function headerFooterBarDirective(isHeader) {
  *       $scope.$broadcast('scroll.infiniteScrollComplete');
  *     });
  *   };
- * 
+ *
  *   $scope.$on('stateChangeSuccess', function() {
  *     $scope.loadMore();
  *   });
@@ -4616,10 +4616,6 @@ IonicModule
         var scrollValues = scrollView.getValues();
         var maxScroll = infiniteScrollCtrl.getMaxScroll();
 
-        if(maxScroll.top === 0) {
-          return;
-        }
-             
         if ((maxScroll.left !== -1 && scrollValues.left >= maxScroll.left) ||
             (maxScroll.top !== -1 && scrollValues.top >= maxScroll.top)) {
           onInfinite();
