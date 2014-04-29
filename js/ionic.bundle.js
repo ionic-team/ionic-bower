@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1887
+ * Ionic, v1.0.0-beta.2-nightly-1892
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1887'
+  version: '1.0.0-beta.2-nightly-1892'
 };
 
 (function(ionic) {
@@ -4147,7 +4147,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         }
       }
 
-      self.doTouchMove(e.touches, e.timeStamp);
+      self.doTouchMove(e.touches, e.timeStamp, e.scale);
     };
 
     self.touchEnd = function(e) {
@@ -4484,7 +4484,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     if (helperElem.style[perspectiveProperty] !== undef) {
 
       return function(left, top, zoom, wasResize) {
-        content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0)';
+        content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
         self.__repositionScrollbars();
         if(!wasResize) {
           self.triggerScrollEvent();
@@ -4494,7 +4494,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     } else if (helperElem.style[transformProperty] !== undef) {
 
       return function(left, top, zoom, wasResize) {
-        content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px)';
+        content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
         self.__repositionScrollbars();
         if(!wasResize) {
           self.triggerScrollEvent();
@@ -32169,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1887
+ * Ionic, v1.0.0-beta.2-nightly-1892
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38107,6 +38107,9 @@ function($timeout, $controller, $ionicBind) {
           scroll: '@',
           scrollbarX: '@',
           scrollbarY: '@',
+          zooming: '@',
+          minZoom: '@',
+          maxZoom: '@'
         });
 
         if (angular.isDefined($attr.padding)) {
@@ -38128,7 +38131,10 @@ function($timeout, $controller, $ionicBind) {
           scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
           scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
           scrollingX: $scope.direction.indexOf('x') >= 0,
-          scrollingY: $scope.direction.indexOf('y') >= 0
+          scrollingY: $scope.direction.indexOf('y') >= 0,
+          zooming: $scope.$eval($scope.zooming) === true,
+          maxZoom: $scope.$eval($scope.maxZoom) || 3,
+          minZoom: $scope.$eval($scope.minZoom) || 0.5
         };
         if (isPaging) {
           scrollViewOptions.speedMultiplier = 0.8;

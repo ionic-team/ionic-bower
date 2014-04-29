@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1887
+ * Ionic, v1.0.0-beta.2-nightly-1892
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5940,6 +5940,9 @@ function($timeout, $controller, $ionicBind) {
           scroll: '@',
           scrollbarX: '@',
           scrollbarY: '@',
+          zooming: '@',
+          minZoom: '@',
+          maxZoom: '@'
         });
 
         if (angular.isDefined($attr.padding)) {
@@ -5961,7 +5964,10 @@ function($timeout, $controller, $ionicBind) {
           scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
           scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
           scrollingX: $scope.direction.indexOf('x') >= 0,
-          scrollingY: $scope.direction.indexOf('y') >= 0
+          scrollingY: $scope.direction.indexOf('y') >= 0,
+          zooming: $scope.$eval($scope.zooming) === true,
+          maxZoom: $scope.$eval($scope.maxZoom) || 3,
+          minZoom: $scope.$eval($scope.minZoom) || 0.5
         };
         if (isPaging) {
           scrollViewOptions.speedMultiplier = 0.8;
