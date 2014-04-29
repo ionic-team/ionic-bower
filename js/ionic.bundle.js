@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1882
+ * Ionic, v1.0.0-beta.2-nightly-1883
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1882'
+  version: '1.0.0-beta.2-nightly-1883'
 };
 
 (function(ionic) {
@@ -32169,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1882
+ * Ionic, v1.0.0-beta.2-nightly-1883
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -33524,6 +33524,15 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
   var createModal = function(templateString, options) {
     // Create a new scope for the modal
     var scope = options.scope && options.scope.$new() || $rootScope.$new(true);
+
+    angular.extend(scope, {
+      $hasHeader: false,
+      $hasSubheader: false,
+      $hasFooter: false,
+      $hasSubfooter: false,
+      $hasTabs: false,
+      $hasTabsTop: false
+    });
 
     // Compile the template
     var element = $compile('<ion-modal>' + templateString + '</ion-modal>')(scope);
