@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1881
+ * Ionic, v1.0.0-beta.2-nightly-1882
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1881'
+  version: '1.0.0-beta.2-nightly-1882'
 };
 
 (function(ionic) {
@@ -5929,7 +5929,7 @@ ionic.scroll = {
   ReorderDrag.prototype._moveElement = function(e) {
     var y = e.gesture.center.pageY -
       this._currentDrag.elementHeight + 
-      this._currentDrag.scrollDelta - 
+      this.scrollView.getValues().top -
       this.listEl.offsetTop;
     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
@@ -5951,8 +5951,7 @@ ionic.scroll = {
       startIndex: startIndex,
       placeholder: placeholder,
       scrollHeight: scroll,
-      list: placeholder.parentNode,
-      scrollDelta: 0
+      list: placeholder.parentNode
     };
 
     this._moveElement(e);
@@ -5979,12 +5978,10 @@ ionic.scroll = {
 
       if (e.gesture.deltaY < 0 && pixelsPastTop > 0 && scrollY > 0) {
         this.scrollView.scrollBy(null, -pixelsPastTop);
-        this._currentDrag.scrollDelta -= pixelsPastTop;
       }
       if (e.gesture.deltaY > 0 && pixelsPastBottom > 0) {
         if (scrollY < this.scrollView.getScrollMax().top) {
           this.scrollView.scrollBy(null, pixelsPastBottom);
-          this._currentDrag.scrollDelta += pixelsPastBottom;
         }
       }
     }
@@ -32172,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1881
+ * Ionic, v1.0.0-beta.2-nightly-1882
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
