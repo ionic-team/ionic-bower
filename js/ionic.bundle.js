@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1880
+ * Ionic, v1.0.0-beta.2-nightly-1881
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1880'
+  version: '1.0.0-beta.2-nightly-1881'
 };
 
 (function(ionic) {
@@ -32172,7 +32172,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1880
+ * Ionic, v1.0.0-beta.2-nightly-1881
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -32266,7 +32266,7 @@ var IonicModule = angular.module('ionic', [
  *    // Show the action sheet
  *    $ionicActionSheet.show({
  *      buttons: [
- *        { text: 'Share' },
+ *        { text: '<b>Share</b> This' },
  *        { text: 'Move' },
  *      ],
  *      destructiveText: 'Delete',
@@ -36067,14 +36067,14 @@ IonicModule
                 '<div class="action-sheet-wrapper">' +
                   '<div class="action-sheet">' +
                     '<div class="action-sheet-group">' +
-                      '<div class="action-sheet-title" ng-if="titleText">{{titleText}}</div>' +
-                      '<button class="button" ng-click="buttonClicked($index)" ng-repeat="button in buttons">{{button.text}}</button>' +
+                      '<div class="action-sheet-title" ng-if="titleText" ng-bind-html="titleText"></div>' +
+                      '<button class="button" ng-click="buttonClicked($index)" ng-repeat="button in buttons" ng-bind-html="button.text"></button>' +
                     '</div>' +
                     '<div class="action-sheet-group" ng-if="destructiveText">' +
-                      '<button class="button destructive" ng-click="destructiveButtonClicked()">{{destructiveText}}</button>' +
+                      '<button class="button destructive" ng-click="destructiveButtonClicked()" ng-bind-html="destructiveText"></button>' +
                     '</div>' +
                     '<div class="action-sheet-group" ng-if="cancelText">' +
-                      '<button class="button" ng-click="cancel()">{{cancelText}}</button>' +
+                      '<button class="button" ng-click="cancel()" ng-bind-html="cancelText"></button>' +
                     '</div>' +
                   '</div>' +
                 '</div>' +
