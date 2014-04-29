@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1883
+ * Ionic, v1.0.0-beta.2-nightly-1884
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1883'
+  version: '1.0.0-beta.2-nightly-1884'
 };
 
 (function(ionic) {
@@ -32169,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1883
+ * Ionic, v1.0.0-beta.2-nightly-1884
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36904,7 +36904,7 @@ IonicModule
     compile: function($element, $attr) {
       //Add the classes we need during the compile phase, so that they stay
       //even if something else like ngIf removes the element and re-addss it
-      $attr.$set('class', ($attr.class || '') + ' button icon button-icon', true);
+      $attr.$set('class', ($attr['class'] || '') + ' button icon button-icon', true);
       return function($scope, $element, $attr, ctrls) {
         var itemCtrl = ctrls[0];
         var listCtrl = ctrls[1];
@@ -36956,7 +36956,7 @@ return {
   require: '^ionItem',
   priority: Number.MAX_VALUE,
   compile: function($element, $attr) {
-    $attr.$set('class', ($attr.class || '') + ' button', true);
+    $attr.$set('class', ($attr['class'] || '') + ' button', true);
     return function($scope, $element, $attr, itemCtrl) {
       if (!itemCtrl.optionsContainer) {
         itemCtrl.optionsContainer = angular.element(ITEM_TPL_OPTION_BUTTONS);
@@ -37024,7 +37024,7 @@ IonicModule
     require: ['^ionItem', '^ionList'],
     priority: Number.MAX_VALUE,
     compile: function($element, $attr) {
-      $attr.$set('class', ($attr.class || '') + ' button icon button-icon', true);
+      $attr.$set('class', ($attr['class'] || '') + ' button icon button-icon', true);
       $element[0].setAttribute('data-prevent-scroll', true);
       return function($scope, $element, $attr, ctrls) {
         var itemCtrl = ctrls[0];
