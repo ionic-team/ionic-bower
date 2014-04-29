@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1886
+ * Ionic, v1.0.0-beta.2-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.2-nightly-1886'
+  version: '1.0.0-beta.2-nightly-1887'
 };
 
 (function(ionic) {
@@ -32169,7 +32169,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1886
+ * Ionic, v1.0.0-beta.2-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37940,7 +37940,8 @@ IonicModule
       ngModel: '=?',
       ngValue: '=?',
       ngChange: '&',
-      icon: '@'
+      icon: '@',
+      name: '@'
     },
     transclude: true,
     template: '<label class="item item-radio">' +
