@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1916
+ * Ionic, v1.0.0-beta.3-nightly-1917
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5221,7 +5221,14 @@ IonicModule
 IonicModule
 .directive('ionNavBackButton', [
   '$animate',
-function($animate) {
+  '$rootScope',
+function($animate, $rootScope) {
+  var backIsShown = false;
+  //If the current viewstate does not allow a back button,
+  //always hide it.
+  $rootScope.$on('$viewHistory.historyChange', function(e, data) {
+    backIsShown = !!data.showBack;
+  });
   return {
     restrict: 'E',
     require: '^ionNavBar',
@@ -5237,19 +5244,11 @@ function($animate) {
           });
         }
 
-        //If the current viewstate does not allow a back button,
-        //always hide it.
-        var deregisterListener = $scope.$parent.$on(
-          '$viewHistory.historyChange',
-          function(e, data) {
-            $scope.hasBackButton = !!data.showBack;
-          }
-        );
-        $scope.$on('$destroy', deregisterListener);
-
         //Make sure both that a backButton is allowed in the first place,
         //and that it is shown by the current view.
-        $scope.$watch('!!(backButtonShown && hasBackButton)', ionic.animationFrameThrottle(function(show) {
+        $scope.$watch(function() {
+          return !!(backIsShown && $scope.backButtonShown);
+        }, ionic.animationFrameThrottle(function(show) {
           if (show) $animate.removeClass($element, 'ng-hide');
           else $animate.addClass($element, 'ng-hide');
         }));
@@ -5295,6 +5294,33 @@ function($animate) {
  * with {@link ionic.service:$ionicNavBarDelegate}.
  * @param align-title {string=} Where to align the title of the navbar.
  * Available: 'left', 'right', 'center'. Defaults to 'center'.
+ *
+ * </table><br/>
+ *
+ * ### Alternative Usage
+ *
+ * Alternatively, you may put ion-nav-bar inside of each individual view's ion-view element.
+ * This will allow you to have the whole navbar, not just its contents, transition every view change.
+ *
+ * This is similar to using a header bar inside your ion-view, except it will has all the power of a navbar.
+ *
+ * If you do this, simply put nav buttons inside the navbar itself; do not use `<ion-nav-buttons>`.
+ *
+ *
+ * ```html
+ * <ion-nav-bar class="bar-positive">
+ *   <ion-nav-back-button>
+ *     Back
+ *   </ion-nav-back-button>
+ *   <div class="buttons right-buttons">
+ *     <button class="button">
+ *       Right Button
+ *     </button>
+ *   </div>
+ * </ion-nav-bar>
+ * <ion-view title="myTitle">
+ * </ion-view>
+ * ```
  */
 IonicModule
 .directive('ionNavBar', [
