@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.2-nightly-1899
+ * Ionic, v1.0.0-beta.2-nightly-1902
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -59,10 +59,6 @@ var deprecated = {
 };
 
 
-/**
- * Create a wrapping module to ease having to include too many
- * modules.
- */
 var IonicModule = angular.module('ionic', [
   // Angular deps
   'ngAnimate',
@@ -2493,6 +2489,13 @@ IonicModule
    * @param {number=} speed The number of milliseconds for the change to take.
    */
   'slide',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#enableSlide
+   * @param {boolean=} shouldEnable Whether to enable sliding the slidebox.
+   * @returns {boolean} Whether sliding is enabled.
+   */
+  'enableSlide',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#previous
