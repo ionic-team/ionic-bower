@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1904
+ * Ionic, v1.0.0-beta.3-nightly-1906
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1904'
+  version: '1.0.0-beta.3-nightly-1906'
 };
 
 (function(ionic) {
@@ -6169,7 +6169,7 @@ ionic.scroll = {
     // Return the list item from the given target
     _getItem: function(target) {
       while(target) {
-        if(target.classList.contains(ITEM_CLASS)) {
+        if(target.classList && target.classList.contains(ITEM_CLASS)) {
           return target;
         }
         target = target.parentNode;
@@ -32175,7 +32175,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1904
+ * Ionic, v1.0.0-beta.3-nightly-1906
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
