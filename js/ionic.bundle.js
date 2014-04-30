@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1912
+ * Ionic, v1.0.0-beta.3-nightly-1914
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1912'
+  version: '1.0.0-beta.3-nightly-1914'
 };
 
 (function(ionic) {
@@ -32175,7 +32175,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1912
+ * Ionic, v1.0.0-beta.3-nightly-1914
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -33464,7 +33464,14 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
         self.el.classList.add('active');
       }, 20);
 
-      return $timeout(angular.noop, 400);
+      return $timeout(function() {
+        //After animating in, allow hide on backdrop click
+        angular.element(self.el).on('click', function(e) {
+          if (e.target === self.el) {
+            self.hide();
+          }
+        });
+      }, 400);
     },
 
     /**
@@ -33485,6 +33492,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
                .removeClass('ng-enter ng-enter-active active');
       }, 20);
 
+      angular.element(self.el).off('click');
       self._isShown = false;
       self.scope.$parent && self.scope.$parent.$broadcast('modal.hidden', self);
       self._deregisterBackButton && self._deregisterBackButton();
@@ -37314,9 +37322,9 @@ IonicModule
     restrict: 'E',
     transclude: true,
     replace: true,
-    template: '<div class="modal-backdrop" ng-click="modal.hide()">' +
+    template: '<div class="modal-backdrop">' +
                 '<div class="modal-wrapper" ng-transclude></div>' +
-              '</div>'
+                '</div>'
   };
 }]);
 
