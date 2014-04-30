@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1910
+ * Ionic, v1.0.0-beta.3-nightly-1911
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6271,7 +6271,6 @@ IonicModule
  * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
  * @param {expression=} pager-click Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.
- * @param {boolean=} disable-scroll Whether to disallow scrolling/dragging of the slide-box content.
  * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an 'index' variable.
  * @param {expression=} active-slide Model to bind the current slide to.
  */
@@ -6303,7 +6302,6 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
       var slider = new ionic.views.Slider({
         el: $element[0],
         auto: slideInterval,
-        disableScroll: ($scope.$eval($scope.disableScroll) === true) || false,
         continuous: continuous,
         startSlide: $scope.activeSlide,
         slidesChanged: function() {
@@ -6321,6 +6319,8 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
           $timeout(function() {});
         }
       });
+
+      slider.enableSlide($scope.$eval($attrs.disableScroll) !== true);
 
       $scope.$watch('activeSlide', function(nv) {
         if(angular.isDefined(nv)){
