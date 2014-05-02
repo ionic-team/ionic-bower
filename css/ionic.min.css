@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1961
+ * Ionic, v1.0.0-beta.3-nightly-1962
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3000,7 +3000,7 @@ a.subdued {
 .tabs-item-hide > .tabs, .tabs.tabs-item-hide {
   display: none; }
 
-.tabs-icon-top > .tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item {
+.tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
   font-size: 12px;
   line-height: 14px; }
 
@@ -3010,22 +3010,22 @@ a.subdued {
   height: 32px;
   font-size: 32px; }
 
-.tabs-icon-left > .tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
+.tabs-icon-left.tabs .tab-item, .tabs-icon-left > .tabs .tab-item, .tabs-icon-right.tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
   font-size: 12px; }
-  .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
+  .tabs-icon-left.tabs .tab-item .icon, .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
     display: inline-block;
     vertical-align: top; }
-    .tabs-icon-left > .tabs .tab-item .icon:before, .tabs-icon-right > .tabs .tab-item .icon:before {
+    .tabs-icon-left.tabs .tab-item .icon:before, .tabs-icon-left > .tabs .tab-item .icon:before, .tabs-icon-right.tabs .tab-item .icon:before, .tabs-icon-right > .tabs .tab-item .icon:before {
       font-size: 24px;
       line-height: 49px; }
 
-.tabs-icon-left > .tabs .tab-item .icon {
+.tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-left.tabs .tab-item .icon {
   padding-right: 3px; }
 
-.tabs-icon-right > .tabs .tab-item .icon {
+.tabs-icon-right > .tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .icon {
   padding-left: 3px; }
 
-.tabs-icon-only > .tabs .icon {
+.tabs-icon-only > .tabs .icon, .tabs-icon-only.tabs .icon {
   line-height: inherit; }
 
 .tab-item.has-badge {
