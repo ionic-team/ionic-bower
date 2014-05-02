@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1950
+ * Ionic, v1.0.0-beta.3-nightly-1953
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1329,7 +1329,10 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       var modalEl = angular.element(self.modalEl);
 
       self.el.classList.remove('hide');
-      $document[0].body.classList.add('modal-open');
+      $timeout(function(){
+        $document[0].body.classList.add('modal-open');
+      }, 400)
+
 
       if(!self.el.parentElement) {
         modalEl.addClass(self.animation);
