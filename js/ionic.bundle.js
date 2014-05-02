@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1957
+ * Ionic, v1.0.0-beta.3-nightly-1959
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1957'
+  version: '1.0.0-beta.3-nightly-1959'
 };
 
 (function(ionic) {
@@ -37218,7 +37218,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1957
+ * Ionic, v1.0.0-beta.3-nightly-1959
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43953,6 +43953,9 @@ IonicModule
  *
  * See the {@link ionic.directive:ionTab} directive's documentation for more details on
  * individual tabs.
+ *
+ * Note: do not place ion-tabs inside of an ion-content element; it has been known to cause a
+ * certain CSS bug.
  *
  * @usage
  * ```html
