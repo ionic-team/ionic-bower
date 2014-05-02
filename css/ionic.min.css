@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1960
+ * Ionic, v1.0.0-beta.3-nightly-1961
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6366,7 +6366,7 @@ a.button {
 /**
  * Platform
  * --------------------------------------------------
- * Platform specific tweaks when in Cordova.
+ * Platform specific tweaks
  */
 .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
   height: 64px; }
@@ -6386,3 +6386,7 @@ a.button {
   top: 157px; }
 .platform-ios7.platform-cordova.status-bar-hide {
   margin-bottom: 20px; }
+
+.platform-android2:not(.enable-transitions) * {
+  -webkit-transition: none !important;
+  transition: none !important; }
