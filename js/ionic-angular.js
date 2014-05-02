@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1936
+ * Ionic, v1.0.0-beta.3-nightly-1950
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -275,6 +275,68 @@ angular.element.prototype.removeClass = function(cssClasses) {
   }
   return this;
 };
+
+
+/**
+ * @ngdoc service
+ * @name $ionicAnimation
+ * @module ionic
+ * @description
+ *
+ * A powerful animation and transition system for Ionic apps.
+ *
+ * @usage
+ *
+ * ```js
+ * angular.module('mySuperApp', ['ionic'])
+ * .controller(function($scope, $ionicAnimation) {
+ *    var anim = $ionicAnimate({
+ *     // A unique, reusable name
+ *     name: 'popIn',
+ *     
+ *     // The duration of an auto playthrough
+ *     duration: 0.5,
+ *     
+ *     // How long to wait before running the animation
+ *     delay: 0,
+ *     
+ *     // Whether to reverse after doing one run through
+ *     autoReverse: false,
+ *     
+ *     // How many times to repeat? -1 or null for infinite
+ *     repeat: -1,
+ *     
+ *     // Timing curve to use (same as CSS timing functions), or a function of time "t" to handle it yourself
+ *     curve: 'ease-in-out'
+ *     
+ *     onStart: function() {
+ *       // Callback on start
+ *     },
+ *     onEnd: function() {
+ *       // Callback on end
+ *     },
+ *     step: function(amt) {
+ *       
+ *     }
+ *   })
+ * });
+ * ```
+ *
+ */
+IonicModule
+.provider('$ionicAnimation', function() {
+  var useSlowAnimations = false;
+  this.setSlowAnimations = function(isSlow) {
+    useSlowAnimations = isSlow;
+  };
+
+  this.$get = [function() {
+    return function(opts) {
+      opts.useSlowAnimations = useSlowAnimations;
+      return ionic.Animation.create(opts);
+    }
+  }]
+});
 
 /**
  * @ngdoc service
@@ -5463,13 +5525,16 @@ IonicModule
  * @restrict AC
  *
  * @description
- * Disables any transition animations between views, along with removing the back
- * button which would normally show on the next view. This directive is useful for
- * links within a sideMenu.
+ * nav-clear is an attribute directive which should be used with an element that changes
+ * the view on click, for example an `<a href>` or a `<button ui-sref>`.
+ *
+ * nav-clear will cause the given element, when clicked, to disable the next view transition.
+ * This directive is useful, for example, for links within a sideMenu.
  *
  * @usage
- * Below is an example of a link within a side menu. Tapping this link would disable
- * any animations which would normally occur between views.
+ * Below is a link in a side menu, with the nav-clear directive added to it.
+ * Tapping this link will disable any animations that would normally occur
+ * between views.
  *
  * ```html
  * <a nav-clear menu-close href="#/home" class="item">Home</a>
