@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1954
+ * Ionic, v1.0.0-beta.3-nightly-1956
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1954'
+  version: '1.0.0-beta.3-nightly-1956'
 };
 
 (function(ionic) {
@@ -5690,6 +5690,9 @@ ionic.scroll = {
         }
 
         var margin = Math.max(leftWidth, rightWidth) + 10;
+
+        //Reset left and right before setting again
+        titleEl.style.left = titleEl.style.right = '';
 
         // Size and align the header titleEl based on the sizes of the left and
         // right children, and the desired alignment mode
