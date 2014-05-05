@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1970
+ * Ionic, v1.0.0-beta.3-nightly-1971
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1970'
+  version: '1.0.0-beta.3-nightly-1971'
 };
 
 (function(ionic) {
@@ -2380,6 +2380,18 @@ window.ionic = {
 })(document, ionic);
 
 
+/**
+ * @ngdoc page
+ * @name tap
+ * @module ionic
+ * @description
+ * This is the tap page.
+ *
+ * - data-tap-disabled
+ * - why not ngTouch and fastclick?
+ * - ionic keyboard plugin
+ * - other notes
+ */
 /*
 
  IONIC TAP
