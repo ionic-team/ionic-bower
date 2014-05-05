@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1975
+ * Ionic, v1.0.0-beta.3-nightly-1976
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1095,10 +1095,12 @@ IonicModule
   '$q',
   '$log',
   '$compile',
-function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile) {
+  '$ionicPlatform',
+function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
 
   var loaderInstance;
-  //default value
+  //default values
+  var deregisterBackAction = angular.noop;
   var loadingShowDelay = $q.when();
 
   return {
@@ -1135,7 +1137,6 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
         appendTo: $document[0].body
       })
       .then(function(loader) {
-
         var self = loader;
 
         loader.show = function(options) {
@@ -1192,10 +1193,11 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
           $timeout.cancel(this.durationTimeout);
           this.isShown = false;
         };
+
         return loader;
       });
     }
-    return $q.when(loaderInstance);
+    return loaderInstance;
   }
 
   function showLoader(options) {
@@ -1203,10 +1205,16 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
     var delay = options.delay || options.showDelay || 0;
 
     //If loading.show() was called previously, cancel it and show with our new options
-    $timeout.cancel(loadingShowDelay);
+    loadingShowDelay && $timeout.cancel(loadingShowDelay);
     loadingShowDelay = $timeout(angular.noop, delay);
 
     loadingShowDelay.then(getLoader).then(function(loader) {
+      deregisterBackAction();
+      //Disable hardware back button while loading
+      deregisterBackAction = $ionicPlatform.registerBackButtonAction(
+        angular.noop,
+        PLATFORM_BACK_BUTTON_PRIORITY_LOADING
+      );
       return loader.show(options);
     });
 
@@ -1224,6 +1232,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
   }
 
   function hideLoader() {
+    deregisterBackAction();
     $timeout.cancel(loadingShowDelay);
     getLoader().then(function(loader) {
       loader.hide();
@@ -1598,7 +1607,8 @@ IonicModule
 
 var PLATFORM_BACK_BUTTON_PRIORITY_VIEW = 100;
 var PLATFORM_BACK_BUTTON_PRIORITY_ACTION_SHEET = 300;
-var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 500;
+var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 400;
+var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
 /**
  * @ngdoc service
  * @name $ionicPlatform
