@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1966
+ * Ionic, v1.0.0-beta.3-nightly-1967
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1966'
+  version: '1.0.0-beta.3-nightly-1967'
 };
 
 (function(ionic) {
@@ -3518,7 +3518,7 @@ function viewportTagUpdate() {
   viewportTag.content = props.join(', ');
 }
 
-ionic.DomUtil.ready(function() {
+ionic.Platform.ready(function() {
   viewportLoadTag();
 
   window.addEventListener("orientationchange", function(){
