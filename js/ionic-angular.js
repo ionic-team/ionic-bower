@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1972
+ * Ionic, v1.0.0-beta.3-nightly-1973
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4749,8 +4749,6 @@ function($animate, $compile) {
       this.$scope = $scope;
       this.$element = $element;
     }],
-    priorty: Number.MAX_VALUE,
-    require: ['ionItem', '^ionList'],
     scope: true,
     compile: function($element, $attrs) {
       var isAnchor = angular.isDefined($attrs.href) || angular.isDefined($attrs.ngHref);
