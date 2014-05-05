@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1967
+ * Ionic, v1.0.0-beta.3-nightly-1968
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -596,6 +596,7 @@ function($cacheFactory, $parse) {
         this.transcludeParent[0].appendChild(item.element[0]);
       }
       reconnectScope(item.scope);
+      !item.scope.$$phase && item.scope.$digest();
     },
     getLength: function() {
       return this.data && this.data.length || 0;
@@ -870,7 +871,7 @@ function($rootScope, $timeout) {
         this.renderItem(i, rect.primaryPos - startPos, rect.secondaryPos);
         i++;
       }
-      var bufferEndIndex = i -1;
+      var bufferEndIndex = i - 1;
 
       for (i in this.renderedItems) {
         if (i < bufferStartIndex || i > bufferEndIndex) {
@@ -889,9 +890,6 @@ function($rootScope, $timeout) {
           primaryPos, secondaryPos, secondaryPos
         );
         this.renderedItems[dataIndex] = item;
-        if (item.scope && !item.scope.$$phase) {
-          item.scope.$digest();
-        }
       } else {
         delete this.renderedItems[dataIndex];
       }
