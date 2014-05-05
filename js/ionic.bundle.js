@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1973
+ * Ionic, v1.0.0-beta.3-nightly-1974
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1973'
+  version: '1.0.0-beta.3-nightly-1974'
 };
 
 (function(ionic) {
@@ -419,36 +419,29 @@ window.ionic = {
 (function(ionic) {
 
   // Custom event polyfill
-  if(!window.CustomEvent) {
-    (function() {
-      var CustomEvent;
-
-      CustomEvent = function(event, params) {
-        var evt;
-        params = params || {
-          bubbles: false,
-          cancelable: false,
-          detail: undefined
-        };
-        try {
-          evt = document.createEvent("CustomEvent");
-          evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-        } catch (error) {
-          // fallback for browsers that don't support createEvent('CustomEvent')
-          evt = document.createEvent("Event");
-          for (var param in params) {
-            evt[param] = params[param];
-          }
-          evt.initEvent(event, params.bubbles, params.cancelable);
-        }
-        return evt;
+  ionic.CustomEvent = window.CustomEvent || (function() {
+    function CustomEvent(event, params) {
+      var evt;
+      params = params || {
+        bubbles: false,
+        cancelable: false,
+        detail: undefined
       };
-
-      CustomEvent.prototype = window.Event.prototype;
-
-      window.CustomEvent = CustomEvent;
-    })();
-  }
+      try {
+        evt = document.createEvent("CustomEvent");
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+      } catch (error) {
+        // fallback for browsers that don't support createEvent('CustomEvent')
+        evt = document.createEvent("Event");
+        for (var param in params) {
+          evt[param] = params[param];
+        }
+        evt.initEvent(event, params.bubbles, params.cancelable);
+      }
+      return evt;
+    }
+    CustomEvent.prototype = window.Event.prototype;
+  })();
 
 
   /**
@@ -471,7 +464,7 @@ window.ionic = {
      */
     // Trigger a new event
     trigger: function(eventType, data, bubbles, cancelable) {
-      var event = new CustomEvent(eventType, {
+      var event = new ionic.CustomEvent(eventType, {
         detail: data,
         bubbles: !!bubbles,
         cancelable: !!cancelable
@@ -37368,7 +37361,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1973
+ * Ionic, v1.0.0-beta.3-nightly-1974
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
