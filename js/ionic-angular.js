@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1969
+ * Ionic, v1.0.0-beta.3-nightly-1970
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3674,15 +3674,17 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
     var viewId = historyData && historyData.viewId;
     if (viewId) {
-      self.rememberScrollPosition(viewId);
-      self.scrollToRememberedPosition();
+      $timeout(function() {
+        self.rememberScrollPosition(viewId);
+        self.scrollToRememberedPosition();
 
-      backListenDone = $rootScope.$on('$viewHistory.viewBack', function(e, fromViewId, toViewId) {
-        //When going back from this view, forget its saved scroll position
-        if (viewId === fromViewId) {
-          self.forgetScrollPosition();
-        }
-      });
+        backListenDone = $rootScope.$on('$viewHistory.viewBack', function(e, fromViewId, toViewId) {
+          //When going back from this view, forget its saved scroll position
+          if (viewId === fromViewId) {
+            self.forgetScrollPosition();
+          }
+        });
+      }, 1, false);
     }
   });
 
