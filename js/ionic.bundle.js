@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1978
+ * Ionic, v1.0.0-beta.3-nightly-1979
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1978'
+  version: '1.0.0-beta.3-nightly-1979'
 };
 
 (function(ionic) {
@@ -3154,6 +3154,7 @@ var keyboardIsOpen;
 var keyboardActiveElement;
 var keyboardFocusOutTimer;
 var keyboardFocusInTimer;
+var keyboardLastShow = 0;
 
 var KEYBOARD_OPEN_CSS = 'keyboard-open';
 var SCROLL_CONTAINER_CSS = 'scroll';
@@ -3203,6 +3204,8 @@ function keyboardSetShow(e) {
   clearTimeout(keyboardFocusOutTimer);
 
   keyboardFocusInTimer = setTimeout(function(){
+    if ( keyboardLastShow + 350 > Date.now() ) return; 
+    keyboardLastShow = Date.now();
     var keyboardHeight; 
     var elementBounds = keyboardActiveElement.getBoundingClientRect();
     var count = 0;
@@ -37362,7 +37365,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1978
+ * Ionic, v1.0.0-beta.3-nightly-1979
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
