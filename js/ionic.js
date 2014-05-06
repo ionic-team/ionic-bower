@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1986
+ * Ionic, v1.0.0-beta.3-nightly-1987
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1986'
+  version: '1.0.0-beta.3-nightly-1987'
 };
 
 (function(ionic) {
@@ -2397,10 +2397,10 @@ window.ionic = {
  *
  * ### Disabling the tap system
  * To disable the tap for any element and all of its children elements,
- * add the attribute `data-prevent-default="true"`.
+ * add the attribute `data-tap-disabled="true"`.
  *
  * ```html
- * <div data-prevent-default="true">
+ * <div data-tap-disabled="true">
  *     <div id="google-map"></div>
  * </div>
  * ```
