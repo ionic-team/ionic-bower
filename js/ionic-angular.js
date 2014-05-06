@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1989
+ * Ionic, v1.0.0-beta.3-nightly-1990
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3848,7 +3848,10 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
   var deregisterInstance = $ionicSideMenuDelegate._registerInstance(
     this, $attrs.delegateHandle
   );
-  $scope.$on('$destroy', deregisterInstance);
+  $scope.$on('$destroy', function() {
+    deregisterInstance();
+    deregisterBackButtonAction();
+  });
 }]);
 
 IonicModule
