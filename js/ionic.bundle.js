@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1985
+ * Ionic, v1.0.0-beta.3-nightly-1986
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1985'
+  version: '1.0.0-beta.3-nightly-1986'
 };
 
 (function(ionic) {
@@ -420,7 +420,8 @@ window.ionic = {
 
   // Custom event polyfill
   ionic.CustomEvent = window.CustomEvent || (function() {
-    function CustomEvent(event, params) {
+    var CustomEvent;
+    CustomEvent = function(event, params) {
       var evt;
       params = params || {
         bubbles: false,
@@ -441,6 +442,7 @@ window.ionic = {
       return evt;
     }
     CustomEvent.prototype = window.Event.prototype;
+    return CustomEvent;
   })();
 
 
@@ -37382,7 +37384,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1985
+ * Ionic, v1.0.0-beta.3-nightly-1986
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
