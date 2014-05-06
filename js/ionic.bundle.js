@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1988
+ * Ionic, v1.0.0-beta.3-nightly-1989
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1988'
+  version: '1.0.0-beta.3-nightly-1989'
 };
 
 (function(ionic) {
@@ -37386,7 +37386,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1988
+ * Ionic, v1.0.0-beta.3-nightly-1989
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38990,6 +38990,7 @@ IonicModule
 ]));
 
 var PLATFORM_BACK_BUTTON_PRIORITY_VIEW = 100;
+var PLATFORM_BACK_BUTTON_PRIORITY_SIDE_MENU = 150;
 var PLATFORM_BACK_BUTTON_PRIORITY_ACTION_SHEET = 300;
 var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 400;
 var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
@@ -41184,8 +41185,12 @@ IonicModule
   '$scope',
   '$attrs',
   '$ionicSideMenuDelegate',
-function($scope, $attrs, $ionicSideMenuDelegate) {
+  '$ionicPlatform',
+function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
+  var self = this;
   angular.extend(this, ionic.controllers.SideMenuController.prototype);
+
+  this.$scope = $scope;
 
   ionic.controllers.SideMenuController.call(this, {
     left: { width: 275 },
@@ -41208,6 +41213,21 @@ function($scope, $attrs, $ionicSideMenuDelegate) {
   };
 
   $scope.sideMenuContentTranslateX = 0;
+
+
+  var deregisterBackButtonAction = angular.noop;
+  var closeSideMenu = angular.bind(this, this.close);
+  $scope.$watch(function() {
+    return self.getOpenAmount() !== 0;
+  }, function(isOpen) {
+    deregisterBackButtonAction();
+    if (isOpen) {
+      deregisterBackButtonAction = $ionicPlatform.registerBackButtonAction(
+        closeSideMenu,
+        PLATFORM_BACK_BUTTON_PRIORITY_SIDE_MENU
+      );
+    }
+  });
 
   var deregisterInstance = $ionicSideMenuDelegate._registerInstance(
     this, $attrs.delegateHandle
