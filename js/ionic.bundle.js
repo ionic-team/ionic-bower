@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2001
+ * Ionic, v1.0.0-beta.3
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2001'
+  version: '1.0.0-beta.3'
 };
 
 (function(ionic) {
@@ -676,7 +676,7 @@ window.ionic = {
     // whatever lookup was done to find this element failed to find it
     // so we can't listen for events on it.
     if(element === null) {
-      void 0;
+      console.error('Null element passed to gesture (element does not exist). Not listening for gesture');
       return;
     }
 
@@ -2044,7 +2044,7 @@ window.ionic = {
      */
     device: function() {
       if(window.device) return window.device;
-      if(this.isWebView()) void 0;
+      if(this.isWebView()) console.error('device plugin required');
       return {};
     },
 
@@ -2599,7 +2599,7 @@ function tapClick(e) {
 
   var c = getPointerCoordinates(e);
 
-  void 0;
+  console.debug('tapClick', e.type, ele.tagName, '('+c.x+','+c.y+')');
   triggerMouseEvent('click', ele, c.x, c.y);
 
   // if it's an input, focus in on the target, otherwise blur
@@ -2623,7 +2623,7 @@ function tapClickGateKeeper(e) {
   // do not allow through any click events that were not created by ionic.tap
   if( (ionic.scroll.isScrolling && ionic.tap.containsOrIsTextInput(e.target) ) ||
       (!e.isIonicTap && !ionic.tap.requiresNativeClick(e.target)) ) {
-    void 0;
+    console.debug('clickPrevent', e.target.tagName);
     e.stopPropagation();
 
     if( !ionic.tap.isLabelWithTextInput(e.target) ) {
@@ -2639,7 +2639,7 @@ function tapMouseDown(e) {
   if(e.isIonicTap || tapIgnoreEvent(e)) return;
 
   if(tapEnabledTouchEvents) {
-    void 0;
+    console.debug('mousedown', 'stop event');
     e.stopPropagation();
 
     if( !ionic.tap.isTextInput(e.target) ) {
@@ -2795,7 +2795,7 @@ function tapHandleFocus(ele) {
 function tapFocusOutActive() {
   var ele = tapActiveElement();
   if(ele && (/input|textarea|select/i).test(ele.tagName) ) {
-    void 0;
+    console.debug('tapFocusOutActive', ele.tagName);
     ele.blur();
   }
   tapActiveElement(null);
@@ -2815,7 +2815,7 @@ function tapFocusIn(e) {
     // 2) There is an active element which is a text input
     // 3) A text input was just set to be focused on by a touch event
     // 4) A new focus has been set, however the target isn't the one the touch event wanted
-    void 0;
+    console.debug('focusin', 'tapTouchFocusedInput');
     tapTouchFocusedInput.focus();
     tapTouchFocusedInput = null;
   }
@@ -3261,12 +3261,12 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
 
   details.contentHeight = viewportHeight - keyboardHeight;
 
-  void 0;
+  console.debug('keyboardShow', keyboardHeight, details.contentHeight);
 
   // distance from top of input to the top of the keyboard
   details.keyboardTopOffset = details.elementTop - details.contentHeight;
 
-  void 0;
+  console.debug('keyboardTopOffset', details.elementTop, details.contentHeight, details.keyboardTopOffset);
 
   // figure out if the element is under the keyboard
   details.isElementUnderKeyboard = (details.elementBottom > details.contentHeight);
@@ -3297,7 +3297,7 @@ function keyboardFocusOut(e) {
 }
 
 function keyboardHide() {
-  void 0;
+  console.debug('keyboardHide');
   ionic.keyboard.isOpen = false;
 
   ionic.trigger('resetScrollView', {
@@ -4228,7 +4228,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
           //middle of the scrollview, where we want to scroll to
           var scrollViewMidpointOffset = container.clientHeight * 0.5;
           var scrollTop = e.detail.keyboardTopOffset + scrollViewMidpointOffset;
-          void 0;
+          console.debug('scrollChildIntoView', scrollTop);
           ionic.tap.cloneFocusedInput(container, self);
           self.scrollBy(0, scrollTop, true);
           self.onScroll();
@@ -7731,7 +7731,7 @@ ionic.views.Slider = ionic.views.View.inherit({
     ionic.extend(this, opts);
 
     if(opts.useSlowAnimations) {
-      void 0;
+      console.warn('Running animation', opts.name, 'with SLOW animations (duration and delay increased by 3x)');
       this.delay *= 3;
       this.duration *= 3;
     }
@@ -7774,7 +7774,7 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       var tf;
 
-      void 0;
+      console.log('Starting animation', this);
 
 
       // Grab the timing function
@@ -7814,7 +7814,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         }
       }, function(droppedFrames, finishedAnimation) {
         ionic.Animation.animationStopped(self);
-        void 0;
+        console.log('Finished anim:', droppedFrames, finishedAnimation);
       }, animState);
     },
 
@@ -37387,7 +37387,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2001
+ * Ionic, v1.0.0-beta.3
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43881,7 +43881,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
       };
 
       this.onPagerClick = function(index) {
-        void 0;
+        console.log('pagerClick', index);
         $scope.pagerClick({index: index});
       };
 
