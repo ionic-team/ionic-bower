@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2014
+ * Ionic, v1.0.0-beta.4-nightly-2016
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2014'
+  version: '1.0.0-beta.4-nightly-2016'
 };
 
 (function(ionic) {
@@ -419,9 +419,10 @@ window.ionic = {
 (function(ionic) {
 
   // Custom event polyfill
-  ionic.CustomEvent = window.CustomEvent || (function() {
-    var CustomEvent;
-    CustomEvent = function(event, params) {
+  ionic.CustomEvent = (function() {
+    if( typeof window.CustomEvent === 'function' ) return CustomEvent;
+
+    var customEvent = function(event, params) {
       var evt;
       params = params || {
         bubbles: false,
@@ -441,8 +442,8 @@ window.ionic = {
       }
       return evt;
     }
-    CustomEvent.prototype = window.Event.prototype;
-    return CustomEvent;
+    customEvent.prototype = window.Event.prototype;
+    return customEvent;
   })();
 
 
@@ -1965,6 +1966,10 @@ window.ionic = {
 
 (function(window, document, ionic) {
 
+  var IOS = 'ios';
+  var ANDROID = 'android';
+  var WINDOWS_PHONE = 'windowsphone';
+
   /**
    * @ngdoc utility
    * @name ionic.Platform
@@ -2107,7 +2112,7 @@ window.ionic = {
      * @returns {boolean} Whether we are running on iOS.
      */
     isIOS: function() {
-      return this.is('ios');
+      return this.is(IOS);
     },
     /**
      * @ngdoc method
@@ -2115,7 +2120,15 @@ window.ionic = {
      * @returns {boolean} Whether we are running on Android.
      */
     isAndroid: function() {
-      return this.is('android');
+      return this.is(ANDROID);
+    },
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isWindowsPhone
+     * @returns {boolean} Whether we are running on Windows Phone.
+     */
+    isWindowsPhone: function() {
+      return this.is(WINDOWS_PHONE);
     },
 
     /**
@@ -2136,11 +2149,13 @@ window.ionic = {
       if(typeof n != 'undefined' && n !== null && n.length) {
         platformName = n.toLowerCase();
       } else if(this.ua.indexOf('Android') > 0) {
-        platformName = 'android';
+        platformName = ANDROID;
       } else if(this.ua.indexOf('iPhone') > -1 || this.ua.indexOf('iPad') > -1 || this.ua.indexOf('iPod') > -1) {
-        platformName = 'ios';
+        platformName = IOS;
+      } else if(this.ua.indexOf('Windows Phone') > -1) {
+        platformName = WINDOWS_PHONE;
       } else {
-        platformName = window.navigator.platform && window.navigator.platform.toLowerCase().split(' ')[0] || '';
+        platformName = window.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
       }
     },
 
@@ -2174,7 +2189,8 @@ window.ionic = {
       var pName = this.platform();
       var versionMatch = {
         'android': /Android (\d+).(\d+)?/,
-        'ios': /OS (\d+)_(\d+)?/
+        'ios': /OS (\d+)_(\d+)?/,
+        'windowsphone': /Windows Phone (\d+).(\d+)?/
       };
       if(versionMatch[pName]) {
         v = this.ua.match( versionMatch[pName] );
@@ -2315,7 +2331,7 @@ window.ionic = {
 
     // transform
     var i, keys = ['webkitTransform', 'transform', '-webkit-transform', 'webkit-transform',
-                '-moz-transform', 'moz-transform', 'MozTransform', 'mozTransform'];
+                   '-moz-transform', 'moz-transform', 'MozTransform', 'mozTransform', 'msTransform'];
 
     for(i = 0; i < keys.length; i++) {
       if(document.documentElement.style[keys[i]] !== undefined) {
@@ -2325,7 +2341,7 @@ window.ionic = {
     }
 
     // transition
-    keys = ['webkitTransition', 'mozTransition', 'transition'];
+    keys = ['webkitTransition', 'mozTransition', 'msTransition', 'transition'];
     for(i = 0; i < keys.length; i++) {
       if(document.documentElement.style[keys[i]] !== undefined) {
         ionic.CSS.TRANSITION = keys[i];
@@ -3225,9 +3241,9 @@ function keyboardSetShow(e) {
   clearTimeout(keyboardFocusOutTimer);
 
   keyboardFocusInTimer = setTimeout(function(){
-    if ( keyboardLastShow + 350 > Date.now() ) return; 
+    if ( keyboardLastShow + 350 > Date.now() ) return;
     keyboardLastShow = Date.now();
-    var keyboardHeight; 
+    var keyboardHeight;
     var elementBounds = keyboardActiveElement.getBoundingClientRect();
     var count = 0;
 
@@ -3244,8 +3260,8 @@ function keyboardSetShow(e) {
         clearInterval(pollKeyboardHeight);
       }
       count++;
-      
-    }, 100); 
+
+    }, 100);
   }, 32);
 }
 
@@ -3342,10 +3358,10 @@ function keyboardOrientationChange() {
       }
 
       updatedViewportHeight = window.innerHeight;
-      
+
       if (updatedViewportHeight !== keyboardViewportHeight){
         if (updatedViewportHeight < keyboardViewportHeight){
-          ionic.keyboard.landscape = true; 
+          ionic.keyboard.landscape = true;
         }
         else {
           ionic.keyboard.landscape = false;
@@ -3358,7 +3374,7 @@ function keyboardOrientationChange() {
     }, 50);
   }
   else {
-    keyboardViewportHeight = updatedViewportHeight;    
+    keyboardViewportHeight = updatedViewportHeight;
   }
 }
 
@@ -37387,7 +37403,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2014
+ * Ionic, v1.0.0-beta.4-nightly-2016
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
