@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1997
+ * Ionic, v1.0.0-beta.3-nightly-1998
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.3-nightly-1997'
+  version: '1.0.0-beta.3-nightly-1998'
 };
 
 (function(ionic) {
@@ -3203,6 +3203,7 @@ function keyboardInit() {
 }
 
 function keyboardNativeShow(e) {
+  clearTimeout(keyboardFocusOutTimer);
   ionic.keyboard.height = e.keyboardHeight;
 }
 
@@ -37386,7 +37387,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.3-nightly-1997
+ * Ionic, v1.0.0-beta.3-nightly-1998
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
