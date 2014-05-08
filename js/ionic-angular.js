@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2027
+ * Ionic, v1.0.0-beta.4-nightly-2028
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5243,7 +5243,7 @@ IonicModule
       });
     }
   };
-}])
+}]);
 
 
 /*
@@ -6507,10 +6507,10 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
         slider.load();
       });
     }],
-    template: '<div class="slider">\
-            <div class="slider-slides" ng-transclude>\
-            </div>\
-          </div>',
+    template: '<div class="slider">' +
+      '<div class="slider-slides" ng-transclude>' +
+      '</div>' +
+    '</div>',
 
     link: function($scope, $element, $attr, slideBoxCtrl) {
       // If the pager should show, append it to the slide box
