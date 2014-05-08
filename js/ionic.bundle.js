@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2025
+ * Ionic, v1.0.0-beta.4-nightly-2027
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2025'
+  version: '1.0.0-beta.4-nightly-2027'
 };
 
 (function(ionic) {
@@ -37402,7 +37402,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2025
+ * Ionic, v1.0.0-beta.4-nightly-2027
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42944,7 +42944,10 @@ IonicModule
 
         //Append buttons to navbar
         ionic.requestAnimationFrame(function() {
-          $animate.enter(buttons, navElement);
+          //If the scope is destroyed before raf runs, be sure not to enter
+          if (!$scope.$$destroyed) {
+            $animate.enter(buttons, navElement);
+          }
         });
 
         //When our ion-nav-buttons container is destroyed,
