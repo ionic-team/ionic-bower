@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2024
+ * Ionic, v1.0.0-beta.4-nightly-2025
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2024'
+  version: '1.0.0-beta.4-nightly-2025'
 };
 
 (function(ionic) {
@@ -4265,7 +4265,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return;
       }
 
-      if( ionic.tap.containsOrIsTextInput(e.target) ) {
+      if( ionic.tap.containsOrIsTextInput(e.target) || e.target.tagName === 'SELECT' ) {
         // do not start if the target is a text input
         // if there is a touchmove on this input, then we can start the scroll
         self.__hasStarted = false;
@@ -4284,7 +4284,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return;
       }
 
-      if( !self.__hasStarted && ionic.tap.containsOrIsTextInput(e.target) ) {
+      if( !self.__hasStarted && ( ionic.tap.containsOrIsTextInput(e.target) || e.target.tagName === 'SELECT' ) ) {
         // the target is a text input and scroll has started
         // since the text input doesn't start on touchStart, do it here
         self.__hasStarted = true;
