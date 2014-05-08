@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2021
+ * Ionic, v1.0.0-beta.4-nightly-2022
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -292,22 +292,22 @@ jqLite.prototype.removeClass = function(cssClasses) {
  *    var anim = $ionicAnimate({
  *     // A unique, reusable name
  *     name: 'popIn',
- *     
+ *
  *     // The duration of an auto playthrough
  *     duration: 0.5,
- *     
+ *
  *     // How long to wait before running the animation
  *     delay: 0,
- *     
+ *
  *     // Whether to reverse after doing one run through
  *     autoReverse: false,
- *     
+ *
  *     // How many times to repeat? -1 or null for infinite
  *     repeat: -1,
- *     
+ *
  *     // Timing curve to use (same as CSS timing functions), or a function of time "t" to handle it yourself
  *     curve: 'ease-in-out'
- *     
+ *
  *     onStart: function() {
  *       // Callback on start
  *     },
@@ -315,7 +315,7 @@ jqLite.prototype.removeClass = function(cssClasses) {
  *       // Callback on end
  *     },
  *     step: function(amt) {
- *       
+ *
  *     }
  *   })
  * });
@@ -333,8 +333,8 @@ IonicModule
     return function(opts) {
       opts.useSlowAnimations = useSlowAnimations;
       return ionic.Animation.create(opts);
-    }
-  }]
+    };
+  }];
 });
 
 /**
@@ -1337,7 +1337,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       self.el.classList.remove('hide');
       $timeout(function(){
         $document[0].body.classList.add('modal-open');
-      }, 400)
+      }, 400);
 
 
       if(!self.el.parentElement) {
@@ -2688,7 +2688,7 @@ IonicModule
    *
    * Example: `$ionicTabsDelegate.$getByHandle('my-handle').select(0);`
    */
-]))
+]));
 
 
 IonicModule
@@ -3603,7 +3603,7 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
       });
     });
   };
-}])
+}]);
 
 
 /**
@@ -4705,7 +4705,7 @@ IonicModule
         $element[0].classList.add('active');
         infiniteScrollCtrl.isLoading = true;
         $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
-      }
+      };
 
       var finishInfiniteScroll = function() {
         $element[0].classList.remove('active');
