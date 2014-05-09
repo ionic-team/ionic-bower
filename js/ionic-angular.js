@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2037
+ * Ionic, v1.0.0-beta.4-nightly-2038
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3530,6 +3530,9 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
   };
 
   this.setTitle = function(title) {
+    if ($scope.title === title) {
+      return;
+    }
     $scope.oldTitle = $scope.title;
     $scope.title = title || '';
   };
@@ -7003,11 +7006,8 @@ IonicModule
 
           // watch for changes in the title, don't set initial value as changeTitle does that
           $attr.$observe('title', function(val, oldVal) {
-            if (val !== initialTitle) {
-              navBarCtrl.setTitle(val);
-            }
+            navBarCtrl.setTitle(val);
           });
-
         }
 
         var hideBackAttr = angular.isDefined($attr.hideBackButton) ?
