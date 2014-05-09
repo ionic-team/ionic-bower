@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2032
+ * Ionic, v1.0.0-beta.4-nightly-2033
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2032'
+  version: '1.0.0-beta.4-nightly-2033'
 };
 
 (function(ionic) {
@@ -7254,6 +7254,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       e.gesture.srcEvent.preventDefault();
 
       ionic.requestAnimationFrame(function(amount) {
+        if (!self._dragInfo) { return; }
 
         var slidePageLeft = self.track.offsetLeft + (self.handle.offsetWidth / 2);
         var slidePageRight = self.track.offsetLeft + self.track.offsetWidth - (self.handle.offsetWidth / 2);
@@ -37411,7 +37412,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2032
+ * Ionic, v1.0.0-beta.4-nightly-2033
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
