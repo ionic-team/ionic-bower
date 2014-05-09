@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2041
+ * Ionic, v1.0.0-beta.4-nightly-2042
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2041'
+  version: '1.0.0-beta.4-nightly-2042'
 };
 
 (function(ionic) {
@@ -3341,7 +3341,9 @@ function keyboardOnKeyDown(e) {
 }
 
 function keyboardPreventDefault(e) {
-  e.preventDefault();
+  if( e.target.tagName !== 'TEXTAREA' ) {
+    e.preventDefault();
+  }
 }
 
 function keyboardOrientationChange() {
@@ -4293,7 +4295,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
     };
 
     self.touchMove = function(e) {
-      if(e.defaultPrevented) {
+      if(e.defaultPrevented ||
+        (e.target.tagName === 'TEXTAREA' && e.target.parentElement.querySelector(':focus')) ) {
         return;
       }
 
