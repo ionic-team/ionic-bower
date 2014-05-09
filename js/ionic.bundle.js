@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2033
+ * Ionic, v1.0.0-beta.4-nightly-2034
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2033'
+  version: '1.0.0-beta.4-nightly-2034'
 };
 
 (function(ionic) {
@@ -3544,6 +3544,10 @@ function viewportUpdate() {
         // iPhone <= 6.1 WebView
         // if height was set it needs to get removed with this hack for <= 6.1
         if( initHeight ) viewportProperties.height = '0';
+
+      } else if(version == 7) {
+        //iPhone == 7.0 WebView
+        viewportProperties.height = DEVICE_HEIGHT;
       }
 
     } else {
@@ -37412,7 +37416,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2033
+ * Ionic, v1.0.0-beta.4-nightly-2034
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
