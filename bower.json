@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "1.0.0-beta.4-nightly-2039",
+  "version": "1.0.0-beta.4-nightly-2040",
   "codename": "antimony-antelope",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -32,6 +32,6 @@
     "angular": "~1.2.12",
     "angular-animate": "~1.2.12",
     "angular-sanitize": "~1.2.12",
-    "angular-ui-router": "0.2.7"
+    "angular-ui-router": "0.2.10"
   }
 }
