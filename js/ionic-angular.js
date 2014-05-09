@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2031
+ * Ionic, v1.0.0-beta.4-nightly-2032
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5627,7 +5627,7 @@ function($ionicViewService, $location, $state, $window, $rootScope) {
  * @name ionNavView
  * @module ionic
  * @restrict E
- * @codepen HjnFx
+ * @codepen odqCz
  *
  * @description
  * As a user navigates throughout your app, Ionic is able to keep track of their
