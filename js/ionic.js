@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2040
+ * Ionic, v1.0.0-beta.4-nightly-2041
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2040'
+  version: '1.0.0-beta.4-nightly-2041'
 };
 
 (function(ionic) {
@@ -3306,7 +3306,6 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
 }
 
 function keyboardFocusOut(e) {
-  clearTimeout(keyboardFocusInTimer);
   clearTimeout(keyboardFocusOutTimer);
 
   keyboardFocusOutTimer = setTimeout(keyboardHide, 350);
