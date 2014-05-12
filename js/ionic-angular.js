@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2052
+ * Ionic, v1.0.0-beta.4-nightly-2055
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4561,7 +4561,8 @@ function tapScrollToTopDirective() {
             bounds.left, bounds.top - 20,
             bounds.left + bounds.width, bounds.top + bounds.height
           )) {
-            $ionicScrollDelegate.scrollTop(true);
+            var scrollCtrl = $element.controller('$ionicScroll');
+            scrollCtrl && scrollCtrl.scrollTop(true);
           }
         }
       }
