@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2049
+ * Ionic, v1.0.0-beta.4-nightly-2052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2049'
+  version: '1.0.0-beta.4-nightly-2052'
 };
 
 (function(ionic) {
@@ -38874,7 +38874,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2049
+ * Ionic, v1.0.0-beta.4-nightly-2052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41406,8 +41406,7 @@ IonicModule
  * @description
  * Delegate that controls the {@link ionic.directive:ionSlideBox} directive.
  *
- * Methods called directly on the $ionicSlideBoxDelegate service will control all side
- * menus.  Use the {@link ionic.service:$ionicSlideBoxDelegate#$getByHandle $getByHandle}
+ * Methods called directly on the $ionicSlideBoxDelegate service will control all slide boxes.  Use the {@link ionic.service:$ionicSlideBoxDelegate#$getByHandle $getByHandle}
  * method to control specific slide box instances.
  *
  * @usage
