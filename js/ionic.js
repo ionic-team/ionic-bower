@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2063
+ * Ionic, v1.0.0-beta.4-nightly-2064
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2063'
+  version: '1.0.0-beta.4-nightly-2064'
 };
 
 (function(ionic) {
@@ -3322,7 +3322,8 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
     target: element,
     elementTop: Math.round(elementTop),
     elementBottom: Math.round(elementBottom),
-    keyboardHeight: keyboardHeight
+    keyboardHeight: keyboardHeight,
+    viewportHeight: viewportHeight
   };
 
   details.hasPlugin = keyboardHasPlugin();
@@ -4277,7 +4278,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
         // shrink scrollview so we can actually scroll if the input is hidden
         // if it isn't shrink so we can scroll to inputs under the keyboard
         if (ionic.Platform.isIOS() || ionic.Platform.isFullScreen){
-          container.style.height = (container.clientHeight - e.detail.keyboardHeight) + "px";
+          // if there are things below the scroll view account for them and
+          // subtract them from the keyboard height when resizing
+          var offsetToTop = container.getBoundingClientRect().bottom;
+          var offsetToBottom = e.detail.viewportHeight - offsetToTop;
+          var keyboardOffset = Math.max(0, e.detail.keyboardHeight - offsetToBottom);
+          container.style.height = (container.clientHeight - keyboardOffset) + "px";
           container.style.overflow = "visible";
           //update scroll view
           self.resize();
