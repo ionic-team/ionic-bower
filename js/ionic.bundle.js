@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2072
+ * Ionic, v1.0.0-beta.4-nightly-2073
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2072'
+  version: '1.0.0-beta.4-nightly-2073'
 };
 
 (function(ionic) {
@@ -34997,7 +34997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2072
+ * Ionic, v1.0.0-beta.4-nightly-2073
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35057,8 +35057,10 @@ var deprecated = {
 var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router']),
   extend = angular.extend,
   forEach = angular.forEach,
+  isDefined = angular.isDefined,
   isString = angular.isString,
   jqLite = angular.element;
+
 
 /**
  * @ngdoc service
@@ -39064,30 +39066,30 @@ IonicModule
     restrict: 'E',
     replace: true,
     require: '?ngModel',
-    scope: {
-      ngModel: '=?',
-      ngValue: '=?',
-      ngChecked: '=?',
-      ngDisabled: '=?',
-      ngChange: '&'
-    },
     transclude: true,
-
     template: '<label class="item item-checkbox">' +
                 '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
-                  '<input type="checkbox" ng-model="ngModel" ng-value="ngValue" ng-change="ngChange()">' +
+                  '<input type="checkbox">' +
                   '<i class="checkbox-icon"></i>' +
                 '</div>' +
                 '<div class="item-content disable-pointer-events" ng-transclude></div>' +
               '</label>',
-
     compile: function(element, attr) {
       var input = element.find('input');
-      if(attr.name) input.attr('name', attr.name);
-      if(attr.ngChecked) input.attr('ng-checked', attr.ngChecked);
-      if(attr.ngDisabled) input.attr('ng-disabled', attr.ngDisabled);
-      if(attr.ngTrueValue) input.attr('ng-true-value', attr.ngTrueValue);
-      if(attr.ngFalseValue) input.attr('ng-false-value', attr.ngFalseValue);
+      forEach({
+        'name': attr.name,
+        'ng-value': attr.ngValue,
+        'ng-model': attr.ngModel,
+        'ng-checked': attr.ngChecked,
+        'ng-disabled': attr.ngDisabled,
+        'ng-true-value': attr.ngTrueValue,
+        'ng-false-value': attr.ngFalseValue,
+        'ng-change': attr.ngChange
+      }, function(value, name) {
+        if (isDefined(value)) {
+          input.attr(name, value);
+        }
+      });
     }
 
   };
