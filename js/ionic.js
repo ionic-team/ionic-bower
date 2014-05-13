@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2078
+ * Ionic, v1.0.0-beta.4-nightly-2079
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2078'
+  version: '1.0.0-beta.4-nightly-2079'
 };
 
 (function(ionic) {
@@ -3262,8 +3262,13 @@ ionic.DomUtil.ready(function(){
  * - If your app is running in fullscreen, i.e. you have `<preference name="Fullscreen" value="true" />` in your `config.xml` file
  * you will need to set `ionic.Platform.isFullScreen = true` manually.
  *
- * - If you are not using the keyboard plugin, it may be necessary to set `android:windowSoftInputMode="adjustResize"` to
- * your activity in `AndroidManifest.xml` to get things working properly.
+ * - You can configure the behavior of the web view when the keyboard shows by setting 
+ *   [android:windowSoftInputMode](http://developer.android.com/reference/android/R.attr.html#windowSoftInputMode) to either `adjustPan`, `adjustResize` or `adjustNothing` in your app's activity in `AndroidManifest.xml`. `adjustResize` is the recommended setting for Ionic, but if for some reason you do use `adjustPan` you will need to set `ionic.Platform.isFullScreen = true`.
+ *
+ *   ```xml
+ *   <activity android:windowSoftInputMode="adjustResize">
+ *
+ *   ```
  *
  * ### iOS Notes
  * - if you are not using the keyboard plugin, switching to inputs below the keyboard using the accessory bar will automatically use the native browser's
