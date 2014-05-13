@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2085
+ * Ionic, v1.0.0-beta.4-nightly-2086
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2085'
+  version: '1.0.0-beta.4-nightly-2086'
 };
 
 (function(ionic) {
@@ -4354,13 +4354,11 @@ ionic.views.Scroll = ionic.views.View.inherit({
           // android y u resize so slow
           if ( ionic.Platform.version() < 4.4) {
             delay = 500;
-          }
-          else {
+          } else {
             // probably overkill for chrome
             delay = 350;
           }
-        }
-        else {
+        } else {
           delay = 80;
         }
 
@@ -35017,7 +35015,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2085
+ * Ionic, v1.0.0-beta.4-nightly-2086
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
