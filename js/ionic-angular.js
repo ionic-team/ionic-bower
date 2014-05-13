@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2083
+ * Ionic, v1.0.0-beta.4-nightly-2084
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -138,8 +138,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
      *  - `{string=}` `destructiveText` The text for a 'danger' on the action sheet.
      *  - `{function=}` `cancel` Called if the cancel button is pressed or the backdrop is tapped.
      *  - `{function=}` `buttonClicked` Called when one of the non-destructive buttons is clicked,
-     *     with the index of the button that was clicked. Return true to close the action sheet,
-     *     or false to keep it opened.
+     *     with the index of the button that was clicked and the button object. Return true to close
+     *     the action sheet, or false to keep it opened.
      *  - `{function=}` `destructiveButtonClicked` Called when the destructive button is clicked.
      *     Return true to close the action sheet, or false to keep it opened.
      */
@@ -149,7 +149,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
       extend(scope, {
         cancel: angular.noop,
         buttonClicked: angular.noop,
-        destructiveButtonClicked: angular.noop
+        destructiveButtonClicked: angular.noop,
+        buttons: []
       }, opts);
 
       // Compile the template
@@ -190,7 +191,7 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
       scope.buttonClicked = function(index) {
         // Check if the button click event returned true, which means
         // we can close the action sheet
-        if((opts.buttonClicked && opts.buttonClicked(index)) === true) {
+        if((opts.buttonClicked && opts.buttonClicked(index, opts.buttons[index])) === true) {
           hideSheet(false);
         }
       };
