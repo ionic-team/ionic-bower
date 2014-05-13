@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2079
+ * Ionic, v1.0.0-beta.4-nightly-2080
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3051,25 +3051,25 @@ a.subdued {
 
 /* Navigational tab */
 /* Active state for tab */
-.tab-item.tab-item-active {
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
   opacity: 1; }
-  .tab-item.tab-item-active.tab-item-light {
+  .tab-item.tab-item-active.tab-item-light, .tab-item.active.tab-item-light, .tab-item.activated.tab-item-light {
     color: #fff; }
-  .tab-item.tab-item-active.tab-item-stable {
+  .tab-item.tab-item-active.tab-item-stable, .tab-item.active.tab-item-stable, .tab-item.activated.tab-item-stable {
     color: #f8f8f8; }
-  .tab-item.tab-item-active.tab-item-positive {
+  .tab-item.tab-item-active.tab-item-positive, .tab-item.active.tab-item-positive, .tab-item.activated.tab-item-positive {
     color: #4a87ee; }
-  .tab-item.tab-item-active.tab-item-calm {
+  .tab-item.tab-item-active.tab-item-calm, .tab-item.active.tab-item-calm, .tab-item.activated.tab-item-calm {
     color: #43cee6; }
-  .tab-item.tab-item-active.tab-item-assertive {
+  .tab-item.tab-item-active.tab-item-assertive, .tab-item.active.tab-item-assertive, .tab-item.activated.tab-item-assertive {
     color: #ef4e3a; }
-  .tab-item.tab-item-active.tab-item-balanced {
+  .tab-item.tab-item-active.tab-item-balanced, .tab-item.active.tab-item-balanced, .tab-item.activated.tab-item-balanced {
     color: #66cc33; }
-  .tab-item.tab-item-active.tab-item-energized {
+  .tab-item.tab-item-active.tab-item-energized, .tab-item.active.tab-item-energized, .tab-item.activated.tab-item-energized {
     color: #f0b840; }
-  .tab-item.tab-item-active.tab-item-royal {
+  .tab-item.tab-item-active.tab-item-royal, .tab-item.active.tab-item-royal, .tab-item.activated.tab-item-royal {
     color: #8a6de9; }
-  .tab-item.tab-item-active.tab-item-dark {
+  .tab-item.tab-item-active.tab-item-dark, .tab-item.active.tab-item-dark, .tab-item.activated.tab-item-dark {
     color: #444; }
 
 .item.tabs {
