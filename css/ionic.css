@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2089
+ * Ionic, v1.0.0-beta.4-nightly-2090
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4217,6 +4217,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   vertical-align: middle;
   font-size: 14px;
   line-height: 16px; }
+
+.platform-ios input[type="datetime-local"], .platform-ios input[type="date"], .platform-ios input[type="month"], .platform-ios input[type="time"], .platform-ios input[type="week"], .platform-android input[type="datetime-local"], .platform-android input[type="date"], .platform-android input[type="month"], .platform-android input[type="time"], .platform-android input[type="week"] {
+  padding-top: 8px; }
 
 input, textarea {
   width: 100%; }
