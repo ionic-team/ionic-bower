@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2095
+ * Ionic, v1.0.0-beta.4-nightly-2096
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5570,9 +5570,10 @@ a.button {
   right: -1px;
   bottom: 0;
   left: -1px;
-  width: auto;
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd; }
+  width: auto; }
+  .slide-left-right-ios7 > .ng-enter:not(.bar), .slide-left-right-ios7.ng-enter:not(.bar), .slide-left-right-ios7 > .ng-leave:not(.bar), .slide-left-right-ios7.ng-leave:not(.bar), .slide-right-left-ios7.reverse > .ng-enter:not(.bar), .slide-right-left-ios7.reverse.ng-enter:not(.bar), .slide-right-left-ios7.reverse > .ng-leave:not(.bar), .slide-right-left-ios7.reverse.ng-leave:not(.bar) {
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd; }
 .slide-left-right-ios7 > .ng-enter, .slide-left-right-ios7.ng-enter, .slide-right-left-ios7.reverse > .ng-enter, .slide-right-left-ios7.reverse.ng-enter {
   /* NEW content placed far RIGHT BEFORE it slides IN from the RIGHT */
   -webkit-transform: translate3d(100%, 0, 0);
