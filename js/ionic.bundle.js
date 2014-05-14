@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5-nightly-2104
+ * Ionic, v1.0.0-beta.5-nightly-2105
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5-nightly-2104'
+  version: '1.0.0-beta.5-nightly-2105'
 };
 
 (function(ionic) {
@@ -3270,7 +3270,12 @@ ionic.DomUtil.ready(function(){
  *   <div id="google-map"></div>
  * </div>
  * ```
- * 
+ * ----------
+ *
+ * ### Plugin Usage
+ * Information on using the plugin can be found at [https://github.com/driftyco/ionic-plugins-keyboard](https://github.com/driftyco/ionic-plugins-keyboard).
+ *
+ * ---------- 
  *
  * ### Android Notes
  * - If your app is running in fullscreen, i.e. you have `<preference name="Fullscreen" value="true" />` in your `config.xml` file
@@ -35040,7 +35045,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5-nightly-2104
+ * Ionic, v1.0.0-beta.5-nightly-2105
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
