@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5-nightly-2105
+ * Ionic, v1.0.0-beta.5-nightly-2106
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5-nightly-2105'
+  version: '1.0.0-beta.5-nightly-2106'
 };
 
 (function(ionic) {
@@ -2494,7 +2494,9 @@ var tapTouchFocusedInput;
 var tapLastTouchTarget;
 var tapTouchMoveListener = 'touchmove';
 
-var TAP_RELEASE_TOLERANCE = 6; // how much the coordinates can be off between start/end, but still a click
+// how much the coordinates can be off between start/end, but still a click
+var TAP_RELEASE_TOLERANCE = 6; // default tolerance
+var TAP_RELEASE_BUTTON_TOLERANCE = 50; // button elements should have a larger tolerance
 
 var tapEventListeners = {
   'click': tapClickGateKeeper,
@@ -2650,8 +2652,9 @@ ionic.tap = {
     return false;
   },
 
-  setTolerance: function(val) {
-    TAP_RELEASE_TOLERANCE = val;
+  setTolerance: function(releaseTolerance, releaseButtonTolerance) {
+    TAP_RELEASE_TOLERANCE = releaseTolerance;
+    TAP_RELEASE_BUTTON_TOLERANCE = releaseButtonTolerance;
   }
 
 };
@@ -2918,8 +2921,10 @@ function tapHasPointerMoved(endEvent) {
   }
   var endCoordinates = getPointerCoordinates(endEvent);
 
-  return Math.abs(tapPointerStart.x - endCoordinates.x) > TAP_RELEASE_TOLERANCE ||
-         Math.abs(tapPointerStart.y - endCoordinates.y) > TAP_RELEASE_TOLERANCE;
+  var releaseTolerance = (endEvent.target.classList.contains('button') ? TAP_RELEASE_BUTTON_TOLERANCE : TAP_RELEASE_TOLERANCE);
+
+  return Math.abs(tapPointerStart.x - endCoordinates.x) > releaseTolerance ||
+         Math.abs(tapPointerStart.y - endCoordinates.y) > releaseTolerance;
 }
 
 function getPointerCoordinates(event) {
@@ -35045,7 +35050,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5-nightly-2105
+ * Ionic, v1.0.0-beta.5-nightly-2106
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
