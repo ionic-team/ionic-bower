@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2097
+ * Ionic, v1.0.0-beta.4-nightly-2098
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4594,9 +4594,10 @@ function headerFooterBarDirective(isHeader) {
 
           if (isHeader) {
             $scope.$watch(function() { return el.className; }, function(value) {
+              var isShown = value.indexOf('ng-hide') === -1;
               var isSubheader = value.indexOf('bar-subheader') !== -1;
-              $scope.$hasHeader = !isSubheader;
-              $scope.$hasSubheader = isSubheader;
+              $scope.$hasHeader = isShown && !isSubheader;
+              $scope.$hasSubheader = isShown && isSubheader;
             });
             $scope.$on('$destroy', function() {
               delete $scope.$hasHeader;
@@ -4604,9 +4605,10 @@ function headerFooterBarDirective(isHeader) {
             });
           } else {
             $scope.$watch(function() { return el.className; }, function(value) {
+              var isShown = value.indexOf('ng-hide') === -1;
               var isSubfooter = value.indexOf('bar-subfooter') !== -1;
-              $scope.$hasFooter = !isSubfooter;
-              $scope.$hasSubfooter = isSubfooter;
+              $scope.$hasFooter = isShown && !isSubfooter;
+              $scope.$hasSubfooter = isShown && isSubfooter;
             });
             $scope.$on('$destroy', function() {
               delete $scope.$hasFooter;
