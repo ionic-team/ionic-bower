@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2096
+ * Ionic, v1.0.0-beta.4-nightly-2097
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1252,7 +1252,8 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * @module ionic
  * @description
  * The Modal is a content pane that can go over the user's main view
- * temporarily.  Usually used for making a choice or editing an item.
+ * temporarily.  Usually used for making a choice or editing an item. 
+ * Note that you need to put the content of the modal inside a div with the class `modal`.
  *
  * @usage
  * ```html
@@ -3791,8 +3792,6 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
       });
     }
   };
-
-
 
   /**
    * @private
