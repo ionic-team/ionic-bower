@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2087
+ * Ionic, v1.0.0-beta.4-nightly-2088
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3110,6 +3110,9 @@ a.subdued {
   -moz-transform: none;
   transform: none;
   box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.2), 1px 0px 2px rgba(0, 0, 0, 0.2); }
+
+.menu-open .scroll-content {
+  pointer-events: none; }
 
 .grade-b .menu-content, .grade-c .menu-content {
   -webkit-box-sizing: content-box;
