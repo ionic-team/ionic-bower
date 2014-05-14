@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.4-nightly-2092
+ * Ionic, v1.0.0-beta.4-nightly-2093
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.4-nightly-2092'
+  version: '1.0.0-beta.4-nightly-2093'
 };
 
 (function(ionic) {
@@ -6239,9 +6239,10 @@ ionic.scroll = {
   ReorderDrag.prototype = new DragOp();
 
   ReorderDrag.prototype._moveElement = function(e) {
-    var y = e.gesture.center.pageY -
-      this._currentDrag.elementHeight +
+    var y = e.gesture.center.pageY +
       this.scrollView.getValues().top -
+      this.scrollView.__container.offsetTop -
+      (this._currentDrag.elementHeight / 2) -
       this.listEl.offsetTop;
     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
@@ -6271,17 +6272,19 @@ ionic.scroll = {
 
   ReorderDrag.prototype.drag = ionic.animationFrameThrottle(function(e) {
     // We really aren't dragging
+    var self = this;
     if(!this._currentDrag) {
       return;
     }
 
     var scrollY = 0;
     var pageY = e.gesture.center.pageY;
+    var offset = this.listEl.offsetTop + this.scrollView.__container.offsetTop;
 
     //If we have a scrollView, check scroll boundaries for dragged element and scroll if necessary
     if (this.scrollView) {
-      var container = this.scrollEl;
 
+      var container = this.scrollView.__container;
       scrollY = this.scrollView.getValues().top;
 
       var containerTop = container.offsetTop;
@@ -6290,10 +6293,18 @@ ionic.scroll = {
 
       if (e.gesture.deltaY < 0 && pixelsPastTop > 0 && scrollY > 0) {
         this.scrollView.scrollBy(null, -pixelsPastTop);
+        //Trigger another drag so the scrolling keeps going
+        setTimeout(function() {
+          self.drag(e);
+        }.bind(this));
       }
       if (e.gesture.deltaY > 0 && pixelsPastBottom > 0) {
         if (scrollY < this.scrollView.getScrollMax().top) {
           this.scrollView.scrollBy(null, pixelsPastBottom);
+          //Trigger another drag so the scrolling keeps going
+          setTimeout(function() {
+            self.drag(e);
+          }.bind(this));
         }
       }
     }
@@ -6307,7 +6318,7 @@ ionic.scroll = {
     if(this._isDragging) {
       this._moveElement(e);
 
-      this._currentDrag.currentY = scrollY + pageY - this._currentDrag.placeholder.parentNode.offsetTop;
+      this._currentDrag.currentY = scrollY + pageY - offset;
 
       this._reorderItems();
     }
@@ -6327,13 +6338,14 @@ ionic.scroll = {
     var bottomSibling = siblings[Math.min(siblings.length, index+1)];
     var thisOffsetTop = this._currentDrag.currentY;// + this._currentDrag.startOffsetTop;
 
-    if(topSibling && (thisOffsetTop < topSibling.offsetTop + topSibling.offsetHeight/2)) {
+   if(topSibling && (thisOffsetTop < topSibling.offsetTop + topSibling.offsetHeight)) {
       ionic.DomUtil.swapNodes(this._currentDrag.placeholder, topSibling);
       return index - 1;
-    } else if(bottomSibling && thisOffsetTop > (bottomSibling.offsetTop + bottomSibling.offsetHeight/2)) {
+    } else if(bottomSibling && thisOffsetTop > (bottomSibling.offsetTop)) {
       ionic.DomUtil.swapNodes(bottomSibling, this._currentDrag.placeholder);
       return index + 1;
     }
+  
   };
 
   ReorderDrag.prototype.end = function(e, doneCallback) {
