@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5-nightly-2106
+ * Ionic, v1.0.0-beta.5-nightly-2107
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4381,6 +4381,13 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   left: 7.5px;
   z-index: 3;
   margin-top: -21px; }
+
+.item-checkbox.item-checkbox-right {
+  padding-right: 58px;
+  padding-left: 15px; }
+
+.item-checkbox-right .checkbox input, .item-checkbox-right .checkbox-icon {
+  float: right; }
 
 /**
  * Toggle
