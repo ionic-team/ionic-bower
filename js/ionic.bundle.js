@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2120
+ * Ionic, v1.0.0-beta.5b-nightly-2123
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2120'
+  version: '1.0.0-beta.5b-nightly-2123'
 };
 
 (function(ionic) {
@@ -35045,7 +35045,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2120
+ * Ionic, v1.0.0-beta.5b-nightly-2123
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39965,23 +39965,27 @@ var ITEM_TPL_OPTION_BUTTONS =
 */
 IonicModule
 .directive('ionOptionButton', ['$compile', function($compile) {
-return {
-  restrict: 'E',
-  require: '^ionItem',
-  priority: Number.MAX_VALUE,
-  compile: function($element, $attr) {
-    $attr.$set('class', ($attr['class'] || '') + ' button', true);
-    return function($scope, $element, $attr, itemCtrl) {
-      if (!itemCtrl.optionsContainer) {
-        itemCtrl.optionsContainer = jqLite(ITEM_TPL_OPTION_BUTTONS);
-        itemCtrl.$element.append(itemCtrl.optionsContainer);
-      }
-      itemCtrl.optionsContainer.append($element);
-
-      $element.on('click', eventStopPropagation);
-    };
+  function stopPropagation(e) {
+    e.stopPropagation();
   }
-};
+  return {
+    restrict: 'E',
+    require: '^ionItem',
+    priority: Number.MAX_VALUE,
+    compile: function($element, $attr) {
+      $attr.$set('class', ($attr['class'] || '') + ' button', true);
+      return function($scope, $element, $attr, itemCtrl) {
+        if (!itemCtrl.optionsContainer) {
+          itemCtrl.optionsContainer = jqLite(ITEM_TPL_OPTION_BUTTONS);
+          itemCtrl.$element.append(itemCtrl.optionsContainer);
+        }
+        itemCtrl.optionsContainer.append($element);
+
+        //Don't bubble click up to main .item
+        $element.on('click', stopPropagation);
+      };
+    }
+  };
 }]);
 
 var ITEM_TPL_REORDER_BUTTON =
@@ -40192,8 +40196,8 @@ function keyboardAttachGetClientHeight(element) { return element.clientHeight }
 */
 IonicModule
 .directive('ionList', [
-'$animate',
-'$timeout',
+  '$animate',
+  '$timeout',
 function($animate, $timeout) {
   return {
     restrict: 'E',
