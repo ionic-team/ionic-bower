@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2128
+ * Ionic, v1.0.0-beta.5b-nightly-2129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2128'
+  version: '1.0.0-beta.5b-nightly-2129'
 };
 
 (function(ionic) {
@@ -7965,21 +7965,21 @@ ionic.views.Slider = ionic.views.View.inherit({
   ionic.Animation = ionic.Animation || {};
 
 
-  /**
+  /*
    * JavaScript port of Webkit implementation of CSS cubic-bezier(p1x.p1y,p2x,p2y) by http://mck.me
    * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/platform/graphics/UnitBezier.h
    */
   ionic.Animation.Bezier = (function(){
     'use strict';
 
-    /**
+    /*
      * Duration value to use when one is not specified (400ms is a common value).
      * @const
      * @type {number}
      */
     var DEFAULT_DURATION = 400;//ms
 
-    /**
+    /*
      * The epsilon value we pass to UnitBezier::solve given that the animation is going to run over |dur| seconds.
      * The longer the animation, the more precision we need in the timing function result to avoid ugly discontinuities.
      * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/page/animation/AnimationBase.cpp
@@ -7988,7 +7988,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       return 1.0 / (200.0 * duration);
     };
 
-    /**
+    /*
      * Defines a cubic-bezier curve given the middle two control points.
      * NOTE: first and last control points are implicitly (0,0) and (1,1).
      * @param p1x {number} X component of control point 1
@@ -8002,49 +8002,49 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
 
-      /**
+      /*
        * X component of Bezier coefficient C
        * @const
        * @type {number}
        */
       var cx = 3.0 * p1x;
 
-      /**
+      /*
        * X component of Bezier coefficient B
        * @const
        * @type {number}
        */
       var bx = 3.0 * (p2x - p1x) - cx;
 
-      /**
+      /*
        * X component of Bezier coefficient A
        * @const
        * @type {number}
        */
       var ax = 1.0 - cx -bx;
 
-      /**
+      /*
        * Y component of Bezier coefficient C
        * @const
        * @type {number}
        */
       var cy = 3.0 * p1y;
 
-      /**
+      /*
        * Y component of Bezier coefficient B
        * @const
        * @type {number}
        */
       var by = 3.0 * (p2y - p1y) - cy;
 
-      /**
+      /*
        * Y component of Bezier coefficient A
        * @const
        * @type {number}
        */
       var ay = 1.0 - cy - by;
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8053,7 +8053,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return ((ax * t + bx) * t + cx) * t;
       };
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8061,7 +8061,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return ((ay * t + by) * t + cy) * t;
       };
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8069,7 +8069,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return (3.0 * ax * t + 2.0 * bx) * t + cx;
       };
 
-      /**
+      /*
        * Given an x value, find a parametric value it came from.
        * @param x {number} value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param epsilon {number} accuracy limit of t for the given x
@@ -8125,7 +8125,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return t2;
       };
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param epsilon {number} the accuracy of t for the given x
        * @return {number} the y value along the bezier curve
@@ -8136,7 +8136,7 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       // public interface --------------------------------------------
 
-      /**
+      /*
        * Find the y of the cubic-bezier for a given x with accuracy determined by the animation duration.
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
@@ -8149,42 +8149,42 @@ ionic.views.Slider = ionic.views.View.inherit({
 
     // http://www.w3.org/TR/css3-transitions/#transition-timing-function
     return {
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       linear: unitBezier(0.0, 0.0, 1.0, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       ease: unitBezier(0.25, 0.1, 0.25, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeIn: unitBezier(0.42, 0, 1.0, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeOut: unitBezier(0, 0, 0.58, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeInOut: unitBezier(0.42, 0, 0.58, 1.0),
 
-      /**
+      /*
        * @param p1x {number} X component of control point 1
        * @param p1y {number} Y component of control point 1
        * @param p2x {number} X component of control point 2
@@ -8199,21 +8199,21 @@ ionic.views.Slider = ionic.views.View.inherit({
     };
   })();
 
-/**
+/*
  * Various fast approximations and alternates to cubic-bezier easing functions.
  * http://www.w3.org/TR/css3-transitions/#transition-timing-function
  */
 var Easing = (function(){
 	'use strict';
 
-	/**
+	/*
 	 * @const
 	 */
 	var EASE_IN_OUT_CONST = 0.5 * Math.pow(0.5, 1.925);
 
 	return {
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8221,7 +8221,7 @@ var Easing = (function(){
 			return x;
 		},
 
-//		/**
+//		/*
 //		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 //		 * @return {number} the y value along the curve
 //		 */
@@ -8230,7 +8230,7 @@ var Easing = (function(){
 //			return x;
 //		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8239,7 +8239,7 @@ var Easing = (function(){
 			return Math.pow(x, 1.685);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8247,7 +8247,7 @@ var Easing = (function(){
 			return (x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8255,7 +8255,7 @@ var Easing = (function(){
 			return (x * x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8264,7 +8264,7 @@ var Easing = (function(){
 			return 1 - Math.pow(1-x, 1.685);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8273,7 +8273,7 @@ var Easing = (function(){
 			return 1 - (x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8282,7 +8282,7 @@ var Easing = (function(){
 			return 1 + (x * x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8296,7 +8296,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8310,7 +8310,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8324,7 +8324,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8338,7 +8338,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */

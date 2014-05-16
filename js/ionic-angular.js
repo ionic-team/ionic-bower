@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2128
+ * Ionic, v1.0.0-beta.5b-nightly-2129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1253,7 +1253,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * @module ionic
  * @description
  * The Modal is a content pane that can go over the user's main view
- * temporarily.  Usually used for making a choice or editing an item. 
+ * temporarily.  Usually used for making a choice or editing an item.
  * Note that you need to put the content of the modal inside a div with the class `modal`.
  *
  * @usage
@@ -4066,6 +4066,60 @@ IonicModule
  * <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
  * ```
  */
+/**
+ * @ngdoc demo
+ * @name ionCheckbox#simple
+ * @module checkboxSimple
+ * @javascript
+ * var app = angular.module('checkboxSimple', ['ionic']);
+ * app.controller('CheckboxSimpleCtrl', function($scope) {
+ *   $scope.pizza = {
+ *     pepperoni: true,
+ *     sausage: false,
+ *     anchovies: true,
+ *     jalapenos: false
+ *   };
+ *
+ *   $scope.toppings = function() {
+ *     var toppings = Object.keys($scope.pizza).filter(function(flavor) {
+ *       return $scope.pizza[flavor];
+ *     });
+ *     if (toppings.length > 1) {
+ *       toppings[toppings.length - 1] = 'and ' + toppings[toppings.length - 1];
+ *     }
+ *     if (toppings.length > 2) {
+ *       return toppings.join(', ');
+ *     } else if (toppings.length) {
+ *       return toppings.join(' ');
+ *     } else {
+ *       return 'nothing';
+ *     }
+ *   };
+ * });
+ *
+ * @html
+ * <ion-header-bar class="bar-positive">
+ *   <h1 class="title">
+ *     Checkbox: Simple Usage
+ *   </h1>
+ * </ion-header-bar>
+ * <ion-content ng-controller="CheckboxSimpleCtrl" class="padding">
+ *   <h3>Your pizza has {{toppings()}}!</h3>
+ *   <ion-checkbox ng-model="pizza.pepperoni">
+ *     Pepperoni?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.sausage">
+ *     Sausage?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.anchovies">
+ *     Jalapeno?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.jalapenos">
+ *     Anchovies?
+ *   </ion-checkbox>
+ * </ion-content>
+ */
+
 IonicModule
 .directive('ionCheckbox', function() {
   return {
@@ -4902,7 +4956,7 @@ var ITEM_TPL_OPTION_BUTTONS =
 * @restrict E
 * Creates an option button inside a list item, that is visible when the item is swiped
 * to the left by the user.  Swiped open option buttons can be hidden with
-* {@link ionic.directive:$ionicListDelegate#closeOptionButtons $ionicListDelegate#closeOptionButtons}.
+* {@link ionic.service:$ionicListDelegate#closeOptionButtons $ionicListDelegate#closeOptionButtons}.
 *
 * Can be assigned any button class.
 *
@@ -5059,23 +5113,25 @@ IonicModule
       if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = keyboardHeight + keyboardAttachGetClientHeight(element[0]) + "px";
       }
-    };
+    }
 
     function onHide() {
       element.css('bottom', '');
-      if ( scrollCtrl ) { 
+      if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = '';
       }
-    };
+    }
 
     scope.$on('$destroy', function() {
       window.removeEventListener('native.showkeyboard', onShow);
       window.removeEventListener('native.hidekeyboard', onHide);
     });
   };
-})
+});
 
-function keyboardAttachGetClientHeight(element) { return element.clientHeight }
+function keyboardAttachGetClientHeight(element) {
+  return element.clientHeight;
+}
 
 /**
 * @ngdoc directive
@@ -6282,6 +6338,7 @@ IonicModule
   };
 });
 
+
 /**
  * @ngdoc directive
  * @name ionSideMenuContent
@@ -6460,6 +6517,51 @@ IonicModule
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
+/**
+ * @ngdoc demo
+ * @name ionSideMenus#simple
+ * @module sideMenusSimple
+ * @javascript
+var app = angular.module('sideMenusSimple', ['ionic']);
+app.controller('SideMenusSimpleCtrl', function($scope, $ionicSideMenuDelegate) {
+
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
+});
+ *
+ * @html
+<ion-view title="Side Menus Simple" ng-controller="SideMenusSimpleCtrl">
+  <ion-side-menus>
+
+    <ion-side-menu-content>
+      <ion-header-bar class="bar-positive">
+        <div class="buttons">
+          <div class="button button-clear" ng-click="toggleLeft()">
+            <i class="icon ion-navicon"></i>
+          </div>
+        </div>
+      </ion-header-bar>
+      <ion-content class="padding">
+        <p>Slide the content or press the button on the header to open a side menu.</p>
+      </ion-content>
+    </ion-side-menu-content>
+
+    <ion-side-menu side="left">
+      <ion-header-bar class="bar-positive">
+      </ion-header-bar>
+      <ion-content>
+        <a class="item" ng-click="toggleLeft()">
+          Close Menu
+        </a>
+      </ion-content>
+    </ion-side-menu>
+
+  </ion-side-menus>
+</ion-view>
+ */
+
 .directive('ionSideMenus', [function() {
   return {
     restrict: 'ECA',

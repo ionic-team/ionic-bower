@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2128
+ * Ionic, v1.0.0-beta.5b-nightly-2129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2128'
+  version: '1.0.0-beta.5b-nightly-2129'
 };
 
 (function(ionic) {
@@ -7972,21 +7972,21 @@ ionic.views.Slider = ionic.views.View.inherit({
   ionic.Animation = ionic.Animation || {};
 
 
-  /**
+  /*
    * JavaScript port of Webkit implementation of CSS cubic-bezier(p1x.p1y,p2x,p2y) by http://mck.me
    * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/platform/graphics/UnitBezier.h
    */
   ionic.Animation.Bezier = (function(){
     'use strict';
 
-    /**
+    /*
      * Duration value to use when one is not specified (400ms is a common value).
      * @const
      * @type {number}
      */
     var DEFAULT_DURATION = 400;//ms
 
-    /**
+    /*
      * The epsilon value we pass to UnitBezier::solve given that the animation is going to run over |dur| seconds.
      * The longer the animation, the more precision we need in the timing function result to avoid ugly discontinuities.
      * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/page/animation/AnimationBase.cpp
@@ -7995,7 +7995,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       return 1.0 / (200.0 * duration);
     };
 
-    /**
+    /*
      * Defines a cubic-bezier curve given the middle two control points.
      * NOTE: first and last control points are implicitly (0,0) and (1,1).
      * @param p1x {number} X component of control point 1
@@ -8009,49 +8009,49 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
 
-      /**
+      /*
        * X component of Bezier coefficient C
        * @const
        * @type {number}
        */
       var cx = 3.0 * p1x;
 
-      /**
+      /*
        * X component of Bezier coefficient B
        * @const
        * @type {number}
        */
       var bx = 3.0 * (p2x - p1x) - cx;
 
-      /**
+      /*
        * X component of Bezier coefficient A
        * @const
        * @type {number}
        */
       var ax = 1.0 - cx -bx;
 
-      /**
+      /*
        * Y component of Bezier coefficient C
        * @const
        * @type {number}
        */
       var cy = 3.0 * p1y;
 
-      /**
+      /*
        * Y component of Bezier coefficient B
        * @const
        * @type {number}
        */
       var by = 3.0 * (p2y - p1y) - cy;
 
-      /**
+      /*
        * Y component of Bezier coefficient A
        * @const
        * @type {number}
        */
       var ay = 1.0 - cy - by;
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8060,7 +8060,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return ((ax * t + bx) * t + cx) * t;
       };
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8068,7 +8068,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return ((ay * t + by) * t + cy) * t;
       };
 
-      /**
+      /*
        * @param t {number} parametric timing value
        * @return {number}
        */
@@ -8076,7 +8076,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return (3.0 * ax * t + 2.0 * bx) * t + cx;
       };
 
-      /**
+      /*
        * Given an x value, find a parametric value it came from.
        * @param x {number} value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param epsilon {number} accuracy limit of t for the given x
@@ -8132,7 +8132,7 @@ ionic.views.Slider = ionic.views.View.inherit({
         return t2;
       };
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param epsilon {number} the accuracy of t for the given x
        * @return {number} the y value along the bezier curve
@@ -8143,7 +8143,7 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       // public interface --------------------------------------------
 
-      /**
+      /*
        * Find the y of the cubic-bezier for a given x with accuracy determined by the animation duration.
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
@@ -8156,42 +8156,42 @@ ionic.views.Slider = ionic.views.View.inherit({
 
     // http://www.w3.org/TR/css3-transitions/#transition-timing-function
     return {
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       linear: unitBezier(0.0, 0.0, 1.0, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       ease: unitBezier(0.25, 0.1, 0.25, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeIn: unitBezier(0.42, 0, 1.0, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeOut: unitBezier(0, 0, 0.58, 1.0),
 
-      /**
+      /*
        * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
        * @param duration {number} the duration of the animation in milliseconds
        * @return {number} the y value along the bezier curve
        */
       easeInOut: unitBezier(0.42, 0, 0.58, 1.0),
 
-      /**
+      /*
        * @param p1x {number} X component of control point 1
        * @param p1y {number} Y component of control point 1
        * @param p2x {number} X component of control point 2
@@ -8206,21 +8206,21 @@ ionic.views.Slider = ionic.views.View.inherit({
     };
   })();
 
-/**
+/*
  * Various fast approximations and alternates to cubic-bezier easing functions.
  * http://www.w3.org/TR/css3-transitions/#transition-timing-function
  */
 var Easing = (function(){
 	'use strict';
 
-	/**
+	/*
 	 * @const
 	 */
 	var EASE_IN_OUT_CONST = 0.5 * Math.pow(0.5, 1.925);
 
 	return {
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8228,7 +8228,7 @@ var Easing = (function(){
 			return x;
 		},
 
-//		/**
+//		/*
 //		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 //		 * @return {number} the y value along the curve
 //		 */
@@ -8237,7 +8237,7 @@ var Easing = (function(){
 //			return x;
 //		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8246,7 +8246,7 @@ var Easing = (function(){
 			return Math.pow(x, 1.685);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8254,7 +8254,7 @@ var Easing = (function(){
 			return (x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8262,7 +8262,7 @@ var Easing = (function(){
 			return (x * x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8271,7 +8271,7 @@ var Easing = (function(){
 			return 1 - Math.pow(1-x, 1.685);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8280,7 +8280,7 @@ var Easing = (function(){
 			return 1 - (x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8289,7 +8289,7 @@ var Easing = (function(){
 			return 1 + (x * x * x);
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8303,7 +8303,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8317,7 +8317,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8331,7 +8331,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -8345,7 +8345,7 @@ var Easing = (function(){
 			}
 		},
 
-		/**
+		/*
 		 * @param x {number} the value of x along the curve, 0.0 <= x <= 1.0
 		 * @return {number} the y value along the curve
 		 */
@@ -35050,7 +35050,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2128
+ * Ionic, v1.0.0-beta.5b-nightly-2129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36301,7 +36301,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * @module ionic
  * @description
  * The Modal is a content pane that can go over the user's main view
- * temporarily.  Usually used for making a choice or editing an item. 
+ * temporarily.  Usually used for making a choice or editing an item.
  * Note that you need to put the content of the modal inside a div with the class `modal`.
  *
  * @usage
@@ -39114,6 +39114,60 @@ IonicModule
  * <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
  * ```
  */
+/**
+ * @ngdoc demo
+ * @name ionCheckbox#simple
+ * @module checkboxSimple
+ * @javascript
+ * var app = angular.module('checkboxSimple', ['ionic']);
+ * app.controller('CheckboxSimpleCtrl', function($scope) {
+ *   $scope.pizza = {
+ *     pepperoni: true,
+ *     sausage: false,
+ *     anchovies: true,
+ *     jalapenos: false
+ *   };
+ *
+ *   $scope.toppings = function() {
+ *     var toppings = Object.keys($scope.pizza).filter(function(flavor) {
+ *       return $scope.pizza[flavor];
+ *     });
+ *     if (toppings.length > 1) {
+ *       toppings[toppings.length - 1] = 'and ' + toppings[toppings.length - 1];
+ *     }
+ *     if (toppings.length > 2) {
+ *       return toppings.join(', ');
+ *     } else if (toppings.length) {
+ *       return toppings.join(' ');
+ *     } else {
+ *       return 'nothing';
+ *     }
+ *   };
+ * });
+ *
+ * @html
+ * <ion-header-bar class="bar-positive">
+ *   <h1 class="title">
+ *     Checkbox: Simple Usage
+ *   </h1>
+ * </ion-header-bar>
+ * <ion-content ng-controller="CheckboxSimpleCtrl" class="padding">
+ *   <h3>Your pizza has {{toppings()}}!</h3>
+ *   <ion-checkbox ng-model="pizza.pepperoni">
+ *     Pepperoni?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.sausage">
+ *     Sausage?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.anchovies">
+ *     Jalapeno?
+ *   </ion-checkbox>
+ *   <ion-checkbox ng-model="pizza.jalapenos">
+ *     Anchovies?
+ *   </ion-checkbox>
+ * </ion-content>
+ */
+
 IonicModule
 .directive('ionCheckbox', function() {
   return {
@@ -39950,7 +40004,7 @@ var ITEM_TPL_OPTION_BUTTONS =
 * @restrict E
 * Creates an option button inside a list item, that is visible when the item is swiped
 * to the left by the user.  Swiped open option buttons can be hidden with
-* {@link ionic.directive:$ionicListDelegate#closeOptionButtons $ionicListDelegate#closeOptionButtons}.
+* {@link ionic.service:$ionicListDelegate#closeOptionButtons $ionicListDelegate#closeOptionButtons}.
 *
 * Can be assigned any button class.
 *
@@ -40107,23 +40161,25 @@ IonicModule
       if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = keyboardHeight + keyboardAttachGetClientHeight(element[0]) + "px";
       }
-    };
+    }
 
     function onHide() {
       element.css('bottom', '');
-      if ( scrollCtrl ) { 
+      if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = '';
       }
-    };
+    }
 
     scope.$on('$destroy', function() {
       window.removeEventListener('native.showkeyboard', onShow);
       window.removeEventListener('native.hidekeyboard', onHide);
     });
   };
-})
+});
 
-function keyboardAttachGetClientHeight(element) { return element.clientHeight }
+function keyboardAttachGetClientHeight(element) {
+  return element.clientHeight;
+}
 
 /**
 * @ngdoc directive
@@ -41330,6 +41386,7 @@ IonicModule
   };
 });
 
+
 /**
  * @ngdoc directive
  * @name ionSideMenuContent
@@ -41508,6 +41565,51 @@ IonicModule
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
+/**
+ * @ngdoc demo
+ * @name ionSideMenus#simple
+ * @module sideMenusSimple
+ * @javascript
+var app = angular.module('sideMenusSimple', ['ionic']);
+app.controller('SideMenusSimpleCtrl', function($scope, $ionicSideMenuDelegate) {
+
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
+});
+ *
+ * @html
+<ion-view title="Side Menus Simple" ng-controller="SideMenusSimpleCtrl">
+  <ion-side-menus>
+
+    <ion-side-menu-content>
+      <ion-header-bar class="bar-positive">
+        <div class="buttons">
+          <div class="button button-clear" ng-click="toggleLeft()">
+            <i class="icon ion-navicon"></i>
+          </div>
+        </div>
+      </ion-header-bar>
+      <ion-content class="padding">
+        <p>Slide the content or press the button on the header to open a side menu.</p>
+      </ion-content>
+    </ion-side-menu-content>
+
+    <ion-side-menu side="left">
+      <ion-header-bar class="bar-positive">
+      </ion-header-bar>
+      <ion-content>
+        <a class="item" ng-click="toggleLeft()">
+          Close Menu
+        </a>
+      </ion-content>
+    </ion-side-menu>
+
+  </ion-side-menus>
+</ion-view>
+ */
+
 .directive('ionSideMenus', [function() {
   return {
     restrict: 'ECA',
