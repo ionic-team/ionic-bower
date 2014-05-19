@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2140
+ * Ionic, v1.0.0-beta.5b-nightly-2141
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2140'
+  version: '1.0.0-beta.5b-nightly-2141'
 };
 
 (function(ionic) {
@@ -35078,7 +35078,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2140
+ * Ionic, v1.0.0-beta.5b-nightly-2141
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40187,7 +40187,7 @@ IonicModule
     function onShow(e) {
       //for testing
       var keyboardHeight = e.keyboardHeight || e.detail.keyboardHeight;
-      element.css('bottom', keyboardHeight);
+      element.css('bottom', keyboardHeight + "px");
       scrollCtrl = element.controller('$ionicScroll');
       if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = keyboardHeight + keyboardAttachGetClientHeight(element[0]) + "px";
