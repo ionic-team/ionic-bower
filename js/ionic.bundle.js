@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2132
+ * Ionic, v1.0.0-beta.5b-nightly-2133
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2132'
+  version: '1.0.0-beta.5b-nightly-2133'
 };
 
 (function(ionic) {
@@ -7115,9 +7115,8 @@ ionic.views.Slider = ionic.views.View.inherit({
               Math.abs(delta.x) > width/2;      // or if slide amt is greater than half the width
 
         // determine if slide attempt is past start and end
-        var isPastBounds =
-              !index && delta.x > 0 |                    // if first slide and slide amt is greater than 0
-              index == slides.length - 1 && delta.x < 0; // or if last slide and slide amt is less than 0
+        var isPastBounds = (!index && delta.x > 0) ||      // if first slide and slide amt is greater than 0
+              (index == slides.length - 1 && delta.x < 0); // or if last slide and slide amt is less than 0
 
         if (options.continuous) isPastBounds = false;
 
@@ -35050,7 +35049,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2132
+ * Ionic, v1.0.0-beta.5b-nightly-2133
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
