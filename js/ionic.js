@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2142
+ * Ionic, v1.0.0-beta.5b-nightly-2143
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2142'
+  version: '1.0.0-beta.5b-nightly-2143'
 };
 
 (function(ionic) {
@@ -3317,6 +3317,10 @@ ionic.keyboard = {
 
 function keyboardInit() {
   if( keyboardHasPlugin() ) {
+    window.addEventListener('native.keyboardshow', keyboardNativeShow);
+    window.addEventListener('native.keyboardhide', keyboardFocusOut);
+
+    //deprecated
     window.addEventListener('native.showkeyboard', keyboardNativeShow);
     window.addEventListener('native.hidekeyboard', keyboardFocusOut);
   }
@@ -3542,6 +3546,7 @@ function keyboardHasPlugin() {
 }
 
 ionic.Platform.ready(function() {
+  ionic.Platform.isFullScreen = true;
   keyboardUpdateViewportHeight();
 
   // Android sometimes reports bad innerHeight on window.load
