@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2129
+ * Ionic, v1.0.0-beta.5b-nightly-2132
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2129'
+  version: '1.0.0-beta.5b-nightly-2132'
 };
 
 (function(ionic) {
@@ -35050,7 +35050,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2129
+ * Ionic, v1.0.0-beta.5b-nightly-2132
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36166,10 +36166,10 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
      * @param {object} opts The options for the loading indicator. Available properties:
      *  - `{string=}` `template` The html content of the indicator.
      *  - `{string=}` `templateUrl` The url of an html template to load as the content of the indicator.
-     *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop.
-     *  - `{number=}` `delay` How many milliseconds to delay showing the indicator.
+     *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop. By default it will be shown.
+     *  - `{number=}` `delay` How many milliseconds to delay showing the indicator. By default there is no delay.
      *  - `{number=}` `duration` How many milliseconds to wait until automatically
-     *  hiding the indicator.
+     *  hiding the indicator. By default, the indicator will be shown until `.hide()` is called.
      */
     show: showLoader,
     /**
