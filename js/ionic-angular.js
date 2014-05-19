@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2136
+ * Ionic, v1.0.0-beta.5b-nightly-2137
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4410,6 +4410,9 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
  * You can implement pull-to-refresh with the {@link ionic.directive:ionRefresher}
  * directive, and infinite scrolling with the {@link ionic.directive:ionInfiniteScroll}
  * directive.
+ *
+ * Be aware that this directive gets its own child scope. If you do not understand why this
+ * is important, you can read [https://docs.angularjs.org/guide/scope](https://docs.angularjs.org/guide/scope).
  *
  * @param {string=} delegate-handle The handle used to identify this scrollView
  * with {@link ionic.service:$ionicScrollDelegate}.
