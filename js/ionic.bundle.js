@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2138
+ * Ionic, v1.0.0-beta.5b-nightly-2139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2138'
+  version: '1.0.0-beta.5b-nightly-2139'
 };
 
 (function(ionic) {
@@ -393,17 +393,6 @@ window.ionic = {
         e = e.parentNode;
       }
       return null;
-    },
-
-    elementHasParent: function(element, parent) {
-      var current = element;
-      while (current) {
-        if (current.parentNode === parent) {
-          return true;
-        }
-        current = current.parentNode;
-      }
-      return false;
     },
 
     /**
@@ -4565,12 +4554,15 @@ ionic.views.Scroll = ionic.views.View.inherit({
       };
 
       self.mouseWheel = ionic.animationFrameThrottle(function(e) {
-        if (ionic.DomUtil.elementHasParent(e.target, self.__container)) {
+        var scrollParent = ionic.DomUtil.getParentOrSelfWithClass(e.target, 'ionic-scroll');
+        if (scrollParent === self.__container) {
+
           self.hintResize();
           self.scrollBy(
             e.wheelDeltaX/self.options.wheelDampen, 
             -e.wheelDeltaY/self.options.wheelDampen
           );
+
           self.__fadeScrollbars('in');
           clearTimeout(self.__wheelHideBarTimeout);
           self.__wheelHideBarTimeout = setTimeout(function() {
@@ -35086,7 +35078,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2138
+ * Ionic, v1.0.0-beta.5b-nightly-2139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39525,7 +39517,7 @@ function($timeout, $controller, $ionicBind) {
     compile: function(element, attr) {
       var innerElement;
 
-      element.addClass('scroll-content');
+      element.addClass('scroll-content ionic-scroll');
 
       if (attr.scroll != 'false') {
         //We cannot use normal transclude here because it breaks element.data()
@@ -41303,7 +41295,7 @@ function($timeout, $controller, $ionicBind) {
     scope: true,
     controller: function() {},
     compile: function(element, attr) {
-      element.addClass('scroll-view');
+      element.addClass('scroll-view ionic-scroll');
 
       //We cannot transclude here because it breaks element.data() inheritance on compile
       var innerElement = jqLite('<div class="scroll"></div>');

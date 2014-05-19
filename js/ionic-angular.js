@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2138
+ * Ionic, v1.0.0-beta.5b-nightly-2139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4441,7 +4441,7 @@ function($timeout, $controller, $ionicBind) {
     compile: function(element, attr) {
       var innerElement;
 
-      element.addClass('scroll-content');
+      element.addClass('scroll-content ionic-scroll');
 
       if (attr.scroll != 'false') {
         //We cannot use normal transclude here because it breaks element.data()
@@ -6219,7 +6219,7 @@ function($timeout, $controller, $ionicBind) {
     scope: true,
     controller: function() {},
     compile: function(element, attr) {
-      element.addClass('scroll-view');
+      element.addClass('scroll-view ionic-scroll');
 
       //We cannot transclude here because it breaks element.data() inheritance on compile
       var innerElement = jqLite('<div class="scroll"></div>');
