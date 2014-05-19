@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2137
+ * Ionic, v1.0.0-beta.5b-nightly-2138
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2137'
+  version: '1.0.0-beta.5b-nightly-2138'
 };
 
 (function(ionic) {
@@ -393,6 +393,17 @@ window.ionic = {
         e = e.parentNode;
       }
       return null;
+    },
+
+    elementHasParent: function(element, parent) {
+      var current = element;
+      while (current) {
+        if (current.parentNode === parent) {
+          return true;
+        }
+        current = current.parentNode;
+      }
+      return false;
     },
 
     /**
@@ -4384,7 +4395,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
           scrollBottomOffsetToTop = container.getBoundingClientRect().bottom;
           //distance from top of focused element to the bottom of the scroll view
-          var elementTopOffsetToScrollBottom = e.detail.elementTop - scrollBottomOffsetToTop; 
+          var elementTopOffsetToScrollBottom = e.detail.elementTop - scrollBottomOffsetToTop;
 
           var scrollTop = elementTopOffsetToScrollBottom  + scrollMidpointOffset;
           ionic.tap.cloneFocusedInput(container, self);
@@ -4523,7 +4534,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       // Mouse Events
       var mousedown = false;
 
-      container.addEventListener("mousedown", function(e) {
+      self.mouseDown = function(e) {
         if ( ionic.tap.ignoreScrollStart(e) || e.target.tagName === 'SELECT' ) {
           return;
         }
@@ -4531,9 +4542,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
         e.preventDefault();
         mousedown = true;
-      }, false);
+      };
 
-      document.addEventListener("mousemove", function(e) {
+      self.mouseMove = function(e) {
         if (!mousedown || e.defaultPrevented) {
           return;
         }
@@ -4541,9 +4552,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
         self.doTouchMove(getEventTouches(e), e.timeStamp);
 
         mousedown = true;
-      }, false);
+      };
 
-      document.addEventListener("mouseup", function(e) {
+      self.mouseUp = function(e) {
         if (!mousedown) {
           return;
         }
@@ -4551,25 +4562,52 @@ ionic.views.Scroll = ionic.views.View.inherit({
         self.doTouchEnd(e.timeStamp);
 
         mousedown = false;
-      }, false);
+      };
 
-      var wheelShowBarFn = ionic.debounce(function() {
-        self.__fadeScrollbars('in');
-      }, 500, true);
+      self.mouseWheel = ionic.animationFrameThrottle(function(e) {
+        if (ionic.DomUtil.elementHasParent(e.target, self.__container)) {
+          self.hintResize();
+          self.scrollBy(
+            e.wheelDeltaX/self.options.wheelDampen, 
+            -e.wheelDeltaY/self.options.wheelDampen
+          );
+          self.__fadeScrollbars('in');
+          clearTimeout(self.__wheelHideBarTimeout);
+          self.__wheelHideBarTimeout = setTimeout(function() {
+            self.__fadeScrollbars('out');
+          }, 100);
+        }
+      });
 
-      var wheelHideBarFn = ionic.debounce(function() {
-        self.__fadeScrollbars('out');
-      }, 100, false);
-
-      //For Firefox
-      document.addEventListener('mousewheel', onMouseWheel);
+      container.addEventListener("mousedown", self.mouseDown, false);
+      document.addEventListener("mousemove", self.mouseMove, false);
+      document.addEventListener("mouseup", self.mouseUp, false);
+      document.addEventListener('mousewheel', self.mouseWheel, false);
     }
-    function onMouseWheel(e) {
-      self.hintResize();
-      wheelShowBarFn();
-      self.scrollBy(e.wheelDeltaX/self.options.wheelDampen, -e.wheelDeltaY/self.options.wheelDampen);
-      wheelHideBarFn();
-    }
+  },
+
+  __removeEventHandlers: function() {
+    var container = this.__container;
+
+    container.removeEventListener('touchstart', self.touchStart);
+    document.removeEventListener('touchmove', self.touchMove);
+    document.removeEventListener('touchend', self.touchEnd);
+    document.removeEventListener('touchcancel', self.touchCancel);
+
+    container.removeEventListener("pointerdown", self.touchStart);
+    document.removeEventListener("pointermove", self.touchMove);
+    document.removeEventListener("pointerup", self.touchEnd);
+    document.removeEventListener("pointercancel", self.touchEnd);
+
+    container.removeEventListener("MSPointerDown", self.touchStart);
+    document.removeEventListener("MSPointerMove", self.touchMove);
+    document.removeEventListener("MSPointerUp", self.touchEnd);
+    document.removeEventListener("MSPointerCancel", self.touchEnd);
+
+    container.removeEventListener("mousedown", self.mouseDown);
+    document.removeEventListener("mousemove", self.mouseMove);
+    document.removeEventListener("mouseup", self.mouseUp);
+    document.removeEventListener('mousewheel', self.mouseWheel);
   },
 
   /** Create a scroll bar div with the given direction **/
@@ -5218,7 +5256,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
     return self.zoomTo(self.__zoomLevel * change, false, pageX - self.__clientLeft, pageY - self.__clientTop);
 
   },
-
 
   /**
    * Touch start handler for scrolling support
@@ -35049,7 +35086,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2137
+ * Ionic, v1.0.0-beta.5b-nightly-2138
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38727,6 +38764,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
   $scope.$on('$destroy', function() {
     deregisterInstance();
+    scrollView.__removeEventHandlers();
     ionic.off('resize', resize, $window);
     $window.removeEventListener('resize', resize);
     backListenDone();
