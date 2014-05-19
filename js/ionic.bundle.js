@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2133
+ * Ionic, v1.0.0-beta.5b-nightly-2134
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2133'
+  version: '1.0.0-beta.5b-nightly-2134'
 };
 
 (function(ionic) {
@@ -35049,7 +35049,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2133
+ * Ionic, v1.0.0-beta.5b-nightly-2134
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41633,14 +41633,14 @@ app.controller('SideMenusSimpleCtrl', function($scope, $ionicSideMenuDelegate) {
  *
  * @usage
  * ```html
- * <ion-slide-box>
+ * <ion-slide-box on-slide-changed="slideHasChanged($index)">
  *   <ion-slide>
  *     <div class="box blue"><h1>BLUE</h1></div>
  *   </ion-slide>
  *   <ion-slide>
  *     <div class="box yellow"><h1>YELLOW</h1></div>
  *   </ion-slide>
- *   <ion-slide on-slide-changed="slideHasChanged(index)">
+ *   <ion-slide>
  *     <div class="box pink"><h1>PINK</h1></div>
  *   </ion-slide>
  * </ion-slide-box>
@@ -41652,7 +41652,7 @@ app.controller('SideMenusSimpleCtrl', function($scope, $ionicSideMenuDelegate) {
  * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
  * @param {expression=} pager-click Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.
- * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an 'index' variable.
+ * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an '$index' variable.
  * @param {expression=} active-slide Model to bind the current slide to.
  */
 IonicModule
@@ -41693,7 +41693,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
         },
         callback: function(slideIndex) {
           $scope.currentSlide = slideIndex;
-          $scope.onSlideChanged({index:$scope.currentSlide});
+          $scope.onSlideChanged({ index: $scope.currentSlide, $index: $scope.currentSlide});
           $scope.$parent.$broadcast('slideBox.slideChanged', slideIndex);
           $scope.activeSlide = slideIndex;
           // Try to trigger a digest
