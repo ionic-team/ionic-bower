@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2157
+ * Ionic, v1.0.0-beta.5b-nightly-2158
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2157'
+  version: '1.0.0-beta.5b-nightly-2158'
 };
 
 (function(ionic) {
@@ -4384,9 +4384,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
           var elementTopOffsetToScrollBottom = e.detail.elementTop - scrollBottomOffsetToTop;
 
           var scrollTop = elementTopOffsetToScrollBottom  + scrollMidpointOffset;
-          ionic.tap.cloneFocusedInput(container, self);
-          self.scrollBy(0, scrollTop, true);
-          self.onScroll();
+
+          if (scrollTop > 0){
+            ionic.tap.cloneFocusedInput(container, self);
+            self.scrollBy(0, scrollTop, true);
+            self.onScroll();
+          }
         }, delay);
       }
 
