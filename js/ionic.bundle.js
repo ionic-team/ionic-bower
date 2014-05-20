@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2151
+ * Ionic, v1.0.0-beta.5b-nightly-2152
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2151'
+  version: '1.0.0-beta.5b-nightly-2152'
 };
 
 (function(ionic) {
@@ -35082,7 +35082,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2151
+ * Ionic, v1.0.0-beta.5b-nightly-2152
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40571,6 +40571,154 @@ function keyboardAttachGetClientHeight(element) {
 * @param can-swipe {boolean=} Whether the items in the list are allowed to be swiped to reveal
 * option buttons. Default: true.
 */
+/**
+ * @ngdoc demo
+ * @name ionList#everything
+ * @module listEverything
+ * @javascript
+ * angular.module('listEverything', ['ionic'])
+ * .controller('ListCtrl', function($scope, $ionicPopup) {
+ *   $scope.data = {
+ *     showReorder: false,
+ *     showDelete: false
+ *   };
+ *
+ *   $scope.items = [];
+ *   for (var i = 0; i < 20; i++) {
+ *     $scope.items.push(i);
+ *   }
+ *
+ *   $scope.toggleDelete = function() {
+ *     $scope.data.showReorder = false;
+ *     $scope.data.showDelete = !$scope.data.showDelete;
+ *   };
+ *   $scope.toggleReorder = function() {
+ *     $scope.data.showDelete = false;
+ *     $scope.data.showReorder = !$scope.data.showReorder;
+ *   };
+ *
+ *   $scope.share = function(item) {
+ *     alert('Sharing ' + item);
+ *   };
+ *   $scope.edit = function(item) {
+ *     alert('Editing ' + item);
+ *   };
+ *
+ *   $scope.reorderItem = function(item, fromIndex, toIndex) {
+ *     $scope.items.splice(fromIndex, 1)
+ *     $scope.items.splice(toIndex, 0, item)
+ *   };
+ * });
+ *
+ * @html
+ * <div ng-controller="ListCtrl">
+ *   <ion-header-bar class="bar-positive">
+ *     <a class="button" ng-click="toggleDelete()">
+ *       Delete
+ *     </a>
+ *     <h1 class="title">List</h1>
+ *     <a class="button" ng-click="toggleReorder()">
+ *       Reorder
+ *     </a>
+ *   </ion-header-bar>
+ *   <ion-content>
+ *     <ion-list show-delete="data.showDelete"
+ *               show-reorder="data.showReorder">
+ *       <ion-item ng-repeat="item in items"
+ *                 class="item-thumbnail-left">
+ *
+ *         <img ng-src="http://placekitten.com/{{60+$index}}/{{61+2*$index}}">
+ *         <h2>Item {{item}}</h2>
+ *         <p>Here's an item description.</p>
+ *         <ion-option-button class="button-positive"
+ *                            ng-click="share(item)">
+ *           Share
+ *         </ion-option-button>
+ *         <ion-option-button class="button-info"
+ *                            ng-click="edit(item)">
+ *           Edit
+ *         </ion-option-button>
+ *         <ion-delete-button class="ion-minus-circled"
+ *                            ng-click="items.splice($index, 1)">
+ *         </ion-delete-button>
+ *         <ion-reorder-button class="ion-navicon"
+ *                             on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+ *         </ion-reorder-button>
+ *
+ *       </ion-item>
+ *     </ion-list>
+ *   </ion-content>
+ * </div>
+ */
+/**
+ * @ngdoc demo
+ * @name ionList#animated
+ * @module listAnimated
+ * @javascript
+ * angular.module('listAnimated', ['ionic'])
+ * .controller('AnimatedListCtrl', function($scope, $timeout) {
+ *   var nextItem = 0;
+ *   $scope.items = [];
+ *   for (var i=0; i < 5; i++) {
+ *     $scope.items.push('Item ' + (nextItem++));
+ *   }
+ *
+ *   $scope.addItem = function(atIndex) {
+ *     $scope.items.splice(atIndex + 1, 0, 'Item ' + nextItem);
+ *     nextItem++;
+ *   };
+ * });
+ *
+ * @html
+ * <div ng-controller="AnimatedListCtrl">
+ *   <ion-header-bar class="bar-positive">
+ *     <h1 class="title">Animated List</h1>
+ *   </ion-header-bar>
+ *   <ion-content>
+ *     <ion-list show-delete="showDelete">
+ *
+ *       <ion-item class="animated-item"
+ *                 ng-repeat="item in items">
+ *         {{item}}
+ *         <div class="item-note">
+ *           <a class="button button-small"
+ *              ng-click="addItem($index)">
+ *              Add
+ *           </a>
+ *           <a class="button button-small"
+ *              ng-click="items.splice($index, 1)">
+ *             Remove
+ *           </a>
+ *         </div>
+ *       </ion-item>
+ *
+ *     </ion-list>
+ *   </ion-content>
+ * </div>
+ *
+ * @css
+ * .animated-item .item-note .button {
+ *   margin-top: 10px;
+ * }
+ * .animated-item {
+ *   line-height: 52px;
+ *   padding-top: 0;
+ *   padding-bottom: 0;
+ *   -webkit-transition: all 0.15s linear;
+ *   -moz-transition: all 0.15s linear;
+ *   transition: all 0.15s linear;
+ * }
+ * .animated-item.ng-leave.ng-leave-active,
+ * .animated-item.ng-enter {
+ *   opacity: 0;
+ *   max-height: 0;
+ * }
+ * .animated-item.ng-leave,
+ * .animated-item.ng-enter.ng-enter-active {
+ *   opacity: 1;
+ *   max-height: 52px;
+ * }
+ */
 IonicModule
 .directive('ionList', [
   '$animate',
@@ -40601,7 +40749,12 @@ function($animate, $timeout) {
             onReorder: function(el, oldIndex, newIndex) {
               var itemScope = jqLite(el).scope();
               if (itemScope && itemScope.$onReorder) {
-                itemScope.$onReorder(oldIndex, newIndex);
+                //Make sure onReorder is called in apply cycle,
+                //but also make sure it has no conflicts by doing
+                //$evalAsync
+                itemScope.$evalAsync(function() {
+                  itemScope.$onReorder(oldIndex, newIndex);
+                });
               }
             },
             canSwipe: function() {
