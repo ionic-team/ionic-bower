@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2148
+ * Ionic, v1.0.0-beta.5b-nightly-2149
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4286,6 +4286,153 @@ IonicModule
  * @param {expression} collection-item-height The height of the repeated element.  Can be a number (in pixels), or a percentage.
  *
  */
+/**
+ * @ngdoc demo
+ * @name collectionRepeat#contacts
+ * @module collectionRepeatContacts
+ * @javascript
+angular.module('collectionRepeatContacts', ['ionic'])
+.controller('ContactsCtrl', function($scope, $ionicScrollDelegate, $http, $ionicLoading) {
+  var contacts = $scope.contacts = [];
+  var currentCharCode = 'A'.charCodeAt(0) - 1;
+
+  $ionicLoading.show({
+    template: 'Fetching Contacts...'
+  });
+
+  $http.get('/contacts.json').then(function(response) {
+    $ionicLoading.hide();
+    response.data.sort(function(a, b) {
+      return a.last_name > b.last_name ? 1 : -1;
+    })
+    .forEach(function(person) {
+      //Get the first letter of the last name, and if the last name changes
+      //put the letter in the array
+      var personCharCode = person.last_name.toUpperCase().charCodeAt(0);
+      //We may jump two letters, be sure to put both in
+      //(eg if we jump from Adam Bradley to Bob Doe, add both C and D)
+      var difference = personCharCode - currentCharCode;
+      for (var i = 1; i <= difference; i++) {
+        addLetter(currentCharCode + i);
+      }
+      currentCharCode = personCharCode;
+      contacts.push(person);
+    });
+
+    //If names ended before Z, add everything up to Z
+    for (var i = currentCharCode + 1; i <= 'Z'.charCodeAt(0); i++) {
+      addLetter(i);
+    }
+  });
+
+  function addLetter(code) {
+    var letter = String.fromCharCode(code);
+    contacts.push({
+      isLetter: true,
+      letter: letter
+    });
+  }
+
+  //Letters are shorter, everything else is 100 pixels
+  $scope.getItemHeight = function(item) {
+    return item.isLetter ? 40 : 100;
+  };
+
+  $scope.scrollBottom = function() {
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+
+  $scope.scrollTop = function() {
+    $ionicScrollDelegate.scrollTop();
+  };
+
+  var letterHasMatch = {};
+  $scope.getContacts = function() {
+    letterHasMatch = {};
+    //Filter contacts by $scope.search.
+    //Additionally, filter letters so that they only show if there
+    //is one or more matching contact
+    return contacts.filter(function(item) {
+      var itemDoesMatch = !$scope.search || item.isLetter ||
+        item.first_name.toLowerCase().indexOf($scope.search.toLowerCase()) > -1 ||
+        item.last_name.toLowerCase().indexOf($scope.search.toLowerCase()) > -1;
+
+      //Mark this person's last name letter as 'has a match'
+      if (!item.isLetter && itemDoesMatch) {
+        var letter = item.last_name.charAt(0).toUpperCase();
+        letterHasMatch[letter] = true;
+      }
+
+      return itemDoesMatch;
+    }).filter(function(item) {
+      //Finally, re-filter all of the letters and take out ones that don't
+      //have a match
+      if (item.isLetter && !letterHasMatch[item.letter]) {
+        return false;
+      }
+      return true;
+    });
+  };
+
+  $scope.clearSearch = function() {
+    $scope.search = '';
+  };
+});
+ * 
+ * @html
+<div ng-controller="ContactsCtrl">
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">1000 Contacts</h1>
+    <div class="button" ng-click="scrollBottom()">
+      Bottom
+    </div>
+  </ion-header-bar>
+  <ion-header-bar class="bar-light bar-subheader">
+    <input type="search"
+      placeholder="Filter contacts..."
+      ng-model="search"
+      ng-change="scrollTop()">
+    <button ng-if="search.length"
+      class="button button-icon ion-android-close input-button"
+      ng-click="clearSearch()">
+    </button>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <a class="item contact-item"
+        collection-repeat="item in getContacts()"
+        collection-item-height="getItemHeight(item)"
+        collection-item-width="100 + '%'"
+        ng-style="{'line-height': getItemHeight(item) + 'px'}"
+        ng-class="{'item-divider': item.isLetter}">
+        <img ng-if="!item.isLetter" ng-src="http://placekitten.com/60/{{55 + ($index % 10)}}">
+        {{item.letter || (item.first_name+' '+item.last_name)}}
+      </a>
+    </div>
+  </ion-content>
+</div>
+ * 
+ * @css
+.button.button-icon.input-button {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  color: #bbb;
+}
+.list .item.contact-item img {
+  height: 60px;
+  width: 60px;
+  float: left;
+  margin-top: 20px;
+  margin-right: 10px;
+}
+.list .item.contact-item {
+  left: 0;
+  right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+ */
 var COLLECTION_REPEAT_SCROLLVIEW_XY_ERROR = "Cannot create a collection-repeat within a scrollView that is scrollable on both x and y axis.  Choose either x direction or y direction.";
 var COLLECTION_REPEAT_ATTR_HEIGHT_ERROR = "collection-repeat expected attribute collection-item-height to be a an expression that returns a number (in pixels) or percentage.";
 var COLLECTION_REPEAT_ATTR_WIDTH_ERROR = "collection-repeat expected attribute collection-item-width to be a an expression that returns a number (in pixels) or percentage.";
@@ -4542,6 +4689,9 @@ IonicModule
  * Can also be a subheader (lower down) if the 'bar-subheader' class is applied.
  * See [the header CSS docs](/docs/components/#subheader).
  *
+ * Note: If you use ionHeaderBar in combination with ng-if, the surrounding content
+ * will not align correctly.  This will be fixed soon.
+ *
  * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
@@ -4561,6 +4711,45 @@ IonicModule
  * </ion-content>
  * ```
  */
+/**
+ * @ngdoc demo
+ * @name ionHeaderBar#simple
+ * @module headerBarSimple
+ * @javascript
+ * angular.module('headerBarSimple', ['ionic'])
+ * .controller('HeaderBarSimpleCtrl', function($scope) {
+ *   $scope.data = {
+ *     isSubheader: false,
+ *     isShown: true
+ *   };
+ *   $scope.items = [];
+ *   for (var i = 0; i < 20; i++) {
+ *     $scope.items.push('Item ' + i);
+ *   }
+ * });
+ *
+ * @html
+ * <div ng-controller="HeaderBarSimpleCtrl">
+ *   <ion-header-bar class="bar-positive"
+ *     ng-class="{'bar-subheader': data.isSubheader}"
+ *     ng-show="data.isShown">
+ *     <h1 class="title">Tap Me to Scroll Top</h1>
+ *   </ion-header-bar>
+ *   <ion-content>
+ *     <ion-toggle ng-model="data.isSubheader">
+ *       Make it a Subheader?
+ *     </ion-toggle>
+ *     <ion-toggle ng-model="data.isShown">
+ *       Show it?
+ *     </ion-toggle>
+ *     <div class="list">
+ *       <div class="item" ng-repeat="item in items">
+ *         {{item}}
+ *       </div>
+ *     </div>
+ *   </ion-content>
+ * </div>
+ */
 .directive('ionHeaderBar', headerFooterBarDirective(true))
 
 /**
@@ -4574,6 +4763,9 @@ IonicModule
  *
  * Can also be a subfooter (higher up) if the 'bar-subfooter' class is applied.
  * See [the footer CSS docs](/docs/components/#footer).
+ *
+ * Note: If you use ionFooterBar in combination with ng-if, the surrounding content
+ * will not align correctly.  This will be fixed soon.
  *
  * @param {string=} align-title Where to align the title.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
@@ -4593,6 +4785,46 @@ IonicModule
  *   </div>
  * </ion-footer-bar>
  * ```
+ */
+/**
+ * @ngdoc demo
+ * @name ionFooterBar#simple
+ * @module footerBarSimple
+ * @javascript
+ * angular.module('footerBarSimple', ['ionic'])
+ * .controller('FooterBarSimpleCtrl', function($scope) {
+ *   $scope.data = {
+ *     isSubfooter: false,
+ *     isShown: true
+ *   };
+ *
+ *   $scope.items = [];
+ *   for (var i = 0; i < 20; i++) {
+ *     $scope.items.push('Item ' + i);
+ *   }
+ * });
+ *
+ * @html
+ * <div ng-controller="FooterBarSimpleCtrl">
+ *   <ion-footer-bar class="bar-assertive"
+ *       ng-class="{'bar-subfooter': data.isSubfooter}"
+ *       ng-show="data.isShown">
+ *     <h1 class="title">Footer</h1>
+ *   </ion-footer-bar>
+ *   <ion-content>
+ *     <ion-toggle ng-model="data.isSubfooter">
+ *       Make it a Subfooter?
+ *     </ion-toggle>
+ *     <ion-toggle ng-model="data.isShown">
+ *       Show it?
+ *     </ion-toggle>
+ *     <div class="list">
+ *       <div class="item" ng-repeat="item in items">
+ *         {{item}}
+ *       </div>
+ *     </div>
+ *   </ion-content>
+ * </div>
  */
 .directive('ionFooterBar', headerFooterBarDirective(false));
 
@@ -4737,6 +4969,47 @@ function headerFooterBarDirective(isHeader) {
  *   on-infinite="loadMoreData()">
  * </ion-infinite-scroll>
  * ```
+ */
+/**
+ * @ngdoc demo
+ * @name ionInfiniteScroll#forever
+ * @module infiniteScrollForever
+ * @javascript
+ * angular.module('infiniteScrollForever', ['ionic'])
+ * .controller('ForeverCtrl', function($scope, $timeout) {
+ *   $scope.items = [];
+ *   for (var i = 0; i < 20; i++) {
+ *     $scope.items.push(i);
+ *   }
+ *
+ *   //Load more after 1 second delay
+ *   $scope.loadMoreItems = function() {
+ *     $timeout(function() {
+ *       var i = $scope.items.length;
+ *       var j = $scope.items.length + 5;
+ *       for (; i < j; i++) {
+ *         $scope.items.push('Item ' + i);
+ *       }
+ *       $scope.$broadcast('scroll.infiniteScrollComplete');
+ *     }, 1000);
+ *   };
+ * });
+ *
+ * @html
+ * <ion-header-bar>
+ *   <h1 class="title">Scroll Down to Load More</h1>
+ * </ion-header-bar>
+ * <ion-content ng-controller="ForeverCtrl">
+ *   <div class="list">
+ *     <div class="item" ng-repeat="item in items">
+ *       {{item}}
+ *     </div>
+ *   </div>
+ *
+ *   <ion-infinite-scroll on-infinite="loadMoreItems()"
+ *     icon="ion-loading-c">
+ *   </ion-infinite-scroll>
+ * </ion-content>
  */
 IonicModule
 .directive('ionInfiniteScroll', ['$timeout', function($timeout) {
