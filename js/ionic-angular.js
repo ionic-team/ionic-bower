@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2159
+ * Ionic, v1.0.0-beta.5b-nightly-2160
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5434,6 +5434,10 @@ IonicModule
     var scrollCtrl;
 
     function onShow(e) {
+      if (ionic.Platform.isAndroid() && !ionic.Platform.isFullScreen) {
+        return;
+      }
+
       //for testing
       var keyboardHeight = e.keyboardHeight || e.detail.keyboardHeight;
       element.css('bottom', keyboardHeight + "px");
@@ -5444,6 +5448,10 @@ IonicModule
     }
 
     function onHide() {
+      if (ionic.Platform.isAndroid() && !ionic.Platform.isFullScreen) {
+        return;
+      }
+
       element.css('bottom', '');
       if ( scrollCtrl ) {
         scrollCtrl.scrollView.__container.style.bottom = '';
