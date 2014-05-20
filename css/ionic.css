@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2154
+ * Ionic, v1.0.0-beta.5b-nightly-2155
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4464,6 +4464,11 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   content: ' ';
   cursor: pointer;
   pointer-events: none; }
+
+/* Fix to avoid background color bleeding */
+/* (occured on (at least) Android 4.2, Asus MeMO Pad HD7 ME173X) */
+.platform-android4_2 .toggle .track {
+  -webkit-background-clip: padding-box; }
 
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
