@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2158
+ * Ionic, v1.0.0-beta.5b-nightly-2159
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2158'
+  version: '1.0.0-beta.5b-nightly-2159'
 };
 
 (function(ionic) {
@@ -35085,7 +35085,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2158
+ * Ionic, v1.0.0-beta.5b-nightly-2159
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41088,6 +41088,9 @@ function($animate, $rootScope) {
  * Assign an [animation class](/docs/components#animations) to the element to
  * enable animated changing of titles (recommended: 'nav-title-slide-ios7')
  *
+ * Note that the ion-nav-bar element will only work correctly if your content has an
+ * ionView around it.
+ *
  * @usage
  *
  * ```html
@@ -41097,7 +41100,11 @@ function($animate, $rootScope) {
  *   </ion-nav-bar>
  *
  *   <!-- where the initial view template will be rendered -->
- *   <ion-nav-view></ion-nav-view>
+ *   <ion-nav-view>
+ *     <ion-view>
+ *       <ion-content>Hello!</ion-content>
+ *     </ion-view>
+ *   </ion-nav-view>
  * </body>
  * ```
  *
@@ -41119,17 +41126,17 @@ function($animate, $rootScope) {
  *
  *
  * ```html
- * <ion-nav-bar class="bar-positive">
- *   <ion-nav-back-button>
- *     Back
- *   </ion-nav-back-button>
- *   <div class="buttons right-buttons">
- *     <button class="button">
- *       Right Button
- *     </button>
- *   </div>
- * </ion-nav-bar>
  * <ion-view title="myTitle">
+ *   <ion-nav-bar class="bar-positive">
+ *     <ion-nav-back-button>
+ *       Back
+ *     </ion-nav-back-button>
+ *     <div class="buttons right-buttons">
+ *       <button class="button">
+ *         Right Button
+ *       </button>
+ *     </div>
+ *   </ion-nav-bar>
  * </ion-view>
  * ```
  */
