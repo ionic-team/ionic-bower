@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2155
+ * Ionic, v1.0.0-beta.5b-nightly-2156
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2155'
+  version: '1.0.0-beta.5b-nightly-2156'
 };
 
 (function(ionic) {
@@ -35082,7 +35082,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2155
+ * Ionic, v1.0.0-beta.5b-nightly-2156
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36171,6 +36171,53 @@ var LOADING_SET_DEPRECATED = '$ionicLoading instance.setContent() has been depre
  *   };
  * });
  * ```
+ */
+/**
+ * @ngdoc demo
+ * @name $ionicLoading#loadThemAll
+ * @module loadingThemAll
+ * @javascript
+ * angular.module('loadingThemAll', ['ionic'])
+ * .controller('LoadingCtrl', function($scope, $ionicLoading) {
+ *   $scope.loadingOptions = {
+ *     duration: 1000,
+ *     delay: 0,
+ *     template: '<i class="icon ion-loading-c"></i>\n<br/>\nLoading...',
+ *     noBackdrop: false
+ *   };
+ *   $scope.showLoading = function() {
+ *     $ionicLoading.show($scope.loadingOptions);
+ *   };
+ * });
+ * @html
+ * <div ng-controller="LoadingCtrl">
+ *   <ion-header-bar class="bar-positive">
+ *     <h1 class="title">Loading Demo</h1>
+ *     <a class="button" ng-click="showLoading()">
+ *       <i class="icon ion-more"></i> Load
+ *     </a>
+ *   </ion-header-bar>
+ *   <ion-content>
+ *     <div class="list">
+ *       <label class="item item-input item-stacked-label">
+ *         <span class="input-label">Loading Duration (ms)</span>
+ *         <input type="number" ng-model="loadingOptions.duration">
+ *       </label>
+ *       <label class="item item-input item-stacked-label">
+ *         <span class="input-label">Loading Delay (ms)</span>
+ *         <input type="number" ng-model="loadingOptions.delay">
+ *       </label>
+ *       <label class="item item-input item-stacked-label">
+ *         <span class="input-label">Loading Template</span>
+ *         <textarea rows="3" ng-model="loadingOptions.template"></textarea>
+ *       </label>
+ *       <ion-toggle class="item item-toggle"
+ *                   ng-model="loadingOptions.noBackdrop">
+ *         Hide Backdrop?
+ *       </ion-toggle>
+ *     </div>
+ *   </ion-content>
+ * </div>
  */
 IonicModule
 .factory('$ionicLoading', [
@@ -40573,7 +40620,7 @@ function keyboardAttachGetClientHeight(element) {
 */
 /**
  * @ngdoc demo
- * @name ionList#everything
+ * @name ionList#reorderDelete
  * @module listEverything
  * @javascript
  * angular.module('listEverything', ['ionic'])
@@ -41655,6 +41702,45 @@ IonicModule
  * the refresher.
  *
  */
+/**
+ * @ngdoc demo
+ * @name ionRefresher#withAList
+ * @module refresherList
+ * @javascript 
+ * angular.module('refresherList', ['ionic'])
+ * .controller('RefresherCtrl', function($scope, $timeout) {
+ *   $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+ *
+ *   $scope.doRefresh = function() {
+ *     $timeout(function() {
+ *       $scope.items.push('New Item ' + Math.floor(Math.random() * 1000) + 4);
+ *       $scope.items.push('New Item ' + Math.floor(Math.random() * 1000) + 4);
+ *       $scope.items.push('New Item ' + Math.floor(Math.random() * 1000) + 4);
+ *       $scope.items.push('New Item ' + Math.floor(Math.random() * 1000) + 4);
+ *       $scope.$broadcast('scroll.refreshComplete');
+ *     }, 1000);
+ *   };
+ * });
+ *
+ * @html
+ * <ion-header-bar class="bar-positive">
+ *   <h1 class="title">Refresher</h1>
+ * </ion-header-bar>
+ * 
+ * <ion-content ng-controller="RefresherCtrl">
+ * 
+ *   <ion-refresher on-refresh="doRefresh()" 
+ *                  pulling-text="Pull to refresh..." 
+ *                  refreshing-text="Refreshing!" 
+ *                  refreshing-icon="ion-loading-c">
+ *   </ion-refresher>
+ * 
+ *   <ion-list>
+ *     <ion-item ng-repeat="item in items">{{item}}</ion-item>
+ *   </ion-list>
+ * 
+ * </ion-content>
+ */
 IonicModule
 .directive('ionRefresher', ['$ionicBind', function($ionicBind) {
   return {
@@ -42511,9 +42597,187 @@ IonicModule
  * @param {string=} delegate-handle The handle used to identify these tabs
  * with {@link ionic.service:$ionicTabsDelegate}.
  */
-IonicModule
+/**
+ * @ngdoc demo
+ * @name ionTabs#navigation
+ * @module tabsAndNavigation
+ * @javascript
+angular.module('tabsAndNavigation', ['ionic'])
+.config(function ($stateProvider, $urlRouterProvider) {
 
-.directive('ionTabs', ['$ionicViewService', '$ionicTabsDelegate', function($ionicViewService, $ionicTabsDelegate) {
+  $stateProvider
+    .state('tabs', {
+      url: "/tab",
+      abstract: true,
+      templateUrl: "tabs.html"
+    })
+    .state('tabs.home', {
+      url: "/home",
+      views: {
+        'home-tab': {
+          templateUrl: "home.html",
+          controller: 'HomeTabCtrl'
+        }
+      }
+    })
+    .state('tabs.facts', {
+      url: "/facts",
+      views: {
+        'home-tab': {
+          templateUrl: "facts.html"
+        }
+      }
+    })
+    .state('tabs.facts2', {
+      url: "/facts2",
+      views: {
+        'home-tab': {
+          templateUrl: "facts2.html"
+        }
+      }
+    })
+    .state('tabs.about', {
+      url: "/about",
+      views: {
+        'about-tab': {
+          templateUrl: "about.html"
+        }
+      }
+    })
+    .state('tabs.navstack', {
+      url: "/navstack",
+      views: {
+        'about-tab': {
+          templateUrl: "nav-stack.html"
+        }
+      }
+    })
+    .state('tabs.contact', {
+      url: "/contact",
+      views: {
+        'contact-tab': {
+          templateUrl: "contact.html"
+        }
+      }
+    });
+
+
+  $urlRouterProvider.otherwise("/tab/home");
+
+})
+
+.controller('HomeTabCtrl', function ($scope) {
+  console.log('We have arrived at HomeTabCtrl.');
+});
+ *
+ * @html
+<ion-nav-bar class="nav-title-slide-ios7 bar-positive">
+  <ion-nav-back-button class="button-icon ion-arrow-left-c">
+  </ion-nav-back-button>
+</ion-nav-bar>
+
+<ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+<script id="tabs.html" type="text/ng-template">
+  <ion-tabs class="tabs-icon-top tabs-positive">
+
+    <ion-tab title="Home" icon="ion-home" href="#/tab/home">
+      <ion-nav-view name="home-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="About" icon="ion-ios7-information" href="#/tab/about">
+      <ion-nav-view name="about-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Contact" icon="ion-ios7-world" ui-sref="tabs.contact">
+      <ion-nav-view name="contact-tab"></ion-nav-view>
+    </ion-tab>
+
+  </ion-tabs>
+</script>
+
+<script id="home.html" type="text/ng-template">
+  <ion-view title="Home">
+    <ion-content class="padding">
+      <p>Example of Ionic tabs. Navigate to each tab, and
+      navigate to child views of each tab and notice how
+      each tab has its own navigation history.</p>
+      <p>
+        <a class="button icon icon-right ion-chevron-right" href="#/tab/facts">Scientific Facts</a>
+      </p>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="facts.html" type="text/ng-template">
+  <ion-view title="Facts" class="padding">
+    <ion-content>
+      <p>Banging your head against a wall uses 150 calories an hour.</p>
+      <p>Dogs have four toes on their hind feet, and five on their front feet.</p>
+      <p>The ant can lift 50 times its own weight, can pull 30 times its own weight and always falls over on its right side when intoxicated.</p>
+      <p>A cockroach will live nine days without it's head, before it starves to death.</p>
+      <p>Polar bears are left handed.</p>
+      <p>
+        <a class="button icon ion-home" href="#/tab/home"> Home</a>
+        <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a>
+      </p>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="facts2.html" type="text/ng-template">
+  <ion-view title="Also Factual">
+    <ion-content class="padding">
+      <p>111,111,111 x 111,111,111 = 12,345,678,987,654,321</p>
+      <p>1 in every 4 Americans has appeared on T.V.</p>
+      <p>11% of the world is left-handed.</p>
+      <p>1 in 8 Americans has worked at a McDonalds restaurant.</p>
+      <p>$283,200 is the absolute highest amount of money you can win on Jeopardy.</p>
+      <p>101 Dalmatians, Peter Pan, Lady and the Tramp, and Mulan are the only Disney cartoons where both parents are present and don't die throughout the movie.</p>
+      <p>
+        <a class="button icon ion-home" href="#/tab/home"> Home</a>
+        <a class="button icon ion-chevron-left" href="#/tab/facts"> Scientific Facts</a>
+      </p>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="about.html" type="text/ng-template">
+  <ion-view title="About">
+    <ion-content class="padding">
+      <h3>Create hybrid mobile apps with the web technologies you love.</h3>
+      <p>Free and open source, Ionic offers a library of mobile-optimized HTML, CSS and JS components for building highly interactive apps.</p>
+      <p>Built with Sass and optimized for AngularJS.</p>
+      <p>
+        <a class="button icon icon-right ion-chevron-right" href="#/tab/navstack">Tabs Nav Stack</a>
+      </p>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="nav-stack.html" type="text/ng-template">
+  <ion-view title="Tab Nav Stack">
+    <ion-content class="padding">
+      <p><img src="http://ionicframework.com/img/diagrams/tabs-nav-stack.png" style="width:100%"></p>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="contact.html" type="text/ng-template">
+  <ion-view title="Contact">
+    <ion-content>
+      <p>@IonicFramework</p>
+      <p>@DriftyCo</p>
+    </ion-content>
+  </ion-view>
+</script>
+*/
+
+IonicModule
+.directive('ionTabs', [
+  '$ionicViewService', 
+  '$ionicTabsDelegate', 
+function($ionicViewService, $ionicTabsDelegate) {
   return {
     restrict: 'E',
     scope: true,
