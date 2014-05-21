@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2167
+ * Ionic, v1.0.0-beta.5b-nightly-2168
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2167'
+  version: '1.0.0-beta.5b-nightly-2168'
 };
 
 (function(ionic) {
@@ -3256,16 +3256,20 @@ ionic.DomUtil.ready(function(){
  * @name keyboard
  * @module ionic
  * @description
- * On both Android and iOS, Ionic will attempt to prevent the keyboard from obscuring inputs and 
- * focusable elements when it appears by scrolling them into view.  In order for this to work,
- * any focusable elements must be within a [Scroll View](http://ionicframework.com/docs/api/directive/ionScroll/)
- * or a directive such as [Content](http://ionicframework.com/docs/api/directive/ionContent/) that has a Scroll View.
+ * On both Android and iOS, Ionic will attempt to prevent the keyboard from
+ * obscuring inputs and focusable elements when it appears by scrolling them
+ * into view.  In order for this to work, any focusable elements must be within
+ * a [Scroll View](http://ionicframework.com/docs/api/directive/ionScroll/)
+ * or a directive such as [Content](http://ionicframework.com/docs/api/directive/ionContent/)
+ * that has a Scroll View.
  *
- * It will also attempt to prevent the native overflow scrolling on focus, which can cause layout issues such as 
- * pushing headers up and out of view.
+ * It will also attempt to prevent the native overflow scrolling on focus,
+ * which can cause layout issues such as pushing headers up and out of view.
  *
- * The keyboard fixes work best in conjunction with the [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard),
- * although it will perform reasonably well without.  However, if you are using Cordova there is no reason not to use the plugin.
+ * The keyboard fixes work best in conjunction with the 
+ * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard),
+ * although it will perform reasonably well without.  However, if you are using
+ * Cordova there is no reason not to use the plugin.
  *
  * ### Hide when keyboard shows
  * 
@@ -3279,16 +3283,22 @@ ionic.DomUtil.ready(function(){
  * ----------
  *
  * ### Plugin Usage
- * Information on using the plugin can be found at [https://github.com/driftyco/ionic-plugins-keyboard](https://github.com/driftyco/ionic-plugins-keyboard).
+ * Information on using the plugin can be found at 
+ * [https://github.com/driftyco/ionic-plugins-keyboard](https://github.com/driftyco/ionic-plugins-keyboard).
  *
  * ---------- 
  *
  * ### Android Notes
- * - If your app is running in fullscreen, i.e. you have `<preference name="Fullscreen" value="true" />` in your `config.xml` file
- * you will need to set `ionic.Platform.isFullScreen = true` manually.
+ * - If your app is running in fullscreen, i.e. you have 
+ *   `<preference name="Fullscreen" value="true" />` in your `config.xml` file
+ *   you will need to set `ionic.Platform.isFullScreen = true` manually.
  *
  * - You can configure the behavior of the web view when the keyboard shows by setting 
- *   [android:windowSoftInputMode](http://developer.android.com/reference/android/R.attr.html#windowSoftInputMode) to either `adjustPan`, `adjustResize` or `adjustNothing` in your app's activity in `AndroidManifest.xml`. `adjustResize` is the recommended setting for Ionic, but if for some reason you do use `adjustPan` you will need to set `ionic.Platform.isFullScreen = true`.
+ *   [android:windowSoftInputMode](http://developer.android.com/reference/android/R.attr.html#windowSoftInputMode)
+ *   to either `adjustPan`, `adjustResize` or `adjustNothing` in your app's
+ *   activity in `AndroidManifest.xml`. `adjustResize` is the recommended setting
+ *   for Ionic, but if for some reason you do use `adjustPan` you will need to
+ *   set `ionic.Platform.isFullScreen = true`.
  *
  *   ```xml
  *   <activity android:windowSoftInputMode="adjustResize">
@@ -3296,16 +3306,13 @@ ionic.DomUtil.ready(function(){
  *   ```
  *
  * ### iOS Notes
- * - if you are not using the keyboard plugin, switching to inputs below the keyboard using the accessory bar will automatically use the native browser's
- * overflow scrolling and push headers out of view
+ * - If the content of your app (including the header) is being pushed up and
+ *   out of view on input focus, try setting `cordova.plugins.Keyboard.disableScroll(true)`.
+ *   This does **not** disable scrolling in the Ionic scroll view, rather it
+ *   disables the native overflow scrolling that happens automatically as a
+ *   result of focusing on inputs below the keyboard. 
  * 
  */
-
-/*
-IONIC KEYBOARD
----------------
-
-*/
 
 var keyboardViewportHeight = window.innerHeight;
 var keyboardIsOpen;
@@ -35086,7 +35093,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2167
+ * Ionic, v1.0.0-beta.5b-nightly-2168
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40492,8 +40499,17 @@ IonicModule
  *
  * @description
  * keyboard-attach is an attribute directive which will cause an element to float above
- * the keyboard when the keyboard shows. Currently only supports the [ion-footer-bar]({{ page.versionHref }}/api/directive/ionFooterBar/)
- * directive.
+ * the keyboard when the keyboard shows. Currently only supports the 
+ * [ion-footer-bar]({{ page.versionHref }}/api/directive/ionFooterBar/) directive.
+ * 
+ * ### Notes 
+ * - This directive requires the 
+ * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard).
+ * - On Android not in fullscreen mode, i.e. you have
+ *   `<preference name="Fullscreen" value="true" />` in your `config.xml` file,
+ *   this directive is unnecessary since it is the default behavior.
+ * - On iOS, if there is an input in your footer, you will need to set
+ *   `cordova.plugins.Keyboard.disableScroll(true)`.
  *
  * @usage
  *
