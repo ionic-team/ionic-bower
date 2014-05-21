@@ -4,9 +4,9 @@ Bower repository for (Ionic Framework)[http://github.com/driftyco/ionic).
 
 ### Usage
 
-You can use `js/ionic.bundle.js` to get ionic and all of its dependencies.
+Include `js/ionic.bundle.js` to get ionic and all of its dependencies.
 
-Alternatively, you may include the individual ionic files iwth the dependencies separately.
+Alternatively, include the individual ionic files with the dependencies separately.
 
 ### Versions
 
