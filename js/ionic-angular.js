@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2171
+ * Ionic, v1.0.0-beta.5b-nightly-22740-nightly-2174
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4611,11 +4611,14 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
  *
  * @param {string=} delegate-handle The handle used to identify this scrollView
  * with {@link ionic.service:$ionicScrollDelegate}.
+ * @param {string=} direction Which way to scroll. 'x' or 'y' or 'xy'. Default 'y'.
  * @param {boolean=} padding Whether to add padding to the content.
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll.
+ * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default true.
+ * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {expression=} on-scroll Expression to evaluate when the content is scrolled.
@@ -4665,20 +4668,19 @@ function($timeout, $controller, $ionicBind) {
           $scope.$hasFooter = $scope.$hasSubfooter =
           $scope.$hasTabs = $scope.$hasTabsTop =
           false;
-
         $ionicBind($scope, $attr, {
           $onScroll: '&onScroll',
           $onScrollComplete: '&onScrollComplete',
           hasBouncing: '@',
           padding: '@',
-          hasScrollX: '@',
-          hasScrollY: '@',
+          direction: '@',
           scrollbarX: '@',
           scrollbarY: '@',
           startX: '@',
           startY: '@',
           scrollEventInterval: '@'
         });
+        $scope.direction = $scope.direction || 'y';
 
         if (angular.isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
@@ -4701,8 +4703,8 @@ function($timeout, $controller, $ionicBind) {
               startY: $scope.$eval($scope.startY) || 0,
               scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
               scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
-              scrollingX: $scope.$eval($scope.hasScrollX) === true,
-              scrollingY: $scope.$eval($scope.hasScrollY) !== false,
+              scrollingX: $scope.direction.indexOf('x') >= 0,
+              scrollingY: $scope.direction.indexOf('y') >= 0,
               scrollEventInterval: parseInt($scope.scrollEventInterval, 10) || 10,
               scrollingComplete: function() {
                 $scope.$onScrollComplete({
@@ -5408,11 +5410,11 @@ IonicModule
  *
  * @description
  * keyboard-attach is an attribute directive which will cause an element to float above
- * the keyboard when the keyboard shows. Currently only supports the 
+ * the keyboard when the keyboard shows. Currently only supports the
  * [ion-footer-bar]({{ page.versionHref }}/api/directive/ionFooterBar/) directive.
- * 
- * ### Notes 
- * - This directive requires the 
+ *
+ * ### Notes
+ * - This directive requires the
  * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard).
  * - On Android not in fullscreen mode, i.e. you have
  *   `<preference name="Fullscreen" value="true" />` in your `config.xml` file,
@@ -5432,12 +5434,12 @@ IonicModule
 IonicModule
 .directive('keyboardAttach', function() {
   return function(scope, element, attrs) {
-    window.addEventListener('native.keyboardshow', onShow);
-    window.addEventListener('native.keyboardhide', onHide);
+    ionic.on('native.keyboardshow', onShow, window);
+    ionic.on('native.keyboardhide', onHide, window);
 
     //deprecated
-    window.addEventListener('native.showkeyboard', onShow);
-    window.addEventListener('native.hidekeyboard', onHide);
+    ionic.on('native.showkeyboard', onShow, window);
+    ionic.on('native.hidekeyboard', onHide, window);
 
 
     var scrollCtrl;
@@ -5468,11 +5470,12 @@ IonicModule
     }
 
     scope.$on('$destroy', function() {
-      window.removeEventListener('native.keyboardshow', onShow);
-      window.removeEventListener('native.keyboardhide', onHide);
-      
-      window.removeEventListener('native.showkeyboard', onShow);
-      window.removeEventListener('native.hidekeyboard', onHide);
+      ionic.off('native.keyboardshow', onShow, window);
+      ionic.off('native.keyboardhide', onHide, window);
+
+      //deprecated
+      ionic.off('native.showkeyboard', onShow, window);
+      ionic.off('native.hidekeyboard', onHide, window);
     });
   };
 });
@@ -5686,6 +5689,7 @@ function keyboardAttachGetClientHeight(element) {
  * }
  * .animated-item {
  *   line-height: 52px;
+ *   max-height: 52px;
  *   padding-top: 0;
  *   padding-bottom: 0;
  *   -webkit-transition: all 0.15s linear;
@@ -6742,11 +6746,11 @@ IonicModule
  *
  * @param {string=} delegate-handle The handle used to identify this scrollView
  * with {@link ionic.service:$ionicScrollDelegate}.
- * @param {string=} direction Which way to scroll. 'x' or 'y'. Default 'y'.
+ * @param {string=} direction Which way to scroll. 'x' or 'y' or 'xy'. Default 'y'.
  * @param {boolean=} paging Whether to scroll with paging.
  * @param {expression=} on-refresh Called on pull-to-refresh, triggered by an {@link ionic.directive:ionRefresher}.
  * @param {expression=} on-scroll Called whenever the user scrolls.
- * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default false.
+ * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default true.
  * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {boolean=} zooming Whether to support pinch-to-zoom
  * @param {integer=} min-zoom The smallest zoom amount allowed (default is 0.5)
@@ -6785,6 +6789,7 @@ function($timeout, $controller, $ionicBind) {
           minZoom: '@',
           maxZoom: '@'
         });
+        $scope.direction = $scope.direction || 'y';
 
         if (angular.isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
