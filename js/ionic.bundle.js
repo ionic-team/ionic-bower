@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2165
+ * Ionic, v1.0.0-beta.5b-nightly-2166
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.5b-nightly-2165'
+  version: '1.0.0-beta.5b-nightly-2166'
 };
 
 (function(ionic) {
@@ -35086,7 +35086,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.5b-nightly-2165
+ * Ionic, v1.0.0-beta.5b-nightly-2166
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35650,8 +35650,8 @@ function($cacheFactory, $parse) {
       item.scope[this.keyExpr] = value;
 
       this.transcludeFn(item.scope, function(clone) {
+        clone.css('position', 'absolute');
         item.element = clone;
-        item.element[0].style.position = 'absolute';
       });
 
       return this.itemCache.put(key, item);
@@ -35974,11 +35974,11 @@ function($rootScope, $timeout) {
     },
     renderItem: function(dataIndex, primaryPos, secondaryPos) {
       var item = this.dataSource.getItem(dataIndex);
-      if (item) {
+      if (item && item.element) {
         this.dataSource.attachItem(item);
-        item.element[0].style[ionic.CSS.TRANSFORM] = this.transformString(
+        item.element.css(ionic.CSS.TRANSFORM, this.transformString(
           primaryPos, secondaryPos, secondaryPos
-        );
+        ));
         this.renderedItems[dataIndex] = item;
       } else {
         delete this.renderedItems[dataIndex];
