@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2181
+ * Ionic, v1.0.0-beta.6-nightly-2186
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4742,6 +4742,9 @@ IonicModule
  * will not align correctly.  This will be fixed soon.
  *
  * @param {string=} align-title Where to align the title.
+ * @param {boolean=} no-tap-scroll By default, the header bar will scroll the
+ * content to the top when tapped.  Set no-tap-scroll to true to disable this 
+ * behavior.
  * Avaialble: 'left', 'right', or 'center'.  Defaults to 'center'.
  *
  * @usage
@@ -4882,6 +4885,9 @@ function tapScrollToTopDirective() {
     return {
       restrict: 'E',
       link: function($scope, $element, $attr) {
+        if ($attr.noTapScroll) {
+          return;
+        }
         ionic.on('tap', onTap, $element[0]);
         $scope.$on('$destroy', function() {
           ionic.off('tap', onTap, $element[0]);
@@ -6050,6 +6056,8 @@ function($animate, $rootScope) {
  * with {@link ionic.service:$ionicNavBarDelegate}.
  * @param align-title {string=} Where to align the title of the navbar.
  * Available: 'left', 'right', 'center'. Defaults to 'center'.
+ * @param {boolean=} no-tap-scroll By default, the navbar will scroll the content
+ * to the top when tapped.  Set no-tap-scroll to true to disable this behavior.
  *
  * </table><br/>
  *
