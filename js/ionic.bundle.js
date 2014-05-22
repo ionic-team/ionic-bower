@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2193
+ * Ionic, v1.0.0-beta.6-nightly-2194
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-2193'
+  version: '1.0.0-beta.6-nightly-2194'
 };
 
 (function(ionic) {
@@ -35093,7 +35093,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2193
+ * Ionic, v1.0.0-beta.6-nightly-2194
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35199,6 +35199,66 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
  * });
  * ```
  *
+ */
+
+/**
+ * @ngdoc demo
+ * @name $ionicActionSheet#simple
+ * @module actionSheetSimple
+ * @javascript
+ * angular.module('actionSheetSimple', ['ionic'])
+ * .controller('ActionSheetCtrl', function($scope, $ionicActionSheet) {
+ *   $scope.messages = [];
+ *   $scope.takeAction = function() {
+ *     $ionicActionSheet.show({
+ *       buttons: [
+ *         { text: 'Share <i class="icon ion-share">' },
+ *         { text: 'Edit <i class="icon ion-edit">' }
+ *       ],
+ *       destructiveText: 'Delete <i class="icon ion-trash-b">',
+ *       titleText: 'Modify your album',
+ *       cancelText: 'Cancel',
+ *       cancel: function() {
+ *         $scope.message('Cancel');
+ *         return true;
+ *       },
+ *       buttonClicked: function(index) {
+ *         $scope.message(index === 0 ? 'Share' : 'Edit');
+ *         return true;
+ *       },
+ *       destructiveButtonClicked: function() {
+ *         $scope.message('Delete');
+ *         return true;
+ *       }
+ *     });
+ *   };
+ *   $scope.message = function(msg) {
+ *     $scope.messages.unshift({
+ *       text: 'User pressed ' + msg
+ *     });
+ *   };
+ *
+ * });
+ *
+ * @html
+ * <ion-header-bar class="bar-positive">
+ *   <h1 class="title">Action</h1>
+ * </ion-header-bar>
+ * <ion-content ng-controller="ActionSheetCtrl" class="padding">
+ *   <div class="button button-assertive button-block" ng-click="takeAction()">
+ *     Take Action!
+ *   </div>
+ *   <div class="card" ng-show="messages.length">
+ *     <div class="item item-divider">
+ *       User Log
+ *     </div>
+ *     <div class="item item-text-wrap">
+ *       <div ng-repeat="message in messages">
+ *         {{message.text}}
+ *       </div>
+ *     </div> 
+ *   </div>
+ * </ion-content>
  */
 IonicModule
 .factory('$ionicActionSheet', [
@@ -37100,6 +37160,9 @@ angular.module('popupSimple', ['ionic'])
   };
 });
  * @html
+<ion-header-bar class="bar-positive">
+  <h1 class="title">Popups</h1>
+</ion-header-bar>
 <ion-content ng-controller="PopupCtrl">
   <button class="button button-dark" ng-click="showPopup()">Generic</button>
   <button class="button button-primary" ng-click="showConfirm()">Confirm</button>
@@ -37107,7 +37170,7 @@ angular.module('popupSimple', ['ionic'])
   <button class="button button-balanced" ng-click="showPasswordPrompt()">Password Prompt</button>
   <button class="button button-positive" ng-click="showAlert()">Alert</button>
   <div class="list">
-    <a class="item" href="#" 
+    <a class="item" href="#"
       ng-repeat="item in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]">
       Item {{item}}
     </a>
