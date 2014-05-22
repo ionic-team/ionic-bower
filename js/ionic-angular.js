@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2200
+ * Ionic, v1.0.0-beta.6-nightly-2201
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3906,7 +3906,15 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
   if (!angular.isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
-      scrollView.options.bouncing = !ionic.Platform.isAndroid();
+      scrollView.options.bouncing = true;
+
+      if(ionic.Platform.isAndroid()) {
+        // No bouncing by default on Android
+        scrollView.options.bouncing = false;
+        // Faster scroll decel
+        scrollView.options.deceleration = 0.95;
+      } else {
+      }
     });
   }
 
