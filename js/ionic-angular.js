@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2186
+ * Ionic, v1.0.0-beta.6-nightly-2187
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4885,7 +4885,7 @@ function tapScrollToTopDirective() {
     return {
       restrict: 'E',
       link: function($scope, $element, $attr) {
-        if ($attr.noTapScroll) {
+        if ($attr.noTapScroll == 'true') {
           return;
         }
         ionic.on('tap', onTap, $element[0]);
