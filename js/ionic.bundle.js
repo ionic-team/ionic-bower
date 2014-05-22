@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2194
+ * Ionic, v1.0.0-beta.6-nightly-2197
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-2194'
+  version: '1.0.0-beta.6-nightly-2197'
 };
 
 (function(ionic) {
@@ -35093,7 +35093,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2194
+ * Ionic, v1.0.0-beta.6-nightly-2197
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36559,6 +36559,14 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      */
     show: function() {
       var self = this;
+
+      if(self.scope.$$destroyed) {
+        void 0;
+        return;
+      }
+
+      void 0;
+
       var modalEl = jqLite(self.modalEl);
 
       self.el.classList.remove('hide');
