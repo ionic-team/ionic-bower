@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2187
+ * Ionic, v1.0.0-beta.6-nightly-2188
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -385,6 +385,7 @@ function($document) {
 
   var el = jqLite('<div class="backdrop">');
   var backdropHolds = 0;
+  var backdropExtraClasses = null;
 
   $document[0].body.appendChild(el[0]);
 
@@ -406,12 +407,18 @@ function($document) {
     _element: el
   };
 
-  function retain() {
+  function retain(extraClasses) {
+    backdropExtraClasses = extraClasses;
+
     if ( (++backdropHolds) === 1 ) {
       el.addClass('visible');
       ionic.requestAnimationFrame(function() {
         backdropHolds && el.addClass('active');
       });
+    }
+    if(extraClasses) {
+      void 0;
+      el.addClass(extraClasses);
     }
   }
   function release() {
@@ -421,6 +428,8 @@ function($document) {
         !backdropHolds && el.removeClass('visible');
       }, 100);
     }
+    el.removeClass(backdropExtraClasses);
+    backdropExtraClasses = null;
   }
 }]);
 
@@ -1203,7 +1212,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
             //options.showBackdrop: deprecated
             this.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
             if (this.hasBackdrop) {
-              $ionicBackdrop.retain();
+              $ionicBackdrop.retain('backdrop-loading');
             }
           }
 
