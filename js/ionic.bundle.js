@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2305
+ * Ionic, v1.0.0-beta.6-nightly-2308
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-2305'
+  version: '1.0.0-beta.6-nightly-2308'
 };
 
 (function(ionic) {
@@ -378,7 +378,7 @@ window.ionic = {
     },
     /**
      * @ngdoc method
-     * @name ionic.DomUtil#getParentWithClass
+     * @name ionic.DomUtil#getParentOrSelfWithClass
      * @param {DOMElement} element
      * @param {string} className
      * @returns {DOMElement} The closest parent or self matching the
@@ -35095,7 +35095,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-2305
+ * Ionic, v1.0.0-beta.6-nightly-2308
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
