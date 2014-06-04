@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-81
+ * Ionic, v1.0.0-beta.6-nightly-82
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-81'
+  version: '1.0.0-beta.6-nightly-82'
 };
 
 (function(ionic) {
@@ -6671,6 +6671,7 @@ ionic.scroll = {
         unfocusOnHide: true,
         focusFirstDelay: 600,
         backdropClickToClose: true,
+        hardwareBackButtonClose: true,
       }, opts);
 
       ionic.extend(this, opts);

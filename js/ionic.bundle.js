@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-81
+ * Ionic, v1.0.0-beta.6-nightly-82
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-81'
+  version: '1.0.0-beta.6-nightly-82'
 };
 
 (function(ionic) {
@@ -6678,6 +6678,7 @@ ionic.scroll = {
         unfocusOnHide: true,
         focusFirstDelay: 600,
         backdropClickToClose: true,
+        hardwareBackButtonClose: true,
       }, opts);
 
       ionic.extend(this, opts);
@@ -35095,7 +35096,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-81
+ * Ionic, v1.0.0-beta.6-nightly-82
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36412,7 +36413,8 @@ IonicModule
   '$ionicPlatform',
   '$ionicTemplateLoader',
   '$q',
-function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q) {
+  '$log',
+function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q, $log) {
 
   /**
    * @ngdoc controller
@@ -36441,6 +36443,8 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      *    the modal when shown.  Default: false.
      *  - `{boolean=}` `backdropClickToClose` Whether to close the modal on clicking the backdrop.
      *    Default: true.
+     *  - `{boolean=}` `hardwareBackButtonClose` Whether the modal can be closed using the hardware
+     *    back button on Android and similar devices.  Default: true.
      */
     initialize: function(opts) {
       ionic.views.Modal.prototype.initialize.call(this, opts);
@@ -36457,11 +36461,9 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       var self = this;
 
       if(self.scope.$$destroyed) {
-        void 0;
+        $log.error('Cannot call modal.show() after remove(). Please create a new modal instance using $ionicModal.');
         return;
       }
-
-      void 0;
 
       var modalEl = jqLite(self.modalEl);
 
@@ -36480,9 +36482,13 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
              .removeClass('ng-leave ng-leave-active');
 
       self._isShown = true;
-      self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function(){
-        self.hide();
-      }, 200);
+      self._deregisterBackButton = self.hardwareBackButtonClose ?
+        $ionicPlatform.registerBackButtonAction(
+          angular.bind(self, self.hide),
+          PLATFORM_BACK_BUTTON_PRIORITY_MODAL
+        ) :
+        angular.noop;
+
       self._isOpenPromise = $q.defer();
 
       ionic.views.Modal.prototype.show.call(self);
@@ -36737,6 +36743,7 @@ IonicModule
 
 var PLATFORM_BACK_BUTTON_PRIORITY_VIEW = 100;
 var PLATFORM_BACK_BUTTON_PRIORITY_SIDE_MENU = 150;
+var PLATFORM_BACK_BUTTON_PRIORITY_MODAL = 200;
 var PLATFORM_BACK_BUTTON_PRIORITY_ACTION_SHEET = 300;
 var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 400;
 var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
