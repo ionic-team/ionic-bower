@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-77
+ * Ionic, v1.0.0-beta.6-nightly-78
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-77'
+  version: '1.0.0-beta.6-nightly-78'
 };
 
 (function(ionic) {
@@ -35095,7 +35095,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-77
+ * Ionic, v1.0.0-beta.6-nightly-78
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40179,7 +40179,7 @@ IonicModule
  * - This directive requires the
  * [Ionic Keyboard Plugin](https://github.com/driftyco/ionic-plugins-keyboard).
  * - On Android not in fullscreen mode, i.e. you have
- *   `<preference name="Fullscreen" value="true" />` in your `config.xml` file,
+ *   `<preference name="Fullscreen" value="false" />` or no preference in your `config.xml` file,
  *   this directive is unnecessary since it is the default behavior.
  * - On iOS, if there is an input in your footer, you will need to set
  *   `cordova.plugins.Keyboard.disableScroll(true)`.
