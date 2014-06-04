@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-83
+ * Ionic, v1.0.0-beta.6-nightly-84
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-83'
+  version: '1.0.0-beta.6-nightly-84'
 };
 
 (function(ionic) {
@@ -35137,7 +35137,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-83
+ * Ionic, v1.0.0-beta.6-nightly-84
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39958,7 +39958,7 @@ IonicModule
 }]);
 
 var ITEM_TPL_CONTENT_ANCHOR =
-  '<a class="item-content" ng-href="{{$href()}}"></a>';
+  '<a class="item-content" ng-href="{{$href()}}" target="{{$target()}}"></a>';
 var ITEM_TPL_CONTENT =
   '<div class="item-content"></div>';
 /**
@@ -40016,6 +40016,9 @@ function($animate, $compile) {
         return function link($scope, $element, $attrs) {
           $scope.$href = function() {
             return $attrs.href || $attrs.ngHref;
+          };
+          $scope.$target = function() {
+            return $attrs.target || '_self';
           };
         };
     }
