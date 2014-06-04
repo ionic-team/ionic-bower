@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-79
+ * Ionic, v1.0.0-beta.6-nightly-81
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -493,7 +493,8 @@ IonicModule
 .factory('$collectionDataSource', [
   '$cacheFactory',
   '$parse',
-function($cacheFactory, $parse) {
+  '$rootScope',
+function($cacheFactory, $parse, $rootScope) {
   var nextCacheId = 0;
   function CollectionRepeatDataSource(options) {
     var self = this;
@@ -610,7 +611,7 @@ function($cacheFactory, $parse) {
         this.transcludeParent[0].appendChild(item.element[0]);
       }
       reconnectScope(item.scope);
-      !item.scope.$$phase && item.scope.$digest();
+      !$rootScope.$$phase && item.scope.$digest();
     },
     getLength: function() {
       return this.data && this.data.length || 0;
