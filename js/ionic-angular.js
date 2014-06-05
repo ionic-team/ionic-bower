@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-89
+ * Ionic, v1.0.0-beta.6-nightly-90
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1388,12 +1388,10 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
              .removeClass('ng-leave ng-leave-active');
 
       self._isShown = true;
-      self._deregisterBackButton = self.hardwareBackButtonClose ?
-        $ionicPlatform.registerBackButtonAction(
-          angular.bind(self, self.hide),
-          PLATFORM_BACK_BUTTON_PRIORITY_MODAL
-        ) :
-        angular.noop;
+      self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(
+        self.hardwareBackButtonClose ? angular.bind(self, self.hide) : angular.noop,
+        PLATFORM_BACK_BUTTON_PRIORITY_MODAL
+      );
 
       self._isOpenPromise = $q.defer();
 
