@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-90
+ * Ionic, v1.0.0-beta.6-nightly-91
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4251,6 +4251,10 @@ input[type="file"] {
   width: 200px; }
 
 input:-moz-placeholder, textarea:-moz-placeholder {
+  /* Firefox 18- */
+  color: #aaaaaa; }
+input::-moz-placeholder, textarea::-moz-placeholder {
+  /* Firefox 19+ */
   color: #aaaaaa; }
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   color: #aaaaaa; }
