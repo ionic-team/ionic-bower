@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-102
+ * Ionic, v1.0.0-beta.6-nightly-103
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-102'
+  version: '1.0.0-beta.6-nightly-103'
 };
 
 (function(ionic) {
@@ -6307,11 +6307,11 @@ ionic.scroll = {
     this.scrollEl = opts.scrollEl;
     this.scrollView = opts.scrollView;
     // Get the True Top of the list el http://www.quirksmode.org/js/findpos.html
-    this.listEl.trueTop = 0;
+    this.listElTrueTop = 0;
     if (this.listEl.offsetParent) {
       var obj = this.listEl;
       do {
-        this.listEl.trueTop += obj.offsetTop;
+        this.listElTrueTop += obj.offsetTop;
         obj = obj.offsetParent;
       } while (obj);
     }
@@ -6323,7 +6323,7 @@ ionic.scroll = {
     var y = e.gesture.center.pageY +
       this.scrollView.getValues().top -
       (this._currentDrag.elementHeight / 2) -
-      this.listEl.trueTop;
+      this.listElTrueTop;
     this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(0, '+y+'px, 0)';
   };
 
@@ -6359,7 +6359,7 @@ ionic.scroll = {
 
     var scrollY = 0;
     var pageY = e.gesture.center.pageY;
-    var offset = this.listEl.trueTop;
+    var offset = this.listElTrueTop;
 
     //If we have a scrollView, check scroll boundaries for dragged element and scroll if necessary
     if (this.scrollView) {
