@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-99
+ * Ionic, v1.0.0-beta.6-nightly-100
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-99'
+  version: '1.0.0-beta.6-nightly-100'
 };
 
 (function(ionic) {
@@ -35109,7 +35109,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-99
+ * Ionic, v1.0.0-beta.6-nightly-100
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35192,13 +35192,13 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
  *
  * ```js
  * angular.module('mySuperApp', ['ionic'])
- * .controller(function($scope, $ionicActionSheet) {
+ * .controller(function($scope, $ionicActionSheet, $timeout) {
  *
  *  // Triggered on a button click, or some other target
  *  $scope.show = function() {
  *
  *    // Show the action sheet
- *    $ionicActionSheet.show({
+ *    var hideSheet = $ionicActionSheet({
  *      buttons: [
  *        { text: '<b>Share</b> This' },
  *        { text: 'Move' },
@@ -35210,6 +35210,11 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
  *        return true;
  *      }
  *    });
+ *
+ *    // For example's sake, hide the sheet after two seconds
+ *    $timeout(function() {
+ *      hideSheet();
+ *    }, 2000);
  *
  *  };
  * });
@@ -35227,16 +35232,20 @@ IonicModule
   '$ionicPlatform',
 function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicPlatform) {
 
+  return {
+    show: actionSheet
+  };
+
   /**
    * @ngdoc method
-   * @name $ionicActionSheet
+   * @name $ionicActionSheet#show
    * @description
    * Load and return a new action sheet.
    *
    * A new isolated scope will be created for the
    * action sheet and the new element will be appended into the body.
    *
-   * @param {object} opts The options for this ActionSheet. Properties:
+   * @param {object} options The options for this ActionSheet. Properties:
    *
    *  - `[Object]` `buttons` Which buttons to show.  Each button is an object with a `text` field.
    *  - `{string}` `titleText` The title to show on the action sheet.
@@ -35250,7 +35259,7 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
    *  - `{function=}` `destructiveButtonClicked` Called when the destructive button is clicked.
    *     Return true to close the action sheet, or false to keep it opened.
    *
-   * @returns {function} cancel A function which, when called, hides & cancels the action sheet.
+   * @returns {function} `hideSheet` A function which, when called, hides & cancels the action sheet.
    */
   function actionSheet(opts) {
     var scope = $rootScope.$new(true);
@@ -35339,13 +35348,6 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
 
     return scope.cancel;
   }
-
-  // DEPRECATED support $ionicActionSheet.show({...})
-  // Current syntax: $ionicActionSheet({...})
-  actionSheet.show = actionSheet;
-
-  return actionSheet;
-
 }]);
 
 
