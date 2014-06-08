@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-103
+ * Ionic, v1.0.0-beta.6-nightly-104
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4710,7 +4710,9 @@ function headerFooterBarDirective(isHeader) {
  * the user gets to the bottom of the page or near the bottom of the page.
  *
  * The expression you pass in for `on-infinite` is called when the user scrolls
- * greater than `distance` away from the bottom of the content.
+ * greater than `distance` away from the bottom of the content.  Once `on-infinite`
+ * is done loading new data, it should broadcast the `scroll.infiniteScrollComplete`
+ * event from your controller (see below example).
  *
  * @param {expression} on-infinite What to call when the scroller reaches the
  * bottom.
