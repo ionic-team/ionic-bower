@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-120
+ * Ionic, v1.0.0-beta.6-nightly-121
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-120'
+  version: '1.0.0-beta.6-nightly-121'
 };
 
 (function(ionic) {
@@ -35129,7 +35129,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-120
+ * Ionic, v1.0.0-beta.6-nightly-121
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36418,7 +36418,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * Note that you need to put the content of the modal inside a div with the class `modal`.
  *
  * Note: a modal will broadcast 'modal.shown', 'modal.hidden', and 'modal.removed' events from its originating
- * scope, passing in itself as an event argument. Note: both modal.removed and modal.hidden are
+ * scope, passing in itself as an event argument. Both the modal.removed and modal.hidden events are
  * called when the modal is removed.
  *
  * @usage
