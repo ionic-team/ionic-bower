@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-118
+ * Ionic, v1.0.0-beta.6-nightly-119
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-118'
+  version: '1.0.0-beta.6-nightly-119'
 };
 
 (function(ionic) {
@@ -35129,7 +35129,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-118
+ * Ionic, v1.0.0-beta.6-nightly-119
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36411,7 +36411,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * @module ionic
  * @description
  *
- * Related {@link ionic.controller:ionicModal ionicModal controller}.
+ * Related: {@link ionic.controller:ionicModal ionicModal controller}.
  *
  * The Modal is a content pane that can go over the user's main view
  * temporarily.  Usually used for making a choice or editing an item.
