@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-116
+ * Ionic, v1.0.0-beta.6-nightly-117
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-116'
+  version: '1.0.0-beta.6-nightly-117'
 };
 
 (function(ionic) {
@@ -35129,7 +35129,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-116
+ * Ionic, v1.0.0-beta.6-nightly-117
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36414,6 +36414,13 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
  * temporarily.  Usually used for making a choice or editing an item.
  * Note that you need to put the content of the modal inside a div with the class `modal`.
  *
+ * Hint: Be sure to call [remove()](#remove) when you are done with each modal
+ * to clean it up and avoid memory leaks.
+ *
+ * Note: a modal will broadcast 'modal.shown', 'modal.hidden', and 'modal.removed' events from its originating
+ * scope, passing in itself as an event argument. Note: both modal.removed and modal.hidden are
+ * called when the modal is removed.
+ *
  * @usage
  * ```html
  * <script id="my-modal.html" type="text/ng-template">
@@ -36479,8 +36486,9 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
    * Hint: Be sure to call [remove()](#remove) when you are done with each modal
    * to clean it up and avoid memory leaks.
    *
-   * Note: a modal will broadcast 'modal.shown' and 'modal.hidden' events from its originating
-   * scope, passing in itself as an event argument.
+   * Note: a modal will broadcast 'modal.shown', 'modal.hidden', and 'modal.removed' events from its originating
+   * scope, passing in itself as an event argument. Note: both modal.removed and modal.hidden are
+   * called when the modal is removed.
    */
   var ModalView = ionic.views.Modal.inherit({
     /**
