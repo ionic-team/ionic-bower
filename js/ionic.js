@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-110
+ * Ionic, v1.0.0-beta.6-nightly-111
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-110'
+  version: '1.0.0-beta.6-nightly-111'
 };
 
 (function(ionic) {
@@ -1665,7 +1665,6 @@ window.ionic = {
 
         // do a single tap
         if(!did_doubletap || inst.options.tap_always) {
-          ionic.tap.cancelClick();
           ionic.Gestures.detection.current.name = 'tap';
           inst.trigger('tap', ev);
         }
@@ -2565,7 +2564,8 @@ ionic.tap = {
            (e.target.isContentEditable) ||
            (/^(file|range)$/i).test(e.target.type) ||
            (e.target.dataset ? e.target.dataset.preventScroll : e.target.getAttribute('data-prevent-default')) == 'true' || // manually set within an elements attributes
-           (!!(/^(object|embed)$/i).test(e.target.tagName));  // flash/movie/object touches should not try to scroll
+           (!!(/^(object|embed)$/i).test(e.target.tagName)) ||  // flash/movie/object touches should not try to scroll
+           ionic.tap.isElementTapDisabled(e.target); // check if this element, or an ancestor, has `data-tap-disabled` attribute
   },
 
   isTextInput: function(ele) {
@@ -2634,7 +2634,11 @@ ionic.tap = {
     if(!ele || ele.disabled || (/^(file|range)$/i).test(ele.type) || (/^(object|video)$/i).test(ele.tagName) ) {
       return true;
     }
-    if(ele.nodeType === 1) {
+    return ionic.tap.isElementTapDisabled(ele);
+  },
+
+  isElementTapDisabled: function(ele) {
+    if(ele && ele.nodeType === 1) {
       var element = ele;
       while(element) {
         if( (element.dataset ? element.dataset.tapDisabled : element.getAttribute('data-tap-disabled')) == 'true' ) {
