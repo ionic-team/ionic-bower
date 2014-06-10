@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-108
+ * Ionic, v1.0.0-beta.6-nightly-110
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-108'
+  version: '1.0.0-beta.6-nightly-110'
 };
 
 (function(ionic) {
@@ -1606,6 +1606,7 @@ window.ionic = {
           // we trigger the hold event
           this.timer = setTimeout(function() {
             if(ionic.Gestures.detection.current.name == 'hold') {
+              ionic.tap.cancelClick();
               inst.trigger('hold', ev);
             }
           }, inst.options.hold_timeout);
@@ -1664,8 +1665,9 @@ window.ionic = {
 
         // do a single tap
         if(!did_doubletap || inst.options.tap_always) {
+          ionic.tap.cancelClick();
           ionic.Gestures.detection.current.name = 'tap';
-          inst.trigger(ionic.Gestures.detection.current.name, ev);
+          inst.trigger('tap', ev);
         }
       }
     }
@@ -2647,6 +2649,12 @@ ionic.tap = {
   setTolerance: function(releaseTolerance, releaseButtonTolerance) {
     TAP_RELEASE_TOLERANCE = releaseTolerance;
     TAP_RELEASE_BUTTON_TOLERANCE = releaseButtonTolerance;
+  },
+
+  cancelClick: function() {
+    // used to cancel any simulated clicks which may happen on a touchend/mouseup
+    // gestures uses this method within its tap and hold events
+    tapPointerMoved = true;
   }
 
 };
