@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-127
+ * Ionic, v1.0.0-beta.6-nightly-128
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-127'
+  version: '1.0.0-beta.6-nightly-128'
 };
 
 (function(ionic) {
@@ -36177,7 +36177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-127
+ * Ionic, v1.0.0-beta.6-nightly-128
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36326,6 +36326,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
    *     the action sheet, or false to keep it opened.
    *  - `{function=}` `destructiveButtonClicked` Called when the destructive button is clicked.
    *     Return true to close the action sheet, or false to keep it opened.
+   *  -  `{boolean=}` `cancelOnStateChange` Whether to cancel the actionSheet when navigating
+   *     to a new state.  Default true.
    *
    * @returns {function} `hideSheet` A function which, when called, hides & cancels the action sheet.
    */
@@ -36338,13 +36340,19 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
       buttonClicked: angular.noop,
       $deregisterBackButton: angular.noop,
       buttons: [],
+      cancelOnStateChange: true
     }, opts || {});
+
 
     // Compile the template
     var element = scope.element = $compile('<ion-action-sheet buttons="buttons"></ion-action-sheet>')(scope);
 
     // Grab the sheet element for animation
     var sheetEl = jqLite(element[0].querySelector('.action-sheet-wrapper'));
+
+    var stateChangeListenDone = scope.cancelOnStateChange ?
+      $rootScope.$on('$stateChangeSuccess', function() { scope.cancel(); }) :
+      angular.noop;
 
     // removes the actionSheet from the screen
     scope.removeSheet = function(done) {
@@ -36354,6 +36362,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
       sheetEl.removeClass('action-sheet-up');
       $document[0].body.classList.remove('action-sheet-open');
       scope.$deregisterBackButton();
+      stateChangeListenDone();
+      scope.cancel.$scope = null; //see last line
 
       $animate.removeClass(element, 'active', function() {
         scope.$destroy();
