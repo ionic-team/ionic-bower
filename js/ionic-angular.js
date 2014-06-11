@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-138
+ * Ionic, v1.0.0-beta.6-nightly-139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3739,10 +3739,9 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
     $element[0].querySelector('.buttons.right-buttons')
   );
 
-  this.back = function(e) {
+  this.back = function() {
     var backView = $ionicViewService.getBackView();
     backView && backView.go();
-    e && (e.alreadyHandled = true);
     return false;
   };
 
@@ -5689,10 +5688,9 @@ IonicModule
   '$animate',
   '$rootScope',
   '$sanitize',
-
   '$ionicNavBarConfig',
-
-function($animate, $rootScope, $sanitize, $ionicNavBarConfig) {
+  '$ionicNgClick',
+function($animate, $rootScope, $sanitize, $ionicNavBarConfig, $ionicNgClick) {
   var backIsShown = false;
   //If the current viewstate does not allow a back button,
   //always hide it.
@@ -5704,23 +5702,19 @@ function($animate, $rootScope, $sanitize, $ionicNavBarConfig) {
     require: '^ionNavBar',
     compile: function(tElement, tAttrs) {
       tElement.addClass('button back-button ng-hide');
-      
+
       return function($scope, $element, $attr, navBarCtrl) {
-        void 0;
 
         // Add a default back button icon based on the nav config, unless one is set
         if($element[0].className.indexOf('ion-') < 0) {
           $element.addClass($ionicNavBarConfig.backButtonIcon);
         }
 
-        if (!$attr.ngClick) {
-          $scope.$navBack = navBarCtrl.back;
-          $element.on('click', function(event){
-            $scope.$apply(function() {
-              $scope.$navBack(event);
-            });
-          });
+        //Default to ngClick going back, but don't override a custom one
+        if (!isDefined($attr.ngClick)) {
+          $ionicNgClick($scope, $element, navBarCtrl.back);
         }
+
         //Make sure both that a backButton is allowed in the first place,
         //and that it is shown by the current view.
         $scope.$watch(function() {
@@ -6238,7 +6232,9 @@ IonicModule
  */
 .factory('$ionicNgClick', ['$parse', function($parse) {
   return function(scope, element, clickExpr) {
-    var clickHandler = $parse(clickExpr);
+    var clickHandler = angular.isFunction(clickExpr) ?
+      clickExpr :
+      $parse(clickExpr);
 
     element.on('click', function(event) {
       scope.$apply(function() {
