@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-125
+ * Ionic, v1.0.0-beta.6-nightly-126
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-125'
+  version: '1.0.0-beta.6-nightly-126'
 };
 
 (function(ionic) {
@@ -36157,7 +36157,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-125
+ * Ionic, v1.0.0-beta.6-nightly-126
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43088,7 +43088,7 @@ function($rootScope, $animate, $ionicBind, $compile) {
         attrStr('icon-off', attr.iconOff) +
         attrStr('badge', attr.badge) +
         attrStr('badge-style', attr.badgeStyle) +
-        attrStr('class', attr.class) +
+        attrStr('class', attr['class']) +
         '></ion-tab-nav>';
 
       //Remove the contents of the element so we can compile them later, if tab is selected
@@ -43167,7 +43167,7 @@ IonicModule
     require: ['^ionTabs', '^ionTab'],
     template:
     '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge}" ' +
-      ' class="tab-item {{class}}">' +
+      ' class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
       '<i class="icon {{getIconOff()}}" ng-if="getIconOff() && !isTabActive()"></i>' +
@@ -43180,7 +43180,7 @@ IonicModule
       iconOff: '@',
       badge: '=',
       badgeStyle: '@',
-      class: '@'
+      'class': '@'
     },
     compile: function(element, attr, transclude) {
       return function link($scope, $element, $attrs, ctrls) {
