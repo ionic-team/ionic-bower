@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-124
+ * Ionic, v1.0.0-beta.6-nightly-125
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -559,14 +559,7 @@ function($cacheFactory, $parse, $rootScope) {
     destroy: function() {
       this.dimensions.length = 0;
       this.data = null;
-      forEach(this.backupItemsArray, function(item) {
-        this.destroyItem(item);
-      }, this);
       this.backupItemsArray.length = 0;
-
-      forEach(this.attachedItems, function(item, key) {
-        this.destroyItem(item);
-      }, this);
       this.attachedItems = {};
     },
     calculateDataDimensions: function() {
@@ -812,9 +805,10 @@ function($rootScope, $timeout) {
 
   CollectionRepeatManager.prototype = {
     destroy: function() {
-      for (var i in this.renderedItems) {
-        this.removeItem(i);
-      }
+      this.renderedItems = {};
+      this.render = angular.noop;
+      this.calculateDimensions = angular.noop;
+      this.dimensions = [];
     },
 
     /*
