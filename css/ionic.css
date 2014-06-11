@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-142
+ * Ionic, v1.0.0-beta.6-nightly-143
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5733,13 +5733,9 @@ a.button {
  * iPad doesn't like box shadows
  */
 .grade-a:not(.platform-ipad) .slide-left-right-ios7 > .ng-enter, .grade-a:not(.platform-ipad) .slide-left-right-ios7.ng-enter, .grade-a:not(.platform-ipad) .slide-right-left-ios7.reverse > .ng-enter, .grade-a:not(.platform-ipad) .slide-right-left-ios7.reverse.ng-enter {
-  box-shadow: -500px 0px 500px rgba(0, 0, 0, 0.01), -5px 0px 5px rgba(0, 0, 0, 0.01); }
+  box-shadow: -200px 0px 200px rgba(0, 0, 0, 0), -5px 0px 5px rgba(0, 0, 0, 0.01); }
 .grade-a:not(.platform-ipad) .slide-left-right-ios7 > .ng-enter.ng-enter-active, .grade-a:not(.platform-ipad) .slide-left-right-ios7.ng-enter.ng-enter-active, .grade-a:not(.platform-ipad) .slide-right-left-ios7.reverse > .ng-enter.ng-enter-active, .grade-a:not(.platform-ipad) .slide-right-left-ios7.reverse.ng-enter.ng-enter-active {
-  box-shadow: -500px 0px 500px rgba(0, 0, 0, 0.1), -5px 0px 5px rgba(0, 0, 0, 0.18); }
-.grade-a:not(.platform-ipad) .slide-left-right-ios7.reverse > .ng-leave, .grade-a:not(.platform-ipad) .slide-left-right-ios7.reverse.ng-leave, .grade-a:not(.platform-ipad) .slide-right-left-ios7 > .ng-leave, .grade-a:not(.platform-ipad) .slide-right-left-ios7.ng-leave {
-  box-shadow: -500px 0px 500px rgba(0, 0, 0, 0.1), -5px 0px 5px rgba(0, 0, 0, 0.18); }
-.grade-a:not(.platform-ipad) .slide-left-right-ios7.reverse > .ng-leave.ng-leave-active, .grade-a:not(.platform-ipad) .slide-left-right-ios7.reverse.ng-leave.ng-leave-active, .grade-a:not(.platform-ipad) .slide-right-left-ios7 > .ng-leave.ng-leave-active, .grade-a:not(.platform-ipad) .slide-right-left-ios7.ng-leave.ng-leave-active {
-  box-shadow: -500px 0px 500px rgba(0, 0, 0, 0.01), -5px 0px 5px rgba(0, 0, 0, 0.01); }
+  box-shadow: -200px 0px 200px rgba(0, 0, 0, 0.15), -5px 0px 5px rgba(0, 0, 0, 0.18); }
 
 .grade-a.platform-ipad .slide-left-right-ios7 > .ng-enter, .grade-a.platform-ipad .slide-left-right-ios7.ng-enter, .grade-a.platform-ipad .slide-right-left-ios7.reverse > .ng-enter, .grade-a.platform-ipad .slide-right-left-ios7.reverse.ng-enter {
   border-left: 1px solid #ddd; }
