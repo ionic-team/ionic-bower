@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-128
+ * Ionic, v1.0.0-beta.6-nightly-129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-128'
+  version: '1.0.0-beta.6-nightly-129'
 };
 
 (function(ionic) {
@@ -36177,7 +36177,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-128
+ * Ionic, v1.0.0-beta.6-nightly-129
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36317,8 +36317,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
    *
    *  - `[Object]` `buttons` Which buttons to show.  Each button is an object with a `text` field.
    *  - `{string}` `titleText` The title to show on the action sheet.
-   *  - `{string=}` `cancelText` The text for a 'cancel' button on the action sheet.
-   *  - `{string=}` `destructiveText` The text for a 'danger' on the action sheet.
+   *  - `{string=}` `cancelText` the text for a 'cancel' button on the action sheet.
+   *  - `{string=}` `destructivetext` The text for a 'danger' on the action sheet.
    *  - `{function=}` `cancel` Called if the cancel button is pressed, the backdrop is tapped or
    *     the hardware back button is pressed.
    *  - `{function=}` `buttonClicked` Called when one of the non-destructive buttons is clicked,
@@ -36363,7 +36363,6 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
       $document[0].body.classList.remove('action-sheet-open');
       scope.$deregisterBackButton();
       stateChangeListenDone();
-      scope.cancel.$scope = null; //see last line
 
       $animate.removeClass(element, 'active', function() {
         scope.$destroy();
