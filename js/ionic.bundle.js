@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-122
+ * Ionic, v1.0.0-beta.6-nightly-124
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-122'
+  version: '1.0.0-beta.6-nightly-124'
 };
 
 (function(ionic) {
@@ -36157,7 +36157,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-122
+ * Ionic, v1.0.0-beta.6-nightly-124
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36670,7 +36670,7 @@ IonicModule
   '$parse',
   '$rootScope',
 function($cacheFactory, $parse, $rootScope) {
-  var nextCacheId = 0;
+
   function CollectionRepeatDataSource(options) {
     var self = this;
     this.scope = options.scope;
@@ -36701,33 +36701,28 @@ function($cacheFactory, $parse, $rootScope) {
       };
     }
 
-    var cacheKeys = {};
-    this.itemCache = $cacheFactory(nextCacheId++, {size: 500});
-
-    var _put = this.itemCache.put;
-    this.itemCache.put = function(key, value) {
-      cacheKeys[key] = true;
-      return _put(key, value);
-    };
-
-    var _remove = this.itemCache.remove;
-    this.itemCache.remove = function(key) {
-      delete cacheKeys[key];
-      return _remove(key);
-    };
-    this.itemCache.keys = function() {
-      return Object.keys(cacheKeys);
-    };
+    this.attachedItems = {};
+    this.BACKUP_ITEMS_LENGTH = 10;
+    this.backupItemsArray = [];
   }
   CollectionRepeatDataSource.prototype = {
+    setup: function() {
+      for (var i = 0; i < this.BACKUP_ITEMS_LENGTH; i++) {
+        this.detachItem(this.createItem());
+      }
+    },
     destroy: function() {
       this.dimensions.length = 0;
-      this.itemCache.keys().forEach(function(key) {
-        var item = this.itemCache.get(key);
-        item.element.remove();
-        item.scope.$destroy();
+      this.data = null;
+      forEach(this.backupItemsArray, function(item) {
+        this.destroyItem(item);
       }, this);
-      this.itemCache.removeAll();
+      this.backupItemsArray.length = 0;
+
+      forEach(this.attachedItems, function(item, key) {
+        this.destroyItem(item);
+      }, this);
+      this.attachedItems = {};
     },
     calculateDataDimensions: function() {
       var locals = {};
@@ -36740,53 +36735,74 @@ function($cacheFactory, $parse, $rootScope) {
         };
       }, this);
     },
-    compileItem: function(index, value) {
-      var key = this.itemHashGetter(index, value);
-      var cachedItem = this.itemCache.get(key);
-      if (cachedItem) return cachedItem;
-
+    createItem: function() {
       var item = {};
       item.scope = this.scope.$new();
-      item.scope[this.keyExpr] = value;
 
       this.transcludeFn(item.scope, function(clone) {
         clone.css('position', 'absolute');
         item.element = clone;
       });
 
-      return this.itemCache.put(key, item);
-    },
-    getItem: function(index) {
-      var value = this.data[index];
-      var item = this.compileItem(index, value);
+      this.transcludeParent.append(item.element);
 
-      if (item.scope.$index !== index) {
+      return item;
+    },
+    getItem: function(hash) {
+      window.AMOUNT = window.AMOUNT || 0;
+      if ( (item = this.attachedItems[hash]) ) {
+        //do nothing, the item is good
+      } else if ( (item = this.backupItemsArray.pop()) ) {
+        reconnectScope(item.scope);
+      } else {
+        AMOUNT++;
+        item = this.createItem();
+      }
+      return item;
+    },
+    attachItemAtIndex: function(index) {
+      var value = this.data[index];
+      var hash = this.itemHashGetter(index, value);
+      var item = this.getItem(hash);
+
+      if (item.scope.$index !== index || item.scope[this.keyExpr] !== value) {
+        item.scope[this.keyExpr] = value;
         item.scope.$index = index;
         item.scope.$first = (index === 0);
         item.scope.$last = (index === (this.getLength() - 1));
         item.scope.$middle = !(item.scope.$first || item.scope.$last);
         item.scope.$odd = !(item.scope.$even = (index&1) === 0);
+
+        //We changed the scope, so digest if needed
+        if (!$rootScope.$$phase) {
+          item.scope.$digest();
+        }
       }
+
+      item.hash = hash;
+      this.attachedItems[hash] = item;
 
       return item;
     },
-    detachItem: function(item) {
-      var i, node, parent;
-      //Don't .remove(), that will destroy element data
-      for (i = 0; i < item.element.length; i++) {
-        node = item.element[i];
-        parent = node.parentNode;
-        parent && parent.removeChild(node);
-      }
-      //Don't .$destroy(), just stop watchers and events firing
-      disconnectScope(item.scope);
+    destroyItem: function(item) {
+      item.element.remove();
+      item.scope.$destroy();
+      item.scope = null;
+      item.element = null;
     },
-    attachItem: function(item) {
-      if (!item.element[0].parentNode) {
-        this.transcludeParent[0].appendChild(item.element[0]);
+    detachItem: function(item) {
+      delete this.attachedItems[item.hash];
+
+      // If we are at the limit of backup items, just get rid of the this element
+      if (this.backupItemsArray.length >= this.BACKUP_ITEMS_LENGTH) {
+        this.destroyItem(item);
+      // Otherwise, add it to our backup items
+      } else {
+        this.backupItemsArray.push(item);
+        item.element.css(ionic.CSS.TRANSFORM, 'translate3d(-2000px,-2000px,0)');
+        //Don't .$destroy(), just stop watchers and events firing
+        disconnectScope(item.scope);
       }
-      reconnectScope(item.scope);
-      !$rootScope.$$phase && item.scope.$digest();
     },
     getLength: function() {
       return this.data && this.data.length || 0;
@@ -36877,6 +36893,10 @@ IonicModule
   '$rootScope',
   '$timeout',
 function($rootScope, $timeout) {
+  /**
+   * Vocabulary: "primary" and "secondary" size/direction/position mean
+   * "y" and "x" for vertical scrolling, or "x" and "y" for horizontal scrolling.
+   */
   function CollectionRepeatManager(options) {
     var self = this;
     this.dataSource = options.dataSource;
@@ -36886,14 +36906,14 @@ function($rootScope, $timeout) {
     this.isVertical = !!this.scrollView.options.scrollingY;
     this.renderedItems = {};
 
-    this.lastRenderScrollValue = this.bufferTransformOffset = this.hasBufferStartIndex =
-      this.hasBufferEndIndex = this.bufferItemsLength = 0;
     this.setCurrentIndex(0);
 
+    //Override scrollview's render callback
     this.scrollView.__$callback = this.scrollView.__callback;
     this.scrollView.__callback = angular.bind(this, this.renderScroll);
 
     function getViewportSize() { return self.viewportSize; }
+    //Set getters and setters to match whether this scrollview is vertical or not
     if (this.isVertical) {
       this.scrollView.options.getContentHeight = getViewportSize;
 
@@ -36951,43 +36971,68 @@ function($rootScope, $timeout) {
         this.removeItem(i);
       }
     },
+
+    /*
+     * Pre-calculate the position of all items in the data list.
+     * Do this using the provided width and height (primarySize and secondarySize)
+     * provided by the dataSource.
+     */
     calculateDimensions: function() {
+      /*
+       * For the sake of explanations below, we're going to pretend we are scrolling
+       * vertically: Items are laid out with primarySize being height,
+       * secondarySize being width.
+       */
       var primaryPos = 0;
       var secondaryPos = 0;
-      var len = this.dataSource.dimensions.length;
       var secondaryScrollSize = this.secondaryScrollSize();
-      var previous;
+      var previousItem;
 
       return this.dataSource.dimensions.map(function(dim) {
+        //Each dimension is an object {width: Number, height: Number} provided by
+        //the dataSource
         var rect = {
+          //Get the height out of the dimension object
           primarySize: this.primaryDimension(dim),
+          //Max out the item's width to the width of the scrollview
           secondarySize: Math.min(this.secondaryDimension(dim), secondaryScrollSize)
         };
 
-        if (previous) {
-          secondaryPos += previous.secondarySize;
-          if (previous.primaryPos === primaryPos &&
+        //If this isn't the first item
+        if (previousItem) {
+          //Move the item's x position over by the width of the previous item
+          secondaryPos += previousItem.secondarySize;
+          //If the y position is the same as the previous item and
+          //the x position is bigger than the scroller's width
+          if (previousItem.primaryPos === primaryPos &&
               secondaryPos + rect.secondarySize > secondaryScrollSize) {
+            //Then go to the next row, with x position 0
             secondaryPos = 0;
-            primaryPos += previous.primarySize;
-          } else {
+            primaryPos += previousItem.primarySize;
           }
         }
 
         rect.primaryPos = primaryPos;
         rect.secondaryPos = secondaryPos;
 
-        previous = rect;
+        previousItem = rect;
         return rect;
       }, this);
     },
     resize: function() {
       this.dimensions = this.calculateDimensions();
-      var last = this.dimensions[this.dimensions.length - 1];
-      this.viewportSize = last ? last.primaryPos + last.primarySize : 0;
+      var lastItem = this.dimensions[this.dimensions.length - 1];
+      this.viewportSize = lastItem ? lastItem.primaryPos + lastItem.primarySize : 0;
       this.setCurrentIndex(0);
       this.render(true);
+      if (!this.dataSource.backupItemsArray.length) {
+        this.dataSource.setup();
+      }
     },
+    /*
+     * setCurrentIndex: set the index in the list that matches the scroller's position.
+     * Also save the position in the scroller for next and previous items (if they exist)
+     */
     setCurrentIndex: function(index, height) {
       this.currentIndex = index;
 
@@ -37000,22 +37045,41 @@ function($rootScope, $timeout) {
         this.nextPos = this.dimensions[index + 1].primaryPos;
       }
     },
+    /**
+     * override the scroller's render callback to check if we need to
+     * re-render our collection
+     */
     renderScroll: ionic.animationFrameThrottle(function(transformLeft, transformTop, zoom, wasResize) {
       if (this.isVertical) {
-        transformTop = this.getTransformPosition(transformTop);
+        this.renderIfNeeded(transformTop);
       } else {
-        transformLeft = this.getTransformPosition(transformLeft);
+        this.renderIfNeeded(transformLeft);
       }
       return this.scrollView.__$callback(transformLeft, transformTop, zoom, wasResize);
     }),
-    getTransformPosition: function(transformPos) {
-      if ((this.hasNextIndex && transformPos >= this.nextPos) ||
-          (this.hasPrevIndex && transformPos < this.previousPos) ||
-           Math.abs(transformPos - this.lastRenderScrollValue) > 100) {
+    renderIfNeeded: function(scrollPos) {
+      if ((this.hasNextIndex && scrollPos >= this.nextPos) ||
+          (this.hasPrevIndex && scrollPos < this.previousPos)) {
+           // Math.abs(transformPos - this.lastRenderScrollValue) > 100) {
         this.render();
       }
-      return transformPos - this.lastRenderScrollValue;
     },
+    /*
+     * getIndexForScrollValue: Given the most recent data index and a new scrollValue,
+     * find the data index that matches that scrollValue.
+     *
+     * Strategy (if we are scrolling down): keep going forward in the dimensions list,
+     * starting at the given index, until an item with height matching the new scrollValue
+     * is found.
+     *
+     * This is a while loop. In the worst case it will have to go through the whole list
+     * (eg to scroll from top to bottom).  The most common case is to scroll
+     * down 1-3 items at a time.
+     *
+     * While this is not as efficient as it could be, optimizing it gives no noticeable
+     * benefit.  We would have to use a new memory-intensive data structure for dimensions
+     * to fully optimize it.
+     */
     getIndexForScrollValue: function(i, scrollValue) {
       var rect;
       //Scrolling up
@@ -37031,62 +37095,88 @@ function($rootScope, $timeout) {
       }
       return i;
     },
+    /*
+     * render: Figure out the scroll position, the index matching it, and then tell
+     * the data source to render the correct items into the DOM.
+     */
     render: function(shouldRedrawAll) {
       var i;
-      if (this.currentIndex >= this.dataSource.getLength() || shouldRedrawAll) {
+      var isOutOfBounds = ( this.currentIndex >= this.dataSource.getLength() );
+      // We want to remove all the items and redraw everything if we're out of bounds
+      // or a flag is passed in.
+      if (isOutOfBounds || shouldRedrawAll) {
         for (i in this.renderedItems) {
           this.removeItem(i);
         }
-        if (this.currentIndex >= this.dataSource.getLength()) return null;
+        // Just don't render anything if we're out of bounds
+        if (isOutOfBounds) return;
       }
 
       var rect;
       var scrollValue = this.scrollValue();
-      var scrollDelta = scrollValue - this.lastRenderScrollValue;
+      // Scroll size = how many pixels are visible in the scroller at one time
       var scrollSize = this.scrollSize();
+      // We take the current scroll value and add it to the scrollSize to get
+      // what scrollValue the current visible scroll area ends at.
       var scrollSizeEnd = scrollSize + scrollValue;
+      // Get the new start index for scrolling, based on the current scrollValue and
+      // the most recent known index
       var startIndex = this.getIndexForScrollValue(this.currentIndex, scrollValue);
 
-      //Make buffer start on previous row
-      var bufferStartIndex = Math.max(startIndex - 1, 0);
-      while (bufferStartIndex > 0 &&
-         (rect = this.dimensions[bufferStartIndex]) &&
+      // If we aren't on the first item, add one row of items before so that when the user is
+      // scrolling up he sees the previous item
+      var renderStartIndex = Math.max(startIndex - 1, 0);
+      // Keep adding items to the 'extra row above' until we get to a new row.
+      // This is for the case where there are multiple items on one row above
+      // the current item; we want to keep adding items above until
+      // a new row is reached.
+      while (renderStartIndex > 0 &&
+         (rect = this.dimensions[renderStartIndex]) &&
          rect.primaryPos === this.dimensions[startIndex - 1].primaryPos) {
-        bufferStartIndex--;
+        renderStartIndex--;
       }
-      var startPos = this.dimensions[bufferStartIndex].primaryPos;
 
-      i = bufferStartIndex;
+      // Keep rendering items, adding them until we are past the end of the visible scroll area
+      i = renderStartIndex;
       while ((rect = this.dimensions[i]) && (rect.primaryPos - rect.primarySize < scrollSizeEnd)) {
-        this.renderItem(i, rect.primaryPos - startPos, rect.secondaryPos);
+        this.renderItem(i, rect.primaryPos, rect.secondaryPos);
         i++;
       }
-      var bufferEndIndex = i - 1;
+      var renderEndIndex = i - 1;
 
+      // Remove any items that were rendered and aren't visible anymore
       for (i in this.renderedItems) {
-        if (i < bufferStartIndex || i > bufferEndIndex) {
+        if (i < renderStartIndex || i > renderEndIndex) {
           this.removeItem(i);
         }
       }
 
       this.setCurrentIndex(startIndex);
-      this.lastRenderScrollValue = startPos;
     },
     renderItem: function(dataIndex, primaryPos, secondaryPos) {
-      var item = this.dataSource.getItem(dataIndex);
+      // Attach an item, and set its transform position to the required value
+      var item = this.dataSource.attachItemAtIndex(dataIndex);
       if (item && item.element) {
-        this.dataSource.attachItem(item);
-        item.element.css(ionic.CSS.TRANSFORM, this.transformString(
-          primaryPos, secondaryPos, secondaryPos
-        ));
+        if (item.primaryPos !== primaryPos || item.secondaryPos !== secondaryPos) {
+          item.element.css(ionic.CSS.TRANSFORM, this.transformString(
+            primaryPos, secondaryPos
+          ));
+          item.primaryPos = primaryPos;
+          item.secondaryPos = secondaryPos;
+        }
+        // Save the item in rendered items
         this.renderedItems[dataIndex] = item;
       } else {
+        // If an item at this index doesn't exist anymore, be sure to delete
+        // it from rendered items
         delete this.renderedItems[dataIndex];
       }
     },
     removeItem: function(dataIndex) {
+      // Detach a given item
       var item = this.renderedItems[dataIndex];
       if (item) {
+        item.primaryPos = item.secondaryPos = null;
         this.dataSource.detachItem(item);
         delete this.renderedItems[dataIndex];
       }
@@ -40480,15 +40570,9 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
       } else if (!isVertical && !$attr.collectionItemWidth) {
         throw new Error(COLLECTION_REPEAT_ATTR_WIDTH_ERROR);
       }
-      $attr.collectionItemHeight = $attr.collectionItemHeight || '"100%"';
-      $attr.collectionItemWidth = $attr.collectionItemWidth || '"100%"';
 
-      var heightParsed = $attr.collectionItemHeight ?
-        $parse($attr.collectionItemHeight) :
-        function() { return scrollView.__clientHeight; };
-      var widthParsed = $attr.collectionItemWidth ?
-        $parse($attr.collectionItemWidth) :
-        function() { return scrollView.__clientWidth; };
+      var heightParsed = $parse($attr.collectionItemHeight || '"100%"');
+      var widthParsed = $parse($attr.collectionItemWidth || '"100%"');
 
       var heightGetter = function(scope, locals) {
         var result = heightParsed(scope, locals);
@@ -43010,6 +43094,7 @@ function($rootScope, $animate, $ionicBind, $compile) {
         attrStr('icon-off', attr.iconOff) +
         attrStr('badge', attr.badge) +
         attrStr('badge-style', attr.badgeStyle) +
+        attrStr('class', attr.class) +
         '></ion-tab-nav>';
 
       //Remove the contents of the element so we can compile them later, if tab is selected
@@ -43088,7 +43173,7 @@ IonicModule
     require: ['^ionTabs', '^ionTab'],
     template:
     '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge}" ' +
-      ' class="tab-item">' +
+      ' class="tab-item {{class}}">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
       '<i class="icon {{getIconOff()}}" ng-if="getIconOff() && !isTabActive()"></i>' +
@@ -43100,7 +43185,8 @@ IonicModule
       iconOn: '@',
       iconOff: '@',
       badge: '=',
-      badgeStyle: '@'
+      badgeStyle: '@',
+      class: '@'
     },
     compile: function(element, attr, transclude) {
       return function link($scope, $element, $attrs, ctrls) {
