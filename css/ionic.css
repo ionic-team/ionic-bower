@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-140
+ * Ionic, v1.0.0-beta.6-nightly-141
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5667,9 +5667,9 @@ a.button {
  * --------------------------------------------------
  */
 .slide-left-right-ios7 > .ng-enter, .slide-left-right-ios7.ng-enter, .slide-left-right-ios7 > .ng-leave, .slide-left-right-ios7.ng-leave, .slide-right-left-ios7.reverse > .ng-enter, .slide-right-left-ios7.reverse.ng-enter, .slide-right-left-ios7.reverse > .ng-leave, .slide-right-left-ios7.reverse.ng-leave {
-  -webkit-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
-  -moz-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
-  transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
+  -webkit-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
+  -moz-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
+  transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
   position: absolute;
   top: 0;
   right: -1px;
@@ -5700,9 +5700,9 @@ a.button {
   transform: translate3d(-15%, 0, 0); }
 
 .slide-left-right-ios7.reverse > .ng-enter, .slide-left-right-ios7.reverse.ng-enter, .slide-left-right-ios7.reverse > .ng-leave, .slide-left-right-ios7.reverse.ng-leave, .slide-right-left-ios7 > .ng-enter, .slide-right-left-ios7.ng-enter, .slide-right-left-ios7 > .ng-leave, .slide-right-left-ios7.ng-leave {
-  -webkit-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
-  -moz-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
-  transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 7340ms;
+  -webkit-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
+  -moz-transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
+  transition: all cubic-bezier(0.4, 0.6, 0.2, 1) 340ms;
   position: absolute;
   top: 0;
   right: -1px;
@@ -6129,9 +6129,9 @@ a.button {
  * Some component specific animations
  */
 .nav-title-slide-ios7:not(.no-animation) .button.back-button {
-  -webkit-transition: all 7340ms;
-  -moz-transition: all 7340ms;
-  transition: all 7340ms;
+  -webkit-transition: all 340ms;
+  -moz-transition: all 340ms;
+  transition: all 340ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   -moz-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
@@ -6151,9 +6151,9 @@ a.button {
   .nav-title-slide-ios7:not(.no-animation) .button.back-button.ng-hide-add {
     position: absolute; }
 .nav-title-slide-ios7 > .ng-enter, .nav-title-slide-ios7.ng-enter, .nav-title-slide-ios7 > .ng-leave, .nav-title-slide-ios7.ng-leave {
-  -webkit-transition: all 7340ms;
-  -moz-transition: all 7340ms;
-  transition: all 7340ms;
+  -webkit-transition: all 340ms;
+  -moz-transition: all 340ms;
+  transition: all 340ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   -moz-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
@@ -6178,9 +6178,9 @@ a.button {
   transform: translate3d(-30%, 0, 0);
   opacity: 0; }
 .nav-title-slide-ios7.reverse > .ng-enter, .nav-title-slide-ios7.reverse.ng-enter, .nav-title-slide-ios7.reverse > .ng-leave, .nav-title-slide-ios7.reverse.ng-leave {
-  -webkit-transition: all 7340ms;
-  -moz-transition: all 7340ms;
-  transition: all 7340ms;
+  -webkit-transition: all 340ms;
+  -moz-transition: all 340ms;
+  transition: all 340ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   -moz-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
