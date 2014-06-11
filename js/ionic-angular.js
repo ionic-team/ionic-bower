@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-136
+ * Ionic, v1.0.0-beta.6-nightly-138
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1772,6 +1772,69 @@ var PLATFORM_BACK_BUTTON_PRIORITY_MODAL = 200;
 var PLATFORM_BACK_BUTTON_PRIORITY_ACTION_SHEET = 300;
 var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 400;
 var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
+
+function componentConfig(defaults) {
+  defaults.$get = function() { return defaults; }
+  return defaults;
+}
+
+IonicModule
+.constant('$ionicPlatformDefaults', {
+  'ios': {
+    '$ionicNavBarConfig': {
+      transition: 'nav-title-slide-ios7',
+      alignTitle: 'center',
+      backButtonIcon: 'ion-ios7-arrow-back'
+    },
+    '$ionicNavViewConfig': {
+      transition: 'slide-left-right-ios7'
+    },
+    '$ionicTabsConfig': {
+      type: '',
+      position: ''
+    }
+  },
+  'android': {
+    '$ionicNavBarConfig': {
+      transition: 'no-animation',
+      alignTitle: 'left',
+      backButtonIcon: 'ion-android-arrow-back'
+    },
+    '$ionicNavViewConfig': {
+      transition: 'fade-implode'
+    },
+    '$ionicTabsConfig': {
+      type: 'tabs-striped',
+      position: ''
+    }
+  }
+})
+
+
+IonicModule.config([
+  '$ionicPlatformDefaults',
+
+  '$injector',
+
+function($ionicPlatformDefaults, $injector) {
+  var platform = ionic.Platform.platform();
+
+  var applyConfig = function(platformDefaults) {
+    forEach(platformDefaults, function(defaults, constantName) {
+      extend($injector.get(constantName), defaults);
+    });
+  };
+
+  switch(platform) {
+    case 'ios':
+      applyConfig($ionicPlatformDefaults.ios);
+      break;
+    case 'android':
+      applyConfig($ionicPlatformDefaults.android);
+      break;
+  }
+}]);
+
 /**
  * @ngdoc service
  * @name $ionicPlatform
@@ -1784,10 +1847,10 @@ var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
  */
 IonicModule
 .provider('$ionicPlatform', function() {
-
   return {
     $get: ['$q', '$rootScope', function($q, $rootScope) {
       var self = {
+
         /**
          * @ngdoc method
          * @name $ionicPlatform#onHardwareBackButton
@@ -1906,6 +1969,7 @@ IonicModule
   };
 
 });
+
 
 
 var POPUP_TPL =
@@ -3018,7 +3082,8 @@ function($rootScope, $state, $location, $document, $animate, $ionicPlatform, $io
   '$window',
   '$injector',
   '$animate',
-function($rootScope, $state, $location, $window, $injector, $animate) {
+  '$ionicNavViewConfig',
+function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavViewConfig) {
 
   var View = function(){};
   View.prototype.initialize = function(data) {
@@ -3365,6 +3430,12 @@ function($rootScope, $state, $location, $window, $injector, $animate) {
           className = el.getAttribute('animation');
           el = el.parentElement;
         }
+
+        // If they don't have an animation set explicitly, use the value in the config
+        if(!className) {
+          return $ionicNavViewConfig.transition;
+        }
+
         return className;
       }
 
@@ -5617,7 +5688,11 @@ IonicModule
 .directive('ionNavBackButton', [
   '$animate',
   '$rootScope',
-function($animate, $rootScope) {
+  '$sanitize',
+
+  '$ionicNavBarConfig',
+
+function($animate, $rootScope, $sanitize, $ionicNavBarConfig) {
   var backIsShown = false;
   //If the current viewstate does not allow a back button,
   //always hide it.
@@ -5629,7 +5704,15 @@ function($animate, $rootScope) {
     require: '^ionNavBar',
     compile: function(tElement, tAttrs) {
       tElement.addClass('button back-button ng-hide');
+      
       return function($scope, $element, $attr, navBarCtrl) {
+        void 0;
+
+        // Add a default back button icon based on the nav config, unless one is set
+        if($element[0].className.indexOf('ion-') < 0) {
+          $element.addClass($ionicNavBarConfig.backButtonIcon);
+        }
+
         if (!$attr.ngClick) {
           $scope.$navBack = navBarCtrl.back;
           $element.on('click', function(event){
@@ -5638,10 +5721,12 @@ function($animate, $rootScope) {
             });
           });
         }
-
         //Make sure both that a backButton is allowed in the first place,
         //and that it is shown by the current view.
         $scope.$watch(function() {
+          if(isDefined($attr.fromTitle)) {
+            $element[0].innerHTML = '<span class="back-button-title">' + $sanitize($scope.oldTitle) + '</span>';
+          }
           return !!(backIsShown && $scope.backButtonShown);
         }, ionic.animationFrameThrottle(function(show) {
           if (show) $animate.removeClass($element, 'ng-hide');
@@ -5652,6 +5737,12 @@ function($animate, $rootScope) {
   };
 }]);
 
+
+IonicModule.constant('$ionicNavBarConfig', {
+  transition: 'nav-title-slide-ios7',
+  alignTitle: 'center',
+  backButtonIcon: 'ion-ios7-arrow-back'
+});
 
 /**
  * @ngdoc directive
@@ -5732,7 +5823,8 @@ IonicModule
   '$rootScope',
   '$animate',
   '$compile',
-function($ionicViewService, $rootScope, $animate, $compile) {
+  '$ionicNavBarConfig',
+function($ionicViewService, $rootScope, $animate, $compile, $ionicNavBarConfig) {
 
   return {
     restrict: 'E',
@@ -5741,7 +5833,7 @@ function($ionicViewService, $rootScope, $animate, $compile) {
     compile: function(tElement, tAttrs) {
       //We cannot transclude here because it breaks element.data() inheritance on compile
       tElement
-        .addClass('bar bar-header nav-bar')
+        .addClass('bar bar-header nav-bar ' + $ionicNavBarConfig.transition)
         .append(
           '<div class="buttons left-buttons"> ' +
           '</div>' +
@@ -5754,7 +5846,7 @@ function($ionicViewService, $rootScope, $animate, $compile) {
       function prelink($scope, $element, $attr, navBarCtrl) {
         navBarCtrl._headerBarView = new ionic.views.HeaderBar({
           el: $element[0],
-          alignTitle: $attr.alignTitle || 'center'
+          alignTitle: $attr.alignTitle || $ionicNavBarConfig.alignTitle || 'center'
         });
 
         //defaults
@@ -5919,6 +6011,10 @@ function($ionicViewService, $location, $state, $window, $rootScope) {
     }
   };
 }]);
+
+IonicModule.constant('$ionicNavViewConfig', {
+  transition: 'slide-left-right-ios7'
+});
 
 /**
  * @ngdoc directive
@@ -6877,6 +6973,10 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
 
 });
 
+IonicModule.constant('$ionicTabConfig', {
+  type: ''
+});
+
 /**
  * @ngdoc directive
  * @name ionTab
@@ -7072,6 +7172,10 @@ IonicModule
   };
 }]);
 
+IonicModule.constant('$ionicTabsConfig', {
+  position: '',
+  type: ''
+});
 
 /**
  * @ngdoc directive
@@ -7120,9 +7224,10 @@ IonicModule
 
 IonicModule
 .directive('ionTabs', [
-  '$ionicViewService',
-  '$ionicTabsDelegate',
-function($ionicViewService, $ionicTabsDelegate) {
+  '$ionicViewService', 
+  '$ionicTabsDelegate', 
+  '$ionicTabsConfig', 
+function($ionicViewService, $ionicTabsDelegate, $ionicTabsConfig) {
   return {
     restrict: 'E',
     scope: true,
@@ -7134,6 +7239,8 @@ function($ionicViewService, $ionicTabsDelegate) {
       var innerElement = jqLite('<div class="tabs"></div>');
       innerElement.append(element.contents());
       element.append(innerElement);
+      element.addClass($ionicTabsConfig.position);
+      element.addClass($ionicTabsConfig.type);
 
       return { pre: prelink };
       function prelink($scope, $element, $attr, tabsCtrl) {
