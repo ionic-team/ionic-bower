@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-151
+ * Ionic, v1.0.0-beta.6-nightly-152
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-151'
+  version: '1.0.0-beta.6-nightly-152'
 };
 
 (function(ionic) {
@@ -36183,7 +36183,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-151
+ * Ionic, v1.0.0-beta.6-nightly-152
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41890,10 +41890,12 @@ function($animate, $rootScope, $sanitize, $ionicNavBarConfig, $ionicNgClick) {
     compile: function(tElement, tAttrs) {
       tElement.addClass('button back-button ng-hide');
 
+      var hasIconChild = !!(tElement.html() || '').match(/class=.*?ion-/);
+
       return function($scope, $element, $attr, navBarCtrl) {
 
         // Add a default back button icon based on the nav config, unless one is set
-        if($element[0].className.indexOf('ion-') < 0) {
+        if (!hasIconChild && $element[0].className.indexOf('ion-') === -1) {
           $element.addClass($ionicNavBarConfig.backButtonIcon);
         }
 
