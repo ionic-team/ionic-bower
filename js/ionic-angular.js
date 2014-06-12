@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-156
+ * Ionic, v1.0.0-beta.6-nightly-157
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4702,8 +4702,13 @@ function($timeout, $controller, $ionicBind) {
 }]);
 
 
+forEach(
+  'onHold onTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeBottom onSwipeLeft'.split(' '),
+  function(name) {
+    IonicModule.directive(name, gestureDirective(name));
+  }
+);
 
-IonicModule
 
 /**
  * @ngdoc directive
@@ -4719,7 +4724,6 @@ IonicModule
  * <button on-hold="onHold()" class="button">Test</button>
  * ```
  */
-  .directive('onHold', gestureDirective('onHold'))
 
 
 /**
@@ -4737,7 +4741,6 @@ IonicModule
  * <button on-tap="onTap()" class="button">Test</button>
  * ```
  */
-  .directive('onTap', gestureDirective('onTap'))
 
 
 /**
@@ -4755,7 +4758,6 @@ IonicModule
  * <button on-touch="onTouch()" class="button">Test</button>
  * ```
  */
-  .directive('onTouch', gestureDirective('onTouch'))
 
 
 /**
@@ -4772,7 +4774,6 @@ IonicModule
  * <button on-release="onRelease()" class="button">Test</button>
  * ```
  */
-  .directive('onRelease', gestureDirective('onRelease'))
 
 
 /**
@@ -4791,7 +4792,6 @@ IonicModule
  * <button on-drag="onDrag()" class="button">Test</button>
  * ```
  */
-  .directive('onDrag', gestureDirective('onDrag'))
 
 
 /**
@@ -4808,7 +4808,6 @@ IonicModule
  * <button on-drag-up="onDragUp()" class="button">Test</button>
  * ```
  */
-  .directive('onDragUp', gestureDirective('onDragUp'))
 
 
 /**
@@ -4825,7 +4824,6 @@ IonicModule
  * <button on-drag-right="onDragRight()" class="button">Test</button>
  * ```
  */
-  .directive('onDragRight', gestureDirective('onDragRight'))
 
 
 /**
@@ -4842,7 +4840,6 @@ IonicModule
  * <button on-drag-down="onDragDown()" class="button">Test</button>
  * ```
  */
-  .directive('onDragDown', gestureDirective('onDragDown'))
 
 
 /**
@@ -4859,7 +4856,6 @@ IonicModule
  * <button on-drag-left="onDragLeft()" class="button">Test</button>
  * ```
  */
-  .directive('onDragLeft', gestureDirective('onDragLeft'))
 
 
 /**
@@ -4876,7 +4872,6 @@ IonicModule
  * <button on-swipe="onSwipe()" class="button">Test</button>
  * ```
  */
-  .directive('onSwipe', gestureDirective('onSwipe'))
 
 
 /**
@@ -4893,7 +4888,6 @@ IonicModule
  * <button on-swipe-up="onSwipeUp()" class="button">Test</button>
  * ```
  */
-  .directive('onSwipeUp', gestureDirective('onSwipeUp'))
 
 
 /**
@@ -4910,7 +4904,6 @@ IonicModule
  * <button on-swipe-right="onSwipeRight()" class="button">Test</button>
  * ```
  */
-  .directive('onSwipeRight', gestureDirective('onSwipeRight'))
 
 
 /**
@@ -4927,7 +4920,6 @@ IonicModule
  * <button on-swipe-down="onSwipeDown()" class="button">Test</button>
  * ```
  */
-  .directive('onSwipeDown', gestureDirective('onSwipeDown'))
 
 
 /**
@@ -4944,27 +4936,30 @@ IonicModule
  * <button on-swipe-left="onSwipeLeft()" class="button">Test</button>
  * ```
  */
-  .directive('onSwipeLeft', gestureDirective('onSwipeLeft'));
 
 
-
-function gestureDirective(attrName) {
-  return ['$ionicGesture', function($ionicGesture) {
+function gestureDirective(directiveName) {
+  return ['$ionicGesture', '$parse', function($ionicGesture, $parse) {
     return {
       restrict: 'A',
-      link: function($scope, $element, $attr) {
-        var eventType = attrName.substr(2).toLowerCase();
+      compile: function($element, attr) {
+        var fn = $parse( attr[directiveName] );
+        var eventType = directiveName.substr(2).toLowerCase();
 
-        var listener = function(ev) {
-          $scope.$apply( $attr[attrName] );
+        return function(scope, element, attr) {
+
+          var listener = function(ev) {
+            scope.$apply(function() {
+              fn(scope, {$event:event});
+            });
+          };
+
+          var gesture = $ionicGesture.on(eventType, listener, $element);
+
+          scope.$on('$destroy', function() {
+            $ionicGesture.off(gesture, eventType, listener);
+          });
         };
-
-        var gesture = $ionicGesture.on(eventType, listener, $element);
-
-        $scope.$on('$destroy', function() {
-          $ionicGesture.off(gesture, eventType, listener);
-        });
-
       }
     };
   }];
