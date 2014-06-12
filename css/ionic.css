@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-158
+ * Ionic, v1.0.0-beta.6-nightly-160
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6201,6 +6201,34 @@ a.button {
   transform: translate3d(100%, 0, 0);
   opacity: 0; }
 
+.nav-title-android:not(.no-animation) .button.back-button {
+  -webkit-transition: all 200ms;
+  -moz-transition: all 200ms;
+  transition: all 200ms;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  transition-timing-function: linear;
+  opacity: 1; }
+  .nav-title-android:not(.no-animation) .button.back-button.ng-hide {
+    opacity: 0; }
+  .nav-title-android:not(.no-animation) .button.back-button.ng-hide-add, .nav-title-android:not(.no-animation) .button.back-button.ng-hide-remove {
+    display: block !important; }
+  .nav-title-android:not(.no-animation) .button.back-button.ng-hide-add {
+    position: absolute; }
+.nav-title-android > .ng-enter, .nav-title-android.ng-enter, .nav-title-android > .ng-leave, .nav-title-android.ng-leave {
+  -webkit-transition: all 200ms;
+  -moz-transition: all 200ms;
+  transition: all 200ms;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-timing-function: linear;
+  transition-timing-function: linear; }
+.nav-title-android > .ng-enter, .nav-title-android.ng-enter {
+  opacity: 0; }
+.nav-title-android > .ng-enter.ng-enter-active, .nav-title-android.ng-enter.ng-enter-active {
+  opacity: 1; }
+.nav-title-android > .ng-leave.ng-leave-active, .nav-title-android.ng-leave.ng-leave-active {
+  opacity: 0; }
+
 /**
  * Grid
  * --------------------------------------------------
@@ -6674,7 +6702,67 @@ a.button {
   .roboto input {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
 
+/*
 .platform-android {
+
+
+  .bar {
+    padding: 0;
+
+    line-height: 40px;
+
+    .button {
+      line-height: 40px;
+    }
+
+    .button-icon:before {
+      font-size: 24px;
+    }
+  }
+
+  .back-button {
+    &.button-icon:before {
+      line-height: 40px;
+    }
+    margin-left: -3px;
+    padding: 0px 2px !important;
+    &.ion-android-arrow-back:before {
+      font-size: 12px;
+    }
+
+    &.back-button.active,
+    &.back-button.activated {
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+
+  .item-divider {
+    background: none;
+    border-top-width: 0;
+    border-bottom-width: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .item {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+
+  .item-divider ~ .item:not(.item-divider) {
+    border-bottom-width: 0;
+  }
+
+  .back-button:not(.ng-hide) + .left-buttons + .title {
+    // Don't allow normal titles in this mode
+    display: none;
+  }
+
+  .bar .title {
+    text-align: left;
+    font-weight: normal;
+  }
+
   /*
   font-family: 'Roboto';
 
@@ -6690,41 +6778,7 @@ a.button {
   input, button, select, textarea {
     font-family: 'Roboto', $font-family-base;
   }
-  */ }
-  .platform-android .bar {
-    padding: 0;
-    line-height: 40px; }
-    .platform-android .bar .button {
-      line-height: 40px; }
-    .platform-android .bar .button-icon:before {
-      font-size: 24px; }
-  .platform-android .back-button {
-    margin-left: -3px;
-    padding: 0px 2px !important; }
-    .platform-android .back-button.button-icon:before {
-      line-height: 40px; }
-    .platform-android .back-button.ion-android-arrow-back:before {
-      font-size: 12px; }
-    .platform-android .back-button.back-button.active, .platform-android .back-button.back-button.activated {
-      background-color: rgba(0, 0, 0, 0.1); }
-  .platform-android .item-divider {
-    background: none;
-    border-top-width: 0;
-    border-bottom-width: 2px;
-    text-transform: uppercase;
-    margin-top: 10px;
-    font-size: 14px; }
-  .platform-android .item {
-    border-left-width: 0;
-    border-right-width: 0; }
-  .platform-android .item-divider ~ .item:not(.item-divider) {
-    border-bottom-width: 0; }
-  .platform-android .back-button:not(.ng-hide) + .left-buttons + .title {
-    display: none; }
-  .platform-android .bar .title {
-    text-align: left;
-    font-weight: normal; }
-
+  */
 .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) {
   height: 64px; }
   .platform-ios7.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader).item-input-inset .item-input-wrapper {

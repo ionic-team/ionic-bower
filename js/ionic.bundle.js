@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-158
+ * Ionic, v1.0.0-beta.6-nightly-160
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.6-nightly-158'
+  version: '1.0.0-beta.6-nightly-160'
 };
 
 (function(ionic) {
@@ -36183,7 +36183,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-158
+ * Ionic, v1.0.0-beta.6-nightly-160
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37977,12 +37977,12 @@ IonicModule
   },
   'android': {
     '$ionicNavBarConfig': {
-      transition: 'no-animation',
-      alignTitle: 'left',
-      backButtonIcon: 'ion-android-arrow-back'
+      transition: 'nav-title-slide-ios7',
+      alignTitle: 'center',
+      backButtonIcon: 'ion-ios7-arrow-back'
     },
     '$ionicNavViewConfig': {
-      transition: 'fade-implode'
+      transition: 'slide-left-right-ios7'
     },
     '$ionicTabsConfig': {
       type: 'tabs-striped',
