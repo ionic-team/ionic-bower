@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-146
+ * Ionic, v1.0.0-beta.6-nightly-147
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6002,9 +6002,9 @@ a.button {
     -moz-animation-fill-mode: both;
     animation-fill-mode: both; }
   .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
-    -webkit-animation-name: slideInFromRight;
-    -moz-animation-name: slideInFromRight;
-    animation-name: slideInFromRight;
+    -webkit-animation-name: slideOutToRight;
+    -moz-animation-name: slideOutToRight;
+    animation-name: slideOutToRight;
     -webkit-animation-duration: 250ms;
     -moz-animation-duration: 250ms;
     animation-duration: 250ms;
