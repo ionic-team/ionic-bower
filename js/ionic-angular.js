@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-157
+ * Ionic, v1.0.0-beta.6-nightly-158
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4940,11 +4940,12 @@ forEach(
 
 function gestureDirective(directiveName) {
   return ['$ionicGesture', '$parse', function($ionicGesture, $parse) {
+    var eventType = directiveName.substr(2).toLowerCase();
+
     return {
       restrict: 'A',
       compile: function($element, attr) {
         var fn = $parse( attr[directiveName] );
-        var eventType = directiveName.substr(2).toLowerCase();
 
         return function(scope, element, attr) {
 
