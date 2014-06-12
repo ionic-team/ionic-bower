@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-148
+ * Ionic, v1.0.0-beta.6-nightly-149
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4860,18 +4860,18 @@ progress {
   .button .icon {
     vertical-align: top;
     pointer-events: none; }
-  .button .icon:before, .button.icon:before, .button.icon-left:before, .button.icon-right:before, .button.icon-left .icon:before, .button.icon-right .icon:before {
+  .button .icon:before, .button.icon:before, .button.icon-left:before, .button.icon-right:before {
     display: inline-block;
     padding: 0 0 1px 0;
     vertical-align: inherit;
     font-size: 24px;
     line-height: 41px;
     pointer-events: none; }
-  .button.icon-left:before, .button.icon-left .icon:before {
+  .button.icon-left:before {
     float: left;
     padding-right: 0.2em;
     padding-left: 0; }
-  .button.icon-right:before, .button.icon-right .icon:before {
+  .button.icon-right:before {
     float: right;
     padding-right: 0;
     padding-left: 0.2em; }
@@ -5128,7 +5128,7 @@ progress {
   min-height: 30px;
   font-size: 12px;
   line-height: 26px; }
-  .button-small .icon:before, .button-small.icon:before, .button-small.icon-left:before, .button-small.icon-right:before, .button-small.icon-left .icon:before, .button-small.icon-right .icon:before {
+  .button-small .icon:before, .button-small.icon:before, .button-small.icon-left:before, .button-small.icon-right:before {
     font-size: 16px;
     line-height: 19px;
     margin-top: 3px; }
@@ -5139,7 +5139,7 @@ progress {
   min-height: 59px;
   font-size: 20px;
   line-height: 53px; }
-  .button-large .icon:before, .button-large.icon:before, .button-large.icon-left:before, .button-large.icon-right:before, .button-large.icon-left .icon:before, .button-large.icon-right .icon:before {
+  .button-large .icon:before, .button-large.icon:before, .button-large.icon-left:before, .button-large.icon-right:before {
     padding-bottom: 2px;
     font-size: 32px;
     line-height: 51px; }
