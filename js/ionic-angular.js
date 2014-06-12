@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-143
+ * Ionic, v1.0.0-beta.6-nightly-146
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6137,7 +6137,7 @@ function( $ionicViewService,   $state,   $compile,   $controller,   $animate) {
         // to derive our own qualified view name, then hang our own details
         // off the DOM so child directives can find it.
         var parent = element.parent().inheritedData('$uiView');
-        if (name.indexOf('@') < 0) name  = name + '@' + (parent ? parent.state.name : '');
+        if (name.indexOf('@') < 0) name  = name + '@' + ((parent && parent.state) ? parent.state.name : '');
         var view = { name: name, state: null };
         element.data('$uiView', view);
 
