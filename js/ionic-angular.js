@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-150
+ * Ionic, v1.0.0-beta.6-nightly-151
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2826,6 +2826,12 @@ IonicModule
    * explicitly told to do so.
    */
   'stop',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#start
+   * @description Start sliding again if the slideBox was stopped. 
+   */
+  'start',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#currentIndex
