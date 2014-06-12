@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.6-nightly-161
+ * Ionic, v1.0.0-beta.6-nightly-163
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4300,6 +4300,25 @@ input, button, select, textarea {
 .item-stacked-label input {
   overflow: hidden;
   height: 46px; }
+
+.item-floating-label {
+  display: block;
+  background-color: transparent;
+  box-shadow: none; }
+  .item-floating-label .input-label {
+    position: relative;
+    padding: 5px 0 0 0;
+    opacity: 0;
+    top: 10px;
+    -webkit-transition: opacity 0.2s ease-in, top 0.2s linear;
+    -moz-transition: opacity 0.2s ease-in, top 0.2s linear;
+    transition: opacity 0.2s ease-in, top 0.2s linear; }
+    .item-floating-label .input-label.has-input {
+      opacity: 1;
+      top: 0;
+      -webkit-transition: opacity 0.2s ease-in, top 0.2s linear;
+      -moz-transition: opacity 0.2s ease-in, top 0.2s linear;
+      transition: opacity 0.2s ease-in, top 0.2s linear; }
 
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
   display: block;
