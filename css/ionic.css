@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.7-nightly-179
+ * Ionic, v1.0.0-beta.7-nightly-180
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1846,6 +1846,7 @@ legend {
  * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
  * 4. Remove any default :focus styles
  * 5. Make sure webkit font smoothing is being inherited
+ * 6. Remove default gradient in Android Firefox / FirefoxOS
  */
 button, input, select, textarea {
   margin: 0;
@@ -1861,7 +1862,9 @@ button, input, select, textarea {
   outline-width: 0;
   /* 4 */
   -webkit-font-smoothing: inherit;
-  /* 5 */ }
+  /* 5 */
+  background-image: none;
+  /* 6 */ }
 
 /**
  * Address Firefox 4+ setting `line-height` on `input` using `importnt` in
