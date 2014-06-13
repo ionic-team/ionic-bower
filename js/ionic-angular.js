@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.7-nightly-180
+ * Ionic, v1.0.0-beta.7-nightly-181
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5421,11 +5421,9 @@ IonicModule
       if ( !input || !inputLabel ) return;
 
       var onInput = function() {
-        var hasInput = inputLabel.classList.contains('has-input');
-        if ( input.value && !hasInput ) {
+        if ( input.value ) {
           inputLabel.classList.add('has-input');
-        }
-        else if ( !input.value && hasInput ) {
+        } else {
           inputLabel.classList.remove('has-input');
         }
       };
@@ -5436,8 +5434,6 @@ IonicModule
       if ( ngModelCtrl ) {
         ngModelCtrl.$render = function() {
           input.value = ngModelCtrl.$viewValue || '';
-          if ( ngModelCtrl.$viewValue ) input.value = ngModelCtrl.$viewValue;
-          else input.value = '';
           onInput();
         };
       }
