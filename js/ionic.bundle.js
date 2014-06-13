@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.7-nightly-177
+ * Ionic, v1.0.0-beta.7-nightly-178
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.7-nightly-177'
+  version: '1.0.0-beta.7-nightly-178'
 };
 
 (function(ionic) {
@@ -2947,7 +2947,7 @@ function tapActiveElement(ele) {
 }
 
 function tapHasPointerMoved(endEvent) {
-  if(!endEvent || !tapPointerStart || ( tapPointerStart.x === 0 && tapPointerStart.y === 0 )) {
+  if(!endEvent || endEvent.target.nodeType !== 1 || !tapPointerStart || ( tapPointerStart.x === 0 && tapPointerStart.y === 0 )) {
     return false;
   }
   var endCoordinates = getPointerCoordinates(endEvent);
@@ -36183,7 +36183,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.7-nightly-177
+ * Ionic, v1.0.0-beta.7-nightly-178
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
