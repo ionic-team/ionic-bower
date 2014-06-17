@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-200
+ * Ionic, v1.0.0-beta.8-nightly-201
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -143,7 +143,7 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
    *  - `[Object]` `buttons` Which buttons to show.  Each button is an object with a `text` field.
    *  - `{string}` `titleText` The title to show on the action sheet.
    *  - `{string=}` `cancelText` the text for a 'cancel' button on the action sheet.
-   *  - `{string=}` `destructivetext` The text for a 'danger' on the action sheet.
+   *  - `{string=}` `destructiveText` The text for a 'danger' on the action sheet.
    *  - `{function=}` `cancel` Called if the cancel button is pressed, the backdrop is tapped or
    *     the hardware back button is pressed.
    *  - `{function=}` `buttonClicked` Called when one of the non-destructive buttons is clicked,
