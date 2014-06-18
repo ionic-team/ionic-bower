@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-204
+ * Ionic, v1.0.0-beta.8-nightly-205
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3780,6 +3780,70 @@ a.item-content {
 .item-complex.item-text-wrap, .item-complex.item-text-wrap h1, .item-complex.item-text-wrap h2, .item-complex.item-text-wrap h3, .item-complex.item-text-wrap h4, .item-complex.item-text-wrap h5, .item-complex.item-text-wrap h6, .item-complex.item-text-wrap p {
   overflow: visible;
   white-space: normal; }
+
+.item-complex.item-light > .item-content {
+  border-color: #ddd;
+  background-color: #fff;
+  color: #444; }
+  .item-complex.item-light > .item-content.active, .item-complex.item-light > .item-content:active {
+    border-color: #ccc;
+    background-color: #fafafa; }
+.item-complex.item-stable > .item-content {
+  border-color: #b2b2b2;
+  background-color: #f8f8f8;
+  color: #444; }
+  .item-complex.item-stable > .item-content.active, .item-complex.item-stable > .item-content:active {
+    border-color: #a2a2a2;
+    background-color: #e5e5e5; }
+.item-complex.item-positive > .item-content {
+  border-color: #145fd7;
+  background-color: #4a87ee;
+  color: #fff; }
+  .item-complex.item-positive > .item-content.active, .item-complex.item-positive > .item-content:active {
+    border-color: #145fd7;
+    background-color: #145fd7; }
+.item-complex.item-calm > .item-content {
+  border-color: #1aacc3;
+  background-color: #43cee6;
+  color: #fff; }
+  .item-complex.item-calm > .item-content.active, .item-complex.item-calm > .item-content:active {
+    border-color: #1aacc3;
+    background-color: #1aacc3; }
+.item-complex.item-assertive > .item-content {
+  border-color: #cc2311;
+  background-color: #ef4e3a;
+  color: #fff; }
+  .item-complex.item-assertive > .item-content.active, .item-complex.item-assertive > .item-content:active {
+    border-color: #cc2311;
+    background-color: #cc2311; }
+.item-complex.item-balanced > .item-content {
+  border-color: #498f24;
+  background-color: #66cc33;
+  color: #fff; }
+  .item-complex.item-balanced > .item-content.active, .item-complex.item-balanced > .item-content:active {
+    border-color: #498f24;
+    background-color: #498f24; }
+.item-complex.item-energized > .item-content {
+  border-color: #d39211;
+  background-color: #f0b840;
+  color: #fff; }
+  .item-complex.item-energized > .item-content.active, .item-complex.item-energized > .item-content:active {
+    border-color: #d39211;
+    background-color: #d39211; }
+.item-complex.item-royal > .item-content {
+  border-color: #552bdf;
+  background-color: #8a6de9;
+  color: #fff; }
+  .item-complex.item-royal > .item-content.active, .item-complex.item-royal > .item-content:active {
+    border-color: #552bdf;
+    background-color: #552bdf; }
+.item-complex.item-dark > .item-content {
+  border-color: #111;
+  background-color: #444;
+  color: #fff; }
+  .item-complex.item-dark > .item-content.active, .item-complex.item-dark > .item-content:active {
+    border-color: #000;
+    background-color: #262626; }
 
 /**
  * Item Icons
