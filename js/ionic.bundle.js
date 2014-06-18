@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-205
+ * Ionic, v1.0.0-beta.8-nightly-206
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.8-nightly-205'
+  version: '1.0.0-beta.8-nightly-206'
 };
 
 (function(ionic) {
@@ -2600,6 +2600,11 @@ ionic.tap = {
             (ele.tagName == 'INPUT' && !(/^(radio|checkbox|range|file|submit|reset)$/i).test(ele.type)) );
   },
 
+  isDateInput: function(ele) {
+    return !!ele &&
+            (ele.tagName == 'INPUT' && (/^(date|time|datetime-local|month|week)$/i).test(ele.type));
+  },
+
   isLabelWithTextInput: function(ele) {
     var container = tapContainingElement(ele, false);
 
@@ -3386,7 +3391,7 @@ function keyboardNativeShow(e) {
 }
 
 function keyboardBrowserFocusIn(e) {
-  if( !e.target || !ionic.tap.isTextInput(e.target) || !keyboardIsWithinScroll(e.target) ) return;
+  if( !e.target || !ionic.tap.isTextInput(e.target) || ionic.tap.isDateInput(e.target) || !keyboardIsWithinScroll(e.target) ) return;
 
   document.addEventListener('keydown', keyboardOnKeyDown, false);
 
@@ -36184,7 +36189,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-205
+ * Ionic, v1.0.0-beta.8-nightly-206
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
