@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-210
+ * Ionic, v1.0.0-beta.8-nightly-211
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3503,7 +3503,21 @@ a.subdued {
     min-height: 240px;
     width: 60%; }
   .modal.ng-leave-active {
-    bottom: 0; } }
+    bottom: 0; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
+    height: 44px; }
+    .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
+      margin-top: 0; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .tabs-top > .tabs, .platform-ios.platform-cordova .modal-wrapper .modal .tabs.tabs-top {
+    top: 44px; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-header, .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
+    top: 44px; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-subheader {
+    top: 88px; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-tabs-top {
+    top: 93px; }
+  .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-subheader.has-tabs-top {
+    top: 137px; } }
 
 .modal-open {
   pointer-events: none; }
