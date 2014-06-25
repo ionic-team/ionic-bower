@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-218
+ * Ionic, v1.0.0-beta.8-nightly-219
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2749,6 +2749,8 @@ a.subdued {
     color: #444; }
     .bar.bar-light .title {
       color: #444; }
+    .bar.bar-light.bar-footer {
+      background-image: linear-gradient(180deg, #ddd, #ddd 50%, transparent 50%); }
   .bar.bar-stable {
     border-color: #b2b2b2;
     background-color: #f8f8f8;
@@ -2756,6 +2758,8 @@ a.subdued {
     color: #444; }
     .bar.bar-stable .title {
       color: #444; }
+    .bar.bar-stable.bar-footer {
+      background-image: linear-gradient(180deg, #b2b2b2, #b2b2b2 50%, transparent 50%); }
   .bar.bar-positive {
     border-color: #145fd7;
     background-color: #4a87ee;
@@ -2763,6 +2767,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-positive .title {
       color: #fff; }
+    .bar.bar-positive.bar-footer {
+      background-image: linear-gradient(180deg, #145fd7, #145fd7 50%, transparent 50%); }
   .bar.bar-calm {
     border-color: #1aacc3;
     background-color: #43cee6;
@@ -2770,6 +2776,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-calm .title {
       color: #fff; }
+    .bar.bar-calm.bar-footer {
+      background-image: linear-gradient(180deg, #1aacc3, #1aacc3 50%, transparent 50%); }
   .bar.bar-assertive {
     border-color: #cc2311;
     background-color: #ef4e3a;
@@ -2777,6 +2785,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-assertive .title {
       color: #fff; }
+    .bar.bar-assertive.bar-footer {
+      background-image: linear-gradient(180deg, #cc2311, #cc2311 50%, transparent 50%); }
   .bar.bar-balanced {
     border-color: #498f24;
     background-color: #66cc33;
@@ -2784,6 +2794,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-balanced .title {
       color: #fff; }
+    .bar.bar-balanced.bar-footer {
+      background-image: linear-gradient(180deg, #498f24, #145fd7 50%, transparent 50%); }
   .bar.bar-energized {
     border-color: #d39211;
     background-color: #f0b840;
@@ -2791,6 +2803,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-energized .title {
       color: #fff; }
+    .bar.bar-energized.bar-footer {
+      background-image: linear-gradient(180deg, #d39211, #d39211 50%, transparent 50%); }
   .bar.bar-royal {
     border-color: #552bdf;
     background-color: #8a6de9;
@@ -2798,6 +2812,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-royal .title {
       color: #fff; }
+    .bar.bar-royal.bar-footer {
+      background-image: linear-gradient(180deg, #552bdf, #552bdf 50%, transparent 50%); }
   .bar.bar-dark {
     border-color: #111;
     background-color: #444444;
@@ -2805,6 +2821,8 @@ a.subdued {
     color: #fff; }
     .bar.bar-dark .title {
       color: #fff; }
+    .bar.bar-dark.bar-footer {
+      background-image: linear-gradient(180deg, #111, #111 50%, transparent 50%); }
   .bar .title {
     position: absolute;
     top: 0;
