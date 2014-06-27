@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-222
+ * Ionic, v1.0.0-beta.8-nightly-223
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.8-nightly-222'
+  version: '1.0.0-beta.8-nightly-223'
 };
 
 (function(ionic) {
@@ -36190,7 +36190,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-222
+ * Ionic, v1.0.0-beta.8-nightly-223
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42829,6 +42829,7 @@ IonicModule
     scope: {
       ngModel: '=?',
       ngValue: '=?',
+      ngDisabled: '=?',
       ngChange: '&',
       icon: '@',
       name: '@'
@@ -42836,7 +42837,7 @@ IonicModule
     transclude: true,
     template: '<label class="item item-radio">' +
                 '<input type="radio" name="radio-group"' +
-                ' ng-model="ngModel" ng-value="getValue()" ng-change="ngChange()">' +
+                ' ng-model="ngModel" ng-value="getValue()" ng-change="ngChange()" ng-disabled="ngDisabled">' +
                 '<div class="item-content disable-pointer-events" ng-transclude></div>' +
                 '<i class="radio-icon disable-pointer-events icon ion-checkmark"></i>' +
               '</label>',
