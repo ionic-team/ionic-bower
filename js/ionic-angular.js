@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-219
+ * Ionic, v1.0.0-beta.8-nightly-222
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2296,6 +2296,17 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
         ionic.requestAnimationFrame(function() {
           //if hidden while waiting for raf, don't show
           if (!self.isShown) return;
+
+          //if the popup is taller than the window, make the popup body scrollable
+          if(self.element[0].offsetHeight > window.innerHeight - 20){
+            self.element[0].style.height = window.innerHeight - 20+'px';
+            popupBody = self.element[0].querySelectorAll('.popup-body');
+            popupHead = self.element[0].querySelectorAll('.popup-head');
+            popupButtons = self.element[0].querySelectorAll('.popup-buttons');
+            self.element.addClass('popup-tall');
+            newHeight = window.innerHeight - popupHead[0].offsetHeight - popupButtons[0].offsetHeight -20;
+            popupBody[0].style.height =  newHeight + 'px';
+          };
 
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
