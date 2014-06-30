@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-224
+ * Ionic, v1.0.0-beta.8-nightly-225
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.8-nightly-224'
+  version: '1.0.0-beta.8-nightly-225'
 };
 
 (function(ionic) {
@@ -36190,7 +36190,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-224
+ * Ionic, v1.0.0-beta.8-nightly-225
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42308,7 +42308,7 @@ IonicModule.constant('$ionicNavBarConfig', {
  * Alternatively, you may put ion-nav-bar inside of each individual view's ion-view element.
  * This will allow you to have the whole navbar, not just its contents, transition every view change.
  *
- * This is similar to using a header bar inside your ion-view, except it will has all the power of a navbar.
+ * This is similar to using a header bar inside your ion-view, except it will have all the power of a navbar.
  *
  * If you do this, simply put nav buttons inside the navbar itself; do not use `<ion-nav-buttons>`.
  *
