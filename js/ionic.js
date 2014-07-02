@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-229
+ * Ionic, v1.0.0-beta.9-nightly-230
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-229'
+  version: '1.0.0-beta.9-nightly-230'
 };
 
 (function(ionic) {
@@ -2655,10 +2655,18 @@ ionic.tap = {
   },
 
   requiresNativeClick: function(ele) {
-    if(!ele || ele.disabled || (/^(file|range)$/i).test(ele.type) || (/^(object|video)$/i).test(ele.tagName) ) {
+    if(!ele || ele.disabled || (/^(file|range)$/i).test(ele.type) || (/^(object|video)$/i).test(ele.tagName) || ionic.tap.isLabelContainingFileInput(ele) ) {
       return true;
     }
     return ionic.tap.isElementTapDisabled(ele);
+  },
+
+  isLabelContainingFileInput: function(ele) {
+    var lbl = tapContainingElement(ele);
+    if(lbl.tagName !== 'LABEL') return false;
+    var fileInput = lbl.querySelector('input[type=file]');
+    if(fileInput && fileInput.disabled === false) return true;
+    return false;
   },
 
   isElementTapDisabled: function(ele) {
