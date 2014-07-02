@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.8-nightly-226
+ * Ionic, v1.0.0-beta.8-nightly-227
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1781,7 +1781,7 @@ var PLATFORM_BACK_BUTTON_PRIORITY_POPUP = 400;
 var PLATFORM_BACK_BUTTON_PRIORITY_LOADING = 500;
 
 function componentConfig(defaults) {
-  defaults.$get = function() { return defaults; }
+  defaults.$get = function() { return defaults; };
   return defaults;
 }
 
@@ -1815,7 +1815,7 @@ IonicModule
       position: ''
     }
   }
-})
+});
 
 
 IonicModule.config([
@@ -2306,7 +2306,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
             self.element.addClass('popup-tall');
             newHeight = window.innerHeight - popupHead[0].offsetHeight - popupButtons[0].offsetHeight -20;
             popupBody[0].style.height =  newHeight + 'px';
-          };
+          }
 
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
