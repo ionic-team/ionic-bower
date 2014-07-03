@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-232
+ * Ionic, v1.0.0-beta.9-nightly-233
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4262,6 +4262,8 @@ a.item-content {
 
 .list:last-child {
   margin-bottom: 0px; }
+  .list:last-child.card {
+    margin-bottom: 40px; }
 
 /**
  * List Header
