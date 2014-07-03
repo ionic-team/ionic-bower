@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-231
+ * Ionic, v1.0.0-beta.9-nightly-232
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3541,6 +3541,8 @@ a.subdued {
   pointer-events: none; }
   .modal-open .modal, .modal-open .modal-backdrop {
     pointer-events: auto; }
+  .modal-open.loading-active .modal, .modal-open.loading-active .modal-backdrop {
+    pointer-events: none; }
 
 /**
  * Popups
