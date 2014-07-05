@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-233
+ * Ionic, v1.0.0-beta.9-nightly-234
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-233'
+  version: '1.0.0-beta.9-nightly-234'
 };
 
 (function(ionic) {
@@ -6909,7 +6909,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       slidePos = new Array(slides.length);
 
       // determine width of each slide
-      width = container.offsetWidth || container.getBoundClientRect().width;
+      width = container.offsetWidth || container.getBoundingClientRect().width;
 
       element.style.width = (slides.length * width) + 'px';
 

@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-233
+ * Ionic, v1.0.0-beta.9-nightly-234
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-233'
+  version: '1.0.0-beta.9-nightly-234'
 };
 
 (function(ionic) {
@@ -6916,7 +6916,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       slidePos = new Array(slides.length);
 
       // determine width of each slide
-      width = container.offsetWidth || container.getBoundClientRect().width;
+      width = container.offsetWidth || container.getBoundingClientRect().width;
 
       element.style.width = (slides.length * width) + 'px';
 
@@ -36198,7 +36198,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-233
+ * Ionic, v1.0.0-beta.9-nightly-234
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40133,7 +40133,6 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     backListenDone();
     if (self._rememberScrollId) {
       $$scrollValueCache[self._rememberScrollId] = scrollView.getValues();
-      void 0;
     }
   });
 
@@ -40157,8 +40156,6 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
       $timeout(function() {
         self.rememberScrollPosition(viewId);
         self.scrollToRememberedPosition();
-
-        void 0;
 
         backListenDone = $rootScope.$on('$viewHistory.viewBack', function(e, fromViewId, toViewId) {
           //When going back from this view, forget its saved scroll position
