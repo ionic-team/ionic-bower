@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-235
+ * Ionic, v1.0.0-beta.9-nightly-236
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-235'
+  version: '1.0.0-beta.9-nightly-236'
 };
 
 (function(ionic) {
@@ -7622,7 +7622,7 @@ ionic.views.Slider = ionic.views.View.inherit({
 (function(ionic) {
 'use strict';
 
-  /**
+/**
    * The SideMenuController is a controller with a left and/or right menu that
    * can be slid out and toggled. Seen on many an app.
    *
@@ -7899,10 +7899,28 @@ ionic.views.Slider = ionic.views.View.inherit({
       this._startX = null;
       this._lastX = null;
       this._offsetX = null;
+      this._firstX = null;
+      this._doDrag = false;
     },
 
     // Handle a drag event
     _handleDrag: function(e) {
+
+      //Get the start position of the drag
+      if (!this._firstX) {
+       this._firstX = e.gesture.touches[0].pageX;
+       this.content._cachedWidth = this.content.element.offsetWidth;
+      }
+
+      //Allow the drag to affect the side if:
+      // - the side menu is already opened, or
+      // - there is no edge drag threshold enabled, or
+      // - the drag is within the edge drag threshold
+      this._doDrag = this.isOpen() ||
+        !this.edgeDragThreshold() ||
+        this._firstX <= this.dragThreshold ||
+        this._firstX >= this.content._cachedWidth - this.dragThreshold;
+
       // If we don't have start coords, grab and store them
       if(!this._startX) {
         this._startX = e.gesture.touches[0].pageX;
@@ -7913,7 +7931,7 @@ ionic.views.Slider = ionic.views.View.inherit({
       }
 
       // Calculate difference from the tap points
-      if(!this._isDragging && Math.abs(this._lastX - this._startX) > this.dragThresholdX) {
+      if(!this._isDragging && this._doDrag && Math.abs(this._lastX - this._startX) > this.dragThresholdX) {
         // if the difference is greater than threshold, start dragging using the current
         // point as the starting point
         this._startX = this._lastX;
