@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-243
+ * Ionic, v1.0.0-beta.9-nightly-244
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7193,7 +7193,8 @@ IonicModule
  *
  * @param {string=} delegate-handle The handle used to identify this slideBox
  * with {@link ionic.service:$ionicSlideBoxDelegate}.
- * @param {boolean=} does-continue Whether the slide box should automatically slide.
+ * @param {boolean=} does-continue Whether the slide box should loop.
+ * @param {boolean=} auto-play Whether the slide box should automatically slide. Default true if does-continue is true.
  * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
  * @param {expression=} pager-click Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.
@@ -7211,6 +7212,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
     replace: true,
     transclude: true,
     scope: {
+      autoPlay: '=',
       doesContinue: '@',
       slideInterval: '@',
       showPager: '@',
@@ -7223,7 +7225,8 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
       var _this = this;
 
       var continuous = $scope.$eval($scope.doesContinue) === true;
-      var slideInterval = continuous ? $scope.$eval($scope.slideInterval) || 4000 : 0;
+      var shouldAutoPlay = isDefined($attrs.autoPlay) ? !!$scope.autoPlay : true;
+      var slideInterval = shouldAutoPlay ? $scope.$eval($scope.slideInterval) || 4000 : 0;
 
       var slider = new ionic.views.Slider({
         el: $element[0],
