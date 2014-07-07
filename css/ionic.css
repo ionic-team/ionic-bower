@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-248
+ * Ionic, v1.0.0-beta.9-nightly-249
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3503,6 +3503,7 @@ a.subdued {
     background-color: rgba(0, 0, 0, 0.5); }
 
 .modal {
+  display: block;
   position: absolute;
   top: 0;
   z-index: 10;
