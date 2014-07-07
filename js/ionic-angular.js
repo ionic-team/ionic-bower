@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-244
+ * Ionic, v1.0.0-beta.9-nightly-245
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1169,6 +1169,7 @@ IonicModule
      * @param {function(e)} callback The function to call when the gesture
      * happens.
      * @param {element} $element The angular element to listen for the event on.
+     * @returns {ionic.Gesture} The gesture object (use this to remove the gesture later on).
      */
     on: function(eventType, cb, $element) {
       return window.ionic.onGesture(eventType, cb, $element[0]);
@@ -1177,9 +1178,9 @@ IonicModule
      * @ngdoc method
      * @name $ionicGesture#off
      * @description Remove an event listener for a gesture on an element. See {@link ionic.utility:ionic.EventController#offGesture}.
+     * @param {ionic.Gesture} gesture The gesture that should be removed.
      * @param {string} eventType The gesture event to remove the listener for.
      * @param {function(e)} callback The listener to remove.
-     * @param {element} $element The angular element that was listening for the event.
      */
     off: function(gesture, eventType, cb) {
       return window.ionic.offGesture(gesture, eventType, cb);
