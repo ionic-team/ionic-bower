@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-236
+ * Ionic, v1.0.0-beta.9-nightly-237
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6110,8 +6110,9 @@ IonicModule.constant('$ionicNavBarConfig', {
  * We can add buttons depending on the currently visible view using
  * {@link ionic.directive:ionNavButtons}.
  *
- * Assign an [animation class](/docs/components#animations) to the element to
- * enable animated changing of titles (recommended: 'nav-title-slide-ios7')
+ * Add an [animation class](/docs/components#animations) to the element via the
+ * `animation` attribute to enable animated changing of titles 
+ * (recommended: 'nav-title-slide-ios7').
  *
  * Note that the ion-nav-bar element will only work correctly if your content has an
  * ionView around it.
@@ -6121,7 +6122,7 @@ IonicModule.constant('$ionicNavBarConfig', {
  * ```html
  * <body ng-app="starter">
  *   <!-- The nav bar that will be updated as we navigate -->
- *   <ion-nav-bar class="bar-positive nav-title-slide-ios7">
+ *   <ion-nav-bar class="bar-positive" animation="nav-title-slide-ios7">
  *   </ion-nav-bar>
  *
  *   <!-- where the initial view template will be rendered -->
@@ -6183,7 +6184,7 @@ function($ionicViewService, $rootScope, $animate, $compile, $ionicNavBarConfig) 
     compile: function(tElement, tAttrs) {
       //We cannot transclude here because it breaks element.data() inheritance on compile
       tElement
-        .addClass('bar bar-header nav-bar ' + $ionicNavBarConfig.transition)
+        .addClass('bar bar-header nav-bar')
         .append(
           '<div class="buttons left-buttons"> ' +
           '</div>' +
@@ -6191,6 +6192,12 @@ function($ionicViewService, $rootScope, $animate, $compile, $ionicNavBarConfig) 
           '<div class="buttons right-buttons"> ' +
           '</div>'
         );
+
+      if (isDefined(tAttrs.animation)) {
+        tElement.addClass(tAttrs.animation);
+      } else {
+        tElement.addClass($ionicNavBarConfig.transition);
+      }
 
       return { pre: prelink };
       function prelink($scope, $element, $attr, navBarCtrl) {
