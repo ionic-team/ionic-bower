@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-246
+ * Ionic, v1.0.0-beta.9-nightly-247
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4694,7 +4694,7 @@ input[type="file"] {
   line-height: 34px; }
 
 .previous-input-focus, .cloned-text-input + input, .cloned-text-input + textarea {
-  position: absolute;
+  position: absolute !important;
   left: -9999px;
   width: 200px; }
 
