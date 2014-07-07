@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-242
+ * Ionic, v1.0.0-beta.9-nightly-243
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-242'
+  version: '1.0.0-beta.9-nightly-243'
 };
 
 (function(ionic) {
@@ -36234,7 +36234,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-242
+ * Ionic, v1.0.0-beta.9-nightly-243
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41624,7 +41624,7 @@ function($animate, $compile) {
 
 
 var ITEM_TPL_DELETE_BUTTON =
-  '<div class="item-left-edit item-delete ng-hide">' +
+  '<div class="item-left-edit item-delete ng-hide enable-pointer-events">' +
   '</div>';
 /**
 * @ngdoc directive
@@ -41773,7 +41773,7 @@ IonicModule
 }]);
 
 var ITEM_TPL_REORDER_BUTTON =
-  '<div data-prevent-scroll="true" class="item-right-edit item-reorder ng-hide">' +
+  '<div data-prevent-scroll="true" class="item-right-edit item-reorder ng-hide enable-pointer-events">' +
   '</div>';
 
 /**
@@ -42077,9 +42077,12 @@ function($animate, $timeout) {
             if (isShown) listCtrl.closeOptionButtons();
             listCtrl.canSwipeItems(!isShown);
 
+            var deleteButton = jqLite($element[0].getElementsByClassName('item-delete'));
+
             $element.children().toggleClass('list-left-editing', isShown);
-            toggleNgHide('.item-delete.item-left-edit', isShown);
-            toggleTapDisabled('.item-content', isShown);
+            toggleNgHide(deleteButton, isShown);
+
+            $element.toggleClass('disable-pointer-events', isShown);
           });
           $scope.$watch(function() {
             return listCtrl.showReorder();
@@ -42090,27 +42093,22 @@ function($animate, $timeout) {
             if (isShown) listCtrl.closeOptionButtons();
             listCtrl.canSwipeItems(!isShown);
 
+            var reorderButton = jqLite($element[0].getElementsByClassName('item-reorder'));
+
             $element.children().toggleClass('list-right-editing', isShown);
-            toggleNgHide('.item-reorder.item-right-edit', isShown);
-            toggleTapDisabled('.item-content', isShown);
+            toggleNgHide(reorderButton, isShown);
+
+            $element.toggleClass('disable-pointer-events', isShown);
           });
 
-          function toggleNgHide(selector, shouldShow) {
-            forEach($element[0].querySelectorAll(selector), function(node) {
+          function toggleNgHide(element, shouldShow) {
+            forEach(element, function(node) {
               if (shouldShow) {
                 $animate.removeClass(jqLite(node), 'ng-hide');
               } else {
                 $animate.addClass(jqLite(node), 'ng-hide');
               }
             });
-          }
-          function toggleTapDisabled(selector, shouldDisable) {
-            var el = jqLite($element[0].querySelectorAll(selector));
-            if (shouldDisable) {
-              el.attr('data-tap-disabled', 'true');
-            } else {
-              el.removeAttr('data-tap-disabled');
-            }
           }
         }
 
