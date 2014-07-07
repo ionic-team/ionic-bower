@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-247
+ * Ionic, v1.0.0-beta.9-nightly-248
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5967,6 +5967,7 @@ IonicModule
     restrict: 'E',
     transclude: true,
     replace: true,
+    controller: [function(){}],
     template: '<div class="modal-backdrop">' +
                 '<div class="modal-wrapper" ng-transclude></div>' +
                 '</div>'
@@ -7782,13 +7783,17 @@ IonicModule
   return {
     restrict: 'EA',
     priority: 1000,
-    require: '^?ionNavBar',
+    require: ['^?ionNavBar', '^?ionModal'],
     compile: function(tElement, tAttrs, transclude) {
       tElement.addClass('pane');
       tElement[0].removeAttribute('title');
 
-      return function link($scope, $element, $attr, navBarCtrl) {
-        if (!navBarCtrl) {
+      return function link($scope, $element, $attr, ctrls) {
+        var navBarCtrl = ctrls[0];
+        var modalCtrl = ctrls[1];
+
+        //Don't use the ionView if we're inside a modal or there's no navbar
+        if (!navBarCtrl || modalCtrl) {
           return;
         }
 
