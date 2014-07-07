@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-241
+ * Ionic, v1.0.0-beta.9-nightly-242
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-241'
+  version: '1.0.0-beta.9-nightly-242'
 };
 
 (function(ionic) {
@@ -36234,7 +36234,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-241
+ * Ionic, v1.0.0-beta.9-nightly-242
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40346,7 +40346,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
   };
 
   this.isDraggableTarget = function(e) {
-    return $scope.dragContent &&
+    return (self.isOpen() || $scope.dragContent) &&
            (!e.gesture.srcEvent.defaultPrevented &&
             !e.target.tagName.match(/input|textarea|select|object|embed/i) &&
             !e.target.isContentEditable &&
