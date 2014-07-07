@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-249
+ * Ionic, v1.0.0-beta.9-nightly-250
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4650,6 +4650,8 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {expression=} on-scroll Expression to evaluate when the content is scrolled.
  * @param {expression=} on-scroll-complete Expression to evaluate when a scroll action completes.
+ * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
+ * of the content.  Defaults to true on iOS, false on Android.
  */
 IonicModule
 .directive('ionContent', [
