@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-251
+ * Ionic, v1.0.0-beta.9-nightly-252
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4121,8 +4121,8 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
     //Only restrict edge when sidemenu is closed and it's enabled
     var shouldAllowOnlyEdgeDrag = self.edgeThresholdEnabled && !self.isOpen();
     var dragIsWithinBounds = !shouldAllowOnlyEdgeDrag ||
-      startX <= this.edgeThreshold ||
-      startX >= this.content.offsetWidth - this.edgeThreshold;
+      startX <= self.edgeThreshold ||
+      startX >= self.content.offsetWidth - self.edgeThreshold;
 
     return ($scope.dragContent || self.isOpen()) &&
            dragIsWithinBounds &&
