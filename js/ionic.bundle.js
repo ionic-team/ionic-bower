@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-253
+ * Ionic, v1.0.0-beta.9-nightly-254
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-253'
+  version: '1.0.0-beta.9-nightly-254'
 };
 
 (function(ionic) {
@@ -6279,9 +6279,9 @@ ionic.scroll = {
 
     if(!lastDrag) return;
 
+    lastDrag.content.style[ionic.CSS.TRANSITION] = '';
+    lastDrag.content.style[ionic.CSS.TRANSFORM] = '';
     ionic.requestAnimationFrame(function() {
-      lastDrag.content.style[ionic.CSS.TRANSITION] = '';
-      lastDrag.content.style[ionic.CSS.TRANSFORM] = '';
       setTimeout(function() {
         lastDrag.buttons && lastDrag.buttons.classList.add('invisible');
       }, 250);
@@ -36219,7 +36219,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-253
+ * Ionic, v1.0.0-beta.9-nightly-254
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40332,12 +40332,12 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
   };
 
   this.isDraggableTarget = function(e) {
+    //Only restrict edge when sidemenu is closed and restriction is enabled
+    var shouldOnlyAllowEdgeDrag = self.edgeThresholdEnabled && !self.isOpen();
     var startX = e.gesture.startEvent && e.gesture.startEvent.center &&
       e.gesture.startEvent.center.pageX;
 
-    //Only restrict edge when sidemenu is closed and it's enabled
-    var shouldAllowOnlyEdgeDrag = self.edgeThresholdEnabled && !self.isOpen();
-    var dragIsWithinBounds = !shouldAllowOnlyEdgeDrag ||
+    var dragIsWithinBounds = !shouldOnlyAllowEdgeDrag ||
       startX <= self.edgeThreshold ||
       startX >= self.content.offsetWidth - self.edgeThreshold;
 
@@ -41622,7 +41622,7 @@ function($animate, $compile) {
 
 
 var ITEM_TPL_DELETE_BUTTON =
-  '<div class="item-left-edit item-delete ng-hide enable-pointer-events">' +
+  '<div class="item-left-edit item-delete enable-pointer-events">' +
   '</div>';
 /**
 * @ngdoc directive
@@ -41672,7 +41672,7 @@ IonicModule
         itemCtrl.$element.append(container).addClass('item-left-editable');
 
         if (listCtrl && listCtrl.showDelete()) {
-          $animate.removeClass(container, 'ng-hide');
+          container.addClass('visible active');
         }
       };
     }
@@ -41771,7 +41771,7 @@ IonicModule
 }]);
 
 var ITEM_TPL_REORDER_BUTTON =
-  '<div data-prevent-scroll="true" class="item-right-edit item-reorder ng-hide enable-pointer-events">' +
+  '<div data-prevent-scroll="true" class="item-right-edit item-reorder enable-pointer-events">' +
   '</div>';
 
 /**
@@ -41844,7 +41844,7 @@ IonicModule
         itemCtrl.$element.append(container).addClass('item-right-editable');
 
         if (listCtrl && listCtrl.showReorder()) {
-          $animate.removeClass(container, 'ng-hide');
+          container.addClass('visible active');
         }
       };
     }
@@ -42075,13 +42075,13 @@ function($animate, $timeout) {
             if (isShown) listCtrl.closeOptionButtons();
             listCtrl.canSwipeItems(!isShown);
 
-            var deleteButton = jqLite($element[0].getElementsByClassName('item-delete'));
-
             $element.children().toggleClass('list-left-editing', isShown);
-            toggleNgHide(deleteButton, isShown);
+            $element.toggleClass('disable-pointer-events left-editing', isShown);
 
-            $element.toggleClass('disable-pointer-events', isShown);
+            var deleteButton = jqLite($element[0].getElementsByClassName('item-delete'));
+            setButtonShown(deleteButton, listCtrl.showDelete);
           });
+
           $scope.$watch(function() {
             return listCtrl.showReorder();
           }, function(isShown, wasShown) {
@@ -42091,21 +42091,17 @@ function($animate, $timeout) {
             if (isShown) listCtrl.closeOptionButtons();
             listCtrl.canSwipeItems(!isShown);
 
-            var reorderButton = jqLite($element[0].getElementsByClassName('item-reorder'));
-
             $element.children().toggleClass('list-right-editing', isShown);
-            toggleNgHide(reorderButton, isShown);
+            $element.toggleClass('disable-pointer-events right-editing', isShown);
 
-            $element.toggleClass('disable-pointer-events', isShown);
+            var reorderButton = jqLite($element[0].getElementsByClassName('item-reorder'));
+            setButtonShown(reorderButton, listCtrl.showReorder);
           });
 
-          function toggleNgHide(element, shouldShow) {
-            forEach(element, function(node) {
-              if (shouldShow) {
-                $animate.removeClass(jqLite(node), 'ng-hide');
-              } else {
-                $animate.addClass(jqLite(node), 'ng-hide');
-              }
+          function setButtonShown(el, shown) {
+            shown() && el.addClass('visible') || el.removeClass('active');
+            ionic.requestAnimationFrame(function() {
+              shown() && el.addClass('active') || el.removeClass('invisible');
             });
           }
         }

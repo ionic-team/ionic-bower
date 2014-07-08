@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-253
+ * Ionic, v1.0.0-beta.9-nightly-254
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4110,24 +4110,9 @@ a.item-content {
   -webkit-transition-timing-function: ease-in-out;
   -moz-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
-  -webkit-transition-property: none;
-  -moz-transition-property: none;
-  transition-property: none; }
-
-.item-left-editable .item-content {
   -webkit-transition-property: -webkit-transform;
   -moz-transition-property: -moz-transform;
   transition-property: transform; }
-
-.item-right-editable .item-content {
-  -webkit-transition-property: margin-right;
-  -moz-transition-property: margin-right;
-  transition-property: margin-right; }
-
-.item-left-editable.item-right-editable .item-content {
-  -webkit-transition-property: -webkit-transform, margin-right;
-  -moz-transition-property: -moz-transform, margin-right;
-  transition-property: transform, margin-right; }
 
 .list-left-editing .item-left-editable .item-content, .item-left-editing.item-left-editable .item-content {
   -webkit-transform: translate3d(50px, 0, 0);
@@ -4135,22 +4120,26 @@ a.item-content {
   transform: translate3d(50px, 0, 0); }
 
 .list-right-editing .item-right-editable .item-content, .item-right-editing.item-right-editable .item-content {
-  margin-right: 50px; }
+  -webkit-transform: translate3d(-50px, 0, 0);
+  -moz-transform: translate3d(-50px, 0, 0);
+  transform: translate3d(-50px, 0, 0); }
 
 .item-left-edit {
-  -webkit-transition: all ease-in-out 250ms;
-  -moz-transition: all ease-in-out 250ms;
-  transition: all ease-in-out 250ms;
-  -webkit-transform: translate3d(-42px, 0, 0);
-  -moz-transform: translate3d(-42px, 0, 0);
-  transform: translate3d(-42px, 0, 0);
+  -webkit-transition: all ease-in-out 125ms;
+  -moz-transition: all ease-in-out 125ms;
+  transition: all ease-in-out 125ms;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 0;
   width: 50px;
   height: 100%;
-  line-height: 100%; }
+  line-height: 100%;
+  display: none;
+  opacity: 0;
+  -webkit-transform: translate3d(-21px, 0, 0);
+  -moz-transform: translate3d(-21px, 0, 0);
+  transform: translate3d(-21px, 0, 0); }
   .item-left-edit .button {
     height: 100%; }
     .item-left-edit .button.icon {
@@ -4168,11 +4157,18 @@ a.item-content {
       position: absolute;
       top: 0;
       height: 100%; }
+  .item-left-edit.visible {
+    display: block; }
+    .item-left-edit.visible.active {
+      opacity: 1;
+      -webkit-transform: translate3d(8px, 0, 0);
+      -moz-transform: translate3d(8px, 0, 0);
+      transform: translate3d(8px, 0, 0); }
 
-.list-left-editing .item-left-edit, .item-left-editing .item-left-edit {
-  -webkit-transform: translate3d(8px, 0, 0);
-  -moz-transform: translate3d(8px, 0, 0);
-  transform: translate3d(8px, 0, 0); }
+.list-left-editing .item-left-edit {
+  -webkit-transition-delay: 125ms;
+  -moz-transition-delay: 125ms;
+  transition-delay: 125ms; }
 
 .item-delete .button.icon {
   color: #ef4e3a;
@@ -4181,16 +4177,21 @@ a.item-content {
     opacity: 0.7; }
 
 .item-right-edit {
-  -webkit-transition: all ease-in-out 250ms;
-  -moz-transition: all ease-in-out 250ms;
-  transition: all ease-in-out 250ms;
+  -webkit-transition: all ease-in-out 125ms;
+  -moz-transition: all ease-in-out 125ms;
+  transition: all ease-in-out 125ms;
   position: absolute;
   top: 0;
   right: 0;
   z-index: 0;
-  width: 50px;
+  width: 75px;
   height: 100%;
-  background: inherit; }
+  background: inherit;
+  display: none;
+  opacity: 0;
+  -webkit-transform: translate3d(25px, 0, 0);
+  -moz-transform: translate3d(25px, 0, 0);
+  transform: translate3d(25px, 0, 0); }
   .item-right-edit .button {
     min-width: 50px;
     height: 100%; }
@@ -4210,6 +4211,18 @@ a.item-content {
       top: 0;
       height: 100%;
       font-size: 32px; }
+  .item-right-edit.visible {
+    display: block; }
+    .item-right-edit.visible.active {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0); }
+
+.list-right-editing .item-right-edit {
+  -webkit-transition-delay: 125ms;
+  -moz-transition-delay: 125ms;
+  transition-delay: 125ms; }
 
 .item-reorder .button.icon {
   color: #444;
@@ -4227,13 +4240,6 @@ a.item-content {
 
 .item-placeholder {
   opacity: 0.7; }
-
-.item-left-edit.item-delete, .item-right-edit.item-reorder {
-  opacity: 1; }
-  .item-left-edit.item-delete.ng-hide, .item-right-edit.item-reorder.ng-hide {
-    opacity: 0; }
-  .item-left-edit.item-delete.ng-hide-add, .item-left-edit.item-delete.ng-hide-remove, .item-right-edit.item-reorder.ng-hide-add, .item-right-edit.item-reorder.ng-hide-remove {
-    display: block !important; }
 
 /**
  * The hidden right-side buttons that can be exposed under a list item
