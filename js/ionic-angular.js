@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-254
+ * Ionic, v1.0.0-beta.9-nightly-255
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5859,7 +5859,7 @@ function($animate, $timeout) {
             listCtrl.canSwipeItems(!isShown);
 
             $element.children().toggleClass('list-left-editing', isShown);
-            $element.toggleClass('disable-pointer-events left-editing', isShown);
+            $element.toggleClass('disable-pointer-events', isShown);
 
             var deleteButton = jqLite($element[0].getElementsByClassName('item-delete'));
             setButtonShown(deleteButton, listCtrl.showDelete);
@@ -5875,7 +5875,7 @@ function($animate, $timeout) {
             listCtrl.canSwipeItems(!isShown);
 
             $element.children().toggleClass('list-right-editing', isShown);
-            $element.toggleClass('disable-pointer-events right-editing', isShown);
+            $element.toggleClass('disable-pointer-events', isShown);
 
             var reorderButton = jqLite($element[0].getElementsByClassName('item-reorder'));
             setButtonShown(reorderButton, listCtrl.showReorder);
