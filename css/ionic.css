@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-252
+ * Ionic, v1.0.0-beta.9-nightly-253
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5144,7 +5144,7 @@ input[type="range"] {
     padding: 13px 45px 15px 15px;
     max-width: 65%;
     border: none;
-    background: transparent;
+    background: #fff;
     color: #333;
     text-indent: 0.01px;
     text-overflow: '';
@@ -5169,6 +5169,49 @@ input[type="range"] {
     color: #999;
     content: "";
     pointer-events: none; }
+  .item-select.item-light select {
+    background: #fff;
+    color: #444; }
+  .item-select.item-stable select {
+    background: #f8f8f8;
+    color: #444; }
+  .item-select.item-stable:after, .item-select.item-stable .input-label {
+    color: #656565; }
+  .item-select.item-positive select {
+    background: #4a87ee;
+    color: #fff; }
+  .item-select.item-positive:after, .item-select.item-positive .input-label {
+    color: #fff; }
+  .item-select.item-calm select {
+    background: #43cee6;
+    color: #fff; }
+  .item-select.item-calm:after, .item-select.item-calm .input-label {
+    color: #fff; }
+  .item-select.item-assertive select {
+    background: #ef4e3a;
+    color: #fff; }
+  .item-select.item-assertive:after, .item-select.item-assertive .input-label {
+    color: #fff; }
+  .item-select.item-balanced select {
+    background: #66cc33;
+    color: #fff; }
+  .item-select.item-balanced:after, .item-select.item-balanced .input-label {
+    color: #fff; }
+  .item-select.item-energized select {
+    background: #f0b840;
+    color: #fff; }
+  .item-select.item-energized:after, .item-select.item-energized .input-label {
+    color: #fff; }
+  .item-select.item-royal select {
+    background: #8a6de9;
+    color: #fff; }
+  .item-select.item-royal:after, .item-select.item-royal .input-label {
+    color: #fff; }
+  .item-select.item-dark select {
+    background: #444;
+    color: #fff; }
+  .item-select.item-dark:after, .item-select.item-dark .input-label {
+    color: #fff; }
 
 select[multiple], select[size] {
   height: auto; }
