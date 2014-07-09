@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-256
+ * Ionic, v1.0.0-beta.9-nightly-257
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7471,6 +7471,7 @@ function($rootScope, $animate, $ionicBind, $compile) {
         attrStr('icon-off', attr.iconOff) +
         attrStr('badge', attr.badge) +
         attrStr('badge-style', attr.badgeStyle) +
+        attrStr('hidden', attr.hidden) +
         attrStr('class', attr['class']) +
         '></ion-tab-nav>';
 
@@ -7549,7 +7550,7 @@ IonicModule
     replace: true,
     require: ['^ionTabs', '^ionTab'],
     template:
-    '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge}" ' +
+    '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge, \'tab-hidden\':isHidden()}" ' +
       ' class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
@@ -7562,6 +7563,7 @@ IonicModule
       iconOn: '@',
       iconOff: '@',
       badge: '=',
+      hidden: '@',
       badgeStyle: '@',
       'class': '@'
     },
@@ -7584,6 +7586,11 @@ IonicModule
             });
           });
         }
+
+        $scope.isHidden = function() {
+          if($attrs.hidden === 'true' || $attrs.hidden === true)return true;
+          return false;
+        };
 
         $scope.getIconOn = function() {
           return $scope.iconOn || $scope.icon;
