@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-257
+ * Ionic, v1.0.0-beta.9-nightly-258
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -321,7 +321,7 @@ jqLite.prototype.removeClass = function(cssClasses) {
  * ```js
  * angular.module('mySuperApp', ['ionic'])
  * .controller(function($scope, $ionicAnimation) {
- *    var anim = $ionicAnimate({
+ *    var anim = $ionicAnimation({
  *     // A unique, reusable name
  *     name: 'popIn',
  *
