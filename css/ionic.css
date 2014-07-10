@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-258
+ * Ionic, v1.0.0-beta.9-nightly-259
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4735,42 +4735,57 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     border-color: #4a87ee; }
   .checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
     background: #4a87ee; }
-  .checkbox.checkbox-light input:before, .checkbox.checkbox-light .checkbox-icon:before {
-    border-color: #ddd; }
-  .checkbox.checkbox-light input:checked:before, .checkbox.checkbox-light input:checked + .checkbox-icon:before {
-    background: #ddd; }
-  .checkbox.checkbox-stable input:before, .checkbox.checkbox-stable .checkbox-icon:before {
-    border-color: #b2b2b2; }
-  .checkbox.checkbox-stable input:checked:before, .checkbox.checkbox-stable input:checked + .checkbox-icon:before {
-    background: #b2b2b2; }
-  .checkbox.checkbox-positive input:before, .checkbox.checkbox-positive .checkbox-icon:before {
-    border-color: #4a87ee; }
-  .checkbox.checkbox-positive input:checked:before, .checkbox.checkbox-positive input:checked + .checkbox-icon:before {
-    background: #4a87ee; }
-  .checkbox.checkbox-calm input:before, .checkbox.checkbox-calm .checkbox-icon:before {
-    border-color: #43cee6; }
-  .checkbox.checkbox-calm input:checked:before, .checkbox.checkbox-calm input:checked + .checkbox-icon:before {
-    background: #43cee6; }
-  .checkbox.checkbox-assertive input:before, .checkbox.checkbox-assertive .checkbox-icon:before {
-    border-color: #ef4e3a; }
-  .checkbox.checkbox-assertive input:checked:before, .checkbox.checkbox-assertive input:checked + .checkbox-icon:before {
-    background: #ef4e3a; }
-  .checkbox.checkbox-balanced input:before, .checkbox.checkbox-balanced .checkbox-icon:before {
-    border-color: #66cc33; }
-  .checkbox.checkbox-balanced input:checked:before, .checkbox.checkbox-balanced input:checked + .checkbox-icon:before {
-    background: #66cc33; }
-  .checkbox.checkbox-energized input:before, .checkbox.checkbox-energized .checkbox-icon:before {
-    border-color: #f0b840; }
-  .checkbox.checkbox-energized input:checked:before, .checkbox.checkbox-energized input:checked + .checkbox-icon:before {
-    background: #f0b840; }
-  .checkbox.checkbox-royal input:before, .checkbox.checkbox-royal .checkbox-icon:before {
-    border-color: #8a6de9; }
-  .checkbox.checkbox-royal input:checked:before, .checkbox.checkbox-royal input:checked + .checkbox-icon:before {
-    background: #8a6de9; }
-  .checkbox.checkbox-dark input:before, .checkbox.checkbox-dark .checkbox-icon:before {
-    border-color: #444; }
-  .checkbox.checkbox-dark input:checked:before, .checkbox.checkbox-dark input:checked + .checkbox-icon:before {
-    background: #444; }
+
+.checkbox-light input:before, .checkbox-light .checkbox-icon:before {
+  border-color: #ddd; }
+.checkbox-light input:checked:before, .checkbox-light input:checked + .checkbox-icon:before {
+  background: #ddd; }
+
+.checkbox-stable input:before, .checkbox-stable .checkbox-icon:before {
+  border-color: #b2b2b2; }
+.checkbox-stable input:checked:before, .checkbox-stable input:checked + .checkbox-icon:before {
+  background: #b2b2b2; }
+
+.checkbox-positive input:before, .checkbox-positive .checkbox-icon:before {
+  border-color: #4a87ee; }
+.checkbox-positive input:checked:before, .checkbox-positive input:checked + .checkbox-icon:before {
+  background: #4a87ee; }
+
+.checkbox-calm input:before, .checkbox-calm .checkbox-icon:before {
+  border-color: #43cee6; }
+.checkbox-calm input:checked:before, .checkbox-calm input:checked + .checkbox-icon:before {
+  background: #43cee6; }
+
+.checkbox-assertive input:before, .checkbox-assertive .checkbox-icon:before {
+  border-color: #ef4e3a; }
+.checkbox-assertive input:checked:before, .checkbox-assertive input:checked + .checkbox-icon:before {
+  background: #ef4e3a; }
+
+.checkbox-balanced input:before, .checkbox-balanced .checkbox-icon:before {
+  border-color: #66cc33; }
+.checkbox-balanced input:checked:before, .checkbox-balanced input:checked + .checkbox-icon:before {
+  background: #66cc33; }
+
+.checkbox-energized input:before, .checkbox-energized .checkbox-icon:before {
+  border-color: #f0b840; }
+.checkbox-energized input:checked:before, .checkbox-energized input:checked + .checkbox-icon:before {
+  background: #f0b840; }
+
+.checkbox-royal input:before, .checkbox-royal .checkbox-icon:before {
+  border-color: #8a6de9; }
+.checkbox-royal input:checked:before, .checkbox-royal input:checked + .checkbox-icon:before {
+  background: #8a6de9; }
+
+.checkbox-dark input:before, .checkbox-dark .checkbox-icon:before {
+  border-color: #444; }
+.checkbox-dark input:checked:before, .checkbox-dark input:checked + .checkbox-icon:before {
+  background: #444; }
+
+.checkbox input:disabled:before, .checkbox input:disabled + .checkbox-icon:before {
+  border-color: #ddd; }
+
+.checkbox input:disabled:checked:before, .checkbox input:disabled:checked + .checkbox-icon:before {
+  background: #ddd; }
 
 .checkbox.checkbox-input-hidden input {
   display: none !important; }
