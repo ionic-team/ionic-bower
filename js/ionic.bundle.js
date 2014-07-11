@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-259
+ * Ionic, v1.0.0-beta.9-nightly-260
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-259'
+  version: '1.0.0-beta.9-nightly-260'
 };
 
 (function(ionic) {
@@ -36219,7 +36219,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-259
+ * Ionic, v1.0.0-beta.9-nightly-260
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40577,13 +40577,14 @@ IonicModule
     replace: true,
     require: '?ngModel',
     transclude: true,
-    template: '<label class="item item-checkbox">' +
-                '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
-                  '<input type="checkbox">' +
-                  '<i class="checkbox-icon"></i>' +
-                '</div>' +
-                '<div class="item-content disable-pointer-events" ng-transclude></div>' +
-              '</label>',
+    template:
+      '<label class="item item-checkbox">' +
+        '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
+          '<input type="checkbox">' +
+          '<i class="checkbox-icon"></i>' +
+        '</div>' +
+        '<div class="item-content disable-pointer-events" ng-transclude></div>' +
+      '</label>',
     compile: function(element, attr) {
       var input = element.find('input');
       forEach({
@@ -42270,7 +42271,7 @@ IonicModule
  * ```html
  * <ion-nav-bar ng-controller="MyCtrl">
  *   <ion-nav-back-button class="button-clear"
- *     ng-click="canGoBack && goBack()">
+ *     ng-click="doSomethingCool()">
  *     <i class="ion-arrow-left-c"></i> Back
  *   </ion-nav-back-button>
  * </ion-nav-bar>
@@ -43956,33 +43957,34 @@ function($ionicGesture, $timeout) {
     restrict: 'E',
     replace: true,
     require: '?ngModel',
-    scope: {
-      ngModel: '=?',
-      ngValue: '=?',
-      ngChecked: '=?',
-      ngChange: '&',
-      ngDisabled: '=?'
-    },
     transclude: true,
-    template: '<div class="item item-toggle">' +
-                '<div ng-transclude></div>' +
-                '<label class="toggle">' +
-                  '<input type="checkbox" ng-model="ngModel" ng-value="ngValue" ng-change="ngChange()" ng-disabled="ngDisabled">' +
-                  '<div class="track">' +
-                    '<div class="handle"></div>' +
-                  '</div>' +
-                '</label>' +
-              '</div>',
+    template:
+      '<div class="item item-toggle">' +
+        '<div ng-transclude></div>' +
+        '<label class="toggle">' +
+          '<input type="checkbox">' +
+          '<div class="track">' +
+            '<div class="handle"></div>' +
+          '</div>' +
+        '</label>' +
+      '</div>',
 
     compile: function(element, attr) {
       var input = element.find('input');
-      if(attr.name) input.attr('name', attr.name);
-      if(attr.ngChecked) input.attr('ng-checked', 'ngChecked');
-      if(attr.ngTrueValue) input.attr('ng-true-value', attr.ngTrueValue);
-      if(attr.ngFalseValue) input.attr('ng-false-value', attr.ngFalseValue);
-      if(attr.toggleClass) {
-        element[0].getElementsByTagName('label')[0].classList.add(attr.toggleClass);
-      }
+      forEach({
+        'name': attr.name,
+        'ng-value': attr.ngValue,
+        'ng-model': attr.ngModel,
+        'ng-checked': attr.ngChecked,
+        'ng-disabled': attr.ngDisabled,
+        'ng-true-value': attr.ngTrueValue,
+        'ng-false-value': attr.ngFalseValue,
+        'ng-change': attr.ngChange
+      }, function(value, name) {
+        if (isDefined(value)) {
+          input.attr(name, value);
+        }
+      });
 
       return function($scope, $element, $attr) {
          var el, checkbox, track, handle;
