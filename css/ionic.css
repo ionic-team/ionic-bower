@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-262
+ * Ionic, v1.0.0-beta.9-nightly-263
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3636,29 +3636,48 @@ a.subdued {
  * Loading
  * --------------------------------------------------
  */
-.loading {
+.loading-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 13;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  align-items: center;
   -webkit-transition: 0.2s opacity linear;
   -moz-transition: 0.2s opacity linear;
   transition: 0.2s opacity linear;
   visibility: hidden;
-  opacity: 0;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 13;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  text-align: center;
-  text-overflow: ellipsis;
-  font-size: 15px; }
-  .loading.visible {
+  opacity: 0; }
+  .loading-container.visible {
     visibility: visible; }
-  .loading.active {
+  .loading-container.active {
     opacity: 1; }
-  .loading h1, .loading h2, .loading h3, .loading h4, .loading h5, .loading h6 {
-    color: #fff; }
+  .loading-container .loading {
+    padding: 20px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-size: 15px; }
+    .loading-container .loading h1, .loading-container .loading h2, .loading-container .loading h3, .loading-container .loading h4, .loading-container .loading h5, .loading-container .loading h6 {
+      color: #fff; }
 
 /**
  * Items
