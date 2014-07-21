@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-267
+ * Ionic, v1.0.0-beta.9-nightly-268
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1225,8 +1225,32 @@ var LOADING_SET_DEPRECATED = '$ionicLoading instance.setContent() has been depre
  * });
  * ```
  */
+/**
+ * @ngdoc object
+ * @name $ionicLoadingConfig
+ * @module ionic
+ * @description
+ * Set the default options to be passed to the {@link ionic.service:$ionicLoading} service.
+ *
+ * @usage
+ * ```js
+ * var app = angular.module('myApp', ['ionic'])
+ * app.constant('$ionicLoadingConfig', {
+ *   template: 'Default Loading Template...'
+ * });
+ * app.controller('AppCtrl', function($scope, $ionicLoading) {
+ *   $scope.showLoading = function() {
+ *     $ionicLoading.show(); //options default to values in $ionicLoadingConfig
+ *   };
+ * });
+ * ```
+ */
 IonicModule
+.constant('$ionicLoadingConfig', {
+  template: '<i class="ion-loading-d"></i>'
+})
 .factory('$ionicLoading', [
+  '$ionicLoadingConfig',
   '$document',
   '$ionicTemplateLoader',
   '$ionicBackdrop',
@@ -1235,7 +1259,7 @@ IonicModule
   '$log',
   '$compile',
   '$ionicPlatform',
-function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
+function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
 
   var loaderInstance;
   //default values
@@ -1344,7 +1368,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
   }
 
   function showLoader(options) {
-    options || (options = {});
+    options = extend($ionicLoadingConfig || {}, options || {});
     var delay = options.delay || options.showDelay || 0;
 
     //If loading.show() was called previously, cancel it and show with our new options

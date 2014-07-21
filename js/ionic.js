@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-267
+ * Ionic, v1.0.0-beta.9-nightly-268
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.9-nightly-267'
+  version: '1.0.0-beta.9-nightly-268'
 };
 
 (function(ionic) {
@@ -1983,6 +1983,10 @@ window.ionic = {
    */
   ionic.Platform = {
 
+    // Put navigator on platform so it can be mocked and set
+    // the browser does not allow window.navigator to be set
+    navigator: window.navigator,
+
     /**
      * @ngdoc property
      * @name ionic.Platform#isReady
@@ -2129,7 +2133,7 @@ window.ionic = {
      * @returns {boolean} Whether we are running on iPad.
      */
     isIPad: function() {
-      if( /iPad/i.test(window.navigator.platform) ) {
+      if( /iPad/i.test(ionic.Platform.navigator.platform) ) {
         return true;
       }
       return /iPad/i.test(this.ua);
@@ -2183,7 +2187,7 @@ window.ionic = {
       } else if(this.ua.indexOf('Windows Phone') > -1) {
         platformName = WINDOWS_PHONE;
       } else {
-        platformName = window.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
+        platformName = ionic.Platform.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
       }
     },
 
@@ -2222,7 +2226,7 @@ window.ionic = {
       };
       if(versionMatch[pName]) {
         v = this.ua.match( versionMatch[pName] );
-        if(v.length > 2) {
+        if(v &&  v.length > 2) {
           platformVersion = parseFloat( v[1] + '.' + v[2] );
         }
       }
