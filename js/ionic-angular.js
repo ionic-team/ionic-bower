@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-269
+ * Ionic, v1.0.0-beta.9-nightly-270
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4058,12 +4058,19 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     this.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
-      if (hash && elm) {
-        var scroll = ionic.DomUtil.getPositionInParent(elm, self.$element);
-        scrollView.scrollTo(scroll.left, scroll.top, !!shouldAnimate);
-      } else {
+      if (!(hash && elm)) {
         scrollView.scrollTo(0,0, !!shouldAnimate);
+        return;
       }
+      var curElm = elm;
+      var scrollLeft = 0, scrollTop = 0, levelsClimbed = 0;
+      do {
+        if(curElm !== null)scrollLeft += curElm.offsetLeft;
+        if(curElm !== null)scrollTop += curElm.offsetTop;
+        curElm = curElm.offsetParent;
+        levelsClimbed++;
+      } while (curElm.attributes != self.element.attributes && curElm.offsetParent !== null);
+      scrollView.scrollTo(scrollLeft, scrollTop, !!shouldAnimate);
     });
   };
 
