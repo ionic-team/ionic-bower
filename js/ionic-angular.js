@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-274
+ * Ionic, v1.0.0-beta.9-nightly-275
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4652,6 +4652,11 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
       function onWindowResize() {
         rerender($scope.$eval(listExpr));
       }
+
+      // for lists inside a modal, recalc when the modal is shown
+      $scope.$on('modal.shown',function(){
+        onWindowResize();
+      });
 
       ionic.on('resize', onWindowResize, window);
 
