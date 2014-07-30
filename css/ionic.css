@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-295
+ * Ionic, v1.0.0-beta.10-nightly-298
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4328,6 +4328,10 @@ a.item-content {
   padding-top: 1px;
   padding-bottom: 1px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); }
+
+.padding .card, .padding .list-inset {
+  margin-left: 0;
+  margin-right: 0; }
 
 .card .item:first-child, .list-inset .item:first-child, .padding > .list .item:first-child {
   border-top-left-radius: 2px;
