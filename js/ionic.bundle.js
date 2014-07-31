@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-301
+ * Ionic, v1.0.0-beta.10-nightly-302
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.10-nightly-301'
+  version: '1.0.0-beta.10-nightly-302'
 };
 
 (function(ionic) {
@@ -36223,7 +36223,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-301
+ * Ionic, v1.0.0-beta.10-nightly-302
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38241,6 +38241,8 @@ IonicModule
  * @module ionic
  * @description
  *
+ * Related: {@link ionic.controller:ionicPopover ionicPopover controller}.
+ *
  * The Popover is a view that floats above an app’s content. Popovers provide an
  * easy way to present or gather information from the user and are
  * commonly used in the following situations:
@@ -38251,12 +38253,12 @@ IonicModule
  *
  * Put the content of the popover inside of an `<ion-popover-view>` element.
  *
- * Note: a popover will broadcast 'popover.shown', 'popover.hidden', and 'popover.removed' events from its originating
- * scope, passing in itself as an event argument. Both the popover.removed and popover.hidden events are
- * called when the popover is removed.
- *
  * @usage
  * ```html
+ * <p>
+ *   <button ng-click="openPopover($event)">Open Popover</button>
+ * </p>
+ *
  * <script id="my-popover.html" type="text/ng-template">
  *   <ion-popover-view>
  *     <ion-header-bar>
@@ -38276,8 +38278,8 @@ IonicModule
  *   }).then(function(popover) {
  *     $scope.popover = popover;
  *   });
- *   $scope.openPopover = function() {
- *     $scope.popover.show();
+ *   $scope.openPopover = function($event) {
+ *     $scope.popover.show($event);
  *   };
  *   $scope.closePopover = function() {
  *     $scope.popover.hide();
@@ -38297,9 +38299,11 @@ IonicModule
  * });
  * ```
  */
+
+
 IonicModule
-.factory('$ionicPopover', ['$ionicModal', '$ionicPosition', '$document',
-function($ionicModal, $ionicPosition, $document) {
+.factory('$ionicPopover', ['$ionicPopover', '$ionicPosition', '$document',
+function($ionicPopover, $ionicPosition, $document) {
 
   var POPOVER_BODY_PADDING = 6;
 
@@ -38342,6 +38346,65 @@ function($ionicModal, $ionicPosition, $document) {
 
   }
 
+  /**
+   * @ngdoc controller
+   * @name ionicPopover
+   * @module ionic
+   * @description
+   * Instantiated by the {@link ionic.service:$ionicPopover} service.
+   *
+   * Be sure to call [remove()](#remove) when you are done with each popover
+   * to clean it up and avoid memory leaks.
+   *
+   * Note: a popover will broadcast 'popover.shown', 'popover.hidden', and 'popover.removed' events from its originating
+   * scope, passing in itself as an event argument. Both the popover.removed and popover.hidden events are
+   * called when the popover is removed.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#initialize
+   * @description Creates a new popover controller instance.
+   * @param {object} options An options object with the following properties:
+   *  - `{object=}` `scope` The scope to be a child of.
+   *    Default: creates a child of $rootScope.
+   *  - `{boolean=}` `focusFirstInput` Whether to autofocus the first input of
+   *    the popover when shown.  Default: false.
+   *  - `{boolean=}` `backdropClickToClose` Whether to close the popover on clicking the backdrop.
+   *    Default: true.
+   *  - `{boolean=}` `hardwareBackButtonClose` Whether the popover can be closed using the hardware
+   *    back button on Android and similar devices.  Default: true.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#show
+   * @description Show this popover instance.
+   * @param {$event} $event The $event or target element which the popover should align
+   * itself next to.
+   * @returns {promise} A promise which is resolved when the popover is finished animating in.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#hide
+   * @description Hide this popover instance.
+   * @returns {promise} A promise which is resolved when the popover is finished animating out.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#remove
+   * @description Remove this popover instance from the DOM and clean up.
+   * @returns {promise} A promise which is resolved when the popover is finished animating out.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#isShown
+   * @returns boolean Whether this popover is currently shown.
+   */
+
   return {
     /**
      * @ngdoc method
@@ -38349,11 +38412,11 @@ function($ionicModal, $ionicPosition, $document) {
      * @param {string} templateString The template string to use as the popovers's
      * content.
      * @param {object} options Options to be passed to the initialize method.
-     * @returns {object} An instance of an {@link ionic.controller:ionicModal}
-     * controller ($ionicPopover is built on top of $ionicModal).
+     * @returns {object} An instance of an {@link ionic.controller:ionicPopover}
+     * controller ($ionicPopover is built on top of $ionicPopover).
      */
     fromTemplate: function(templateString, options) {
-      return $ionicModal.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicPopover.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
     },
     /**
      * @ngdoc method
@@ -38361,10 +38424,10 @@ function($ionicModal, $ionicPosition, $document) {
      * @param {string} templateUrl The url to load the template from.
      * @param {object} options Options to be passed to the initialize method.
      * @returns {promise} A promise that will be resolved with an instance of
-     * an {@link ionic.controller:ionicModal} controller ($ionicPopover is built on top of $ionicModal).
+     * an {@link ionic.controller:ionicPopover} controller ($ionicPopover is built on top of $ionicPopover).
      */
     fromTemplateUrl: function(url, options, _) {
-      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicPopover.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
     }
   };
 
@@ -38867,8 +38930,8 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
  * It is meant to be used where we need to absolute-position DOM elements in
  * relation to other, existing elements (this is the case for tooltips, popovers, etc.).
  *
- * Adapted from [ui.bootstrap.position](https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js),
- * [License](https://github.com/angular-ui/bootstrap/blob/master/LICENSE)
+ * Adapted from [AngularUI Bootstrap](https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js),
+ * ([license](https://github.com/angular-ui/bootstrap/blob/master/LICENSE))
  */
 IonicModule
 .factory('$ionicPosition', ['$document', '$window', function ($document, $window) {
@@ -38909,7 +38972,7 @@ IonicModule
      * @ngdoc method
      * @name $ionicPosition#position
      * @description Get the current coordinates of the element, relative to the offset parent.
-     * Read-only equivalent of [jQuery's position function](http://api.jquery.com/position/)
+     * Read-only equivalent of [jQuery's position function](http://api.jquery.com/position/).
      * @param {element} element The element to get the position of.
      * @returns {object} Returns an object containing the properties top, left, width and height.
      */
@@ -38936,7 +38999,7 @@ IonicModule
      * @ngdoc method
      * @name $ionicPosition#offset
      * @description Get the current coordinates of the element, relative to the document.
-     * Read-only equivalent of [jQuery's offset function](http://api.jquery.com/offset/)
+     * Read-only equivalent of [jQuery's offset function](http://api.jquery.com/offset/).
      * @param {element} element The element to get the offset of.
      * @returns {object} Returns an object containing the properties top, left, width and height.
      */
