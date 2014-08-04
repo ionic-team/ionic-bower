@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-306
+ * Ionic, v1.0.0-beta.10-nightly-307
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.10-nightly-306'
+  version: '1.0.0-beta.10-nightly-307'
 };
 
 (function(ionic) {
@@ -36223,7 +36223,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-306
+ * Ionic, v1.0.0-beta.10-nightly-307
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38302,8 +38302,8 @@ IonicModule
 
 
 IonicModule
-.factory('$ionicPopover', ['$ionicPopover', '$ionicPosition', '$document',
-function($ionicPopover, $ionicPosition, $document) {
+.factory('$ionicPopover', ['$ionicModal', '$ionicPosition', '$document',
+function($ionicModal, $ionicPosition, $document) {
 
   var POPOVER_BODY_PADDING = 6;
 
@@ -38416,7 +38416,7 @@ function($ionicPopover, $ionicPosition, $document) {
      * controller ($ionicPopover is built on top of $ionicPopover).
      */
     fromTemplate: function(templateString, options) {
-      return $ionicPopover.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicModal.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
     },
     /**
      * @ngdoc method
@@ -38427,7 +38427,7 @@ function($ionicPopover, $ionicPosition, $document) {
      * an {@link ionic.controller:ionicPopover} controller ($ionicPopover is built on top of $ionicPopover).
      */
     fromTemplateUrl: function(url, options, _) {
-      return $ionicPopover.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
     }
   };
 
