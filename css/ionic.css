@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.10-nightly-307
+ * Ionic, v1.0.0-beta.10-nightly-308
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3889,6 +3889,7 @@ a.subdued {
     transform: rotate(-45deg); }
 
 .platform-android .popover {
+  background-color: #fafafa;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   margin-top: -32px; }
   .platform-android .popover .item {
