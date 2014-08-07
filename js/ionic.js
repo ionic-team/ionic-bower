@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-344
+ * Ionic, v1.0.0-beta.11-nightly-345
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-344'
+  version: '1.0.0-beta.11-nightly-345'
 };
 
 (function(window, document, ionic) {
@@ -4042,7 +4042,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       getContentHeight: function() {
         return Math.max(self.__content.scrollHeight, self.__content.offsetHeight + self.__content.offsetTop);
       }
-		};
+    };
 
     for (var key in options) {
       this.options[key] = options[key];
@@ -4766,8 +4766,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // Update Scroller dimensions for changed content
     // Add padding to bottom of content
     this.setDimensions(
-    	this.__container.clientWidth,
-    	this.__container.clientHeight,
+      this.__container.clientWidth,
+      this.__container.clientHeight,
       this.options.getContentWidth(),
       this.options.getContentHeight()
     );
