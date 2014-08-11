@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-348
+ * Ionic, v1.0.0-beta.11-nightly-352
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2681,8 +2681,13 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
   function showPrompt(opts) {
     var scope = $rootScope.$new(true);
     scope.data = {};
+    var text = '';
+    if(opts.template && /<[a-z][\s\S]*>/i.test(opts.template) === false){
+      text = '<span>'+opts.template+'</span>';
+      delete opts.template;
+    }
     return showPopup( extend({
-      template: '<input ng-model="data.response" type="' + (opts.inputType || 'text') +
+      template: text+'<input ng-model="data.response" type="' + (opts.inputType || 'text') +
         '" placeholder="' + (opts.inputPlaceholder || '') + '">',
       scope: scope,
       buttons: [{
@@ -4236,6 +4241,8 @@ IonicModule
 function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $rootScope, $document, $ionicScrollDelegate) {
 
   var self = this;
+  // for testing
+  this.__timeout = $timeout;
 
   this._scrollViewOptions = scrollViewOptions; //for testing
 
@@ -4404,14 +4411,26 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     var refresher = this.refresher = refresherElement;
     var refresherHeight = self.refresher.clientHeight || 0;
     scrollView.activatePullToRefresh(refresherHeight, function() {
+      // activateCallback
       refresher.classList.add('active');
       refresherScope.$onPulling();
     }, function() {
-      refresher.classList.remove('refreshing');
-      refresher.classList.remove('active');
+      // deactivateCallback
+      $timeout(function(){
+        refresher.classList.remove('active');
+        refresher.classList.remove('refreshing');
+        refresher.classList.add('invisible');
+      },300);
     }, function() {
+      // startCallback
       refresher.classList.add('refreshing');
       refresherScope.$onRefresh();
+    },function(){
+      // showCallback
+      refresher.classList.remove('invisible');
+    },function(){
+      // hideCallback
+      refresher.classList.add('invisible');
     });
   };
 }]);
@@ -4949,6 +4968,8 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         rerender(value);
       });
 
+      // Find every sibling before and after the repeated items, and pass them
+      // to the dataSource
       var scrollViewContent = scrollCtrl.scrollView.__content;
       function rerender(value) {
         var beforeSiblings = [];
@@ -4958,6 +4979,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
           if ( ionic.DomUtil.elementIsDescendant($element[0], node, scrollViewContent) ) {
             before = false;
           } else {
+            if (node.hasAttribute('collection-repeat-ignore')) return;
             var width = node.offsetWidth;
             var height = node.offsetHeight;
             if (width && height) {
@@ -7209,7 +7231,7 @@ IonicModule
     replace: true,
     require: '^$ionicScroll',
     template:
-    '<div class="scroll-refresher">' +
+    '<div class="scroll-refresher" collection-repeat-ignore>' +
       '<div class="ionic-refresher-content" ' +
       'ng-class="{\'ionic-refresher-with-text\': pullingText || refreshingText}">' +
         '<div class="icon-pulling">' +
@@ -7240,7 +7262,6 @@ IonicModule
         scrollCtrl._setRefresher($scope, $element[0]);
         $scope.$on('scroll.refreshComplete', function() {
           $scope.$evalAsync(function() {
-            $element[0].classList.remove('active');
             scrollCtrl.scrollView.finishPullToRefresh();
           });
         });
