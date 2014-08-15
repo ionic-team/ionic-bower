@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-360
+ * Ionic, v1.0.0-beta.11-nightly-362
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1163,7 +1163,7 @@ IonicModule
   /**
    * @ngdoc method
    * @name $ionicConfigProvider#prefetchTemplates
-   * @description Set whether Ionic should prefetch all templateUrls defined in 
+   * @description Set whether Ionic should prefetch all templateUrls defined in
    * $stateProvider.state. Default true. If set to false, the user will have to wait
    * for a template to be fetched the first time he/she is going to a a new page.
    * @param shouldPrefetch Whether Ionic should prefetch templateUrls defined in
@@ -1172,9 +1172,9 @@ IonicModule
    */
   this.prefetchTemplates = function(newValue) {
     if (arguments.length) {
-      config.prefetchTemlates = newValue;
+      config.prefetchTemplates = newValue;
     }
-    return config.prefetchTemlates;
+    return config.prefetchTemplates;
   };
 
   // private: Service definition for internal Ionic use
