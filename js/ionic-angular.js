@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-364
+ * Ionic, v1.0.0-beta.11-nightly-365
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3292,17 +3292,17 @@ IonicModule
  * @ngdoc service
  * @name $ionicTemplateCache
  * @module ionic
- * @description An angular service that preemptively caches template files to reduce flicker and boost performance.
+ * @description A service that preemptively caches template files to eliminate transition flicker and boost performance.
  * @usage
  * State templates are cached automatically, but you can optionally cache other templates.
+ *
  * ```js
  * $ionicTemplateCahce('myNgIncludeTemplate.html');
  * ```
  *
  * Optionally disable all preemptive caching with the `$ionicConfigProvider` or individual states by setting `prefetchTemplate`
- * in the $state definition
- * ```js
- * $ionicTemplateCahce('myNgIncludeTemplate.html');
+ * in the `$state` definition
+ *
  * ```js
  *   angular.module('myApp', ['ionic'])
  *   .config(function($stateProvider, $ionicConfigProvider) {
@@ -3340,12 +3340,7 @@ IonicModule
 function($http, $templateCache, $timeout, $ionicConfig) {
   var toCache = templatesToCache,
       hasRun = false;
-  /**
-   * @ngdoc method
-   * @name $ionicTemplateCache
-   * @description Add template(s) to be cached.
-   * @param {string | array} string or array of strings of templates to cache.
-   */
+
   function $ionicTemplateCache(templates){
     if(toCache.length > 500) return false;
     if(typeof templates === 'undefined')return run();
@@ -3384,14 +3379,7 @@ function($http, $templateCache, $timeout, $ionicConfig) {
   return $ionicTemplateCache;
 }])
 
-/**
- * @ngdoc config
- * @name $ionicTemplateCache
- * @module ionic
- * @private
- *
- * Intercepts the $stateprovider.state() command to look for templateUrls that can be cached
- */
+// Intercepts the $stateprovider.state() command to look for templateUrls that can be cached
 .config([
 '$stateProvider',
 '$ionicConfigProvider',
@@ -3413,14 +3401,7 @@ function($stateProvider, $ionicConfigProvider) {
   };
 }])
 
-/**
- * @ngdoc run
- * @name $ionicTemplateCache
- * @module ionic
- * @private
- *
- * process the templateUrls collected by the $stateProvider, adding them to the cache
- */
+// process the templateUrls collected by the $stateProvider, adding them to the cache
 .run(function($ionicTemplateCache) {
     $ionicTemplateCache();
 });
