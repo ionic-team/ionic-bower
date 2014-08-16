@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-365
+ * Ionic, v1.0.0-beta.11-nightly-366
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-365'
+  version: '1.0.0-beta.11-nightly-366'
 };
 
 (function(window, document, ionic) {
@@ -35072,7 +35072,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-365
+ * Ionic, v1.0.0-beta.11-nightly-366
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38367,7 +38367,7 @@ IonicModule
  * State templates are cached automatically, but you can optionally cache other templates.
  *
  * ```js
- * $ionicTemplateCahce('myNgIncludeTemplate.html');
+ * $ionicTemplateCache('myNgIncludeTemplate.html');
  * ```
  *
  * Optionally disable all preemptive caching with the `$ionicConfigProvider` or individual states by setting `prefetchTemplate`
