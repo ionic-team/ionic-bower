@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-366
+ * Ionic, v1.0.0-beta.11-nightly-368
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-366'
+  version: '1.0.0-beta.11-nightly-368'
 };
 
 (function(window, document, ionic) {
@@ -4456,12 +4456,6 @@ ionic.views.Scroll = ionic.views.View.inherit({
       }
     };
 
-    self.options.orgScrollingComplete = self.options.scrollingComplete;
-    self.options.scrollingComplete = function() {
-      ionic.tap.removeClonedInputs(container, self);
-      self.options.orgScrollingComplete();
-    };
-
     if ('ontouchstart' in window) {
       // Touch Events
       container.addEventListener("touchstart", self.touchStart, false);
@@ -4544,7 +4538,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     }
   },
 
-  __removeEventHandlers: function() {
+  __cleanup: function() {
     var container = this.__container;
 
     container.removeEventListener('touchstart', self.touchStart);
@@ -4566,6 +4560,14 @@ ionic.views.Scroll = ionic.views.View.inherit({
     document.removeEventListener("mousemove", self.mouseMove);
     document.removeEventListener("mouseup", self.mouseUp);
     document.removeEventListener('mousewheel', self.mouseWheel);
+
+    delete this.__container;
+    delete this.__content;
+    delete this.__indicatorX;
+    delete this.__indicatorY;
+
+    this.resize = this.scrollTo = this.zoomTo = 
+      this.__scrollingComplete = angular.noop;
   },
 
   /** Create a scroll bar div with the given direction **/
@@ -4765,6 +4767,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   __scrollingComplete: function() {
     var self = this;
     self.options.scrollingComplete();
+    ionic.tap.removeClonedInputs(self.__container, self);
 
     self.__fadeScrollbars('out');
   },
@@ -35072,7 +35075,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-366
+ * Ionic, v1.0.0-beta.11-nightly-368
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36017,7 +36020,7 @@ function($rootScope, $timeout) {
         var rect = self.dimensions[dataIndex];
         if (!rect) {
 
-        }else if (dataIndex < self.dataSource.dataStartIndex) {
+        } else if (dataIndex < self.dataSource.dataStartIndex) {
           // do nothing
         } else {
           self.renderItem(dataIndex, rect.primaryPos - self.beforeSize, rect.secondaryPos);
@@ -39471,7 +39474,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
   $scope.$on('$destroy', function() {
     deregisterInstance();
-    scrollView.__removeEventHandlers();
+    scrollView.__cleanup();
     ionic.off('resize', resize, $window);
     $window.removeEventListener('resize', resize);
     backListenDone();
@@ -40341,26 +40344,31 @@ function($timeout, $controller, $ionicBind) {
         } else if(attr.overflowScroll === "true") {
           $element.addClass('overflow-scroll');
         } else {
+          var scrollViewOptions = {
+            el: $element[0],
+            delegateHandle: attr.delegateHandle,
+            bouncing: $scope.$eval($scope.hasBouncing),
+            startX: $scope.$eval($scope.startX) || 0,
+            startY: $scope.$eval($scope.startY) || 0,
+            scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
+            scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
+            scrollingX: $scope.direction.indexOf('x') >= 0,
+            scrollingY: $scope.direction.indexOf('y') >= 0,
+            scrollEventInterval: parseInt($scope.scrollEventInterval, 10) || 10,
+            scrollingComplete: function() {
+              $scope.$onScrollComplete({
+                scrollTop: this.__scrollTop,
+                scrollLeft: this.__scrollLeft
+              });
+            }
+          };
           $controller('$ionicScroll', {
             $scope: $scope,
-            scrollViewOptions: {
-              el: $element[0],
-              delegateHandle: attr.delegateHandle,
-              bouncing: $scope.$eval($scope.hasBouncing),
-              startX: $scope.$eval($scope.startX) || 0,
-              startY: $scope.$eval($scope.startY) || 0,
-              scrollbarX: $scope.$eval($scope.scrollbarX) !== false,
-              scrollbarY: $scope.$eval($scope.scrollbarY) !== false,
-              scrollingX: $scope.direction.indexOf('x') >= 0,
-              scrollingY: $scope.direction.indexOf('y') >= 0,
-              scrollEventInterval: parseInt($scope.scrollEventInterval, 10) || 10,
-              scrollingComplete: function() {
-                $scope.$onScrollComplete({
-                  scrollTop: this.__scrollTop,
-                  scrollLeft: this.__scrollLeft
-                });
-              }
-            }
+            scrollViewOptions: scrollViewOptions
+          });
+
+          $scope.$on('$destroy', function() {
+            scrollViewOptions.scrollingComplete = angular.noop;
           });
         }
 
