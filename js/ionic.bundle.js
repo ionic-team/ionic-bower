@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-370
+ * Ionic, v1.0.0-beta.11-nightly-371
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-370'
+  version: '1.0.0-beta.11-nightly-371'
 };
 
 (function(window, document, ionic) {
@@ -2940,7 +2940,7 @@ ionic.DomUtil.ready(function(){
         var ele = e.target;
         var eleToActivate;
 
-        for(var x=0; x<4; x++) {
+        for(var x=0; x<6; x++) {
           if(!ele || ele.nodeType !== 1) break;
           if(eleToActivate && ele.classList.contains('item')) {
             eleToActivate = ele;
@@ -2952,6 +2952,10 @@ ionic.DomUtil.ready(function(){
           }
           if( ele.classList.contains('button') ) {
             eleToActivate = ele;
+            break;
+          }
+          // no sense climbing past these
+          if(ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT'){
             break;
           }
           ele = ele.parentElement;
@@ -35075,7 +35079,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-370
+ * Ionic, v1.0.0-beta.11-nightly-371
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
