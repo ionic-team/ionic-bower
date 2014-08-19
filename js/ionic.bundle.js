@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-371
+ * Ionic, v1.0.0-beta.11-nightly-372
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-371'
+  version: '1.0.0-beta.11-nightly-372'
 };
 
 (function(window, document, ionic) {
@@ -35079,7 +35079,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-371
+ * Ionic, v1.0.0-beta.11-nightly-372
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36426,8 +36426,11 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
               $ionicBackdrop.release();
               $ionicBackdrop.getElement().removeClass('backdrop-loading');
             }
-            self.element.removeClass('active');
-            $document[0].body.classList.remove('loading-active');
+            // wrapping in a timeout to make process asyncronous
+            $timeout(function(){
+              self.element.removeClass('active');
+              $document[0].body.classList.remove('loading-active');
+            }, 10);
             setTimeout(function() {
               !self.isShown && self.element.removeClass('visible');
             }, 200);
