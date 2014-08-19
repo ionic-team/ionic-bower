@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-372
+ * Ionic, v1.0.0-beta.11-nightly-373
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-372'
+  version: '1.0.0-beta.11-nightly-373'
 };
 
 (function(window, document, ionic) {
@@ -6419,7 +6419,7 @@ ionic.scroll = {
           return i;
         }
       } else if (dragOffsetTop > el.offsetTop - el.offsetHeight / 2 &&
-                 dragOffsetTop < el.offsetTop + el.offsetHeight * 1.5) {
+                 dragOffsetTop < el.offsetTop + el.offsetHeight) {
         return i;
       }
     }
@@ -35079,7 +35079,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-372
+ * Ionic, v1.0.0-beta.11-nightly-373
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
