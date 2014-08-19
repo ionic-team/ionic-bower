@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-368
+ * Ionic, v1.0.0-beta.11-nightly-370
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6159,6 +6159,11 @@ IonicModule
             $toIndex: newIndex
           });
         };
+
+        // prevent clicks from bubbling up to the item
+        if(!$attr.ngClick && !$attr.onClick && !$attr.onclick){
+          $element[0].onclick = function(e){e.stopPropagation(); return false;};
+        }
 
         var container = jqLite(ITEM_TPL_REORDER_BUTTON);
         container.append($element);
