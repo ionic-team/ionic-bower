@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-378
+ * Ionic, v1.0.0-beta.11-nightly-379
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-378'
+  version: '1.0.0-beta.11-nightly-379'
 };
 
 (function(window, document, ionic) {
@@ -34745,7 +34745,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-378
+ * Ionic, v1.0.0-beta.11-nightly-379
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35283,8 +35283,13 @@ function($cacheFactory, $parse, $rootScope) {
     attachItemAtIndex: function(index) {
       if (index < this.dataStartIndex) {
         return this.beforeSiblings[index];
-      } else if (index > this.data.length - 1) {
-        return this.afterSiblings[index - this.data.length - this.dataStartIndex];
+      }
+      // Subtract so we start at the beginning of this.data, after
+      // this.beforeSiblings.
+      index -= this.dataStartIndex;
+
+      if (index > this.data.length - 1) {
+        return this.afterSiblings[index - this.dataStartIndex];
       }
 
       var item = this.getItem(index);
@@ -35500,7 +35505,6 @@ function($rootScope, $timeout) {
       primaryPos = secondaryPos = 0;
       previousItem = null;
 
-
       var dimensions = this.dataSource.dimensions.map(calculateSize, this);
       var totalSize = primaryPos + (previousItem ? previousItem.primarySize : 0);
 
@@ -35704,6 +35708,7 @@ function($rootScope, $timeout) {
     renderItem: function(dataIndex, primaryPos, secondaryPos) {
       // Attach an item, and set its transform position to the required value
       var item = this.dataSource.attachItemAtIndex(dataIndex);
+      void 0;
       if (item && item.element) {
         if (item.primaryPos !== primaryPos || item.secondaryPos !== secondaryPos) {
           item.element.css(ionic.CSS.TRANSFORM, this.transformString(
