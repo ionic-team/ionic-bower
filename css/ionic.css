@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-380
+ * Ionic, v1.0.0-beta.11-nightly-381
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3833,7 +3833,6 @@ a.subdued {
   z-index: 10;
   display: block;
   margin-left: -110px;
-  margin-top: 12px;
   height: 280px;
   width: 220px;
   background-color: #fff;
@@ -3843,6 +3842,10 @@ a.subdued {
     border-top: 0; }
   .popover .item:last-child {
     border-bottom: 0; }
+  .popover.popover-top {
+    margin-top: 12px; }
+  .popover.popover-bottom {
+    margin-top: -12px; }
 
 .popover, .popover .bar-header {
   border-radius: 2px; }
@@ -3873,8 +3876,6 @@ a.subdued {
   margin-top: 0; }
 .platform-ios .popover-arrow {
   position: absolute;
-  top: -17px;
-  left: 43%;
   display: block;
   width: 30px;
   height: 19px;
@@ -3891,15 +3892,24 @@ a.subdued {
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
     transform: rotate(-45deg); }
+.platform-ios .popover-top .popover-arrow {
+  top: -17px; }
+.platform-ios .popover-bottom .popover-arrow {
+  bottom: -10px; }
+  .platform-ios .popover-bottom .popover-arrow:after {
+    top: -6px; }
 
 .platform-android .popover {
   background-color: #fafafa;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-  margin-top: -32px; }
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); }
   .platform-android .popover .item {
     border-color: #fafafa;
     background-color: #fafafa;
     color: #4d4d4d; }
+  .platform-android .popover.popover-top {
+    margin-top: -32px; }
+  .platform-android .popover.popover-bottom {
+    margin-top: 32px; }
 .platform-android .popover-backdrop, .platform-android .popover-backdrop.active {
   background-color: transparent; }
 
