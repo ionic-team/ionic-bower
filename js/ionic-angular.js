@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-379
+ * Ionic, v1.0.0-beta.11-nightly-380
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1345,7 +1345,7 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
               self.element.addClass('visible');
               ionic.requestAnimationFrame(function() {
                 self.isShown && self.element.addClass('active');
-                $document[0].body.classList.add('loading-active');
+                self.isShown && $document[0].body.classList.add('loading-active');
               });
             }
           });
@@ -1358,11 +1358,8 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
               $ionicBackdrop.release();
               $ionicBackdrop.getElement().removeClass('backdrop-loading');
             }
-            // wrapping in a timeout to make process asyncronous
-            $timeout(function(){
-              self.element.removeClass('active');
-              $document[0].body.classList.remove('loading-active');
-            }, 10);
+            self.element.removeClass('active');
+            $document[0].body.classList.remove('loading-active');
             setTimeout(function() {
               !self.isShown && self.element.removeClass('visible');
             }, 200);
