@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-376
+ * Ionic, v1.0.0-beta.11-nightly-377
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -540,7 +540,7 @@ function($cacheFactory, $parse, $rootScope) {
     attachItemAtIndex: function(index) {
       if (index < this.dataStartIndex) {
         return this.beforeSiblings[index];
-      } else if (index > this.data.length) {
+      } else if (index > this.data.length - 1) {
         return this.afterSiblings[index - this.data.length - this.dataStartIndex];
       }
 
@@ -927,27 +927,31 @@ function($rootScope, $timeout) {
       // Keep rendering items, adding them until we are past the end of the visible scroll area
       i = renderStartIndex;
       while ((rect = this.dimensions[i]) && (rect.primaryPos - rect.primarySize < scrollSizeEnd)) {
-        doRender(i++);
+        doRender(i, rect);
+        i++;
       }
-      //Add two more items at the end
-      doRender(i++);
-      doRender(i);
+
+      // Render two extra items at the end as a buffer
+      if (self.dimensions[i]) {
+        doRender(i, self.dimensions[i]);
+        i++;
+      }
+      if (self.dimensions[i]) {
+        doRender(i, self.dimensions[i]);
+      }
       var renderEndIndex = i;
 
       // Remove any items that were rendered and aren't visible anymore
-      for (i in this.renderedItems) {
-        if (i < renderStartIndex || i > renderEndIndex) {
-          this.removeItem(i);
+      for (var renderIndex in this.renderedItems) {
+        if (renderIndex < renderStartIndex || renderIndex > renderEndIndex) {
+          this.removeItem(renderIndex);
         }
       }
 
       this.setCurrentIndex(startIndex);
 
-      function doRender(dataIndex) {
-        var rect = self.dimensions[dataIndex];
-        if (!rect) {
-
-        } else if (dataIndex < self.dataSource.dataStartIndex) {
+      function doRender(dataIndex, rect) {
+        if (dataIndex < self.dataSource.dataStartIndex) {
           // do nothing
         } else {
           self.renderItem(dataIndex, rect.primaryPos - self.beforeSize, rect.secondaryPos);
