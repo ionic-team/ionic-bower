@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-383
+ * Ionic, v1.0.0-beta.11-nightly-388
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-383'
+  version: '1.0.0-beta.11-nightly-388'
 };
 
 (function(window, document, ionic) {
@@ -218,27 +218,6 @@ window.ionic = {
      */
     swapNodes: function(src, dest) {
       dest.parentNode.insertBefore(src, dest);
-    },
-
-    /**
-     * @private
-     */
-    centerElementByMargin: function(el) {
-      el.style.marginLeft = (-el.offsetWidth) / 2 + 'px';
-      el.style.marginTop = (-el.offsetHeight) / 2 + 'px';
-    },
-    //Center twice, after raf, to fix a bug with ios and showing elements
-    //that have just been attached to the DOM.
-    centerElementByMarginTwice: function(el) {
-      ionic.requestAnimationFrame(function() {
-        ionic.DomUtil.centerElementByMargin(el);
-        setTimeout(function() {
-          ionic.DomUtil.centerElementByMargin(el);
-          setTimeout(function() {
-            ionic.DomUtil.centerElementByMargin(el);
-          });
-        });
-      });
     },
 
     elementIsDescendant: function(el, parent, stopAt) {
@@ -34745,7 +34724,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-383
+ * Ionic, v1.0.0-beta.11-nightly-388
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36976,15 +36955,17 @@ function($ionicModal, $ionicPosition, $document, $window) {
 
 
 var POPUP_TPL =
-  '<div class="popup">' +
-    '<div class="popup-head">' +
-      '<h3 class="popup-title" ng-bind-html="title"></h3>' +
-      '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
-    '</div>' +
-    '<div class="popup-body">' +
-    '</div>' +
-    '<div class="popup-buttons row">' +
-      '<button ng-repeat="button in buttons" ng-click="$buttonTapped(button, $event)" class="button col" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
+  '<div class="popup-container">' +
+    '<div class="popup">' +
+      '<div class="popup-head">' +
+        '<h3 class="popup-title" ng-bind-html="title"></h3>' +
+        '<h5 class="popup-sub-title" ng-bind-html="subTitle" ng-if="subTitle"></h5>' +
+      '</div>' +
+      '<div class="popup-body">' +
+      '</div>' +
+      '<div class="popup-buttons">' +
+        '<button ng-repeat="button in buttons" ng-click="$buttonTapped(button, $event)" class="button" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
+      '</div>' +
     '</div>' +
   '</div>';
 
@@ -37090,7 +37071,7 @@ IonicModule
 function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $document, $compile, $ionicPlatform) {
   //TODO allow this to be configured
   var config = {
-    stackPushDelay: 50
+    stackPushDelay: 75
   };
   var popupStack = [];
   var $ionicPopup = {
@@ -37298,20 +37279,8 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
           //if hidden while waiting for raf, don't show
           if (!self.isShown) return;
 
-          //if the popup is taller than the window, make the popup body scrollable
-          if(self.element[0].offsetHeight > window.innerHeight - 20){
-            self.element[0].style.height = window.innerHeight - 20+'px';
-            popupBody = self.element[0].querySelectorAll('.popup-body');
-            popupHead = self.element[0].querySelectorAll('.popup-head');
-            popupButtons = self.element[0].querySelectorAll('.popup-buttons');
-            self.element.addClass('popup-tall');
-            newHeight = window.innerHeight - popupHead[0].offsetHeight - popupButtons[0].offsetHeight -20;
-            popupBody[0].style.height =  newHeight + 'px';
-          }
-
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
-          ionic.DomUtil.centerElementByMarginTwice(self.element[0]);
           focusInput(self.element);
         });
       };
@@ -37358,6 +37327,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
         //Add popup-open & backdrop if this is first popup
         document.body.classList.add('popup-open');
         $ionicBackdrop.retain();
+        //only show the backdrop on the first popup
         $ionicPopup._backButtonActionDone = $ionicPlatform.registerBackButtonAction(
           onHardwareBackButton,
           PLATFORM_BACK_BUTTON_PRIORITY_POPUP
@@ -37384,10 +37354,9 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
         } else {
           //Remove popup-open & backdrop if this is last popup
           document.body.classList.remove('popup-open');
+          $ionicBackdrop.release();
           ($ionicPopup._backButtonActionDone || angular.noop)();
         }
-        // always release the backdrop since it has an internal backdrop counter
-        $ionicBackdrop.release();
         return result;
       });
     });
