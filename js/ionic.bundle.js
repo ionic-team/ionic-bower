@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-381
+ * Ionic, v1.0.0-beta.11-nightly-382
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-381'
+  version: '1.0.0-beta.11-nightly-382'
 };
 
 (function(window, document, ionic) {
@@ -34745,7 +34745,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-381
+ * Ionic, v1.0.0-beta.11-nightly-382
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37657,6 +37657,24 @@ IonicModule
   'scrollBy',
   /**
    * @ngdoc method
+   * @name $ionicScrollDelegate#zoomTo
+   * @param {number} level Level to zoom to.
+   * @param {boolean=} animate Whether to animate the zoom.
+   * @param {number=} originLeft Zoom in at given left coordinate.
+   * @param {number=} originTop Zoom in at given top coordinate.
+   */
+  'zoomTo',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#zoomBy
+   * @param {number} factor The factor to zoom by.
+   * @param {boolean=} animate Whether to animate the zoom.
+   * @param {number=} originLeft Zoom in at given left coordinate.
+   * @param {number=} originTop Zoom in at given top coordinate.
+   */
+  'zoomBy',
+  /**
+   * @ngdoc method
    * @name $ionicScrollDelegate#getScrollPosition
    * @returns {object} The scroll position of this view, with the following properties:
    *  - `{number}` `left` The distance the user has scrolled from the left (starts at 0).
@@ -39236,6 +39254,18 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   this.scrollTo = function(left, top, shouldAnimate) {
     this.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
+    });
+  };
+
+  this.zoomTo = function(zoom, shouldAnimate, originLeft, originTop) {
+    this.resize().then(function() {
+      scrollView.zoomTo(zoom, !!shouldAnimate, originLeft, originTop);
+    });
+  };
+
+  this.zoomBy = function(zoom, shouldAnimate, originLeft, originTop) {
+    this.resize().then(function() {
+      scrollView.zoomBy(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
