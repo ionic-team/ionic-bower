@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-373
+ * Ionic, v1.0.0-beta.11-nightly-374
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3261,11 +3261,6 @@ IonicModule
    * @description Select the tab matching the given index.
    *
    * @param {number} index Index of the tab to select.
-   * @param {boolean=} shouldChangeHistory Whether this selection should load this tab's
-   * view history (if it exists) and use it, or just load the default page.
-   * Default false.
-   * Hint: you probably want this to be true if you have an
-   * {@link ionic.directive:ionNavView} inside your tab.
    */
   'select',
   /**
@@ -4672,9 +4667,9 @@ function($scope, $ionicViewService, $attrs, $location, $state) {
 
 IonicModule
 .controller('$ionicTabs', [
-  '$scope', 
-  '$ionicViewService', 
-  '$element', 
+  '$scope',
+  '$ionicViewService',
+  '$element',
 function($scope, $ionicViewService, $element) {
   var _selectedTab = null;
   var self = this;
@@ -4731,8 +4726,9 @@ function($scope, $ionicViewService, $element) {
     } else {
       tabIndex = self.tabs.indexOf(tab);
     }
-    if (!tab || tabIndex == -1) {
-      throw new Error('Cannot select tab "' + tabIndex + '"!');
+
+    if (arguments.length === 1) {
+      shouldEmitEvent = !!(tab.navViewName || tab.uiSref);
     }
 
     if (_selectedTab && _selectedTab.$historyId == tab.$historyId) {
@@ -4757,7 +4753,6 @@ function($scope, $ionicViewService, $element) {
           navViewName: tab.navViewName,
           hasNavView: !!tab.navViewName,
           title: tab.title,
-          //Skip the first character of href if it's #
           url: tab.href,
           uiSref: tab.uiSref
         };
@@ -8134,13 +8129,13 @@ function($rootScope, $animate, $ionicBind, $compile) {
         $element[0].removeAttribute('title');
 
         if (navViewName) {
-          tabCtrl.navViewName = navViewName;
+          tabCtrl.navViewName = $scope.navViewName = navViewName;
         }
         $scope.$on('$stateChangeSuccess', selectIfMatchesState);
         selectIfMatchesState();
         function selectIfMatchesState() {
           if (tabCtrl.tabMatchesState()) {
-            tabsCtrl.select($scope);
+            tabsCtrl.select($scope, false);
           }
         }
 
