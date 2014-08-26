@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-403
+ * Ionic, v1.0.0-beta.11-nightly-406
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-403'
+  version: '1.0.0-beta.11-nightly-406'
 };
 
 (function(window, document, ionic) {
@@ -34724,7 +34724,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-403
+ * Ionic, v1.0.0-beta.11-nightly-406
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39322,10 +39322,11 @@ IonicModule
   '$attrs',
   '$ionicSideMenuDelegate',
   '$ionicPlatform',
-function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
+  '$document',
+function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $document) {
   var self = this;
   var rightShowing, leftShowing, isDragging;
-  var startX, lastX, offsetX;
+  var startX, lastX, offsetX, isAsideExposed;
 
   self.$scope = $scope;
 
@@ -39450,9 +39451,9 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
     }
 
     if(percentage !== 0) {
-      document.body.classList.add('menu-open');
+      $document[0].body.classList.add('menu-open');
     } else {
-      document.body.classList.remove('menu-open');
+      $document[0].body.classList.remove('menu-open');
     }
   };
 
@@ -39571,8 +39572,32 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
     }
   };
 
+  self.isAsideExposed = function() {
+    return !!isAsideExposed;
+  };
+
+  self.exposeAside = function(shouldExposeAside) {
+    isAsideExposed = shouldExposeAside;
+
+    // set the left marget width if it should be exposed
+    // otherwise set false so there's no left margin
+    self.content.setMarginLeft( isAsideExposed ? self.left.width : 0 );
+
+    self.$scope.$emit('$ionicExposeAside', isAsideExposed);
+  };
+
+  self.activeAsideResizing = function(isResizing) {
+    if(isResizing) {
+      $document[0].body.classList.add('aside-resizing');
+    } else {
+      $document[0].body.classList.remove('aside-resizing');
+    }
+  };
+
   // End a drag with the given event
   self._endDrag = function(e) {
+    if(isAsideExposed) return;
+
     if(isDragging) {
       self.snapToRest(e);
     }
@@ -39583,6 +39608,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform) {
 
   // Handle a drag event
   self._handleDrag = function(e) {
+    if(isAsideExposed) return;
 
     // If we don't have start coords, grab and store them
     if(!startX) {
@@ -40348,6 +40374,84 @@ function($timeout, $controller, $ionicBind) {
     }
   };
 }]);
+
+/**
+ * @ngdoc directive
+ * @name exposeAsideWhen
+ * @module ionic
+ * @restrict A
+ * @parent ionic.directive:ionSideMenus
+ *
+ * @description
+ * It is common for a tablet application to hide a menu when in portrait mode, but to show the
+ * same menu on the left side when the tablet is in landscape mode. The `exposeAsideWhen` attribute
+ * directive can be used to accomplish a similar interface.
+ *
+ * By default, side menus are hidden underneath its side menu content, and can be opened by either
+ * swiping the content left or right, or toggling a button to show the side menu. However, by adding the
+ * `exposeAsideWhen` attribute directive to an {@link ionic.directive:ionSideMenu} element directive,
+ * a side menu can be given instructions on "when" the menu should be exposed (always viewable). For
+ * example, the `expose-aside-when="large"` attribute will keep the side menu hidden when the viewport's
+ * width is less than `768px`, but when the viewport's width is `768px` or greater, the menu will then
+ * always be shown and can no longer be opened or closed like it could when it was hidden for smaller
+ * viewports.
+ *
+ * Using `large` as the attribute's value is a shortcut value to `(min-width:768px)` since it is
+ * the most common use-case. However, for added flexibility, any valid media query could be added
+ * as the value, such as `(min-width:600px)` or even multiple queries such as
+ * `(min-width:750px) and (max-width:1200px)`.
+
+ * @usage
+ * ```html
+ * <ion-side-menus>
+ *   <!-- Center content -->
+ *   <ion-side-menu-content>
+ *   </ion-side-menu-content>
+ *
+ *   <!-- Left menu -->
+ *   <ion-side-menu expose-aside-when="large">
+ *   </ion-side-menu>
+ * </ion-side-menus>
+ * ```
+ * For a complete side menu example, see the
+ * {@link ionic.directive:ionSideMenus} documentation.
+ */
+IonicModule
+.directive('exposeAsideWhen', ['$window', function($window) {
+  return {
+    restrict: 'A',
+    require: '^ionSideMenus',
+    link: function($scope, $element, $attr, sideMenuCtrl) {
+
+      function checkAsideExpose() {
+        var mq = $attr.exposeAsideWhen == 'large' ? '(min-width:768px)' : $attr.exposeAsideWhen;
+        sideMenuCtrl.exposeAside( $window.matchMedia(mq).matches );
+        sideMenuCtrl.activeAsideResizing(false);
+      }
+
+      function onResize() {
+        sideMenuCtrl.activeAsideResizing(true);
+        debouncedCheck();
+      }
+
+      var debouncedCheck = ionic.debounce(function() {
+        $scope.$apply(function(){
+          checkAsideExpose();
+        });
+      }, 300, false);
+
+      checkAsideExpose();
+
+      ionic.on('resize', onResize, $window);
+
+      $scope.$on('$destroy', function(){
+        ionic.off('resize', onResize, $window);
+      });
+
+    }
+  };
+}]);
+
 
 var GESTURE_DIRECTIVES = 'onHold onTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeDown onSwipeLeft'.split(' ');
 
@@ -42665,7 +42769,8 @@ IonicModule
 .directive('ionSideMenuContent', [
   '$timeout',
   '$ionicGesture',
-function($timeout, $ionicGesture) {
+  '$window',
+function($timeout, $ionicGesture, $window) {
 
   return {
     restrict: 'EA', //DEPRECATED 'A'
@@ -42761,7 +42866,7 @@ function($timeout, $ionicGesture) {
           }
         }
 
-        sideMenuCtrl.setContent({
+        var content = {
           element: element[0],
           onDrag: function(e) {},
           endDrag: function(e) {},
@@ -42769,10 +42874,22 @@ function($timeout, $ionicGesture) {
             return $scope.sideMenuContentTranslateX || 0;
           },
           setTranslateX: ionic.animationFrameThrottle(function(amount) {
-            $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amount + 'px, 0, 0)';
+            var xTransform = content.offsetX + amount;
+            $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + xTransform + 'px,0,0)';
             $timeout(function() {
               $scope.sideMenuContentTranslateX = amount;
             });
+          }),
+          setMarginLeft: ionic.animationFrameThrottle(function(amount) {
+            if(amount) {
+              $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amount + 'px,0,0)';
+              $element[0].style.width = ($window.innerWidth - amount) + 'px';
+              content.offsetX = amount;
+            } else {
+              $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(0,0,0)';
+              $element[0].style.width = '';
+              content.offsetX = 0;
+            }
           }),
           enableAnimation: function() {
             $scope.animationEnabled = true;
@@ -42781,8 +42898,11 @@ function($timeout, $ionicGesture) {
           disableAnimation: function() {
             $scope.animationEnabled = false;
             $element[0].classList.remove('menu-animated');
-          }
-        });
+          },
+          offsetX: 0
+        };
+
+        sideMenuCtrl.setContent(content);
 
         // add gesture handlers
         var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element);
@@ -42825,6 +42945,12 @@ IonicModule
  * links and buttons within `ion-side-menu` content, so that when the element is
  * clicked then the opened side menu will automatically close.
  *
+ * By default, side menus are hidden underneath its side menu content, and can be opened by
+ * either swiping the content left or right, or toggling a button to show the side menu. However,
+ * by adding the {@link ionic.directive:exposeAsideWhen} attribute directive to an
+ * {@link ionic.directive:ionSideMenu} element directive, a side menu can be given instructions
+ * on "when" the menu should be exposed (always viewable).
+ *
  * ![Side Menu](http://ionicframework.com.s3.amazonaws.com/docs/controllers/sidemenu.gif)
  *
  * For more information on side menus, check out:
@@ -42832,6 +42958,7 @@ IonicModule
  * - {@link ionic.directive:ionSideMenuContent}
  * - {@link ionic.directive:ionSideMenu}
  * - {@link ionic.directive:menuClose}
+ * - {@link ionic.directive:exposeAsideWhen}
  *
  * @usage
  * To use side menus, add an `<ion-side-menus>` parent element,
@@ -42866,18 +42993,35 @@ IonicModule
  *
  */
 .directive('ionSideMenus', ['$document', function($document) {
+
+  var ASIDE_OPEN_CSS = 'aside-open';
+
   return {
     restrict: 'ECA',
     controller: '$ionicSideMenus',
     compile: function(element, attr) {
       attr.$set('class', (attr['class'] || '') + ' view');
 
-      return function($scope) {
-        $scope.$on('$destroy', function(){
-          $document[0].body.classList.remove('menu-open');
+      return { pre: prelink };
+      function prelink($scope) {
+        var bodyClassList = $document[0].body.classList;
+
+        $scope.$on('$ionicExposeAside', function(evt, isAsideExposed){
+          if(!$scope.$exposeAside) $scope.$exposeAside = {};
+          $scope.$exposeAside.active = isAsideExposed;
+          if(isAsideExposed) {
+            bodyClassList.add(ASIDE_OPEN_CSS);
+          } else {
+            bodyClassList.remove(ASIDE_OPEN_CSS);
+          }
         });
 
-      };
+        $scope.$on('$destroy', function(){
+          bodyClassList.remove('menu-open');
+          bodyClassList.remove(ASIDE_OPEN_CSS);
+        });
+
+      }
     }
   };
 }]);
