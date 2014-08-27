@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-407
+ * Ionic, v1.0.0-beta.11-nightly-411
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-407'
+  version: '1.0.0-beta.11-nightly-411'
 };
 
 (function(window, document, ionic) {
@@ -34724,7 +34724,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-407
+ * Ionic, v1.0.0-beta.11-nightly-411
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35256,6 +35256,31 @@ IonicModule
      */
     get: function() {
       return $document[0].body;
+    }
+  };
+}]);
+
+IonicModule
+.factory('$ionicClickBlock', [
+  '$document',
+  '$ionicBody',
+  '$timeout',
+function($document, $ionicBody, $timeout) {
+  var cb = $document[0].createElement('div');
+  cb.className = 'click-block';
+  return {
+    show: function() {
+      if(cb.parentElement) {
+        cb.classList.remove('hide');
+      } else {
+        $ionicBody.append(cb);
+      }
+      $timeout(function(){
+        cb.classList.add('hide');
+      }, 500);
+    },
+    hide: function() {
+      cb.classList.add('hide');
     }
   };
 }]);
@@ -38401,7 +38426,8 @@ function($rootScope, $state, $location, $document, $animate, $ionicPlatform, $io
   '$injector',
   '$animate',
   '$ionicNavViewConfig',
-function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavViewConfig) {
+  '$ionicClickBlock',
+function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavViewConfig, $ionicClickBlock) {
 
   var View = function(){};
   View.prototype.initialize = function(data) {
@@ -38784,17 +38810,17 @@ function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavV
               setAnimationClass();
 
               element.addClass('ng-enter');
-              document.body.classList.add('disable-pointer-events');
+              $ionicClickBlock.show();
 
               $animate.enter(element, navViewElement, null, function() {
-                document.body.classList.remove('disable-pointer-events');
+                $ionicClickBlock.hide();
                 if (animationClass) {
                   navViewElement[0].classList.remove(animationClass);
                 }
               });
               return;
             } else if(!doAnimation) {
-              document.body.classList.remove('disable-pointer-events');
+              $ionicClickBlock.hide();
             }
 
             // no animation
