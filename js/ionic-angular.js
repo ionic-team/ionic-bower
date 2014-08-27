@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-406
+ * Ionic, v1.0.0-beta.11-nightly-407
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -120,13 +120,13 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
 IonicModule
 .factory('$ionicActionSheet', [
   '$rootScope',
-  '$document',
   '$compile',
   '$animate',
   '$timeout',
   '$ionicTemplateLoader',
   '$ionicPlatform',
-function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicPlatform) {
+  '$ionicBody',
+function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicPlatform, $ionicBody) {
 
   return {
     show: actionSheet
@@ -188,7 +188,7 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
 
       scope.removed = true;
       sheetEl.removeClass('action-sheet-up');
-      $document[0].body.classList.remove('action-sheet-open');
+      $ionicBody.removeClass('action-sheet-open');
       scope.$deregisterBackButton();
       stateChangeListenDone();
 
@@ -204,8 +204,8 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
     scope.showSheet = function(done) {
       if (scope.removed) return;
 
-      $document[0].body.appendChild(element[0]);
-      $document[0].body.classList.add('action-sheet-open');
+      $ionicBody.append(element)
+                .addClass('action-sheet-open');
 
       $animate.addClass(element, 'active', function() {
         if (scope.removed) return;
@@ -454,6 +454,87 @@ IonicModule
           break;
       }
     });
+  };
+}]);
+
+/**
+ * @ngdoc service
+ * @name $ionicBody
+ * @module ionic
+ * @description An angular utility service to easily and efficiently
+ * add and remove CSS classes from the document's body element.
+ */
+IonicModule
+.factory('$ionicBody', ['$document', function($document) {
+  return {
+    /**
+     * @ngdoc method
+     * @name $ionicBody#add
+     * @description Add a class to the document's body element.
+     * @param {string} class Each argument will be added to the body element.
+     * @returns {$ionicBody} The $ionicBody service so methods can be chained.
+     */
+    addClass: function() {
+      for(var x=0; x<arguments.length; x++) {
+        $document[0].body.classList.add(arguments[x]);
+      }
+      return this;
+    },
+    /**
+     * @ngdoc method
+     * @name $ionicBody#removeClass
+     * @description Remove a class from the document's body element.
+     * @param {string} class Each argument will be removed from the body element.
+     * @returns {$ionicBody} The $ionicBody service so methods can be chained.
+     */
+    removeClass: function() {
+      for(var x=0; x<arguments.length; x++) {
+        $document[0].body.classList.remove(arguments[x]);
+      }
+      return this;
+    },
+    /**
+     * @ngdoc method
+     * @name $ionicBody#enableClass
+     * @description Similar to the `add` method, except the first parameter accepts a boolean
+     * value determining if the class should be added or removed. Rather than writing user code,
+     * such as "if true then add the class, else then remove the class", this method can be
+     * given a true or false value which reduces redundant code.
+     * @param {boolean} shouldEnableClass A true/false value if the class should be added or removed.
+     * @param {string} class Each remaining argument would be added or removed depending on
+     * the first argument.
+     * @returns {$ionicBody} The $ionicBody service so methods can be chained.
+     */
+    enableClass: function(shouldEnableClass) {
+      var args = Array.prototype.slice.call(arguments).slice(1);
+      if(shouldEnableClass) {
+        this.addClass.apply(this, args);
+      } else {
+        this.removeClass.apply(this, args);
+      }
+      return this;
+    },
+    /**
+     * @ngdoc method
+     * @name $ionicBody#append
+     * @description Append a child to the document's body.
+     * @param {element} element The element to be appended to the body. The passed in element
+     * can be either a jqLite element, or a DOM element.
+     * @returns {$ionicBody} The $ionicBody service so methods can be chained.
+     */
+    append: function(ele) {
+      $document[0].body.appendChild( ele.length ? ele[0] : ele );
+      return this;
+    },
+    /**
+     * @ngdoc method
+     * @name $ionicBody#get
+     * @description Get the document's body element.
+     * @returns {element} Returns the document's body element.
+     */
+    get: function() {
+      return $document[0].body;
+    }
   };
 }]);
 
@@ -1258,7 +1339,7 @@ IonicModule
 })
 .factory('$ionicLoading', [
   '$ionicLoadingConfig',
-  '$document',
+  '$ionicBody',
   '$ionicTemplateLoader',
   '$ionicBackdrop',
   '$timeout',
@@ -1266,7 +1347,7 @@ IonicModule
   '$log',
   '$compile',
   '$ionicPlatform',
-function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
+function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
 
   var loaderInstance;
   //default values
@@ -1304,7 +1385,7 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
     if (!loaderInstance) {
       loaderInstance = $ionicTemplateLoader.compile({
         template: LOADING_TPL,
-        appendTo: $document[0].body
+        appendTo: $ionicBody.get()
       })
       .then(function(loader) {
         var self = loader;
@@ -1344,8 +1425,10 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
             if (self.isShown) {
               self.element.addClass('visible');
               ionic.requestAnimationFrame(function() {
-                self.isShown && self.element.addClass('active');
-                self.isShown && $document[0].body.classList.add('loading-active');
+                if(self.isShown) {
+                  self.element.addClass('active');
+                  $ionicBody.addClass('loading-active');
+                }
               });
             }
           });
@@ -1359,7 +1442,7 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
               $ionicBackdrop.getElement().removeClass('backdrop-loading');
             }
             self.element.removeClass('active');
-            $document[0].body.classList.remove('loading-active');
+            $ionicBody.removeClass('loading-active');
             setTimeout(function() {
               !self.isShown && self.element.removeClass('visible');
             }, 200);
@@ -1477,14 +1560,14 @@ function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $
 IonicModule
 .factory('$ionicModal', [
   '$rootScope',
-  '$document',
+  '$ionicBody',
   '$compile',
   '$timeout',
   '$ionicPlatform',
   '$ionicTemplateLoader',
   '$q',
   '$log',
-function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q, $log) {
+function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q, $log) {
 
   /**
    * @ngdoc controller
@@ -1540,12 +1623,12 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
 
       self.el.classList.remove('hide');
       $timeout(function(){
-        $document[0].body.classList.add(self.viewType + '-open');
+        $ionicBody.addClass(self.viewType + '-open');
       }, 400);
 
       if(!self.el.parentElement) {
         modalEl.addClass(self.animation);
-        $document[0].body.appendChild(self.el);
+        $ionicBody.append(self.el);
       }
 
       if(target && self.positionView) {
@@ -1608,7 +1691,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       ionic.views.Modal.prototype.hide.call(self);
 
       return $timeout(function(){
-        $document[0].body.classList.remove(self.viewType + '-open');
+        $ionicBody.removeClass(self.viewType + '-open');
         self.el.classList.add('hide');
       }, self.hideDelay || 500);
     },
@@ -2344,10 +2427,10 @@ IonicModule
   '$q',
   '$timeout',
   '$rootScope',
-  '$document',
+  '$ionicBody',
   '$compile',
   '$ionicPlatform',
-function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $document, $compile, $ionicPlatform) {
+function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicBody, $compile, $ionicPlatform) {
   //TODO allow this to be configured
   var config = {
     stackPushDelay: 75
@@ -2512,7 +2595,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
     var popupPromise = $ionicTemplateLoader.compile({
       template: POPUP_TPL,
       scope: options.scope && options.scope.$new(),
-      appendTo: $document[0].body
+      appendTo: $ionicBody.get()
     });
     var contentPromise = options.templateUrl ?
       $ionicTemplateLoader.load(options.templateUrl) :
@@ -2604,7 +2687,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
     .then(function(popup) {
       if (!previousPopup) {
         //Add popup-open & backdrop if this is first popup
-        document.body.classList.add('popup-open');
+        $ionicBody.addClass('popup-open');
         $ionicBackdrop.retain();
         //only show the backdrop on the first popup
         $ionicPopup._backButtonActionDone = $ionicPlatform.registerBackButtonAction(
@@ -2632,7 +2715,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
           previousPopup.show();
         } else {
           //Remove popup-open & backdrop if this is last popup
-          document.body.classList.remove('popup-open');
+          $ionicBody.removeClass('popup-open');
           $ionicBackdrop.release();
           ($ionicPopup._backButtonActionDone || angular.noop)();
         }
@@ -4600,8 +4683,8 @@ IonicModule
   '$attrs',
   '$ionicSideMenuDelegate',
   '$ionicPlatform',
-  '$document',
-function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $document) {
+  '$ionicBody',
+function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody) {
   var self = this;
   var rightShowing, leftShowing, isDragging;
   var startX, lastX, offsetX, isAsideExposed;
@@ -4728,11 +4811,9 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $document) {
       self.openAmount(self.right.width * p);
     }
 
-    if(percentage !== 0) {
-      $document[0].body.classList.add('menu-open');
-    } else {
-      $document[0].body.classList.remove('menu-open');
-    }
+    // add the CSS class "menu-open" if the percentage does not
+    // equal 0, otherwise remove the class from the body element
+    $ionicBody.enableClass( (percentage !== 0), 'menu-open');
   };
 
   /**
@@ -4865,11 +4946,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $document) {
   };
 
   self.activeAsideResizing = function(isResizing) {
-    if(isResizing) {
-      $document[0].body.classList.add('aside-resizing');
-    } else {
-      $document[0].body.classList.remove('aside-resizing');
-    }
+    $ionicBody.enableClass(isResizing, 'aside-resizing');
   };
 
   // End a drag with the given event
@@ -8270,10 +8347,7 @@ IonicModule
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
-.directive('ionSideMenus', ['$document', function($document) {
-
-  var ASIDE_OPEN_CSS = 'aside-open';
-
+.directive('ionSideMenus', ['$ionicBody', function($ionicBody) {
   return {
     restrict: 'ECA',
     controller: '$ionicSideMenus',
@@ -8282,21 +8356,15 @@ IonicModule
 
       return { pre: prelink };
       function prelink($scope) {
-        var bodyClassList = $document[0].body.classList;
 
         $scope.$on('$ionicExposeAside', function(evt, isAsideExposed){
           if(!$scope.$exposeAside) $scope.$exposeAside = {};
           $scope.$exposeAside.active = isAsideExposed;
-          if(isAsideExposed) {
-            bodyClassList.add(ASIDE_OPEN_CSS);
-          } else {
-            bodyClassList.remove(ASIDE_OPEN_CSS);
-          }
+          $ionicBody.enableClass(isAsideExposed, 'aside-open');
         });
 
         $scope.$on('$destroy', function(){
-          bodyClassList.remove('menu-open');
-          bodyClassList.remove(ASIDE_OPEN_CSS);
+          $ionicBody.removeClass('menu-open', 'aside-open');
         });
 
       }
