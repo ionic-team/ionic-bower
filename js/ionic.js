@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-412
+ * Ionic, v1.0.0-beta.11-nightly-413
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-412'
+  version: '1.0.0-beta.11-nightly-413'
 };
 
 (function(window, document, ionic) {
@@ -2504,6 +2504,10 @@ ionic.tap = {
           clonedInput.className = focusInput.className;
           clonedInput.classList.add('cloned-text-input');
           clonedInput.readOnly = true;
+          if (focusInput.isContentEditable) {
+            clonedInput.contentEditable = focusInput.contentEditable;
+            clonedInput.innerHTML = focusInput.innerHTML;
+          }
           focusInput.parentElement.insertBefore(clonedInput, focusInput);
           focusInput.style.top = focusInput.offsetTop;
           focusInput.classList.add('previous-input-focus');
