@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-415
+ * Ionic, v1.0.0-beta.11-nightly-416
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6290,6 +6290,11 @@ function headerFooterBarDirective(isHeader) {
  * @usage
  * ```html
  * <ion-content ng-controller="MyController">
+ *   <ion-list>
+ *   ....
+ *   ....
+ *   </ion-list>
+ *
  *   <ion-infinite-scroll
  *     on-infinite="loadMore()"
  *     distance="1%">
