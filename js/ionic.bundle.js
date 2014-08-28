@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-416
+ * Ionic, v1.0.0-beta.11-nightly-417
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-416'
+  version: '1.0.0-beta.11-nightly-417'
 };
 
 (function(window, document, ionic) {
@@ -34728,7 +34728,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-416
+ * Ionic, v1.0.0-beta.11-nightly-417
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41159,6 +41159,9 @@ var ITEM_TPL_CONTENT =
 * ```html
 * <ion-list>
 *   <ion-item>Hello!</ion-item>
+*   <ion-item href="#/detail">
+*     Link to detail page
+*   <ion-item>
 * </ion-list>
 * ```
 */
@@ -41203,7 +41206,6 @@ function($animate, $compile) {
     }
   };
 }]);
-
 
 var ITEM_TPL_DELETE_BUTTON =
   '<div class="item-left-edit item-delete enable-pointer-events">' +
