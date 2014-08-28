@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-414
+ * Ionic, v1.0.0-beta.11-nightly-415
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3535,9 +3535,11 @@ function($stateProvider, $ionicConfigProvider) {
 }])
 
 // process the templateUrls collected by the $stateProvider, adding them to the cache
-.run(function($ionicTemplateCache) {
-    $ionicTemplateCache();
-});
+.run([
+'$ionicTemplateCache',
+function($ionicTemplateCache) {
+  $ionicTemplateCache();
+}]);
 
 })();
 
