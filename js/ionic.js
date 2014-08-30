@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-419
+ * Ionic, v1.0.0-beta.11-nightly-420
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-419'
+  version: '1.0.0-beta.11-nightly-420'
 };
 
 (function(window, document, ionic) {
@@ -414,8 +414,8 @@ window.ionic = {
      * happens.
      * @param {DOMElement} element The angular element to listen for the event on.
      */
-    onGesture: function(type, callback, element) {
-      var gesture = new ionic.Gesture(element);
+    onGesture: function(type, callback, element, options) {
+      var gesture = new ionic.Gesture(element, options);
       gesture.on(type, callback);
       return gesture;
     },
@@ -2789,7 +2789,7 @@ function tapHandleFocus(ele) {
     // already is the active element and has focus
     triggerFocusIn = true;
 
-  } else if( (/^(input|textarea)$/i).test(ele.tagName) ) {
+  } else if( (/^(input|textarea)$/i).test(ele.tagName) || ele.isContentEditable ) {
     triggerFocusIn = true;
     ele.focus && ele.focus();
     ele.value = ele.value;
@@ -2811,7 +2811,7 @@ function tapHandleFocus(ele) {
 
 function tapFocusOutActive() {
   var ele = tapActiveElement();
-  if(ele && (/^(input|textarea|select)$/i).test(ele.tagName) ) {
+  if(ele && ((/^(input|textarea|select)$/i).test(ele.tagName) || ele.isContentEditable) ) {
     void 0;
     ele.blur();
   }

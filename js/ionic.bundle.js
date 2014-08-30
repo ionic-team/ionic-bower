@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-419
+ * Ionic, v1.0.0-beta.11-nightly-420
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-419'
+  version: '1.0.0-beta.11-nightly-420'
 };
 
 (function(window, document, ionic) {
@@ -421,8 +421,8 @@ window.ionic = {
      * happens.
      * @param {DOMElement} element The angular element to listen for the event on.
      */
-    onGesture: function(type, callback, element) {
-      var gesture = new ionic.Gesture(element);
+    onGesture: function(type, callback, element, options) {
+      var gesture = new ionic.Gesture(element, options);
       gesture.on(type, callback);
       return gesture;
     },
@@ -2796,7 +2796,7 @@ function tapHandleFocus(ele) {
     // already is the active element and has focus
     triggerFocusIn = true;
 
-  } else if( (/^(input|textarea)$/i).test(ele.tagName) ) {
+  } else if( (/^(input|textarea)$/i).test(ele.tagName) || ele.isContentEditable ) {
     triggerFocusIn = true;
     ele.focus && ele.focus();
     ele.value = ele.value;
@@ -2818,7 +2818,7 @@ function tapHandleFocus(ele) {
 
 function tapFocusOutActive() {
   var ele = tapActiveElement();
-  if(ele && (/^(input|textarea|select)$/i).test(ele.tagName) ) {
+  if(ele && ((/^(input|textarea|select)$/i).test(ele.tagName) || ele.isContentEditable) ) {
     void 0;
     ele.blur();
   }
@@ -34728,7 +34728,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-419
+ * Ionic, v1.0.0-beta.11-nightly-420
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35960,8 +35960,8 @@ IonicModule
      * @param {element} $element The angular element to listen for the event on.
      * @returns {ionic.Gesture} The gesture object (use this to remove the gesture later on).
      */
-    on: function(eventType, cb, $element) {
-      return window.ionic.onGesture(eventType, cb, $element[0]);
+    on: function(eventType, cb, $element, options) {
+      return window.ionic.onGesture(eventType, cb, $element[0], options);
     },
     /**
      * @ngdoc method
@@ -42915,13 +42915,13 @@ function($timeout, $ionicGesture, $window) {
         }
 
         // Listen for taps on the content to close the menu
-        function onContentTap(e) {
+        function onContentTap(gestureEvt) {
           if(sideMenuCtrl.getOpenAmount() !== 0) {
             sideMenuCtrl.close();
-            e.gesture.srcEvent.preventDefault();
+            gestureEvt.gesture.srcEvent.preventDefault();
             startCoord = null;
             primaryScrollAxis = null;
-          } else if(gestureEvt && gestureEvt.gesture && !startCoord) {
+          } else if(!startCoord) {
             startCoord = ionic.tap.pointerCoord(gestureEvt.gesture.srcEvent);
           }
         }
@@ -43023,12 +43023,13 @@ function($timeout, $ionicGesture, $window) {
         sideMenuCtrl.setContent(content);
 
         // add gesture handlers
-        var contentTapGesture = $ionicGesture.on('tap', onContentTap, $element);
-        var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element);
-        var dragLeftGesture = $ionicGesture.on('dragleft', onDragX, $element);
-        var dragUpGesture = $ionicGesture.on('dragup', onDragY, $element);
-        var dragDownGesture = $ionicGesture.on('dragdown', onDragY, $element);
-        var releaseGesture = $ionicGesture.on('release', onDragRelease, $element);
+        var gestureOpts = { stop_browser_behavior: false };
+        var contentTapGesture = $ionicGesture.on('tap', onContentTap, $element, gestureOpts);
+        var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element, gestureOpts);
+        var dragLeftGesture = $ionicGesture.on('dragleft', onDragX, $element, gestureOpts);
+        var dragUpGesture = $ionicGesture.on('dragup', onDragY, $element, gestureOpts);
+        var dragDownGesture = $ionicGesture.on('dragdown', onDragY, $element, gestureOpts);
+        var releaseGesture = $ionicGesture.on('release', onDragRelease, $element, gestureOpts);
 
         // Cleanup
         $scope.$on('$destroy', function() {
