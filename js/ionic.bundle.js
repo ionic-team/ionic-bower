@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-422
+ * Ionic, v1.0.0-beta.11-nightly-423
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -26,7 +26,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-422'
+  version: '1.0.0-beta.11-nightly-423'
 };
 
 (function(window, document, ionic) {
@@ -34727,7 +34727,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-422
+ * Ionic, v1.0.0-beta.11-nightly-423
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42233,7 +42233,7 @@ IonicModule.constant('$ionicNavViewConfig', {
  * the {@link ionic.directive:ionNavBar} directive that updates as we navigate through the
  * navigation stack.
  *
- * You can use any [animation class](/docs/components#animation) on the navView's `animation` attribute
+ * You can use any [animation class](/docs/components#animations) on the navView's `animation` attribute
  * to have its pages animate.
  *
  * Recommended for page transitions: 'slide-left-right', 'slide-left-right-ios7', 'slide-in-up'.
