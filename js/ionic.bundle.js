@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-428
+ * Ionic, v1.0.0-beta.11-nightly-429
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-428';
+window.ionic.version = '1.0.0-beta.11-nightly-429';
 
 (function(window, document, ionic) {
 
@@ -34723,7 +34723,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-428
+ * Ionic, v1.0.0-beta.11-nightly-429
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39081,6 +39081,10 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
 
   $scope.$on('$destroy', deregisterInstance);
 
+  $scope.$on('$viewHistory.historyChange', function(e, data) {
+    backIsShown = !!data.showBack;
+  });
+
   var self = this;
 
   this.leftButtonsElement = jqLite(
@@ -39125,6 +39129,10 @@ function($scope, $element, $attrs, $ionicViewService, $animate, $compile, $ionic
 
   this.changeTitle = function(title, direction) {
     if ($scope.title === title) {
+      // if we're not animating the title, but the back button becomes invisible
+      if(typeof backIsShown != 'undefined' && !backIsShown && $scope.backButtonShown){
+        jqLite($element[0].querySelector('.back-button')).addClass('ng-hide');
+      }
       return false;
     }
     this.setTitle(title);
