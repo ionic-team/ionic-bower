@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-425
+ * Ionic, v1.0.0-beta.11-nightly-426
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -19,7 +19,7 @@
 window.ionic = {
   controllers: {},
   views: {},
-  version: '1.0.0-beta.11-nightly-425'
+  version: '1.0.0-beta.11-nightly-426'
 };
 
 (function(window, document, ionic) {
@@ -1950,9 +1950,7 @@ window.ionic = {
      * @returns {object} The device object.
      */
     device: function() {
-      if(window.device) return window.device;
-      if(this.isWebView()) void 0;
-      return {};
+      return window.device || {};
     },
 
     _checkPlatforms: function(platforms) {
