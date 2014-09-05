@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-427
+ * Ionic, v1.0.0-beta.11-nightly-428
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6080,6 +6080,8 @@ button.button-block, button.button-full, .button-full > button.button, input.but
 
 a.button {
   text-decoration: none; }
+  a.button .icon:before, a.button.icon:before, a.button.icon-left:before, a.button.icon-right:before {
+    margin-top: 2px; }
 
 .button.disabled, .button[disabled] {
   opacity: 0.4;
