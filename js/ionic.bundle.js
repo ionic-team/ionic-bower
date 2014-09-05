@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-426
+ * Ionic, v1.0.0-beta.11-nightly-427
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -21,13 +21,11 @@
 
 (function() {
 
-// Create namespaces
-//
-window.ionic = {
-  controllers: {},
-  views: {},
-  version: '1.0.0-beta.11-nightly-426'
-};
+// Create global ionic obj and its namespaces
+// build processes may have already created an ionic obj
+window.ionic = window.ionic || {};
+window.ionic.views = {};
+window.ionic.version = '1.0.0-beta.11-nightly-427';
 
 (function(window, document, ionic) {
 
@@ -34725,7 +34723,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-426
+ * Ionic, v1.0.0-beta.11-nightly-427
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
