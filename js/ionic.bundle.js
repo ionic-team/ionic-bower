@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-430
+ * Ionic, v1.0.0-beta.11-nightly-431
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-430';
+window.ionic.version = '1.0.0-beta.11-nightly-431';
 
 (function(window, document, ionic) {
 
@@ -1902,6 +1902,8 @@ window.ionic.version = '1.0.0-beta.11-nightly-430';
      * When the app is within a WebView (Cordova), it'll fire
      * the callback once the device is ready. If the app is within
      * a web browser, it'll fire the callback after `window.load`.
+     * Please remember that Cordova features (Camera, FileSystem, etc) still
+     * will not work in a web browser.
      * @param {function} callback The function to call.
      */
     ready: function(cb) {
@@ -34739,7 +34741,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-430
+ * Ionic, v1.0.0-beta.11-nightly-431
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
