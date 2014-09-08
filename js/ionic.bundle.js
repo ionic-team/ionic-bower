@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-429
+ * Ionic, v1.0.0-beta.11-nightly-430
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-429';
+window.ionic.version = '1.0.0-beta.11-nightly-430';
 
 (function(window, document, ionic) {
 
@@ -4278,9 +4278,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // Event Handler
     var container = this.__container;
 
-    //Broadcasted when keyboard is shown on some platforms.
-    //See js/utils/keyboard.js
-    container.addEventListener('scrollChildIntoView', function(e) {
+    self.scrollChildIntoView = function(e) {
 
       //distance from bottom of scrollview to top of viewport
       var scrollBottomOffsetToTop;
@@ -4342,16 +4340,21 @@ ionic.views.Scroll = ionic.views.View.inherit({
       //Only the first scrollView parent of the element that broadcasted this event
       //(the active element that needs to be shown) should receive this event
       e.stopPropagation();
-    });
+    };
 
-    container.addEventListener('resetScrollView', function(e) {
+    self.resetScrollView = function(e) {
       //return scrollview to original height once keyboard has hidden
       self.isScrolledIntoView = false;
       container.style.height = "";
       container.style.overflow = "";
       self.resize();
       ionic.scroll.isScrolling = false;
-    });
+    };
+
+    //Broadcasted when keyboard is shown on some platforms.
+    //See js/utils/keyboard.js
+    container.addEventListener('scrollChildIntoView', self.scrollChildIntoView);
+    container.addEventListener('resetScrollView', self.resetScrollView);
 
     function getEventTouches(e) {
       return e.touches && e.touches.length ? e.touches : [{
@@ -4522,6 +4525,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
   __cleanup: function() {
     var container = this.__container;
+    var self = this;
 
     container.removeEventListener('touchstart', self.touchStart);
     document.removeEventListener('touchmove', self.touchMove);
@@ -4543,13 +4547,25 @@ ionic.views.Scroll = ionic.views.View.inherit({
     document.removeEventListener("mouseup", self.mouseUp);
     document.removeEventListener('mousewheel', self.mouseWheel);
 
+    container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
+    container.removeEventListener('resetScrollView', self.resetScrollView);
+
+    ionic.tap.removeClonedInputs(container, self);
+
     delete this.__container;
     delete this.__content;
     delete this.__indicatorX;
     delete this.__indicatorY;
+    delete this.options.el;
+
+    this.__callback = this.scrollChildIntoView = this.resetScrollView = angular.noop;
+
+    this.mouseMove = this.mouseDown = this.mouseUp = this.mouseWheel =
+      this.touchStart = this.touchMove = this.touchEnd = this.touchCancel = angular.noop;
 
     this.resize = this.scrollTo = this.zoomTo = 
       this.__scrollingComplete = angular.noop;
+    container = null;
   },
 
   /** Create a scroll bar div with the given direction **/
@@ -34723,7 +34739,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-429
+ * Ionic, v1.0.0-beta.11-nightly-430
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39263,28 +39279,40 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
 
   // set by rootScope listener if needed
   var backListenDone = angular.noop;
+  var viewContentLoaded = angular.noop;
 
-  $scope.$on('$destroy', function() {
-    deregisterInstance();
-    scrollView.__cleanup();
-    ionic.off('resize', resize, $window);
-    $window.removeEventListener('resize', resize);
-    backListenDone();
-    if (self._rememberScrollId) {
-      $$scrollValueCache[self._rememberScrollId] = scrollView.getValues();
-    }
-  });
-
-  $element.on('scroll', function(e) {
+  var scrollFunc = function(e) {
     var detail = (e.originalEvent || e).detail || {};
     $scope.$onScroll && $scope.$onScroll({
       event: e,
       scrollTop: detail.scrollTop || 0,
       scrollLeft: detail.scrollLeft || 0
     });
+  };
+
+  $element.on('scroll', scrollFunc );
+
+  $scope.$on('$destroy', function() {
+    deregisterInstance();
+    scrollView.__cleanup();
+    ionic.off('resize', resize, $window);
+    $window.removeEventListener('resize', resize);
+    viewContentLoaded();
+    backListenDone();
+    if (self._rememberScrollId) {
+      $$scrollValueCache[self._rememberScrollId] = scrollView.getValues();
+    }
+    scrollViewOptions = null;
+    self._scrollViewOptions = null;
+    self.element = null;
+    $element.off('scroll', scrollFunc);
+    $element = null;
+    self.$element = null;
+    self.scrollView = null;
+    scrollView = null;
   });
 
-  $scope.$on('$viewContentLoaded', function(e, historyData) {
+  viewContentLoaded = $scope.$on('$viewContentLoaded', function(e, historyData) {
     //only the top-most scroll area under a view should remember that view's
     //scroll position
     if (e.defaultPrevented) { return; }
@@ -40479,6 +40507,10 @@ function($timeout, $controller, $ionicBind) {
 
           $scope.$on('$destroy', function() {
             scrollViewOptions.scrollingComplete = angular.noop;
+            delete scrollViewOptions.el;
+            innerElement = null;
+            $element = null;
+            attr.$$element = null;
           });
         }
 
