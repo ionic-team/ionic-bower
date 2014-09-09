@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-432
+ * Ionic, v1.0.0-beta.11-nightly-433
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-432';
+window.ionic.version = '1.0.0-beta.11-nightly-433';
 
 (function(window, document, ionic) {
 
@@ -2175,6 +2175,11 @@ window.ionic.version = '1.0.0-beta.11-nightly-432';
       ionic.DomUtil.ready(function(){
         // run this only when or if the DOM is ready
         ionic.requestAnimationFrame(function(){
+          // fixing pane height before we adjust this
+          panes = document.getElementsByClassName('pane');
+          for(var i = 0;i<panes.length;i++){
+            panes[i].style.height = panes[i].offsetHeight+"px";
+          }
           if(ionic.Platform.isFullScreen) {
             document.body.classList.add('fullscreen');
           } else {
