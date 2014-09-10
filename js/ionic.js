@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-438
+ * Ionic, v1.0.0-beta.11-nightly-440
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-438';
+window.ionic.version = '1.0.0-beta.11-nightly-440';
 
 (function(window, document, ionic) {
 
@@ -3267,8 +3267,8 @@ function keyboardInit() {
     //deprecated
     window.addEventListener('native.showkeyboard', keyboardNativeShow);
     window.addEventListener('native.hidekeyboard', keyboardFocusOut);
-  }
-  else {
+
+  } else {
     document.body.addEventListener('focusout', keyboardFocusOut);
   }
 
@@ -3279,8 +3279,7 @@ function keyboardInit() {
 
   if (window.navigator.msPointerEnabled) {
     document.removeEventListener("MSPointerDown", keyboardInit);
-  }
-  else {
+  } else {
     document.removeEventListener('touchstart', keyboardInit);
   }
 }
@@ -3365,8 +3364,7 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
   // any touchmove events while the keyboard is open using e.preventDefault()
   if (window.navigator.msPointerEnabled) {
     document.addEventListener("MSPointerMove", keyboardPreventDefault, false);
-  }
-  else {
+  } else {
     document.addEventListener('touchmove', keyboardPreventDefault, false);
   }
 
@@ -3394,8 +3392,7 @@ function keyboardHide() {
   // the keyboard is gone now, remove the touchmove that disables native scroll
   if (window.navigator.msPointerEnabled) {
     document.removeEventListener("MSPointerMove", keyboardPreventDefault);
-  }
-  else {
+  } else {
     document.removeEventListener('touchmove', keyboardPreventDefault);
   }
   document.removeEventListener('keydown', keyboardOnKeyDown);
@@ -3436,8 +3433,7 @@ function keyboardOrientationChange() {
       if (updatedViewportHeight !== keyboardViewportHeight){
         if (updatedViewportHeight < keyboardViewportHeight){
           ionic.keyboard.landscape = true;
-        }
-        else {
+        } else {
           ionic.keyboard.landscape = false;
         }
         keyboardViewportHeight = updatedViewportHeight;
@@ -3446,8 +3442,7 @@ function keyboardOrientationChange() {
       count++;
 
     }, 50);
-  }
-  else {
+  } else {
     keyboardViewportHeight = updatedViewportHeight;
   }
 }
@@ -3518,8 +3513,7 @@ ionic.Platform.ready(function() {
   // if a touchstart event happens
   if (window.navigator.msPointerEnabled) {
     document.addEventListener("MSPointerDown", keyboardInit, false);
-  }
-  else {
+  } else {
     document.addEventListener('touchstart', keyboardInit, false);
   }
 });
