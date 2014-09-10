@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.11-nightly-434
+ * Ionic, v1.0.0-beta.11-nightly-435
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.11-nightly-434';
+window.ionic.version = '1.0.0-beta.11-nightly-435';
 
 (function(window, document, ionic) {
 
@@ -4029,7 +4029,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
         return Math.max(self.__content.scrollWidth, self.__content.offsetWidth);
       },
       getContentHeight: function() {
-        return Math.max(self.__content.scrollHeight, self.__content.offsetHeight + self.__content.offsetTop);
+        return Math.max(self.__content.scrollHeight, self.__content.offsetHeight + (self.__content.offsetTop * 2));
       }
     };
 
@@ -4563,7 +4563,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     this.mouseMove = this.mouseDown = this.mouseUp = this.mouseWheel =
       this.touchStart = this.touchMove = this.touchEnd = this.touchCancel = angular.noop;
 
-    this.resize = this.scrollTo = this.zoomTo = 
+    this.resize = this.scrollTo = this.zoomTo =
       this.__scrollingComplete = angular.noop;
     container = null;
   },
