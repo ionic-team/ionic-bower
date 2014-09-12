@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-446
+ * Ionic, v1.0.0-beta.12-nightly-448
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4809,6 +4809,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody) {
    * Close all menus.
    */
   self.close = function() {
+    if(isAsideExposed) return;
     self.openPercentage(0);
   };
 
@@ -6992,7 +6993,7 @@ function($animate, $timeout) {
           function setButtonShown(el, shown) {
             shown() && el.addClass('visible') || el.removeClass('active');
             ionic.requestAnimationFrame(function() {
-              shown() && el.addClass('active') || el.removeClass('invisible');
+              shown() && el.addClass('active') || el.removeClass('visible');
             });
           }
         }
