@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-457
+ * Ionic, v1.0.0-beta.12-nightly-458
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.12-nightly-457';
+window.ionic.version = '1.0.0-beta.12-nightly-458';
 
 (function(window, document, ionic) {
 
@@ -34783,7 +34783,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-457
+ * Ionic, v1.0.0-beta.12-nightly-458
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39772,6 +39772,8 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody) {
   };
 
   self.exposeAside = function(shouldExposeAside) {
+    if(!self.left || !self.left.isEnabled) return;
+
     self.close();
     isAsideExposed = shouldExposeAside;
 
