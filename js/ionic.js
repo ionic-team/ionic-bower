@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-460
+ * Ionic, v1.0.0-beta.12-nightly-461
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.12-nightly-460';
+window.ionic.version = '1.0.0-beta.12-nightly-461';
 
 (function(window, document, ionic) {
 
@@ -3264,7 +3264,6 @@ ionic.keyboard = {
     clearTimeout(keyboardFocusOutTimer);
     clearTimeout(keyboardPollHeightTimer);
 
-    void 0;
     ionic.keyboard.isOpen = false;
 
     ionic.trigger('resetScrollView', {
