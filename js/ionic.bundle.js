@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-463
+ * Ionic, v1.0.0-beta.12-nightly-464
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.12-nightly-463';
+window.ionic.version = '1.0.0-beta.12-nightly-464';
 
 (function(window, document, ionic) {
 
@@ -34782,7 +34782,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-463
+ * Ionic, v1.0.0-beta.12-nightly-464
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41720,7 +41720,7 @@ function keyboardAttachGetClientHeight(element) {
 *
 * @param {string=} delegate-handle The handle used to identify this list with
 * {@link ionic.service:$ionicListDelegate}.
-* @param type {string=} The type of list to use (for example, list-inset for an inset list)
+* @param type {string=} The type of list to use (list-inset or card)
 * @param show-delete {boolean=} Whether the delete buttons for the items in the list are
 * currently shown or hidden.
 * @param show-reorder {boolean=} Whether the reorder buttons for the items in the list are
