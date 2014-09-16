@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-467
+ * Ionic, v1.0.0-beta.12-nightly-468
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2307,25 +2307,25 @@ body.grade-b, body.grade-c {
     transform: translate3d(0, 0, 0) rotate(0); }
 
   100% {
-    transform: translate3d(0, 0, 0) rotate(-180deg); } }
+    transform: translate3d(0, 0, 0) rotate(180deg); } }
 
 @-webkit-keyframes refresh-spin {
   0% {
     -webkit-transform: translate3d(0, 0, 0) rotate(0); }
 
   100% {
-    -webkit-transform: translate3d(0, 0, 0) rotate(-180deg); } }
+    -webkit-transform: translate3d(0, 0, 0) rotate(180deg); } }
 
 @keyframes refresh-spin-back {
   0% {
-    transform: translate3d(0, 0, 0) rotate(-180deg); }
+    transform: translate3d(0, 0, 0) rotate(180deg); }
 
   100% {
     transform: translate3d(0, 0, 0) rotate(0); } }
 
 @-webkit-keyframes refresh-spin-back {
   0% {
-    -webkit-transform: translate3d(0, 0, 0) rotate(-180deg); }
+    -webkit-transform: translate3d(0, 0, 0) rotate(180deg); }
 
   100% {
     -webkit-transform: translate3d(0, 0, 0) rotate(0); } }
@@ -2378,16 +2378,28 @@ body.grade-b, body.grade-c {
     -webkit-animation-duration: 1.5s;
     -moz-animation-duration: 1.5s;
     animation-duration: 1.5s; }
-  .scroll-refresher.active .icon-pulling {
+  .scroll-refresher.active .icon-pulling:not(.pulling-rotation-disabled) {
     -webkit-animation-name: refresh-spin;
     -moz-animation-name: refresh-spin;
     animation-name: refresh-spin;
     -webkit-transform: translate3d(0, 0, 0) rotate(-180deg);
     transform: translate3d(0, 0, 0) rotate(-180deg); }
-  .scroll-refresher.active.refreshing .icon-pulling, .scroll-refresher.active.refreshing .text-pulling {
-    display: none; }
-  .scroll-refresher.active.refreshing .icon-refreshing, .scroll-refresher.active.refreshing .text-refreshing {
-    display: block; }
+  .scroll-refresher.active.refreshing {
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    transition: transform 0.2s;
+    -webkit-transition: -webkit-transform 0.2s;
+    -moz-transition: -webkit-transform 0.2s;
+    transition: -webkit-transform 0.2s;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1); }
+    .scroll-refresher.active.refreshing .icon-pulling, .scroll-refresher.active.refreshing .text-pulling {
+      display: none; }
+    .scroll-refresher.active.refreshing .icon-refreshing, .scroll-refresher.active.refreshing .text-refreshing {
+      display: block; }
+    .scroll-refresher.active.refreshing.refreshing-tail {
+      -webkit-transform: scale(0, 0);
+      transform: scale(0, 0); }
 
 ion-infinite-scroll {
   height: 60px;
