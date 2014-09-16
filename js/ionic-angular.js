@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-461
+ * Ionic, v1.0.0-beta.12-nightly-462
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8751,7 +8751,7 @@ function($rootScope, $animate, $ionicBind, $compile) {
 
         tabsCtrl.add($scope);
         $scope.$on('$destroy', function() {
-          if(!$scope.$tabsDestory) {
+          if(!$scope.$tabsDestroy) {
             // if the containing ionTabs directive is being destroyed
             // then don't bother going through the controllers remove
             // method, since remove will reset the active tab as each tab
@@ -8944,7 +8944,7 @@ function($ionicViewService, $ionicTabsDelegate, $ionicTabsConfig) {
           // used so that while destorying an individual tab, each one
           // doesn't select the next tab as the active one, which causes unnecessary
           // loading of tab views when each will eventually all go away anyway
-          $scope.$tabsDestory = true;
+          $scope.$tabsDestroy = true;
           deregisterInstance();
         });
 
