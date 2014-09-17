@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-472
+ * Ionic, v1.0.0-beta.12-nightly-473
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5928,7 +5928,7 @@ GESTURE_DIRECTIVES.forEach(function(name) {
  * @restrict A
  *
  * @description
- * Touch stays at the same location for 500ms.
+ * Touch stays at the same location for 500ms. Similar to long touch events available for AngularJS and jQuery.
  *
  * @usage
  * ```html
