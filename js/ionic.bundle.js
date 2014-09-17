@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-470
+ * Ionic, v1.0.0-beta.12-nightly-471
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.12-nightly-470';
+window.ionic.version = '1.0.0-beta.12-nightly-471';
 
 (function(window, document, ionic) {
 
@@ -4396,11 +4396,13 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     self.resetScrollView = function(e) {
       //return scrollview to original height once keyboard has hidden
-      self.isScrolledIntoView = false;
-      container.style.height = "";
-      container.style.overflow = "";
-      self.resize();
-      ionic.scroll.isScrolling = false;
+      if(self.isScrolledIntoView) {
+        self.isScrolledIntoView = false;
+        container.style.height = "";
+        container.style.overflow = "";
+        self.resize();
+        ionic.scroll.isScrolling = false;
+      }
     };
 
     //Broadcasted when keyboard is shown on some platforms.
@@ -4823,6 +4825,8 @@ ionic.views.Scroll = ionic.views.View.inherit({
   },
 
   resize: function() {
+    if(!this.__container || !this.options) return;
+
     // Update Scroller dimensions for changed content
     // Add padding to bottom of content
     this.setDimensions(
@@ -35224,7 +35228,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-470
+ * Ionic, v1.0.0-beta.12-nightly-471
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39965,7 +39969,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
    */
   this._setRefresher = function(refresherScope, refresherElement) {
     var refresher = this.refresher = refresherElement;
-    var refresherHeight = self.refresher.clientHeight || 0;
+    var refresherHeight = self.refresher.clientHeight || 60;
     scrollView.activatePullToRefresh(refresherHeight, function() {
       // activateCallback
       refresher.classList.add('active');

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-470
+ * Ionic, v1.0.0-beta.12-nightly-471
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4743,7 +4743,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
    */
   this._setRefresher = function(refresherScope, refresherElement) {
     var refresher = this.refresher = refresherElement;
-    var refresherHeight = self.refresher.clientHeight || 0;
+    var refresherHeight = self.refresher.clientHeight || 60;
     scrollView.activatePullToRefresh(refresherHeight, function() {
       // activateCallback
       refresher.classList.add('active');
