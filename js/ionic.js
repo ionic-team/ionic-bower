@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.12-nightly-468
+ * Ionic, v1.0.0-beta.12-nightly-469
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,12 +18,12 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.12-nightly-468';
+window.ionic.version = '1.0.0-beta.12-nightly-469';
 
 (function(window, document, ionic) {
 
   var readyCallbacks = [];
-  var isDomReady = false;
+  var isDomReady = document.readyState === 'complete' || document.readyState === 'interactive';
 
   function domReady() {
     isDomReady = true;
@@ -33,7 +33,10 @@ window.ionic.version = '1.0.0-beta.12-nightly-468';
     readyCallbacks = [];
     document.removeEventListener('DOMContentLoaded', domReady);
   }
-  document.addEventListener('DOMContentLoaded', domReady);
+  if (!isDomReady){
+    document.addEventListener('DOMContentLoaded', domReady);
+  }
+  
 
   // From the man himself, Mr. Paul Irish.
   // The requestAnimationFrame polyfill
@@ -132,7 +135,7 @@ window.ionic.version = '1.0.0-beta.12-nightly-468';
      * @param {function} callback The function to be called.
      */
     ready: function(cb) {
-      if(isDomReady || document.readyState === "complete") {
+      if(isDomReady) {
         ionic.requestAnimationFrame(cb);
       } else {
         readyCallbacks.push(cb);
