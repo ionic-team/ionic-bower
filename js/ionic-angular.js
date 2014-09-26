@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-503
+ * Ionic, v1.0.0-beta.13-nightly-504
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2787,7 +2787,9 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
             // click which would trigging whatever was underneath this
             $ionicBody.removeClass('popup-open');
           }, 400);
-          $ionicBackdrop.release();
+          $timeout(function(){
+            if(popupStack.length === 0)$ionicBackdrop.release();
+          }, config.stackPushDelay || 0);
           ($ionicPopup._backButtonActionDone || angular.noop)();
         }
         return result;
