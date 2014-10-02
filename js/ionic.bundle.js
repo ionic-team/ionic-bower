@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-524
+ * Ionic, v1.0.0-beta.13-nightly-526
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-524';
+window.ionic.version = '1.0.0-beta.13-nightly-526';
 
 (function(window, document, ionic) {
 
@@ -35243,7 +35243,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-524
+ * Ionic, v1.0.0-beta.13-nightly-526
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -36919,6 +36919,11 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
 
       if(target && self.positionView) {
         self.positionView(target, modalEl);
+        // set up a listener for in case the window size changes
+        ionic.on('resize',function(){
+          ionic.off('resize',null,window);
+          self.positionView(target,modalEl);
+        },window);
       }
 
       modalEl.addClass('ng-enter active')
@@ -36975,6 +36980,11 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       self._deregisterBackButton && self._deregisterBackButton();
 
       ionic.views.Modal.prototype.hide.call(self);
+
+      // clean up event listeners
+      if(self.positionView) {
+        ionic.off('resize',null,window);
+      }
 
       return $timeout(function(){
         $ionicBody.removeClass(self.viewType + '-open');
