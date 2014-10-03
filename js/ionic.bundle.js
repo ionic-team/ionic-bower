@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-526
+ * Ionic, v1.0.0-beta.13-nightly-529
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-526';
+window.ionic.version = '1.0.0-beta.13-nightly-529';
 
 (function(window, document, ionic) {
 
@@ -35243,7 +35243,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-526
+ * Ionic, v1.0.0-beta.13-nightly-529
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40299,14 +40299,16 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody) {
   };
 
   self.exposeAside = function(shouldExposeAside) {
-    if(!self.left || !self.left.isEnabled) return;
-
+    if(!(self.left && self.left.isEnabled) && !(self.right && self.right.isEnabled))return;
     self.close();
     isAsideExposed = shouldExposeAside;
-
-    // set the left marget width if it should be exposed
-    // otherwise set false so there's no left margin
-    self.content.setMarginLeft( isAsideExposed ? self.left.width : 0 );
+    if(self.left && self.left.isEnabled){
+      // set the left marget width if it should be exposed
+      // otherwise set false so there's no left margin
+      self.content.setMarginLeft( isAsideExposed ? self.left.width : 0 );
+    }else if(self.right && self.right.isEnabled){
+      self.content.setMarginRight( isAsideExposed ? self.right.width : 0 );
+    }
 
     self.$scope.$emit('$ionicExposeAside', isAsideExposed);
   };
@@ -43629,6 +43631,18 @@ function($timeout, $ionicGesture, $window) {
               $element[0].style.width = '';
               content.offsetX = 0;
             }
+          }),
+          setMarginRight: ionic.animationFrameThrottle(function(amount) {
+            if(amount) {
+              amount = parseInt(amount, 10);
+              $element[0].style.width = ($window.innerWidth - amount) + 'px';
+              content.offsetX = amount;
+            } else {
+              $element[0].style.width = '';
+              content.offsetX = 0;
+            }
+            // reset incase left gets grabby
+            $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(0,0,0)';
           }),
           enableAnimation: function() {
             $scope.animationEnabled = true;
