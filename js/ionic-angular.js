@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-534
+ * Ionic, v1.0.0-beta.13-nightly-535
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -650,6 +650,7 @@ function($cacheFactory, $parse, $rootScope) {
       return item;
     },
     getItem: function(index) {
+      var item;
       if ( (item = this.attachedItems[index]) ) {
         //do nothing, the item is good
       } else if ( (item = this.backupItemsArray.pop()) ) {
