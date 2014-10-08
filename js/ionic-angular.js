@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-557
+ * Ionic, v1.0.0-beta.13-nightly-559
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9020,6 +9020,8 @@ IonicModule
  * The Slide Box is a multi-page container where each page can be swiped or dragged between:
  *
  * ![SlideBox](http://ionicframework.com.s3.amazonaws.com/docs/controllers/slideBox.gif)
+ *
+ * Note: The slideBox will take up the whole width and height of its parent element.
  *
  * @usage
  * ```html
