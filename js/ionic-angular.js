@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-559
+ * Ionic, v1.0.0-beta.13-nightly-560
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -338,9 +338,9 @@ IonicModule
     var dragEndGesture = ionic.onGesture('dragend', handleDragEnd, element[0]);
 
     scope.$on('$destroy', function() {
-      ionic.offGesture(dragStartGesture);
-      ionic.offGesture(dragGesture);
-      ionic.offGesture(dragEndGesture);
+      ionic.offGesture(dragStartGesture, 'dragstart', handleDragStart);
+      ionic.offGesture(dragGesture, 'drag', handleDrag);
+      ionic.offGesture(dragEndGesture, 'dragend', handleDragEnd);
     });
 
     var dragState;
@@ -5488,8 +5488,7 @@ function(scope, element, $q) {
   var self = this;
 
   scope.$on('$destroy', function() {
-    element.removeData();
-    detachSlide();
+    attachSlide();
   });
   element.on(ionic.CSS.TRANSITIONEND, onTransitionEnd);
 
