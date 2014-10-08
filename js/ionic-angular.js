@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-564
+ * Ionic, v1.0.0-beta.13-nightly-565
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9031,9 +9031,7 @@ IonicModule
  *
  * @usage
  * ```html
- * <ion-slide-box on-slide-changed="slideHasChanged($index)"
- *   loop="shouldLoop"
- *   auto-play="3000">
+ * <ion-slide-box on-slide-changed="slideHasChanged($index)" loop="shouldLoop" auto-play="3000">
  *   <ion-slide>
  *     <div class="box blue"><h1>BLUE</h1></div>
  *   </ion-slide>
@@ -9047,7 +9045,6 @@ IonicModule
  * ```
  *
  * @param {expression=} selected A model bound to the selected slide index.
- * with {@link ionic.service:$ionicSlideBoxDelegate}.
  * @param {boolean=} loop Whether the slide box should loop. Default false.
  * @param {number=} auto-play If a positive number, then every time the given number of milliseconds have passed, slideBox will go to the next slide. Set to a non-positive number to disable. Default: -1.
  * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an '$index' variable.
