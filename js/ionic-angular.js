@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-562
+ * Ionic, v1.0.0-beta.13-nightly-564
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -341,6 +341,10 @@ IonicModule
       ionic.offGesture(dragStartGesture, 'dragstart', handleDragStart);
       ionic.offGesture(dragGesture, 'drag', handleDrag);
       ionic.offGesture(dragEndGesture, 'dragend', handleDragEnd);
+    });
+
+    element.on('touchmove pointermove mousemove', function(ev) {
+      if (dragState && dragState.dragging) ev.preventDefault();
     });
 
     var dragState;
@@ -5280,6 +5284,7 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     // If we only have two slides and loop is enabled, we cannot have a previous
     // because previous === next. In this case, return -1.
     if (self.loop() && self.count() === 2) {
+      void 0;
       return -1;
     }
     return slideList.previous(index);
@@ -5404,16 +5409,17 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     if (Math.abs(percent) > 0.5 || velocity > SLIDE_SUCCESS_VELOCITY) {
       nextIndex = percent > 0 ? self.next() : self.previous();
     }
-    var transitionDuration = Math.min(
-      slidesParent.prop('offsetWidth') / (3 * velocity),
-      SLIDE_TRANSITION_DURATION
-    );
 
     // Select a new slide if it's avaiable
-    self.select(
-      self.isInRange(nextIndex) ? nextIndex : self.selected(),
-      transitionDuration
-    );
+    if (self.isInRange(nextIndex)) {
+      var transitionDuration = Math.min(
+        slidesParent.prop('offsetWidth') / (3 * velocity),
+        SLIDE_TRANSITION_DURATION
+      );
+      self.select(nextIndex, transitionDuration);
+    } else {
+      self.select(selectedIndex);
+    }
   }
 
   // ***
@@ -9057,7 +9063,7 @@ function($ionicSlideBoxDelegate, $window) {
   return {
     restrict: 'E',
     controller: '$ionSlideBox',
-    require: ['ionSlideBox', '^?$ionicScroll'],
+    require: 'ionSlideBox',
     transclude: true,
     scope: {
       selectedIndex: '=?selected',
@@ -9074,10 +9080,7 @@ function($ionicSlideBoxDelegate, $window) {
     return postLink;
   }
 
-  function postLink(scope, element, attr, ctrls) {
-    var slideBoxCtrl = ctrls[0];
-    var scrollCtrl = ctrls[1];
-
+  function postLink(scope, element, attr, slideBoxCtrl) {
     element.addClass('slider');
 
     var deregister = $ionicSlideBoxDelegate._registerInstance(slideBoxCtrl, attr.delegateHandle);
@@ -9091,15 +9094,7 @@ function($ionicSlideBoxDelegate, $window) {
     throttledReposition();
     angular.element($window).on('resize', throttledReposition);
 
-    if (scrollCtrl) {
-      var oldScrollingY = scrollCtrl.scrollView.options.scrollingY;
-      scrollCtrl.scrollView.options.scrollingY = false;
-    }
-
     scope.$on('$destroy', function() {
-      if (scrollCtrl) {
-        scrollCtrl.scrollView.options.scrollingY = oldScrollingY;
-      }
       angular.element($window).off('resize', throttledReposition);
     });
 
