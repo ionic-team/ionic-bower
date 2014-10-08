@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-554
+ * Ionic, v1.0.0-beta.13-nightly-557
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-554';
+window.ionic.version = '1.0.0-beta.13-nightly-557';
 
 (function(window, document, ionic) {
 
@@ -34845,7 +34845,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-554
+ * Ionic, v1.0.0-beta.13-nightly-557
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43864,27 +43864,21 @@ IonicModule
  *
  * ![SlideBox](http://ionicframework.com.s3.amazonaws.com/docs/controllers/slideBox.gif)
  *
- * Note: The slideBox will always take up all of the space within its parent scroll
- * container. If you wish to have a smaller slidebox, create a custom-sized parent
- * <ion-scroll> element.
- *
  * @usage
  * ```html
- * <ion-content>
- *   <ion-slide-box on-slide-changed="slideHasChanged($index)"
- *     loop="shouldLoop"
- *     auto-play="3000">
- *     <ion-slide>
- *       <div class="box blue"><h1>BLUE</h1></div>
- *     </ion-slide>
- *     <ion-slide>
- *       <div class="box yellow"><h1>YELLOW</h1></div>
- *     </ion-slide>
- *     <ion-slide>
- *       <div class="box pink"><h1>PINK</h1></div>
- *     </ion-slide>
- *   </ion-slide-box>
- * </ion-content>
+ * <ion-slide-box on-slide-changed="slideHasChanged($index)"
+ *   loop="shouldLoop"
+ *   auto-play="3000">
+ *   <ion-slide>
+ *     <div class="box blue"><h1>BLUE</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box yellow"><h1>YELLOW</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box pink"><h1>PINK</h1></div>
+ *   </ion-slide>
+ * </ion-slide-box>
  * ```
  *
  * @param {expression=} selected A model bound to the selected slide index.
@@ -43904,7 +43898,7 @@ function($ionicSlideBoxDelegate, $window) {
   return {
     restrict: 'E',
     controller: '$ionSlideBox',
-    require: ['ionSlideBox', '^$ionicScroll'],
+    require: ['ionSlideBox', '^?$ionicScroll'],
     transclude: true,
     scope: {
       selectedIndex: '=?selected',
@@ -43936,14 +43930,18 @@ function($ionicSlideBoxDelegate, $window) {
 
     var throttledReposition = ionic.animationFrameThrottle(repositionSlideBox);
     throttledReposition();
-
-    var oldScrollingY = scrollCtrl.scrollView.options.scrollingY;
-    scrollCtrl.scrollView.options.scrollingY = false;
-
     angular.element($window).on('resize', throttledReposition);
+
+    if (scrollCtrl) {
+      var oldScrollingY = scrollCtrl.scrollView.options.scrollingY;
+      scrollCtrl.scrollView.options.scrollingY = false;
+    }
+
     scope.$on('$destroy', function() {
+      if (scrollCtrl) {
+        scrollCtrl.scrollView.options.scrollingY = oldScrollingY;
+      }
       angular.element($window).off('resize', throttledReposition);
-      scrollCtrl.scrollView.options.scrollingY = oldScrollingY;
     });
 
     // ***
@@ -43952,12 +43950,11 @@ function($ionicSlideBoxDelegate, $window) {
 
     // There is no way to make the slidebox stretch to a large enough size
     // when its children are all position: absolute elements.
-    // We just make it so the slidebox is *always* as large as its parent scroll
-    // container.
+    // We just make it so the slidebox is *always* as large as its offsetParent.
     function repositionSlideBox() {
       element.css({
-        width: scrollCtrl.$element.prop('offsetWidth') + 'px',
-        height: scrollCtrl.$element.prop('offsetHeight') + 'px'
+        width: (element[0].offsetParent || element[0].parentNode || {}).offsetWidth + 'px',
+        height: (element[0].offsetParent || element[0].parentNode || {}).offsetHeight + 'px'
       });
     }
 
