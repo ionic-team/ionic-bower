@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-566
+ * Ionic, v1.0.0-beta.13-nightly-568
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-566';
+window.ionic.version = '1.0.0-beta.13-nightly-568';
 
 (function(window, document, ionic) {
 
@@ -34845,7 +34845,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-566
+ * Ionic, v1.0.0-beta.13-nightly-568
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -38270,7 +38270,16 @@ IonicModule
    * @name $ionicSlideBoxDelegate#count
    * @returns `number` The number of slides there are currently.
    */
-  'count'
+  'count',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#update
+   * @description Causes the slidebox to re-scan all of the child slide
+   * elements and reorganize itself again.
+   * You only need to call update if you are moving slides around in the DOM
+   * (for example, ng-repeat moving an element from the middle to the end).
+   */
+  'update',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#$getByHandle
@@ -40101,6 +40110,7 @@ function(scope, element, $$ionicAttachDrag, $interval) {
   self.loop = slideList.loop;
   self.delta = slideList.delta;
 
+  self.update = update;
   self.enableSlide = enableSlide;
   self.autoPlay = autoPlay;
   self.add = add;
@@ -40138,6 +40148,18 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     return slideList.next(index);
   }
 
+  function update() {
+    var selectedIndex = scope.selectedIndex;
+    for (var i = self.count() - 1; i >= 0; i--) {
+      slideList.remove(i);
+    }
+    var slideNodes = element[0].querySelectorAll('ion-slide');
+    for (var j = 0, jj = slideNodes.length; j < jj; j++) {
+      slideList.add(jqLite(slideNodes[j]).controller('ionSlide'));
+    }
+    self.select(selectedIndex);
+  }
+
   function enableSlide(isEnabled) {
     if (arguments.length) {
       self.dragDisabled = !isEnabled;
@@ -40160,7 +40182,7 @@ function(scope, element, $$ionicAttachDrag, $interval) {
    */
   function add(slide, index) {
     var newIndex = slideList.add(slide, index);
-    slide.onAdded(slidesParent);
+    slide.onAdded();
 
     // If we are waiting for a certain scope.selectedIndex and this is it,
     // select the slide
@@ -40191,12 +40213,12 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     if (index === -1) return;
 
     // If the slide is current, next, or previous, save so we can re-select after moving.
-    var isRelevant = self.isRelevant(targetIndex);
+    var isRelevant = self.selected() === index || self.isRelevant(targetIndex);
     slideList.remove(index);
     slideList.add(slide, targetIndex);
 
     if (isRelevant) {
-      enqueueRefresh();
+      self.select(targetIndex);
     }
   }
 
@@ -40360,9 +40382,7 @@ function(scope, element, $q) {
   // Public Methods
   // ***
 
-  function onAdded(parentElement) {
-    self.parentElement = parentElement;
-
+  function onAdded() {
     // Set default state
     self.setState('detached');
   }
@@ -40419,19 +40439,21 @@ function(scope, element, $q) {
   // ***
 
   function attachSlide() {
-    if (!self.element[0].parentNode) {
-      self.parentElement.append(self.element);
-      ionic.Utils.reconnectScope(scope);
-    }
+    // if (!self.element[0].parentNode) {
+    //   self.parentElement.append(self.element);
+    //   ionic.Utils.reconnectScope(scope);
+    // }
+    ionic.Utils.reconnectScope(scope);
   }
 
   function detachSlide() {
     // Don't use self.element.remove(), that will destroy the element's data
-    var parent = self.element[0].parentNode;
-    if (parent) {
-      parent.removeChild(self.element[0]);
-      ionic.Utils.disconnectScope(scope);
-    }
+    // var parent = self.element[0].parentNode;
+    // if (parent) {
+    //   parent.removeChild(self.element[0]);
+    //   ionic.Utils.disconnectScope(scope);
+    // }
+    ionic.Utils.disconnectScope(scope);
   }
 
   var transitionDeferred;
@@ -43833,18 +43855,6 @@ IonicModule
     scope.$on('$destroy', function() {
       slideBoxCtrl.remove(slideCtrl);
     });
-
-    element.one('$animate:after', watchNgRepeatIndexOnInsertElement);
-    element.on('$animate:after', refreshStateOnInsertElement);
-
-    // If this element is inserted later by an ng-if or ng-repeat, remove it
-    // from the DOM again if it's irrelevant (not selected or adjacent).
-    function refreshStateOnInsertElement() {
-      var slideIndex = slideBoxCtrl.indexOf(slideCtrl);
-      if (!slideBoxCtrl.isRelevant(slideIndex)) {
-        slideCtrl.setState('detached');
-      }
-    }
 
     // Move with ng-repeat if this slide is part of ng-repeat.
     // scope.$index only appears after the first time ng-repaet inserts the element.
