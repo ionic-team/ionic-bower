@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-568
+ * Ionic, v1.0.0-beta.13-nightly-570
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3432,9 +3432,10 @@ IonicModule
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#update
    * @description Causes the slidebox to re-scan all of the child slide
-   * elements and reorganize itself again.
+   * elements and reorganize itself again. This will rarely be needed.
    * You only need to call update if you are moving slides around in the DOM
-   * (for example, ng-repeat moving an element from the middle to the end).
+   * (for example, ng-repeat moving an element from the middle to the end of
+   * the list).
    */
   'update',
   /**
@@ -9009,23 +9010,9 @@ IonicModule
     element.addClass('slider-slide');
 
     slideBoxCtrl.add(slideCtrl);
-    scope.$on('$destroy', function() {
+    element.on('$destroy', function() {
       slideBoxCtrl.remove(slideCtrl);
     });
-
-    // Move with ng-repeat if this slide is part of ng-repeat.
-    // scope.$index only appears after the first time ng-repaet inserts the element.
-    function watchNgRepeatIndexOnInsertElement() {
-      if (angular.isNumber(scope.$index)) {
-        scope.$watch('$index', function(newIndex, oldIndex) {
-          if (!isDefined(oldIndex)) return;
-          var difference = newIndex - oldIndex;
-          var currentIndex = slideBoxCtrl.indexOf(slideCtrl);
-
-          slideBoxCtrl.move(slideCtrl, currentIndex + difference);
-        });
-      }
-    }
 
   }
 }]);
