@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-573
+ * Ionic, v1.0.0-beta.13-nightly-574
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-573';
+window.ionic.version = '1.0.0-beta.13-nightly-574';
 
 (function(window, document, ionic) {
 
@@ -34845,7 +34845,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-573
+ * Ionic, v1.0.0-beta.13-nightly-574
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44008,6 +44008,18 @@ function($ionicSlideBoxDelegate, $window) {
  *   <ion-slide>2</ion-slide>
  *   <ion-slide>3</ion-slide>
  *   <ion-slide>4</ion-slide>
+ * </ion-slide-box>
+ * ```
+ *
+ * If you provide your own `ng-click` attribute, it overrides the default
+ * click behavior.
+ *
+ * ```html
+ * <ion-slide-box>
+ *   <ion-slide-pager ng-click="doSomething($slideIndex)"></ion-slide-pager>
+ *   <ion-slide>1</ion-slide>
+ *   <ion-slide>2</ion-slide>
+ *   <ion-slide>3</ion-slide>
  * </ion-slide-box>
  * ```
  *
