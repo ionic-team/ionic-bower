@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-571
+ * Ionic, v1.0.0-beta.13-nightly-572
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -364,7 +364,7 @@ IonicModule
       var deltaY = dragState.startY - ev.gesture.center.pageY;
       var isVertical = ev.gesture.direction === 'up' || ev.gesture.direction === 'down';
 
-      if (isVertical && Math.abs(deltaY) > Math.abs(deltaX)) {
+      if (isVertical && Math.abs(deltaY) > Math.abs(deltaX) * 2) {
         handleDragEnd(ev);
         return;
       }
@@ -5439,8 +5439,9 @@ function(scope, element, $$ionicAttachDrag, $interval) {
 
     // Select a new slide if it's avaiable
     if (self.isInRange(nextIndex)) {
+      var distanceRemaining = (1 - Math.abs(percent)) * slidesParent.prop('offsetWidth');
       var transitionDuration = Math.min(
-        slidesParent.prop('offsetWidth') / (3 * velocity),
+        distanceRemaining / velocity,
         SLIDE_TRANSITION_DURATION
       );
       self.select(nextIndex, transitionDuration);
