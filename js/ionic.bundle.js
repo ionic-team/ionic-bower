@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-582
+ * Ionic, v1.0.0-beta.13-nightly-583
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-582';
+window.ionic.version = '1.0.0-beta.13-nightly-583';
 
 (function(window, document, ionic) {
 
@@ -34861,7 +34861,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-582
+ * Ionic, v1.0.0-beta.13-nightly-583
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43593,12 +43593,12 @@ function($timeout, $ionicGesture, $window) {
     require: '^ionSideMenus',
     scope: true,
     compile: function(element, attr) {
+      element.addClass('menu-content pane');
+
       return { pre: prelink };
       function prelink($scope, $element, $attr, sideMenuCtrl) {
         var startCoord = null;
         var primaryScrollAxis = null;
-
-        $element.addClass('menu-content pane');
 
         if (isDefined(attr.dragContent)) {
           $scope.$watch(attr.dragContent, function(value) {
@@ -43616,27 +43616,27 @@ function($timeout, $ionicGesture, $window) {
 
         // Listen for taps on the content to close the menu
         function onContentTap(gestureEvt) {
-          if(sideMenuCtrl.getOpenAmount() !== 0) {
+          if (sideMenuCtrl.getOpenAmount() !== 0) {
             sideMenuCtrl.close();
             gestureEvt.gesture.srcEvent.preventDefault();
             startCoord = null;
             primaryScrollAxis = null;
-          } else if(!startCoord) {
+          } else if (!startCoord) {
             startCoord = ionic.tap.pointerCoord(gestureEvt.gesture.srcEvent);
           }
         }
 
         function onDragX(e) {
-          if(!sideMenuCtrl.isDraggableTarget(e)) return;
+          if (!sideMenuCtrl.isDraggableTarget(e)) return;
 
-          if( getPrimaryScrollAxis(e) == 'x') {
+          if ( getPrimaryScrollAxis(e) == 'x') {
             sideMenuCtrl._handleDrag(e);
             e.gesture.srcEvent.preventDefault();
           }
         }
 
         function onDragY(e) {
-          if( getPrimaryScrollAxis(e) == 'x' ) {
+          if ( getPrimaryScrollAxis(e) == 'x' ) {
             e.gesture.srcEvent.preventDefault();
           }
         }
@@ -43652,14 +43652,14 @@ function($timeout, $ionicGesture, $window) {
           // If a majority of the drag has been on the Y since the start of
           // the drag, but the X has moved a little bit, it's still a Y drag
 
-          if(primaryScrollAxis) {
+          if (primaryScrollAxis) {
             // we already figured out which way they're scrolling
             return primaryScrollAxis;
           }
 
-          if(gestureEvt && gestureEvt.gesture) {
+          if (gestureEvt && gestureEvt.gesture) {
 
-            if(!startCoord) {
+            if (!startCoord) {
               // get the starting point
               startCoord = ionic.tap.pointerCoord(gestureEvt.gesture.srcEvent);
 
@@ -43672,7 +43672,7 @@ function($timeout, $ionicGesture, $window) {
 
               var scrollAxis = ( xDistance < yDistance ? 'y' : 'x' );
 
-              if( Math.max(xDistance, yDistance) > 30 ) {
+              if ( Math.max(xDistance, yDistance) > 30 ) {
                 // ok, we pretty much know which way they're going
                 // let's lock it in
                 primaryScrollAxis = scrollAxis;
@@ -43699,7 +43699,7 @@ function($timeout, $ionicGesture, $window) {
             });
           }),
           setMarginLeft: ionic.animationFrameThrottle(function(amount) {
-            if(amount) {
+            if (amount) {
               amount = parseInt(amount, 10);
               $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amount + 'px,0,0)';
               $element[0].style.width = ($window.innerWidth - amount) + 'px';
@@ -43711,7 +43711,7 @@ function($timeout, $ionicGesture, $window) {
             }
           }),
           setMarginRight: ionic.animationFrameThrottle(function(amount) {
-            if(amount) {
+            if (amount) {
               amount = parseInt(amount, 10);
               $element[0].style.width = ($window.innerWidth - amount) + 'px';
               content.offsetX = amount;
@@ -43746,6 +43746,10 @@ function($timeout, $ionicGesture, $window) {
 
         // Cleanup
         $scope.$on('$destroy', function() {
+          if (content) {
+            content.element = null;
+            content = null;
+          }
           $ionicGesture.off(dragLeftGesture, 'dragleft', onDragX);
           $ionicGesture.off(dragRightGesture, 'dragright', onDragX);
           $ionicGesture.off(dragUpGesture, 'dragup', onDragY);
