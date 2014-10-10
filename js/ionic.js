@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-578
+ * Ionic, v1.0.0-beta.13-nightly-579
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-578';
+window.ionic.version = '1.0.0-beta.13-nightly-579';
 
 (function(window, document, ionic) {
 
@@ -6309,7 +6309,7 @@ ionic.scroll = {
         // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
         for(i = 0; i < childNodes.length; i++) {
           c = childNodes[i];
-          if (c.tagName && c.tagName.toLowerCase() == 'h1') {
+          if (c.classList && c.classList.contains('title')) {
             isCountingRightWidth = true;
             continue;
           }
