@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-580
+ * Ionic, v1.0.0-beta.13-nightly-581
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7571,11 +7571,11 @@ IonicModule
  * @restrict AC
  *
  * @description
- * Toggle a side menu on the given side
+ * Toggle a side menu on the given side.
  *
  * @usage
- * Below is an example of a link within a nav bar. Tapping this link would
- * automatically open the given side menu
+ * Below is an example of a link within a nav bar. Tapping this button
+ * would open the given side menu, and tapping it again would close it.
  *
  * ```html
  * <ion-view>
@@ -7587,22 +7587,21 @@ IonicModule
  * ```
  */
 IonicModule
-.directive('menuToggle', ['$ionicViewService', function($ionicViewService) {
+.directive('menuToggle', function() {
   return {
     restrict: 'AC',
     require: '^ionSideMenus',
     link: function($scope, $element, $attr, sideMenuCtrl) {
-      var side = $attr.menuToggle || 'left';
       $element.bind('click', function(){
-        if(side === 'left') {
-          sideMenuCtrl.toggleLeft();
-        } else if(side === 'right') {
+        if ($attr.menuToggle === 'right') {
           sideMenuCtrl.toggleRight();
+        } else {
+          sideMenuCtrl.toggleLeft();
         }
       });
     }
   };
-}]);
+});
 
 
 /*
