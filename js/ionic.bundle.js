@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-588
+ * Ionic, v1.0.0-beta.13-nightly-591
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-588';
+window.ionic.version = '1.0.0-beta.13-nightly-591';
 
 (function(window, document, ionic) {
 
@@ -32777,6 +32777,9 @@ function $UrlRouterProvider(  $urlMatcherFactory) {
         for (i=0; i<n; i++) {
           if (check(rules[i])) return;
         }
+        if($location.$$path && $location.$$path !== '/') {
+          console.warn('Routing: No route matched for', $location.$$path + '. Check your Ionic route definitions.');
+        }
         // always check otherwise last to allow dynamic updates to the set of rules
         if (otherwise) check(otherwise);
       }
@@ -34850,6 +34853,7 @@ angular.module('ui.router.compat')
   .provider('$route', $RouteProvider)
   .directive('ngView', $ViewDirective);
 })(window, window.angular);
+
 /*!
  * ionic.bundle.js is a concatenation of:
  * ionic.js, angular.js, angular-animate.js,
@@ -34861,7 +34865,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-588
+ * Ionic, v1.0.0-beta.13-nightly-591
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
