@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-614
+ * Ionic, v1.0.0-beta.13-nightly-617
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -37,7 +37,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
-.ion-spin, .ion-loading-a, .ion-loading-b, .ion-loading-c, .ion-loading-d, .ion-looping, .ion-refreshing, .ion-ios7-reloading {
+.ion-spin, .ion-loading-a:before, .ion-loading-b:before, .ion-loading-c:before, .ion-loading-d:before, .ion-looping:before, .ion-refreshing:before, .ion-ios7-reloading:before {
   -webkit-animation: spin 1s infinite linear;
   -moz-animation: spin 1s infinite linear;
   -o-animation: spin 1s infinite linear;
