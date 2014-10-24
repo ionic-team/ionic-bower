@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-620
+ * Ionic, v1.0.0-beta.13-nightly-622
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2449,7 +2449,7 @@ var POPUP_TPL =
       '</div>' +
       '<div class="popup-body">' +
       '</div>' +
-      '<div class="popup-buttons">' +
+      '<div class="popup-buttons" ng-show="buttons.length">' +
         '<button ng-repeat="button in buttons" ng-click="$buttonTapped(button, $event)" class="button" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
       '</div>' +
     '</div>' +
