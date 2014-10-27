@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-624
+ * Ionic, v1.0.0-beta.13-nightly-627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-624';
+window.ionic.version = '1.0.0-beta.13-nightly-627';
 
 (function(window, document, ionic) {
 
@@ -36,7 +36,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-624';
   if (!isDomReady){
     document.addEventListener('DOMContentLoaded', domReady);
   }
-  
+
 
   // From the man himself, Mr. Paul Irish.
   // The requestAnimationFrame polyfill
@@ -276,6 +276,20 @@ window.ionic.version = '1.0.0-beta.13-nightly-624';
       if(x < x1 || x > x2) return false;
       if(y < y1 || y > y2) return false;
       return true;
+    },
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#blurAll
+     * @description
+     * Blurs any currently focused input element
+     * @returns {DOMElement} The element blurred or null
+     */
+    blurAll: function() {
+      if (document.activeElement && document.activeElement != document.body){
+        document.activeElement.blur();
+        return document.activeElement;
+      }
+      return null;
     }
   };
 
@@ -2879,7 +2893,8 @@ function tapHasPointerMoved(endEvent) {
   }
   var endCoordinates = ionic.tap.pointerCoord(endEvent);
 
-  var hasClassList = !!(endEvent.target.classList && endEvent.target.classList.contains);
+  var hasClassList = !!(endEvent.target.classList && endEvent.target.classList.contains &&
+    typeof endEvent.target.classList.contains === 'function');
   var releaseTolerance = hasClassList && endEvent.target.classList.contains('button') ?
     TAP_RELEASE_BUTTON_TOLERANCE :
     TAP_RELEASE_TOLERANCE;

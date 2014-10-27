@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-624
+ * Ionic, v1.0.0-beta.13-nightly-627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-624';
+window.ionic.version = '1.0.0-beta.13-nightly-627';
 
 (function(window, document, ionic) {
 
@@ -43,7 +43,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-624';
   if (!isDomReady){
     document.addEventListener('DOMContentLoaded', domReady);
   }
-  
+
 
   // From the man himself, Mr. Paul Irish.
   // The requestAnimationFrame polyfill
@@ -283,6 +283,20 @@ window.ionic.version = '1.0.0-beta.13-nightly-624';
       if(x < x1 || x > x2) return false;
       if(y < y1 || y > y2) return false;
       return true;
+    },
+    /**
+     * @ngdoc method
+     * @name ionic.DomUtil#blurAll
+     * @description
+     * Blurs any currently focused input element
+     * @returns {DOMElement} The element blurred or null
+     */
+    blurAll: function() {
+      if (document.activeElement && document.activeElement != document.body){
+        document.activeElement.blur();
+        return document.activeElement;
+      }
+      return null;
     }
   };
 
@@ -2886,7 +2900,8 @@ function tapHasPointerMoved(endEvent) {
   }
   var endCoordinates = ionic.tap.pointerCoord(endEvent);
 
-  var hasClassList = !!(endEvent.target.classList && endEvent.target.classList.contains);
+  var hasClassList = !!(endEvent.target.classList && endEvent.target.classList.contains &&
+    typeof endEvent.target.classList.contains === 'function');
   var releaseTolerance = hasClassList && endEvent.target.classList.contains('button') ?
     TAP_RELEASE_BUTTON_TOLERANCE :
     TAP_RELEASE_TOLERANCE;
@@ -34865,7 +34880,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-624
+ * Ionic, v1.0.0-beta.13-nightly-627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39605,12 +39620,14 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 
   this.scrollTop = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollTo(0, 0, !!shouldAnimate);
     });
   };
 
   this.scrollBottom = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       var max = scrollView.getScrollMax();
       scrollView.scrollTo(max.left, max.top, !!shouldAnimate);
@@ -39618,30 +39635,35 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 
   this.scrollTo = function(left, top, shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
     });
   };
 
   this.zoomTo = function(zoom, shouldAnimate, originLeft, originTop) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.zoomTo(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   this.zoomBy = function(zoom, shouldAnimate, originLeft, originTop) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.zoomBy(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   this.scrollBy = function(left, top, shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollBy(left, top, !!shouldAnimate);
     });
   };
 
   this.anchorScroll = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
@@ -39672,6 +39694,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     this._rememberScrollId = null;
   };
   this.scrollToRememberedPosition = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     var values = $$scrollValueCache[this._rememberScrollId];
     if (values) {
       this.resize().then(function() {

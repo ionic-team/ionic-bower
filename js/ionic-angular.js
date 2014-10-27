@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-624
+ * Ionic, v1.0.0-beta.13-nightly-627
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4742,12 +4742,14 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 
   this.scrollTop = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollTo(0, 0, !!shouldAnimate);
     });
   };
 
   this.scrollBottom = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       var max = scrollView.getScrollMax();
       scrollView.scrollTo(max.left, max.top, !!shouldAnimate);
@@ -4755,30 +4757,35 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 
   this.scrollTo = function(left, top, shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
     });
   };
 
   this.zoomTo = function(zoom, shouldAnimate, originLeft, originTop) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.zoomTo(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   this.zoomBy = function(zoom, shouldAnimate, originLeft, originTop) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.zoomBy(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   this.scrollBy = function(left, top, shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       scrollView.scrollBy(left, top, !!shouldAnimate);
     });
   };
 
   this.anchorScroll = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     this.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
@@ -4809,6 +4816,7 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     this._rememberScrollId = null;
   };
   this.scrollToRememberedPosition = function(shouldAnimate) {
+    ionic.DomUtil.blurAll();
     var values = $$scrollValueCache[this._rememberScrollId];
     if (values) {
       this.resize().then(function() {
