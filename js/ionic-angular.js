@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-627
+ * Ionic, v1.0.0-beta.13-nightly-641
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1282,6 +1282,7 @@ IonicModule
      * @param {function(e)} callback The function to call when the gesture
      * happens.
      * @param {element} $element The angular element to listen for the event on.
+     * @param {object} options object.
      * @returns {ionic.Gesture} The gesture object (use this to remove the gesture later on).
      */
     on: function(eventType, cb, $element, options) {
