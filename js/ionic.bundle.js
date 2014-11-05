@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-650
+ * Ionic, v1.0.0-beta.13-nightly-662
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-650';
+window.ionic.version = '1.0.0-beta.13-nightly-662';
 
 (function(window, document, ionic) {
 
@@ -34880,7 +34880,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-650
+ * Ionic, v1.0.0-beta.13-nightly-662
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44185,7 +44185,7 @@ IonicModule.constant('$ionicTabConfig', {
  * @param {string=} icon-on The icon of the tab while it is selected.
  * @param {string=} icon-off The icon of the tab while it is not selected.
  * @param {expression=} badge The badge to put on this tab (usually a number).
- * @param {expression=} badge-style The style of badge to put on this tab (eg tabs-positive).
+ * @param {expression=} badge-style The style of badge to put on this tab (eg: badge-positive).
  * @param {expression=} on-select Called when this tab is selected.
  * @param {expression=} on-deselect Called when this tab is deselected.
  * @param {expression=} ng-click By default, the tab will be selected on click. If ngClick is set, it will not.  You can explicitly switch tabs using {@link ionic.service:$ionicTabsDelegate#select $ionicTabsDelegate.select()}.
