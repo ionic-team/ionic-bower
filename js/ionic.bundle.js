@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-662
+ * Ionic, v1.0.0-beta.13-nightly-667
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-662';
+window.ionic.version = '1.0.0-beta.13-nightly-667';
 
 (function(window, document, ionic) {
 
@@ -3272,29 +3272,97 @@ ionic.DomUtil.ready(function(){
 
 function trueFn() { return true; }
 
-ionic.Utils.list = list;
+ionic.Utils.list = wrapList;
 
-function list(initialArray) {
+// Expose previous and next publicly so we can use them
+// without having to instantiate a whole list wrapper.
+ionic.Utils.list.next = listNext;
+ionic.Utils.list.previous = listPrevious;
 
-  var array =  angular.isArray(initialArray) ? initialArray : [];
+// Get the index after the given index.
+// Takes looping and the given filterFn into account.
+function listNext(list, isLooping, index, filterFn) {
+  filterFn = filterFn || trueFn;
+  if (index < 0 || index >= list.length) return -1;
+
+  // Keep adding 1 to index, trying to find an index that passes filterFn.
+  // If we loop through *everything* and get back to our original index, return -1.
+  // We don't use recursion here because Javascript sucks at recursion.
+  var nextIndex = index + 1;
+  while ( nextIndex !== index ) {
+
+    if (nextIndex === list.length) {
+      if (isLooping) nextIndex -= list.length;
+      else break;
+    } else {
+      if (filterFn(list[nextIndex], nextIndex)) {
+        return nextIndex;
+      }
+      nextIndex++;
+    }
+  }
+  return -1;
+}
+
+// Get the index before the given index.
+// Takes looping and the given filterFn into account.
+function listPrevious(list, isLooping, index, filterFn) {
+  filterFn = filterFn || trueFn;
+  if (index < 0 || index >= list.length) return -1;
+
+  // Keep subtracting 1 from index, trying to find an index that passes filterFn.
+  // If we loop through *everything* and get back to our original index, return -1.
+  // We don't use recursion here because Javascript sucks at recursion.
+  var prevIndex = index - 1;
+  while ( prevIndex !== index ) {
+
+    if (prevIndex === -1) {
+      if (isLooping) prevIndex += list.length;
+      else break;
+    } else {
+      if (filterFn(list[prevIndex], prevIndex)) {
+        return prevIndex;
+      }
+      prevIndex--;
+    }
+  }
+  return -1;
+}
+
+
+// initialList may be a nodeList or an list,
+// so we don't expect it to have any list methods
+function wrapList(initialList) {
+
+  var list = initialList || [];
   var self = {};
   var isLooping = false;
 
   // The Basics
   self.items = items;
-  self.add = add;
-  self.remove = remove;
+
+  // add and remove are array-ONLY, if we're given a nodeList
+  // it's immutable
+  if (angular.isArray(list)) {
+    self.add = add;
+    self.remove = remove;
+  }
+
   self.at = at;
   self.count = count;
-  self.indexOf = angular.bind(array, array.indexOf);
+  self.indexOf = indexOf;
   self.isInRange = isInRange;
   self.loop = loop;
 
   // The Crazy Ones
   self.delta = delta;
   self.isRelevant = isRelevant;
-  self.previous = previous;
-  self.next = next;
+  self.previous = function(index, filterFn) {
+    return listPrevious(list, isLooping, index, filterFn);
+  };
+  self.next = function(index, filterFn) {
+    return listNext(list, isLooping, index, filterFn);
+  };
 
   return self;
 
@@ -3302,29 +3370,37 @@ function list(initialArray) {
   // Public methods
   // ***************
   function items() {
-    return array;
+    return list;
   }
   function add(item, index) {
-    if (!self.isInRange(index)) index = array.length;
-    array.splice(index, 0, item);
+    if (!self.isInRange(index)) index = list.length;
+    list.splice(index, 0, item);
+
     return index;
   }
 
   function remove(index) {
     if (!self.isInRange(index)) return;
-    array.splice(index, 1);
+    list.splice(index, 1);
   }
 
   function at(index) {
-    return array[index];
+    return list[index];
   }
 
   function count() {
-    return array.length;
+    return list.length;
+  }
+
+  function indexOf(item) {
+    for (var i = 0, ii = list.length; i < ii; i++) {
+      if (list[i] === item) return i;
+    }
+    return -1;
   }
 
   function isInRange(index) {
-    return index > -1 && index < array.length;
+    return index > -1 && index < list.length;
   }
 
   function loop(newIsLooping) {
@@ -3363,56 +3439,6 @@ function list(initialArray) {
       index === self.previous(someIndex) ||
       index === self.next(someIndex)
     );
-  }
-
-  // Get the index after the given index.
-  // Takes looping and the given filterFn into account.
-  function next(index, filterFn) {
-    filterFn = filterFn || trueFn;
-    if (!self.isInRange(index)) return -1;
-
-    // Keep adding 1 to index, trying to find an index that passes filterFn.
-    // If we loop through *everything* and get back to our original index, return -1.
-    // We don't use recursion here because Javascript sucks at recursion.
-    var nextIndex = index + 1;
-    while ( nextIndex !== index ) {
-
-      if (nextIndex === array.length) {
-        if (isLooping) nextIndex -= array.length;
-        else break;
-      } else {
-        if (filterFn(array[nextIndex], nextIndex)) {
-          return nextIndex;
-        }
-        nextIndex++;
-      }
-    }
-    return -1;
-  }
-
-  // Get the index before the given index.
-  // Takes looping and the given filterFn into account.
-  function previous(index, filterFn) {
-    filterFn = filterFn || trueFn;
-    if (!self.isInRange(index)) return -1;
-
-    // Keep subtracting 1 from index, trying to find an index that passes filterFn.
-    // If we loop through *everything* and get back to our original index, return -1.
-    // We don't use recursion here because Javascript sucks at recursion.
-    var prevIndex = index - 1;
-    while ( prevIndex !== index ) {
-
-      if (prevIndex === -1) {
-        if (isLooping) prevIndex += array.length;
-        else break;
-      } else {
-        if (filterFn(array[prevIndex], prevIndex)) {
-          return prevIndex;
-        }
-        prevIndex--;
-      }
-    }
-    return -1;
   }
 
 }
@@ -34880,7 +34906,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-662
+ * Ionic, v1.0.0-beta.13-nightly-667
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -35229,12 +35255,13 @@ IonicModule
     var dragState;
     function handleDragStart(ev) {
       if (dragState) return;
-      dragState = {
-        startX: ev.gesture.center.pageX,
-        startY: ev.gesture.center.pageY,
-        distance: opts.getDistance()
-      };
-      opts.onDragStart();
+      if (opts.onDragStart() !== false) {
+        dragState = {
+          startX: ev.gesture.center.pageX,
+          startY: ev.gesture.center.pageY,
+          distance: opts.getDistance()
+        };
+      }
     }
     function handleDrag(ev) {
       if (!dragState) return;
@@ -38320,16 +38347,6 @@ IonicModule
   'count',
   /**
    * @ngdoc method
-   * @name $ionicSlideBoxDelegate#update
-   * @description Causes the slidebox to re-scan all of the child slide
-   * elements and reorganize itself again. This will rarely be needed.
-   * You only need to call update if you are moving slides around in the DOM
-   * (for example, ng-repeat moving an element from the middle to the end of
-   * the list).
-   */
-  'update',
-  /**
-   * @ngdoc method
    * @name $ionicSlideBoxDelegate#$getByHandle
    * @param {string} handle
    * @returns `delegateInstance` A delegate instance that controls only the
@@ -40149,7 +40166,12 @@ IonicModule
    */
 function(scope, element, $$ionicAttachDrag, $interval) {
   var self = this;
-  var slideList = ionic.Utils.list([]);
+
+  // This is a live nodeList that is updated whenever child ion-slides
+  // are added or removed.
+  var slideNodes = element[0].getElementsByTagName('ion-slide');
+  var slideList = ionic.Utils.list(slideNodes);
+
   var slidesParent = angular.element(element[0].querySelector('.slider-slides'));
 
   // Successful slide requires velocity to be greater than this amount
@@ -40166,29 +40188,37 @@ function(scope, element, $$ionicAttachDrag, $interval) {
   self.isRelevant = isRelevant;
   self.previous = previous;
   self.next = next;
+  self.onSlidesChanged = ionic.animationFrameThrottle(onSlidesChanged);
 
   // Methods calling straight back to Utils.list
-  self.at = slideList.at;
+  self.at = at;
   self.count = slideList.count;
-  self.indexOf = slideList.indexOf;
+  self.indexOf = indexOf;
   self.isInRange = slideList.isInRange;
   self.loop = slideList.loop;
   self.delta = slideList.delta;
 
-  self.update = update;
   self.enableSlide = enableSlide;
   self.autoPlay = autoPlay;
-  self.add = add;
-  self.remove = remove;
-  self.move = move;
   self.selected = selected;
   self.select = select;
+  self.onDragStart = onDragStart;
   self.onDrag = onDrag;
   self.onDragEnd = onDragEnd;
+
+  scope.$watchCollection(function() { return slideNodes; }, self.onSlidesChanged);
 
   // ***
   // Public Methods
   // ***
+  function at(index) {
+    return jqLite( slideList.at(index) ).controller('ionSlide');
+  }
+
+  function indexOf(slide) {
+    return slide && slideList.indexOf(slide.node) || -1;
+  }
+
 
   // Gets whether the given index is relevant to selected
   // That is, whether the given index is previous, selected, or next
@@ -40213,18 +40243,6 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     return slideList.next(index);
   }
 
-  function update() {
-    var selectedIndex = scope.selectedIndex;
-    for (var i = self.count() - 1; i >= 0; i--) {
-      slideList.remove(i);
-    }
-    var slideNodes = element[0].querySelectorAll('ion-slide');
-    for (var j = 0, jj = slideNodes.length; j < jj; j++) {
-      slideList.add(jqLite(slideNodes[j]).controller('ionSlide'));
-    }
-    self.select(selectedIndex);
-  }
-
   function enableSlide(isEnabled) {
     if (arguments.length) {
       self.dragDisabled = !isEnabled;
@@ -40239,51 +40257,6 @@ function(scope, element, $$ionicAttachDrag, $interval) {
       self.autoPlayTimeout = $interval(function() {
         self.select(self.next());
       }, newInterval);
-    }
-  }
-
-  /*
-   * Add/remove/move slides
-   */
-  function add(slide, index) {
-    var newIndex = slideList.add(slide, index);
-    slide.onAdded();
-
-    // If we are waiting for a certain scope.selectedIndex and this is it,
-    // select the slide
-    if (scope.selectedIndex === index) {
-      self.select(newIndex);
-    // If we don't have a selectedIndex yet, select the first one available
-    } else if (!isNumber(scope.selectedIndex) || scope.selectedIndex === -1) {
-      self.select(newIndex);
-    } else if (newIndex === self.previous() || newIndex === self.next()) {
-      // if the new slide is adjacent to selected, refresh the selection
-      enqueueRefresh();
-    }
-  }
-  function remove(slide) {
-    var index = self.indexOf(slide);
-    if (index === -1) return;
-
-    var isSelected = self.selected() === index;
-    slideList.remove(index);
-    slide.onRemoved();
-
-    if (isSelected) {
-      self.select( self.isInRange(scope.selectedIndex) ? scope.selectedIndex : scope.selectedIndex - 1 );
-    }
-  }
-  function move(slide, targetIndex) {
-    var index = self.indexOf(slide);
-    if (index === -1) return;
-
-    // If the slide is current, next, or previous, save so we can re-select after moving.
-    var isRelevant = self.selected() === index || self.isRelevant(targetIndex);
-    slideList.remove(index);
-    slideList.add(slide, targetIndex);
-
-    if (isRelevant) {
-      self.select(targetIndex);
     }
   }
 
@@ -40326,11 +40299,13 @@ function(scope, element, $$ionicAttachDrag, $interval) {
     }
   }
 
+  function onDragStart() {
+    if (self.dragDisabled) return false;
+  }
+
   // percent is negative 0-1 for backward slide
   // positive 0-1 for forward slide
   function onDrag(percent) {
-    if (self.dragDisabled) return;
-
     var target = self.at(percent > 0 ? self.next() : self.previous());
     var current = self.at(self.selected());
 
@@ -40360,6 +40335,49 @@ function(scope, element, $$ionicAttachDrag, $interval) {
   // ***
   // Private Methods
   // ***
+
+  var oldNodes = [];
+  function onSlidesChanged() {
+    var newSelected = slideNodes[scope.selectedIndex];
+    var oldSelected = oldNodes[scope.selectedIndex];
+    if (!newSelected && !oldSelected) {
+      if (slideNodes[scope.selectedIndex]) {
+        // If we don't have a selected slide and are waiting for a certain selectedIndex,
+        // then select it now.
+        self.select(scope.selectedIndex);
+      } else if (slideNodes.length) {
+        // If we don't have a selectedIndex yet, go ahead and select the first available
+        self.select(0);
+      }
+    } else {
+      if (newSelected !== oldSelected) {
+        // If the item at newList[selectedIndex] isn't the same as the item at
+        // oldList[selectedIndex], that means the selected slide was either moved
+        // in the list or was removed.
+        var newIndex = slideList.indexOf(oldSelected);
+        if (newIndex === -1) {
+          // If the selected slide was removed, try to select the nearest available slide
+          self.select(scope.selectedIndex > 0 ? scope.selectedIndex - 1 : scope.selectedIndex);
+        } else {
+          // If the selected slide moved, select the selected slide's new index
+          self.select(newIndex);
+        }
+      } else {
+        // Figure out the next and previous index based upon the old list.
+        // That way, if the old list had a previous item that's out of range
+        // in the new list, our check below will catch that the next/previous
+        // have changed.
+        var oldNextIndex = ionic.Utils.list.next(oldNodes, slideList.loop(), scope.selectedIndex);
+        var oldPrevIndex = ionic.Utils.list.previous(oldNodes, slideList.loop(), scope.selectedIndex);
+        if (slideNodes[self.next()] !== oldNodes[oldNextIndex] ||
+            slideNodes[self.previous()] !== oldNodes[oldPrevIndex]) {
+          //If the next or previous slides have changed, just refresh selection of the current slide.
+          self.select(scope.selectedIndex);
+        }
+      }
+    }
+    oldNodes = Array.prototype.slice.call(slideNodes);
+  }
 
   var oldSlides;
   function arrangeSlides(newShownIndex) {
@@ -40404,20 +40422,6 @@ function(scope, element, $$ionicAttachDrag, $interval) {
 
     oldSlides = newSlides;
   }
-
-  // When adding/moving slides, we sometimes need to refresh
-  // the currently selected slides to reflect new data.
-  // We don't want to refresh more than once per digest cycle,
-  // so we do this.
-  function enqueueRefresh() {
-    if (!enqueueRefresh.queued) {
-      enqueueRefresh.queued = true;
-      scope.$$postDigest(function() {
-        self.select(scope.selectedIndex);
-        enqueueRefresh.queued = false;
-      });
-    }
-  }
 }]);
 
 IonicModule
@@ -40428,33 +40432,21 @@ IonicModule
 function(scope, element, $q) {
   var self = this;
 
-  scope.$on('$destroy', function() {
-    // Re-attach the element so it can be properly removed
-    attachSlide();
-  });
   element.on(ionic.CSS.TRANSITIONEND, onTransitionEnd);
 
   self.element = element;
-
-  self.onAdded = onAdded;
-  self.onRemoved = onRemoved;
+  self.node = element[0];
 
   self.transform = transform;
 
   self.state = '';
   self.setState = setState;
 
+  self.setState('detached');
+
   // ***
   // Public Methods
   // ***
-
-  function onAdded() {
-    // Set default state
-    self.setState('detached');
-  }
-  function onRemoved() {
-    self.setState('detached');
-  }
 
   var isTransforming;
   // percent is negative 0-1 for dragging left
@@ -40505,20 +40497,10 @@ function(scope, element, $q) {
   // ***
 
   function attachSlide() {
-    // if (!self.element[0].parentNode) {
-    //   self.parentElement.append(self.element);
-    //   ionic.Utils.reconnectScope(scope);
-    // }
     ionic.Utils.reconnectScope(scope);
   }
 
   function detachSlide() {
-    // Don't use self.element.remove(), that will destroy the element's data
-    // var parent = self.element[0].parentNode;
-    // if (parent) {
-    //   parent.removeChild(self.element[0]);
-    //   ionic.Utils.disconnectScope(scope);
-    // }
     ionic.Utils.disconnectScope(scope);
   }
 
@@ -43913,26 +43895,22 @@ IonicModule
  * ```
  */
 IonicModule
-.directive('ionSlide', [function() {
+.directive('ionSlide', ['$timeout', function($timeout) {
   return {
     restrict: 'E',
     controller: '$ionSlide',
+    require: '^ionSlideBox',
     scope: true,
-    require: ['^ionSlideBox', 'ionSlide'],
     link: postLink
   };
 
-  function postLink(scope, element, attr, ctrls) {
-    var slideBoxCtrl = ctrls[0];
-    var slideCtrl = ctrls[1];
-
+  function postLink(scope, element, attr, slideBoxCtrl) {
     element.addClass('slider-slide');
 
-    slideBoxCtrl.add(slideCtrl);
+    $timeout(angular.noop);
     element.on('$destroy', function() {
-      slideBoxCtrl.remove(slideCtrl);
+      $timeout(angular.noop);
     });
-
   }
 }]);
 
@@ -44001,7 +43979,6 @@ function($ionicSlideBoxDelegate, $window) {
     element.addClass('slider');
 
     var deregister = $ionicSlideBoxDelegate._registerInstance(slideBoxCtrl, attr.delegateHandle);
-    scope.$on('$destroy', deregister);
 
     watchSelected();
     isDefined(attr.loop) && watchLoop();
@@ -44012,6 +43989,7 @@ function($ionicSlideBoxDelegate, $window) {
     angular.element($window).on('resize', throttledReposition);
 
     scope.$on('$destroy', function() {
+      deregister();
       angular.element($window).off('resize', throttledReposition);
     });
 
