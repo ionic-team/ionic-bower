@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-691
+ * Ionic, v1.0.0-beta.13-nightly-692
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4421,40 +4421,39 @@ IonicModule
 .controller('$ionicList', [
   '$scope',
   '$attrs',
-  '$parse',
   '$ionicListDelegate',
-function($scope, $attrs, $parse, $ionicListDelegate) {
-
+function($scope, $attrs, $ionicListDelegate) {
+  var self = this;
   var isSwipeable = true;
   var isReorderShown = false;
   var isDeleteShown = false;
 
-  var deregisterInstance = $ionicListDelegate._registerInstance(this, $attrs.delegateHandle);
+  var deregisterInstance = $ionicListDelegate._registerInstance(self, $attrs.delegateHandle);
   $scope.$on('$destroy', deregisterInstance);
 
-  this.showReorder = function(show) {
+  self.showReorder = function(show) {
     if (arguments.length) {
       isReorderShown = !!show;
     }
     return isReorderShown;
   };
 
-  this.showDelete = function(show) {
+  self.showDelete = function(show) {
     if (arguments.length) {
       isDeleteShown = !!show;
     }
     return isDeleteShown;
   };
 
-  this.canSwipeItems = function(can) {
+  self.canSwipeItems = function(can) {
     if (arguments.length) {
       isSwipeable = !!can;
     }
     return isSwipeable;
   };
 
-  this.closeOptionButtons = function() {
-    this.listView && this.listView.clearDragEffects();
+  self.closeOptionButtons = function() {
+    self.listView && self.listView.clearDragEffects();
   };
 }]);
 
@@ -6975,10 +6974,7 @@ var ITEM_TPL_CONTENT =
 * ```
 */
 IonicModule
-.directive('ionItem', [
-  '$animate',
-  '$compile',
-function($animate, $compile) {
+.directive('ionItem', function() {
   return {
     restrict: 'E',
     controller: ['$scope', '$element', function($scope, $element) {
@@ -6988,8 +6984,8 @@ function($animate, $compile) {
     scope: true,
     compile: function($element, $attrs) {
       var isAnchor = angular.isDefined($attrs.href) ||
-        angular.isDefined($attrs.ngHref) ||
-        angular.isDefined($attrs.uiSref);
+                     angular.isDefined($attrs.ngHref) ||
+                     angular.isDefined($attrs.uiSref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
         /ion-(delete|option|reorder)-button/i.test($element.html());
@@ -7014,7 +7010,7 @@ function($animate, $compile) {
         };
     }
   };
-}]);
+});
 
 var ITEM_TPL_DELETE_BUTTON =
   '<div class="item-left-edit item-delete enable-pointer-events">' +
@@ -7048,7 +7044,7 @@ var ITEM_TPL_DELETE_BUTTON =
 * ```
 */
 IonicModule
-.directive('ionDeleteButton', ['$animate', function($animate) {
+.directive('ionDeleteButton', function() {
   return {
     restrict: 'E',
     require: ['^ionItem', '^?ionList'],
@@ -7072,7 +7068,7 @@ IonicModule
       };
     }
   };
-}]);
+});
 
 
 IonicModule
@@ -7214,7 +7210,7 @@ var ITEM_TPL_REORDER_BUTTON =
 * Parameters given: $fromIndex, $toIndex.
 */
 IonicModule
-.directive('ionReorderButton', ['$animate', '$parse', function($animate, $parse) {
+.directive('ionReorderButton', ['$parse', function($parse) {
   return {
     restrict: 'E',
     require: ['^ionItem', '^?ionList'],
@@ -7410,9 +7406,8 @@ function keyboardAttachGetClientHeight(element) {
 */
 IonicModule
 .directive('ionList', [
-  '$animate',
   '$timeout',
-function($animate, $timeout) {
+function($timeout) {
   return {
     restrict: 'E',
     require: ['ionList', '^?$ionicScroll'],
