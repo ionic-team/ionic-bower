@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-693
+ * Ionic, v1.0.0-beta.13-nightly-694
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -623,7 +623,8 @@ IonicModule
   '$ionicBody',
   '$timeout',
 function($document, $ionicBody, $timeout) {
-  var fallbackTimer;
+  var fallbackTimer, isAttached;
+  var CSS_HIDE = 'click-block-hide';
 
   var cb = $document[0].createElement('div');
   cb.className = 'click-block';
@@ -633,14 +634,17 @@ function($document, $ionicBody, $timeout) {
       // cancel the fallback timer
       $timeout.cancel( fallbackTimer );
 
-      if(cb.parentElement) {
-        cb.classList.remove('hide');
-      } else {
-        $ionicBody.append(cb);
-      }
+      ionic.requestAnimationFrame(function(){
+        if(isAttached) {
+          cb.classList.remove(CSS_HIDE);
+        } else {
+          $ionicBody.append(cb);
+        }
+      });
+
       fallbackTimer = $timeout(function(){
-        cb.classList.add('hide');
-      }, 500);
+        cb.classList.add(CSS_HIDE);
+      }, 750);
     },
     hide: function() {
       // cancel the fallback timer
@@ -648,7 +652,7 @@ function($document, $ionicBody, $timeout) {
 
       // should be a minimum time it should hide
       ionic.requestAnimationFrame(function(){
-        cb.classList.add('hide');
+        cb.classList.add(CSS_HIDE);
       });
     }
   };
