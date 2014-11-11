@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-695
+ * Ionic, v1.0.0-beta.13-nightly-696
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5653,7 +5653,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', $ionicConfig.navBar.transition());
     ionic.DomUtil.cachedAttr($element, 'nav-bar-direction', viewData.direction);
 
-    navBarAttr(enteringHeaderBar, navBarTransition.shouldAnimate ? 'stage' : 'entering');
+    if(navBarTransition.shouldAnimate) {
+      navBarAttr(enteringHeaderBar, 'stage');
+    } else {
+      navBarAttr(enteringHeaderBar, 'entering');
+      navBarAttr(leavingHeaderBar, 'leaving');
+    }
 
     enteringHeaderBarCtrl.resetBackButton();
 
