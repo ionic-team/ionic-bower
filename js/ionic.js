@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-694
+ * Ionic, v1.0.0-beta.13-nightly-695
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-694';
+window.ionic.version = '1.0.0-beta.13-nightly-695';
 
 (function(window, document, ionic) {
 
@@ -277,6 +277,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-694';
       if(y < y1 || y > y2) return false;
       return true;
     },
+
     /**
      * @ngdoc method
      * @name ionic.DomUtil#blurAll
@@ -290,6 +291,33 @@ window.ionic.version = '1.0.0-beta.13-nightly-694';
         return document.activeElement;
       }
       return null;
+    },
+
+    cachedAttr: function(ele, key, value) {
+      ele = ele && ele.length && ele[0] || ele;
+      if (ele && ele.setAttribute) {
+        var dataKey = '$attr-' + key;
+        if (arguments.length > 2) {
+          if (ele[dataKey] !== value) {
+            ele.setAttribute(key, value);
+            ele[dataKey] = value;
+          }
+        } else if (typeof ele[dataKey] == 'undefined') {
+          ele[dataKey] = ele.getAttribute(key);
+        }
+        return ele[dataKey];
+      }
+    },
+
+    cachedStyles: function(ele, styles) {
+      ele = ele && ele.length && ele[0] || ele;
+      if (ele && ele.style) {
+        for (var prop in styles) {
+          if ( ele['$style-' + prop] !== styles[prop] ) {
+            ele.style[prop] = ele['$style-' + prop] = styles[prop];
+          }
+        }
+      }
     }
   };
 
@@ -2994,7 +3022,7 @@ ionic.DomUtil.ready(function(){
 
     end: function() {
       // clear out any active/queued elements after XX milliseconds
-      clearTimeout(this._activateTimeout);
+      clearTimeout(self._activateTimeout);
       setTimeout(clear, 200);
     }
 
@@ -3020,6 +3048,11 @@ ionic.DomUtil.ready(function(){
   }
 
   function deactivateElements() {
+    if (ionic.transition && ionic.transition.isActive) {
+      setTimeout(deactivateElements, 500);
+      return;
+    }
+
     for(var key in activeElements) {
       if(activeElements[key]) {
         activeElements[key].classList.remove(ACTIVATED_CLASS);
@@ -6317,101 +6350,6 @@ ionic.scroll = {
   isScrolling: false,
   lastTop: 0
 };
-
-})(ionic);
-
-(function(ionic) {
-'use strict';
-
-  ionic.views.HeaderBar = ionic.views.View.inherit({
-    initialize: function(opts) {
-      this.el = opts.el;
-
-      ionic.extend(this, {
-        alignTitle: 'center'
-      }, opts);
-
-      this.align();
-    },
-
-    align: function(align) {
-
-      align || (align = this.alignTitle);
-
-      // Find the titleEl element
-      var titleEl = this.el.querySelector('.title');
-      if(!titleEl) {
-        return;
-      }
-
-      var self = this;
-      //We have to rAF here so all of the elements have time to initialize
-      ionic.requestAnimationFrame(function() {
-        var i, c, childSize;
-        var childNodes = self.el.childNodes;
-        var leftWidth = 0;
-        var rightWidth = 0;
-        var isCountingRightWidth = false;
-
-        // Compute how wide the left children are
-        // Skip all titles (there may still be two titles, one leaving the dom)
-        // Once we encounter a titleEl, realize we are now counting the right-buttons, not left
-        for(i = 0; i < childNodes.length; i++) {
-          c = childNodes[i];
-          if (c.classList && c.classList.contains('title')) {
-            isCountingRightWidth = true;
-            continue;
-          }
-
-          childSize = null;
-          if(c.nodeType == 3) {
-            var bounds = ionic.DomUtil.getTextBounds(c);
-            if(bounds) {
-              childSize = bounds.width;
-            }
-          } else if(c.nodeType == 1) {
-            childSize = c.offsetWidth;
-          }
-          if(childSize) {
-            if (isCountingRightWidth) {
-              rightWidth += childSize;
-            } else {
-              leftWidth += childSize;
-            }
-          }
-        }
-
-        var margin = Math.max(leftWidth, rightWidth) + 10;
-
-        //Reset left and right before setting again
-        titleEl.style.left = titleEl.style.right = '';
-
-        // Size and align the header titleEl based on the sizes of the left and
-        // right children, and the desired alignment mode
-        if(align == 'center') {
-          if(margin > 10) {
-            titleEl.style.left = margin + 'px';
-            titleEl.style.right = margin + 'px';
-          }
-          if(titleEl.offsetWidth < titleEl.scrollWidth) {
-            if(rightWidth > 0) {
-              titleEl.style.right = (rightWidth + 5) + 'px';
-            }
-          }
-        } else if(align == 'left') {
-          titleEl.classList.add('title-left');
-          if(leftWidth > 0) {
-            titleEl.style.left = (leftWidth + 15) + 'px';
-          }
-        } else if(align == 'right') {
-          titleEl.classList.add('title-right');
-          if(rightWidth > 0) {
-            titleEl.style.right = (rightWidth + 15) + 'px';
-          }
-        }
-      });
-    }
-  });
 
 })(ionic);
 
