@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-702
+ * Ionic, v1.0.0-beta.13-nightly-707
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2270,6 +2270,7 @@ IonicModule
         providerObj[namespace] = function(newValue) {
           if (arguments.length) {
             configObj[namespace] = newValue;
+            return providerObj;
           }
           if (configObj[namespace] == PLATFORM) {
             // if the config is set to 'platform', then get this config's platform value
