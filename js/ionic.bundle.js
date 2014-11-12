@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-698
+ * Ionic, v1.0.0-beta.13-nightly-699
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-698';
+window.ionic.version = '1.0.0-beta.13-nightly-699';
 
 (function(window, document, ionic) {
 
@@ -34,13 +34,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
 
   function domReady() {
     isDomReady = true;
-    for(var x=0; x<readyCallbacks.length; x++) {
+    for (var x = 0; x < readyCallbacks.length; x++) {
       ionic.requestAnimationFrame(readyCallbacks[x]);
     }
     readyCallbacks = [];
     document.removeEventListener('DOMContentLoaded', domReady);
   }
-  if (!isDomReady){
+  if (!isDomReady) {
     document.addEventListener('DOMContentLoaded', domReady);
   }
 
@@ -49,13 +49,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
   // The requestAnimationFrame polyfill
   // Put it on window just to preserve its context
   // without having to use .call
-  window._rAF = (function(){
-    return  window.requestAnimationFrame       ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
-              window.setTimeout(callback, 16);
-            };
+  window._rAF = (function() {
+    return window.requestAnimationFrame       ||
+           window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame    ||
+           function(callback) {
+             window.setTimeout(callback, 16);
+           };
   })();
 
   var cancelAnimationFrame = window.cancelAnimationFrame ||
@@ -142,7 +142,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @param {function} callback The function to be called.
      */
     ready: function(cb) {
-      if(isDomReady) {
+      if (isDomReady) {
         ionic.requestAnimationFrame(cb);
       } else {
         readyCallbacks.push(cb);
@@ -164,12 +164,12 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      *   - `{number}` `height` The height of the textNode.
      */
     getTextBounds: function(textNode) {
-      if(document.createRange) {
+      if (document.createRange) {
         var range = document.createRange();
         range.selectNodeContents(textNode);
-        if(range.getBoundingClientRect) {
+        if (range.getBoundingClientRect) {
           var rect = range.getBoundingClientRect();
-          if(rect) {
+          if (rect) {
             var sx = window.scrollX;
             var sy = window.scrollY;
 
@@ -198,13 +198,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @returns {number} The index, or -1, of a child with nodeName matching type.
      */
     getChildIndex: function(element, type) {
-      if(type) {
+      if (type) {
         var ch = element.parentNode.children;
         var c;
-        for(var i = 0, k = 0, j = ch.length; i < j; i++) {
+        for (var i = 0, k = 0, j = ch.length; i < j; i++) {
           c = ch[i];
-          if(c.nodeName && c.nodeName.toLowerCase() == type) {
-            if(c == element) {
+          if (c.nodeName && c.nodeName.toLowerCase() == type) {
+            if (c == element) {
               return k;
             }
             k++;
@@ -240,8 +240,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      */
     getParentWithClass: function(e, className, depth) {
       depth = depth || 10;
-      while(e.parentNode && depth--) {
-        if(e.parentNode.classList && e.parentNode.classList.contains(className)) {
+      while (e.parentNode && depth--) {
+        if (e.parentNode.classList && e.parentNode.classList.contains(className)) {
           return e.parentNode;
         }
         e = e.parentNode;
@@ -258,8 +258,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      */
     getParentOrSelfWithClass: function(e, className, depth) {
       depth = depth || 10;
-      while(e && depth--) {
-        if(e.classList && e.classList.contains(className)) {
+      while (e && depth--) {
+        if (e.classList && e.classList.contains(className)) {
           return e;
         }
         e = e.parentNode;
@@ -280,8 +280,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * {x1,y1,x2,y2}.
      */
     rectContains: function(x, y, x1, y1, x2, y2) {
-      if(x < x1 || x > x2) return false;
-      if(y < y1 || y > y2) return false;
+      if (x < x1 || x > x2) return false;
+      if (y < y1 || y > y2) return false;
       return true;
     },
 
@@ -293,7 +293,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @returns {DOMElement} The element blurred or null
      */
     blurAll: function() {
-      if (document.activeElement && document.activeElement != document.body){
+      if (document.activeElement && document.activeElement != document.body) {
         document.activeElement.blur();
         return document.activeElement;
       }
@@ -320,7 +320,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
       ele = ele && ele.length && ele[0] || ele;
       if (ele && ele.style) {
         for (var prop in styles) {
-          if ( ele['$style-' + prop] !== styles[prop] ) {
+          if (ele['$style-' + prop] !== styles[prop]) {
             ele.style[prop] = ele['$style-' + prop] = styles[prop];
           }
         }
@@ -332,6 +332,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
   ionic.requestAnimationFrame = ionic.DomUtil.requestAnimationFrame;
   ionic.cancelAnimationFrame = ionic.DomUtil.cancelAnimationFrame;
   ionic.animationFrameThrottle = ionic.DomUtil.animationFrameThrottle;
+
 })(window, document, ionic);
 
 /**
@@ -2984,38 +2985,38 @@ ionic.DomUtil.ready(function(){
 
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
-      ionic.requestAnimationFrame(function(){
-        if ( ionic.tap.requiresNativeClick(e.target) ) return;
+      ionic.requestAnimationFrame(function() {
+        if (ionic.tap.requiresNativeClick(e.target)) return;
         var ele = e.target;
         var eleToActivate;
 
-        for(var x=0; x<6; x++) {
-          if(!ele || ele.nodeType !== 1) break;
-          if(eleToActivate && ele.classList.contains('item')) {
+        for (var x = 0; x < 6; x++) {
+          if (!ele || ele.nodeType !== 1) break;
+          if (eleToActivate && ele.classList.contains('item')) {
             eleToActivate = ele;
             break;
           }
-          if( ele.tagName == 'A' || ele.tagName == 'BUTTON' || ele.hasAttribute('ng-click') ) {
+          if (ele.tagName == 'A' || ele.tagName == 'BUTTON' || ele.hasAttribute('ng-click')) {
             eleToActivate = ele;
             break;
           }
-          if( ele.classList.contains('button') ) {
+          if (ele.classList.contains('button')) {
             eleToActivate = ele;
             break;
           }
           // no sense climbing past these
-          if(ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT'){
+          if (ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT') {
             break;
           }
           ele = ele.parentElement;
         }
 
-        if(eleToActivate) {
+        if (eleToActivate) {
           // queue that this element should be set to active
           queueElements[keyId] = eleToActivate;
 
           // in XX milliseconds, set the queued elements to active
-          if(e.type === 'touchstart') {
+          if (e.type === 'touchstart') {
             self._activateTimeout = setTimeout(activateElements, 80);
           } else {
             ionic.requestAnimationFrame(activateElements);
@@ -3045,8 +3046,8 @@ ionic.DomUtil.ready(function(){
 
   function activateElements() {
     // activate all elements in the queue
-    for(var key in queueElements) {
-      if(queueElements[key]) {
+    for (var key in queueElements) {
+      if (queueElements[key]) {
         queueElements[key].classList.add(ACTIVATED_CLASS);
         activeElements[key] = queueElements[key];
       }
@@ -3060,8 +3061,8 @@ ionic.DomUtil.ready(function(){
       return;
     }
 
-    for(var key in activeElements) {
-      if(activeElements[key]) {
+    for (var key in activeElements) {
+      if (activeElements[key]) {
         activeElements[key].classList.remove(ACTIVATED_CLASS);
         delete activeElements[key];
       }
@@ -38997,7 +38998,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-698
+ * Ionic, v1.0.0-beta.13-nightly-699
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39184,7 +39185,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
 
       scope.removed = true;
       sheetEl.removeClass('action-sheet-up');
-      $timeout(function(){
+      $timeout(function() {
         // wait to remove this due to a 300ms delay native
         // click which would trigging whatever was underneath this
         $ionicBody.removeClass('action-sheet-open');
@@ -39211,7 +39212,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
         if (scope.removed) return;
         (done || angular.noop)();
       });
-      $timeout(function(){
+      $timeout(function() {
         if (scope.removed) return;
         sheetEl.addClass('action-sheet-up');
       }, 20, false);
@@ -40317,7 +40318,7 @@ IonicModule
 function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory) {
 
   // always reset the keyboard state when change stage
-  $rootScope.$on('$stateChangeStart', function(){
+  $rootScope.$on('$stateChangeStart', function() {
     ionic.keyboard.hide();
   });
 
@@ -40326,7 +40327,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
 
     var viewHistory = $ionicHistory.viewHistory();
 
-    var hist = (data.historyId ? viewHistory.histories[ data.historyId ] : null );
+    var hist = (data.historyId ? viewHistory.histories[ data.historyId ] : null);
     if (hist && hist.cursor > -1 && hist.cursor < hist.stack.length) {
       // the history they're going to already exists
       // go to it's last view in its stack
@@ -40417,10 +40418,10 @@ function($rootScope, $state, $location, $window) {
     currentView: null
   };
 
-  var View = function(){};
+  var View = function() {};
   View.prototype.initialize = function(data) {
     if (data) {
-      for(var name in data) this[name] = data[name];
+      for (var name in data) this[name] = data[name];
       return this;
     }
     return null;
@@ -40454,25 +40455,25 @@ function($rootScope, $state, $location, $window) {
 
 
   function getViewById(viewId) {
-    return (viewId ? viewHistory.views[ viewId ] : null );
+    return (viewId ? viewHistory.views[ viewId ] : null);
   }
 
   function getBackView(view) {
-    return (view ? getViewById(view.backViewId) : null );
+    return (view ? getViewById(view.backViewId) : null);
   }
 
   function getForwardView(view) {
-    return (view ? getViewById(view.forwardViewId) : null );
+    return (view ? getViewById(view.forwardViewId) : null);
   }
 
   function getHistoryById(historyId) {
-    return (historyId ? viewHistory.histories[ historyId ] : null );
+    return (historyId ? viewHistory.histories[ historyId ] : null);
   }
 
   function getHistory(scope) {
     var histObj = getParentHistoryObj(scope);
 
-    if ( !viewHistory.histories[ histObj.historyId ] ) {
+    if (!viewHistory.histories[ histObj.historyId ]) {
       // this history object exists in parent scope, but doesn't
       // exist in the history data yet
       viewHistory.histories[ histObj.historyId ] = {
@@ -40487,7 +40488,7 @@ function($rootScope, $state, $location, $window) {
 
   function getParentHistoryObj(scope) {
     var parentScope = scope;
-    while(parentScope) {
+    while (parentScope) {
       if (parentScope.hasOwnProperty('$historyId')) {
         // this parent scope has a historyId
         return { historyId: parentScope.$historyId, scope: parentScope };
@@ -40510,7 +40511,7 @@ function($rootScope, $state, $location, $window) {
     if ($state && $state.current && $state.current.name) {
       id = $state.current.name;
       if ($state.params) {
-        for(var key in $state.params) {
+        for (var key in $state.params) {
           if ($state.params.hasOwnProperty(key) && $state.params[key]) {
             id += "_" + key + "=" + $state.params[key];
           }
@@ -40525,7 +40526,7 @@ function($rootScope, $state, $location, $window) {
   function getCurrentStateParams() {
     var rtn;
     if ($state && $state.params) {
-      for(var key in $state.params) {
+      for (var key in $state.params) {
         if ($state.params.hasOwnProperty(key)) {
           rtn = rtn || {};
           rtn[key] = $state.params[key];
@@ -40551,7 +40552,7 @@ function($rootScope, $state, $location, $window) {
           historyId = hist.historyId,
           tmp;
 
-      if ( isAbstractView ) {
+      if (isAbstractView) {
         // abstract states should not register themselves in the history stack
         return {
           action: 'abstractView',
@@ -40670,7 +40671,7 @@ function($rootScope, $state, $location, $window) {
             tmp = getHistoryById(forwardView.historyId);
             if (tmp) {
               // the forward has a history
-              for(var x=tmp.stack.length - 1; x >= forwardView.index; x--) {
+              for (var x=tmp.stack.length - 1; x >= forwardView.index; x--) {
                 // starting from the end destroy all forwards in this history from this point
                 tmp.stack[x].destroy();
                 tmp.stack.splice(x);
@@ -40814,7 +40815,7 @@ function($rootScope, $state, $location, $window) {
       currentView = viewHistory.currentView;
 
       if (histories) {
-        for(var historyId in histories) {
+        for (var historyId in histories) {
 
           if (histories[historyId].stack) {
             histories[historyId].stack = [];
@@ -40831,7 +40832,7 @@ function($rootScope, $state, $location, $window) {
         }
       }
 
-      for(var viewId in viewHistory.views) {
+      for (var viewId in viewHistory.views) {
         if (viewId !== currentView.viewId) {
           delete viewHistory.views[viewId];
         }
@@ -41021,11 +41022,11 @@ IonicModule
         return {
           run: function(step) {
             if (direction == 'forward') {
-              setStyles(enteringEle, 1, (1-step) * 99); // starting at 98% prevents a flicker
+              setStyles(enteringEle, 1, (1 - step) * 99); // starting at 98% prevents a flicker
               setStyles(leavingEle, (1 - 0.1 * step), step * -33);
 
             } else if (direction == 'back') {
-              setStyles(enteringEle, (1 - 0.1 * (1-step)), (1-step) * -33);
+              setStyles(enteringEle, (1 - 0.1 * (1 - step)), (1 - step) * -33);
               setStyles(leavingEle, 1, step * 100);
 
             } else {
@@ -41083,8 +41084,8 @@ IonicModule
             var enteringHeaderCtrl = enteringHeaderBar.controller();
             var leavingHeaderCtrl = leavingHeaderBar && leavingHeaderBar.controller();
             if (direction == 'back') {
-              leave(enteringHeaderCtrl, leavingHeaderCtrl, 1-step);
-              enter(leavingHeaderCtrl, enteringHeaderCtrl, 1-step);
+              leave(enteringHeaderCtrl, leavingHeaderCtrl, 1 - step);
+              enter(leavingHeaderCtrl, enteringHeaderCtrl, 1 - step);
             } else {
               enter(enteringHeaderCtrl, leavingHeaderCtrl, step);
               leave(leavingHeaderCtrl, enteringHeaderCtrl, step);
@@ -41144,12 +41145,12 @@ IonicModule
         return {
           run: function(step) {
             if (direction == 'forward') {
-              setStyles(enteringEle, step, (1-step) * startX);
+              setStyles(enteringEle, step, (1 - step) * startX);
               setStyles(leavingEle, 1, 0);
 
             } else if (direction == 'back') {
               setStyles(enteringEle, 1, 0);
-              setStyles(leavingEle, (1-step), step * startX);
+              setStyles(leavingEle, (1 - step), step * startX);
 
             } else {
               // swap, enter, exit
@@ -41187,12 +41188,12 @@ IonicModule
             var leavingEle = leavingHeaderBar && leavingHeaderBar.containerEle();
 
             if (direction == 'forward') {
-              setStyles(enteringEle, step, (1-step) * startX, 10);
+              setStyles(enteringEle, step, (1 - step) * startX, 10);
               setStyles(leavingEle, 1, 0, 9);
 
             } else if (direction == 'back') {
               setStyles(enteringEle, 1, 0, 9);
-              setStyles(leavingEle, (1-step), step * startX, 10);
+              setStyles(leavingEle, (1 - step), step * startX, 10);
 
             } else {
               // swap, enter, exit
@@ -41234,13 +41235,13 @@ IonicModule
   function addConfig(configObj, platformObj) {
     for (var n in configObj) {
       if (n != PLATFORM && configObj.hasOwnProperty(n)) {
-        if ( angular.isObject(configObj[n]) ) {
+        if (angular.isObject(configObj[n])) {
           if (!isDefined(platformObj[n])) {
             platformObj[n] = {};
           }
           addConfig(configObj[n], platformObj[n]);
 
-        } else if( !isDefined(platformObj[n]) ) {
+        } else if (!isDefined(platformObj[n])) {
           platformObj[n] = null;
         }
       }
@@ -41250,7 +41251,7 @@ IonicModule
 
   // private: create methods for each config to get/set
   function createConfig(configObj, providerObj, platformPath) {
-    forEach(configObj, function(value, namespace){
+    forEach(configObj, function(value, namespace) {
 
       if (angular.isObject(configObj[namespace])) {
         // recursively drill down the config object so we can create a method for each one
@@ -41282,7 +41283,7 @@ IonicModule
   function stringObj(obj, str) {
     str = str.split(".");
     for (var i = 0; i < str.length; i++) {
-      if ( obj && isDefined(obj[str[i]]) ) {
+      if (obj && isDefined(obj[str[i]])) {
         obj = obj[str[i]];
       } else {
         return null;
@@ -42019,7 +42020,7 @@ IonicModule
         $backButtonActions: {},
         registerBackButtonAction: function(fn, priority, actionId) {
 
-          if(!self._hasBackButtonHandler) {
+          if (!self._hasBackButtonHandler) {
             // add a back button listener if one hasn't been setup yet
             self.$backButtonActions = {};
             self.onHardwareBackButton(self.hardwareBackButtonClick);
@@ -42042,16 +42043,16 @@ IonicModule
         /**
          * @private
          */
-        hardwareBackButtonClick: function(e){
+        hardwareBackButtonClick: function(e) {
           // loop through all the registered back button actions
           // and only run the last one of the highest priority
           var priorityAction, actionId;
-          for(actionId in self.$backButtonActions) {
-            if(!priorityAction || self.$backButtonActions[actionId].priority >= priorityAction.priority) {
+          for (actionId in self.$backButtonActions) {
+            if (!priorityAction || self.$backButtonActions[actionId].priority >= priorityAction.priority) {
               priorityAction = self.$backButtonActions[actionId];
             }
           }
-          if(priorityAction) {
+          if (priorityAction) {
             priorityAction.fn(e);
             return priorityAction;
           }
@@ -42073,11 +42074,11 @@ IonicModule
          * @returns {function} Returns a deregistration function to remove the event listener.
          */
         on: function(type, cb) {
-          ionic.Platform.ready(function(){
+          ionic.Platform.ready(function() {
             document.addEventListener(type, cb, false);
           });
           return function() {
-            ionic.Platform.ready(function(){
+            ionic.Platform.ready(function() {
               document.removeEventListener(type, cb);
             });
           };
@@ -42095,7 +42096,7 @@ IonicModule
         ready: function(cb) {
           var q = $q.defer();
 
-          ionic.Platform.ready(function(){
+          ionic.Platform.ready(function() {
             q.resolve();
             cb && cb();
           });
@@ -42108,7 +42109,6 @@ IonicModule
   };
 
 });
-
 
 /**
  * @ngdoc service
@@ -43416,7 +43416,7 @@ function($http, $templateCache, $timeout) {
     if (toCache.length === 0) return;
 
     var i = 0;
-    while (i < 4 && (template = toCache.pop()) ) {
+    while (i < 4 && (template = toCache.pop())) {
       // note that inline templates are ignored by this request
       if (isString(template)) $http.get(template, { cache: $templateCache });
       i++;
@@ -43581,8 +43581,8 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
   }
 
   function getViewElementIdentifier(locals, view) {
-    if ( viewState(locals).abstract ) return viewState(locals).name;
-    if ( view ) return view.stateId || view.viewId;
+    if (viewState(locals).abstract) return viewState(locals).name;
+    if (view) return view.stateId || view.viewId;
     return ionic.Utils.nextUid();
   }
 
@@ -43644,7 +43644,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           $ionicClickBlock.show();
           switcher.loadViewElements();
 
-          switcher.render(registerData, function(){
+          switcher.render(registerData, function() {
             callback && callback();
           });
         },
@@ -43654,7 +43654,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           var enteringEleIdentifier = getViewElementIdentifier(viewLocals, enteringView);
           var navViewActiveEleId = navViewElement.data(DATA_ACTIVE_ELE_IDENTIFIER);
 
-          for (var x=0, l=viewElements.length; x<l; x++) {
+          for (var x=0, l=viewElements.length; x < l; x++) {
             viewEle = viewElements.eq(x);
 
             if (viewEle.data(DATA_ELE_IDENTIFIER) === enteringEleIdentifier) {
@@ -43683,9 +43683,9 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
         },
 
         render: function(registerData, callback) {
-          if ( alreadyInDom ) {
+          if (alreadyInDom) {
             // it was already found in the dom, just reconnect the scope
-            ionic.Utils.reconnectScope( enteringEle.scope() );
+            ionic.Utils.reconnectScope(enteringEle.scope());
 
           } else {
             // the entering element is not already in the DOM
@@ -43700,7 +43700,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
 
             // if the current state has cache:false
             // or the element has cache-view="false" attribute
-            if ( viewState(viewLocals).cache === false || enteringEle.attr('cache-view') == 'false' ) {
+            if (viewState(viewLocals).cache === false || enteringEle.attr('cache-view') == 'false') {
               enteringEle.data(DATA_NO_CACHE, true);
             }
 
@@ -43735,7 +43735,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           ionic.DomUtil.cachedAttr(enteringEle.parent(), 'nav-view-direction', transData.direction);
 
           // cancel any previous transition complete fallbacks
-          $timeout.cancel( enteringEle.data(DATA_FALLBACK_TIMER) );
+          $timeout.cancel(enteringEle.data(DATA_FALLBACK_TIMER));
 
           switcher.emit('before', transData);
 
@@ -43787,7 +43787,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
 
             enteringEle.off(TRANSITIONEND_EVENT, transitionComplete);
             leavingEle && leavingEle.off(TRANSITIONEND_EVENT, transitionComplete);
-            $timeout.cancel( enteringEle.data(DATA_FALLBACK_TIMER) );
+            $timeout.cancel(enteringEle.data(DATA_FALLBACK_TIMER));
 
             switcher.emit('after', transData);
 
@@ -43830,24 +43830,24 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           var x, viewElement, removableEle;
 
           // check if any views should be removed
-          if ( leavingEle && transData.direction == 'back' && !$ionicConfig.views.forwardCache() ) {
+          if (leavingEle && transData.direction == 'back' && !$ionicConfig.views.forwardCache()) {
             // if they just navigated back we can destroy the forward view
             // do not remove forward views if cacheForwardViews config is true
             removableEle = leavingEle;
 
-          } else if ( leavingEle && leavingEle.data(DATA_NO_CACHE) ) {
+          } else if (leavingEle && leavingEle.data(DATA_NO_CACHE)) {
             // remove if the leaving element has DATA_NO_CACHE===false
             removableEle = leavingEle;
 
-          } else if ( (viewElementsLength - 1) > $ionicConfig.views.maxCache() ) {
+          } else if ((viewElementsLength - 1) > $ionicConfig.views.maxCache()) {
             // check to see if we have more cached views than we should
             // the total number of child elements has exceeded how many to keep in the DOM
             var oldestAccess = Date.now();
 
-            for (x=0; x<viewElementsLength; x++) {
+            for (x=0; x < viewElementsLength; x++) {
               viewElement = viewElements.eq(x);
 
-              if ( viewElement.data(DATA_VIEW_ACCESSED) < oldestAccess ) {
+              if (viewElement.data(DATA_VIEW_ACCESSED) < oldestAccess) {
                 // remove the element that was the oldest to be accessed
                 oldestAccess = viewElement.data(DATA_VIEW_ACCESSED);
                 removableEle = viewElements.eq(x);
@@ -43863,11 +43863,11 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
             removableEle.remove();
           }
 
-          ionic.Utils.disconnectScope( leavingEle && leavingEle.scope() );
+          ionic.Utils.disconnectScope(leavingEle && leavingEle.scope());
         },
 
-        enteringEle: function(){ return enteringEle; },
-        leavingEle: function(){ return leavingEle; }
+        enteringEle: function() { return enteringEle; },
+        leavingEle: function() { return leavingEle; }
 
       };
 
@@ -43881,7 +43881,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
       var x, viewElement;
       var isHistoryRoot;
 
-      for (x=0; x<viewElementsLength; x++) {
+      for (x=0; x < viewElementsLength; x++) {
         viewElement = viewElements.eq(x);
 
         if (viewElement.data(DATA_ELE_IDENTIFIER) === navViewActiveEleId) {
@@ -43889,13 +43889,13 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           isHistoryRoot = ionic.DomUtil.cachedAttr(viewElement, HISTORY_CURSOR_ATTR) === HISTORY_ROOT;
 
         } else if (ionic.DomUtil.cachedAttr(viewElement, NAV_VIEW_ATTR) === 'leaving' ||
-                  (ionic.DomUtil.cachedAttr(viewElement, NAV_VIEW_ATTR) === VIEW_STATUS_ACTIVE && viewElement.data(DATA_ELE_IDENTIFIER) !== navViewActiveEleId) ) {
+                  (ionic.DomUtil.cachedAttr(viewElement, NAV_VIEW_ATTR) === VIEW_STATUS_ACTIVE && viewElement.data(DATA_ELE_IDENTIFIER) !== navViewActiveEleId)) {
           navViewAttr(viewElement, VIEW_STATUS_CACHED);
         }
       }
 
       if (isHistoryRoot) {
-        for (x=0; x<viewElementsLength; x++) {
+        for (x=0; x < viewElementsLength; x++) {
           viewElement = viewElements.eq(x);
 
           if (ionic.DomUtil.cachedAttr(viewElement, HISTORY_CURSOR_ATTR) === HISTORY_ROOT &&
@@ -43925,7 +43925,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
         ionic.transition.isActive = !!val;
         $timeout.cancel(isActiveTimer);
         if (val) {
-          isActiveTimer = $timeout(function(){
+          isActiveTimer = $timeout(function() {
             ionicViewSwitcher.isTransitioning(false);
           }, 999);
         }
@@ -44024,7 +44024,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
   self.titleTextWidth = function() {
     if (!titleTextWidth) {
-      var bounds = ionic.DomUtil.getTextBounds( getEle(TITLE) );
+      var bounds = ionic.DomUtil.getTextBounds(getEle(TITLE));
       titleTextWidth = Math.min(bounds && bounds.width || 30);
     }
     return titleTextWidth;
@@ -44054,7 +44054,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   self.backButtonTextLeft = function() {
     var offsetLeft = 0;
     var ele = getEle(BACK_TEXT);
-    while(ele) {
+    while (ele) {
       offsetLeft += ele.offsetLeft;
       ele = ele.parentElement;
     }
@@ -44063,7 +44063,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
 
   self.resetBackButton = function() {
-    if ( $ionicConfig.backButton.previousTitleText() ) {
+    if ($ionicConfig.backButton.previousTitleText()) {
       var previousTitleEle = getEle(PREVIOUS_TITLE);
       if (previousTitleEle) {
         previousTitleEle.classList.remove(HIDE);
@@ -44089,7 +44089,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
     var widths = self.calcWidths(align, false);
 
-    if ( isBackShown && previousTitleText && $ionicConfig.backButton.previousTitleText() ) {
+    if (isBackShown && previousTitleText && $ionicConfig.backButton.previousTitleText()) {
       var previousTitleWidths = self.calcWidths(align, true);
 
       var availableTitleWidth = $element[0].offsetWidth - previousTitleWidths.titleLeft - previousTitleWidths.titleRight;
@@ -44146,10 +44146,10 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
                   d = b.children[z];
 
                   if (isPreviousTitle) {
-                    if ( d.classList.contains(DEFAULT_TITLE) ) continue;
+                    if (d.classList.contains(DEFAULT_TITLE)) continue;
                     backButtonWidth += d.offsetWidth;
                   } else {
-                    if ( d.classList.contains(PREVIOUS_TITLE) ) continue;
+                    if (d.classList.contains(PREVIOUS_TITLE)) continue;
                     backButtonWidth += d.offsetWidth;
                   }
                 }
@@ -44253,7 +44253,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
       defaultTitle && defaultTitle.classList[ showPreviousTitle ? 'add' : 'remove'](HIDE);
     }
 
-    ionic.requestAnimationFrame(function(){
+    ionic.requestAnimationFrame(function() {
       if (titleEle && titleEle.offsetWidth + 10 < titleEle.scrollWidth) {
         var minRight = buttonsRight + 5;
         var testRight = $element[0].offsetWidth - titleLeft - self.titleTextWidth() - 20;
@@ -44271,7 +44271,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
 
   self.setCss = function(elementClassname, css) {
-    ionic.DomUtil.cachedStyles( getEle(elementClassname), css);
+    ionic.DomUtil.cachedStyles(getEle(elementClassname), css);
   };
 
 
@@ -44285,11 +44285,10 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
 
   $scope.$on('$destroy', function() {
-    for(var n in eleCache) eleCache[n] = null;
+    for (var n in eleCache) eleCache[n] = null;
   });
 
 }]);
-
 
 
 /**
@@ -44452,10 +44451,10 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
 
   self.createHeaderBar = function(isActive, navBarClass) {
-    var containerEle = jqLite( '<div class="nav-bar-block">' );
+    var containerEle = jqLite('<div class="nav-bar-block">');
     ionic.DomUtil.cachedAttr(containerEle, 'nav-bar', isActive ? 'active' : 'cached');
 
-    var headerBarEle = jqLite( '<ion-header-bar>' ).addClass($attrs.class);
+    var headerBarEle = jqLite('<ion-header-bar>').addClass($attrs.class);
     var titleEle = jqLite('<div class="title title-' + $ionicConfig.navBar.alignTitle() + '">');
     var navEle = {};
     var lastViewBtnsEle = {};
@@ -44468,7 +44467,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     // append title in the header, this is the rock to where buttons append
     headerBarEle.append(titleEle);
 
-    forEach(BUTTON_TYPES, function(buttonType){
+    forEach(BUTTON_TYPES, function(buttonType) {
       // create default button elements
       navEle[buttonType] = createNavElement(buttonType);
       // append and position buttons
@@ -44477,7 +44476,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
     // compile header and append to the DOM
     containerEle.append(headerBarEle);
-    $element.append( $compile(containerEle)($scope.$new()) );
+    $element.append($compile(containerEle)($scope.$new()));
 
     var headerBarCtrl = headerBarEle.data('$ionHeaderBarController');
 
@@ -44522,7 +44521,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
         return headerBarEle;
       },
       afterLeave: function() {
-        forEach(BUTTON_TYPES, function(buttonType){
+        forEach(BUTTON_TYPES, function(buttonType) {
           headerBarInstance.removeButtons(buttonType);
         });
         headerBarCtrl.resetBackButton();
@@ -44531,7 +44530,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
         return headerBarCtrl;
       },
       destroy: function() {
-        forEach(BUTTON_TYPES, function(buttonType){
+        forEach(BUTTON_TYPES, function(buttonType) {
           headerBarInstance.removeButtons(buttonType);
         });
         containerEle.scope().$destroy();
@@ -44595,7 +44594,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
 
   self.navElement = function(type, html) {
-    if ( isDefined(html) ) {
+    if (isDefined(html)) {
       navElementHtml[type] = html;
     }
     return navElementHtml[type];
@@ -44622,7 +44621,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
     // update the buttons, depending if the view has their own or not
     if (viewData.buttons) {
-      forEach(BUTTON_TYPES, function(buttonType){
+      forEach(BUTTON_TYPES, function(buttonType) {
         enteringHeaderBar.setButtons(viewData.buttons[buttonType], buttonType);
       });
     }
@@ -44646,7 +44645,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', $ionicConfig.navBar.transition());
     ionic.DomUtil.cachedAttr($element, 'nav-bar-direction', viewData.direction);
 
-    if(navBarTransition.shouldAnimate) {
+    if (navBarTransition.shouldAnimate) {
       navBarAttr(enteringHeaderBar, 'stage');
     } else {
       navBarAttr(enteringHeaderBar, 'entering');
@@ -44669,7 +44668,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
       queuedTransitionEnd = function() {
         if (latestTransitionId == transitionId || !navBarTransition.shouldAnimate) {
-          for (var x=0; x<headerBars.length; x++) {
+          for (var x = 0; x < headerBars.length; x++) {
             headerBars[x].isActive = false;
           }
           enteringHeaderBar.isActive = true;
@@ -44721,7 +44720,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     self.visibleBar(val);
 
     // set non primary to hide second
-    for (var x=0; x<$ionicNavBarDelegate._instances.length; x++) {
+    for (var x = 0; x < $ionicNavBarDelegate._instances.length; x++) {
       if ($ionicNavBarDelegate._instances[x] !== self) $ionicNavBarDelegate._instances[x].visibleBar(false);
     }
   };
@@ -44746,21 +44745,21 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
 
   function createNavElement(type) {
-    if ( navElementHtml[type] ) {
+    if (navElementHtml[type]) {
       return jqLite(navElementHtml[type]);
     }
   }
 
 
   function getOnScreenHeaderBar() {
-    for (var x=0; x<headerBars.length; x++) {
+    for (var x = 0; x < headerBars.length; x++) {
       if (headerBars[x].isActive) return headerBars[x];
     }
   }
 
 
   function getOffScreenHeaderBar() {
-    for (var x=0; x<headerBars.length; x++) {
+    for (var x = 0; x < headerBars.length; x++) {
       if (!headerBars[x].isActive) return headerBars[x];
     }
   }
@@ -44771,12 +44770,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   }
 
 
-  $scope.$on('ionHeaderBar.init', function(ev){
+  $scope.$on('ionHeaderBar.init', function(ev) {
     ev.stopPropagation();
   });
 
 
-  $scope.$on('$destroy', function(){
+  $scope.$on('$destroy', function() {
     $scope.$parent.$hasHeader = false;
     $element.parent().removeData(DATA_NAV_BAR_CTRL);
     for (var x = 0; x < headerBars.length; x++) {
@@ -44788,7 +44787,6 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   });
 
 }]);
-
 
 IonicModule
 .controller('$ionicNavView', [
@@ -44876,11 +44874,11 @@ function($scope, $element, $attrs, $ionicNavBarDelegate, $ionicHistory, $ionicVi
     var switcher = $ionicViewSwitcher.create($scope, $element, viewLocals, enteringView);
 
     // init the rendering of views for this navView directive
-    switcher.init(registerData, function(){
+    switcher.init(registerData, function() {
       // the view is now compiled, in the dom and linked, now lets transition the views.
       // this uses a callback incase THIS nav-view has a nested nav-view, and after the NESTED
       // nav-view links, the NESTED nav-view would update which direction THIS nav-view should use
-      switcher.transition( self.direction(), registerData.showBack );
+      switcher.transition(self.direction(), registerData.showBack);
     });
 
   };
@@ -44926,7 +44924,7 @@ function($scope, $element, $attrs, $ionicNavBarDelegate, $ionicHistory, $ionicVi
 
   function getAssociatedNavBarCtrl() {
     if (navBarDelegate) {
-      for (var x=0; x<$ionicNavBarDelegate._instances.length; x++) {
+      for (var x=0; x < $ionicNavBarDelegate._instances.length; x++) {
         if ($ionicNavBarDelegate._instances[x].$$delegateHandle == navBarDelegate) {
           return $ionicNavBarDelegate._instances[x];
         }
@@ -45943,7 +45941,7 @@ function($scope, $ionicHistory, $attrs, $location, $state) {
     ) === 0;
   };
   this.srefMatchesState = function() {
-    return $attrs.uiSref && $state.includes( $attrs.uiSref.split('(')[0] );
+    return $attrs.uiSref && $state.includes($attrs.uiSref.split('(')[0]);
   };
   this.navNameMatchesState = function() {
     return this.navViewName && $ionicHistory.isCurrentStateNavView(this.navViewName);
@@ -46008,7 +46006,7 @@ function($scope, $ionicHistory, $element) {
     var tabIndex;
     if (angular.isNumber(tab)) {
       tabIndex = tab;
-      if(tabIndex >= self.tabs.length) return;
+      if (tabIndex >= self.tabs.length) return;
       tab = self.tabs[tabIndex];
     } else {
       tabIndex = self.tabs.indexOf(tab);
@@ -46048,7 +46046,6 @@ function($scope, $ionicHistory, $element) {
     }
   };
 }]);
-
 
 IonicModule
 .controller('$ionicView', [
@@ -47937,7 +47934,7 @@ IonicModule
   return {
     restrict: 'AC',
     link: function($scope, $element, $attr) {
-      $element.bind('click', function(){
+      $element.bind('click', function() {
         var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
         if (sideMenuCtrl) {
           // lower priority than navAnimation which allows navTransition
@@ -47977,10 +47974,10 @@ IonicModule
   return {
     restrict: 'AC',
     link: function($scope, $element, $attr) {
-      $scope.$on('$ionicView.beforeEnter', function(ev, viewData){
+      $scope.$on('$ionicView.beforeEnter', function(ev, viewData) {
         if (viewData.showBack) {
           var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
-          if ( !sideMenuCtrl.enableMenuWithBackViews() ) {
+          if (!sideMenuCtrl.enableMenuWithBackViews()) {
             $element.addClass('hide');
           }
         } else {
@@ -47988,14 +47985,13 @@ IonicModule
         }
       });
 
-      $element.bind('click', function(){
+      $element.bind('click', function() {
         var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
         sideMenuCtrl && sideMenuCtrl.toggle($attr.menuToggle);
       });
     }
   };
 });
-
 
 /*
  * We don't document the ionModal directive, we instead document
@@ -48352,8 +48348,8 @@ IonicModule
     restrict: 'A',
     priority: 1000,
     link: function($scope, $element, $attr) {
-      $element.bind('click', function(){
-        $ionicViewSwitcher.nextDirection( $attr.navDirection );
+      $element.bind('click', function() {
+        $ionicViewSwitcher.nextDirection($attr.navDirection);
       });
     }
   };
@@ -48381,8 +48377,8 @@ IonicModule
     restrict: 'A',
     priority: 1000,
     link: function($scope, $element, $attr) {
-      $element.bind('click', function(){
-        $ionicViewSwitcher.nextTransition( $attr.navTransition );
+      $element.bind('click', function() {
+        $ionicViewSwitcher.nextTransition($attr.navTransition);
       });
     }
   };
@@ -48484,7 +48480,7 @@ function($state, $ionicConfig) {
     priority: 2000,
     transclude: true,
     controller: '$ionicNavView',
-    compile: function (tElement, tAttrs, transclude) {
+    compile: function(tElement, tAttrs, transclude) {
 
       // a nav view element is a container for numerous views
       tElement.addClass('view-container');
@@ -48494,8 +48490,8 @@ function($state, $ionicConfig) {
         var latestLocals;
 
         // Put in the compiled initial view
-        transclude($scope, function(clone){
-          $element.append( clone );
+        transclude($scope, function(clone) {
+          $element.append(clone);
         });
 
         var viewData = navViewCtrl.init();
@@ -48532,7 +48528,6 @@ function($state, $ionicConfig) {
     }
   };
 }]);
-
 
 IonicModule
 
@@ -49274,15 +49269,15 @@ IonicModule
       return { pre: prelink };
       function prelink($scope, $element, $attrs, ctrl) {
 
-        ctrl.enableMenuWithBackViews( $scope.$eval($attrs.enableMenuWithBackViews) );
+        ctrl.enableMenuWithBackViews($scope.$eval($attrs.enableMenuWithBackViews));
 
-        $scope.$on('$ionicExposeAside', function(evt, isAsideExposed){
-          if(!$scope.$exposeAside) $scope.$exposeAside = {};
+        $scope.$on('$ionicExposeAside', function(evt, isAsideExposed) {
+          if (!$scope.$exposeAside) $scope.$exposeAside = {};
           $scope.$exposeAside.active = isAsideExposed;
           $ionicBody.enableClass(isAsideExposed, 'aside-open');
         });
 
-        $scope.$on('$destroy', function(){
+        $scope.$on('$destroy', function() {
           $ionicBody.removeClass('menu-open', 'aside-open');
         });
 

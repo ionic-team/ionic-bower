@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-698
+ * Ionic, v1.0.0-beta.13-nightly-699
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-698';
+window.ionic.version = '1.0.0-beta.13-nightly-699';
 
 (function(window, document, ionic) {
 
@@ -27,13 +27,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
 
   function domReady() {
     isDomReady = true;
-    for(var x=0; x<readyCallbacks.length; x++) {
+    for (var x = 0; x < readyCallbacks.length; x++) {
       ionic.requestAnimationFrame(readyCallbacks[x]);
     }
     readyCallbacks = [];
     document.removeEventListener('DOMContentLoaded', domReady);
   }
-  if (!isDomReady){
+  if (!isDomReady) {
     document.addEventListener('DOMContentLoaded', domReady);
   }
 
@@ -42,13 +42,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
   // The requestAnimationFrame polyfill
   // Put it on window just to preserve its context
   // without having to use .call
-  window._rAF = (function(){
-    return  window.requestAnimationFrame       ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
-              window.setTimeout(callback, 16);
-            };
+  window._rAF = (function() {
+    return window.requestAnimationFrame       ||
+           window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame    ||
+           function(callback) {
+             window.setTimeout(callback, 16);
+           };
   })();
 
   var cancelAnimationFrame = window.cancelAnimationFrame ||
@@ -135,7 +135,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @param {function} callback The function to be called.
      */
     ready: function(cb) {
-      if(isDomReady) {
+      if (isDomReady) {
         ionic.requestAnimationFrame(cb);
       } else {
         readyCallbacks.push(cb);
@@ -157,12 +157,12 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      *   - `{number}` `height` The height of the textNode.
      */
     getTextBounds: function(textNode) {
-      if(document.createRange) {
+      if (document.createRange) {
         var range = document.createRange();
         range.selectNodeContents(textNode);
-        if(range.getBoundingClientRect) {
+        if (range.getBoundingClientRect) {
           var rect = range.getBoundingClientRect();
-          if(rect) {
+          if (rect) {
             var sx = window.scrollX;
             var sy = window.scrollY;
 
@@ -191,13 +191,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @returns {number} The index, or -1, of a child with nodeName matching type.
      */
     getChildIndex: function(element, type) {
-      if(type) {
+      if (type) {
         var ch = element.parentNode.children;
         var c;
-        for(var i = 0, k = 0, j = ch.length; i < j; i++) {
+        for (var i = 0, k = 0, j = ch.length; i < j; i++) {
           c = ch[i];
-          if(c.nodeName && c.nodeName.toLowerCase() == type) {
-            if(c == element) {
+          if (c.nodeName && c.nodeName.toLowerCase() == type) {
+            if (c == element) {
               return k;
             }
             k++;
@@ -233,8 +233,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      */
     getParentWithClass: function(e, className, depth) {
       depth = depth || 10;
-      while(e.parentNode && depth--) {
-        if(e.parentNode.classList && e.parentNode.classList.contains(className)) {
+      while (e.parentNode && depth--) {
+        if (e.parentNode.classList && e.parentNode.classList.contains(className)) {
           return e.parentNode;
         }
         e = e.parentNode;
@@ -251,8 +251,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      */
     getParentOrSelfWithClass: function(e, className, depth) {
       depth = depth || 10;
-      while(e && depth--) {
-        if(e.classList && e.classList.contains(className)) {
+      while (e && depth--) {
+        if (e.classList && e.classList.contains(className)) {
           return e;
         }
         e = e.parentNode;
@@ -273,8 +273,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * {x1,y1,x2,y2}.
      */
     rectContains: function(x, y, x1, y1, x2, y2) {
-      if(x < x1 || x > x2) return false;
-      if(y < y1 || y > y2) return false;
+      if (x < x1 || x > x2) return false;
+      if (y < y1 || y > y2) return false;
       return true;
     },
 
@@ -286,7 +286,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
      * @returns {DOMElement} The element blurred or null
      */
     blurAll: function() {
-      if (document.activeElement && document.activeElement != document.body){
+      if (document.activeElement && document.activeElement != document.body) {
         document.activeElement.blur();
         return document.activeElement;
       }
@@ -313,7 +313,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
       ele = ele && ele.length && ele[0] || ele;
       if (ele && ele.style) {
         for (var prop in styles) {
-          if ( ele['$style-' + prop] !== styles[prop] ) {
+          if (ele['$style-' + prop] !== styles[prop]) {
             ele.style[prop] = ele['$style-' + prop] = styles[prop];
           }
         }
@@ -325,6 +325,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-698';
   ionic.requestAnimationFrame = ionic.DomUtil.requestAnimationFrame;
   ionic.cancelAnimationFrame = ionic.DomUtil.cancelAnimationFrame;
   ionic.animationFrameThrottle = ionic.DomUtil.animationFrameThrottle;
+
 })(window, document, ionic);
 
 /**
@@ -2977,38 +2978,38 @@ ionic.DomUtil.ready(function(){
 
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
-      ionic.requestAnimationFrame(function(){
-        if ( ionic.tap.requiresNativeClick(e.target) ) return;
+      ionic.requestAnimationFrame(function() {
+        if (ionic.tap.requiresNativeClick(e.target)) return;
         var ele = e.target;
         var eleToActivate;
 
-        for(var x=0; x<6; x++) {
-          if(!ele || ele.nodeType !== 1) break;
-          if(eleToActivate && ele.classList.contains('item')) {
+        for (var x = 0; x < 6; x++) {
+          if (!ele || ele.nodeType !== 1) break;
+          if (eleToActivate && ele.classList.contains('item')) {
             eleToActivate = ele;
             break;
           }
-          if( ele.tagName == 'A' || ele.tagName == 'BUTTON' || ele.hasAttribute('ng-click') ) {
+          if (ele.tagName == 'A' || ele.tagName == 'BUTTON' || ele.hasAttribute('ng-click')) {
             eleToActivate = ele;
             break;
           }
-          if( ele.classList.contains('button') ) {
+          if (ele.classList.contains('button')) {
             eleToActivate = ele;
             break;
           }
           // no sense climbing past these
-          if(ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT'){
+          if (ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT') {
             break;
           }
           ele = ele.parentElement;
         }
 
-        if(eleToActivate) {
+        if (eleToActivate) {
           // queue that this element should be set to active
           queueElements[keyId] = eleToActivate;
 
           // in XX milliseconds, set the queued elements to active
-          if(e.type === 'touchstart') {
+          if (e.type === 'touchstart') {
             self._activateTimeout = setTimeout(activateElements, 80);
           } else {
             ionic.requestAnimationFrame(activateElements);
@@ -3038,8 +3039,8 @@ ionic.DomUtil.ready(function(){
 
   function activateElements() {
     // activate all elements in the queue
-    for(var key in queueElements) {
-      if(queueElements[key]) {
+    for (var key in queueElements) {
+      if (queueElements[key]) {
         queueElements[key].classList.add(ACTIVATED_CLASS);
         activeElements[key] = queueElements[key];
       }
@@ -3053,8 +3054,8 @@ ionic.DomUtil.ready(function(){
       return;
     }
 
-    for(var key in activeElements) {
-      if(activeElements[key]) {
+    for (var key in activeElements) {
+      if (activeElements[key]) {
         activeElements[key].classList.remove(ACTIVATED_CLASS);
         delete activeElements[key];
       }
