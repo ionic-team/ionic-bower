@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-719
+ * Ionic, v1.0.0-beta.13-nightly-720
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-719';
+window.ionic.version = '1.0.0-beta.13-nightly-720';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-719
+ * Ionic, v1.0.0-beta.13-nightly-720
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -46126,7 +46126,7 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
     // add listeners for when this view changes
     $scope.$on('$ionicView.beforeEnter', self.beforeEnter);
     $scope.$on('$ionicView.afterEnter', afterEnter);
-    $scope.$on('$ionicView.beforeLeave', deregisterObservers);
+    $scope.$on('$ionicView.beforeLeave', deregisterFns);
   };
 
   self.beforeEnter = function(ev, transData) {
@@ -46158,7 +46158,7 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
       });
 
       // make sure any existing observers are cleaned up
-      deregisterObservers();
+      deregisterFns();
     }
   };
 
@@ -46175,14 +46175,14 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
     }
 
     if (isDefined($attrs.hideBackButton)) {
-      deregisters.push($attrs.$observe('hideBackButton', function() {
-        navViewCtrl.showBackButton(!attrTrue('hideBackButton'));
+      deregisters.push($scope.$watch($attrs.hideBackButton, function(val) {
+        navViewCtrl.showBackButton(!val);
       }));
     }
 
     if (isDefined($attrs.hideNavBar)) {
-      deregisters.push($attrs.$observe('hideNavBar', function() {
-        navViewCtrl.showBar(!attrTrue('hideNavBar'));
+      deregisters.push($scope.$watch($attrs.hideNavBar, function(val) {
+        navViewCtrl.showBar(!val);
       }));
     }
 
@@ -46190,7 +46190,7 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
   }
 
 
-  function deregisterObservers() {
+  function deregisterFns() {
     // remove all existing $attrs.$observe's
     for (var x = 0; x < deregisters.length; x++) {
       deregisters[x]();
