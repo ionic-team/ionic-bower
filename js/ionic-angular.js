@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-714
+ * Ionic, v1.0.0-beta.13-nightly-715
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6583,6 +6583,7 @@ function(scope, element, $$ionicAttachDrag, $interval) {
 
   $$ionicAttachDrag(scope, element, {
     getDistance: function() { return slidesParent.prop('offsetWidth'); },
+    onDragStart: onDragStart,
     onDrag: onDrag,
     onDragEnd: onDragEnd
   });
