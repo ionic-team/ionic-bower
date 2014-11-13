@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-713
+ * Ionic, v1.0.0-beta.13-nightly-714
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-713';
+window.ionic.version = '1.0.0-beta.13-nightly-714';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-713
+ * Ionic, v1.0.0-beta.13-nightly-714
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43813,7 +43813,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           if (leavingEle) {
             scope = leavingEle.scope();
             if (scope) {
-              scope.$emit('$ionicView.' + step + 'Leaving', transData);
+              scope.$emit('$ionicView.' + step + 'Leave', transData);
             }
           }
         },
@@ -50027,6 +50027,19 @@ function($ionicGesture, $timeout) {
  *   </ion-view>
  * </ion-nav-view>
  * ```
+ *
+ * ## Events
+ *
+ * Views can be cached which means controllers may only load once, which could change how you'd
+ * expected data to load. To know when a view has entered or left, events have been added that
+ * get emitted from the view's scope. These events also contain data about the view,
+ * such as the title and if the back button should show, along with transition data, such as the
+ * transition type and direction that will be or was used.
+ *
+ * * `$ionicView.beforeEnter`
+ * * `$ionicView.beforeLeave`
+ * * `$ionicView.afterEnter`
+ * * `$ionicView.afterLeave`
  *
  * @param {string=} view-title The title to display on the parent {@link ionic.directive:ionNavBar}.
  * @param {boolean=} cache-view If this view should be allowed to be cached or not. Default `true`
