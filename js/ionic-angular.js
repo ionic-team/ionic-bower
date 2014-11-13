@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-722
+ * Ionic, v1.0.0-beta.13-nightly-723
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2905,7 +2905,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
  * ```js
  * function MyCtrl($scope, $ionicNavBarDelegate) {
  *   $scope.setNavTitle = function(title) {
- *     $ionicNavBarDelegate.setTitle(title);
+ *     $ionicNavBarDelegate.title(title);
  *   }
  * }
  * ```
