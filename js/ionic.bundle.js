@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-716
+ * Ionic, v1.0.0-beta.13-nightly-717
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-716';
+window.ionic.version = '1.0.0-beta.13-nightly-717';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-716
+ * Ionic, v1.0.0-beta.13-nightly-717
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47949,9 +47949,15 @@ function($timeout) {
  * @restrict AC
  *
  * @description
- * Closes a side menu which is currently opened. By default, navigation
- * transitions will not animate between views when the menu is open and
- * this directive is used to close the menu.
+ * Attribute directive which closes a currently opened side menu. By default,
+ * navigation transitions will not animate between views when the menu is open and
+ * this directive is used to close the menu. Additionally, this directive
+ * will reset the history and make the entering view the root of its history
+ * stack. Having the entering view become the root of the history stack is done
+ * to replicate the user experience seen on most side menu implementations, which is
+ * to not show the back button at the root of the stack, and only show the
+ * menu button. It's recommended to also use the `enable-menu-with-back-views="false"`
+ * {@link ionic.directive:ionSideMenus} attribute when using the menuClose directive.
  *
  * @usage
  * Below is an example of a link within a side menu. Tapping this link would
