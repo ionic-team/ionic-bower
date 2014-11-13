@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-717
+ * Ionic, v1.0.0-beta.13-nightly-718
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7097,6 +7097,7 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
   var navViewCtrl;
   var navBarDelegateHandle;
   var hasViewHeaderBar;
+  var deregisters = [];
 
   var deregIonNavBarInit = $scope.$on('ionNavBar.init', function(ev, delegateHandle){
     // this view has its own ion-nav-bar, remember the navBarDelegateHandle for this view
@@ -7123,13 +7124,8 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
 
     // add listeners for when this view changes
     $scope.$on('$ionicView.beforeEnter', self.beforeEnter);
-    $scope.$on('$ionicView.afterEnter', self.afterEnter);
-
-    // watch to see if the hideNavBar attribute changes
-    var hideNavAttr = isDefined($attrs.hideNavBar) ? $attrs.hideNavBar : 'false';
-    $scope.$watch(hideNavAttr, function(value) {
-      navViewCtrl.showBar(!value);
-    });
+    $scope.$on('$ionicView.afterEnter', afterEnter);
+    $scope.$on('$ionicView.beforeLeave', deregisterObservers);
   };
 
   self.beforeEnter = function(ev, transData) {
@@ -7153,14 +7149,53 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
         transition: transData.transition,
         transitionId: transData.transitionId,
         shouldAnimate: transData.shouldAnimate,
-        showBack: transData.showBack && !$attrs.hideBackButton,
+        showBack: transData.showBack && !attrTrue('hideBackButton'),
         buttons: buttons,
         navBarDelegate: navBarDelegateHandle || null,
-        showNavBar: !($attrs.hideNavBar === "true" || $attrs.hideNavBar === ""),
+        showNavBar: !attrTrue('hideNavBar'),
         hasHeaderBar: !!hasViewHeaderBar
       });
+
+      // make sure any existing observers are cleaned up
+      deregisterObservers();
     }
   };
+
+
+  function afterEnter() {
+    // only listen for title updates after it has entered
+    // but also deregister the observe before it leaves
+    var viewTitleAttr = isDefined($attrs.viewTitle) && 'viewTitle' || isDefined($attrs.title) && 'title';
+    if (viewTitleAttr) {
+      deregisters.push($attrs.$observe(viewTitleAttr, function(val) {
+        navViewCtrl.title(val);
+        $ionicHistory.currentTitle(val);
+      }));
+    }
+
+    if (isDefined($attrs.hideBackButton)) {
+      deregisters.push($attrs.$observe('hideBackButton', function() {
+        navViewCtrl.showBackButton(!attrTrue('hideBackButton'));
+      }));
+    }
+
+    if (isDefined($attrs.hideNavBar)) {
+      deregisters.push($attrs.$observe('hideNavBar', function() {
+        navViewCtrl.showBar(!attrTrue('hideNavBar'));
+      }));
+    }
+
+    $ionicViewSwitcher.setActiveView($element.parent());
+  }
+
+
+  function deregisterObservers() {
+    // remove all existing $attrs.$observe's
+    for (var x = 0; x < deregisters.length; x++) {
+      deregisters[x]();
+    }
+    deregisters = [];
+  }
 
 
   function generateButton(html) {
@@ -7171,9 +7206,9 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
   }
 
 
-  self.afterEnter = function(ev, transitionData) {
-    $ionicViewSwitcher.setActiveView($element.parent());
-  };
+  function attrTrue(key) {
+    return $attrs[key] == 'true' || $attrs[key] === '';
+  }
 
 
   self.navElement = function(type, html) {
