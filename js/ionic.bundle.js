@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-711
+ * Ionic, v1.0.0-beta.13-nightly-712
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-711';
+window.ionic.version = '1.0.0-beta.13-nightly-712';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-711
+ * Ionic, v1.0.0-beta.13-nightly-712
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40406,7 +40406,7 @@ function($rootScope, $state, $location, $window) {
   var DIRECTION_NONE = 'none';
 
   var stateChangeCounter = 0;
-  var lastStateId;
+  var lastStateId, setNextAsHistoryRoot;
 
   var viewHistory = {
     histories: { root: { historyId: 'root', parentHistoryId: null, stack: [], cursor: -1 } },
@@ -40548,7 +40548,7 @@ function($rootScope, $state, $location, $window) {
           action = null,
           direction = DIRECTION_NONE,
           historyId = hist.historyId,
-          tmp;
+          tmp, x;
 
       if (isAbstractView) {
         // abstract states should not register themselves in the history stack
@@ -40669,7 +40669,7 @@ function($rootScope, $state, $location, $window) {
             tmp = getHistoryById(forwardView.historyId);
             if (tmp) {
               // the forward has a history
-              for (var x=tmp.stack.length - 1; x >= forwardView.index; x--) {
+              for (x = tmp.stack.length - 1; x >= forwardView.index; x--) {
                 // starting from the end destroy all forwards in this history from this point
                 tmp.stack[x].destroy();
                 tmp.stack.splice(x);
@@ -40722,6 +40722,19 @@ function($rootScope, $state, $location, $window) {
 
         // add the new view to this history's stack
         hist.stack.push(viewHistory.views[viewId]);
+      }
+
+      if (setNextAsHistoryRoot) {
+        for (x = 0; x < hist.stack.length; x++) {
+          if (hist.stack[x].viewId === viewId) {
+            hist.stack[x].index = 0;
+            hist.stack[x].backViewId = hist.stack[x].forwardViewId = null;
+          } else {
+            delete viewHistory.views[hist.stack[x].viewId];
+          }
+        }
+        hist.stack = [viewHistory.views[viewId]];
+        setNextAsHistoryRoot = false;
       }
 
       setNavViews(viewId);
@@ -40843,6 +40856,10 @@ function($rootScope, $state, $location, $window) {
       if (currentView) {
         setNavViews(currentView.viewId);
       }
+    },
+
+    resetHistory: function() {
+      setNextAsHistoryRoot = true;
     }
 
   };
@@ -43534,7 +43551,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
   var VIEW_STATUS_STAGED = 'stage';
 
   var transitionCounter = 0;
-  var nextTransition, nextDirection, nextShowBack;
+  var nextTransition, nextDirection;
   ionic.transition = ionic.transition || {};
   ionic.transition.isActive = false;
   var isActiveTimer;
@@ -43578,7 +43595,6 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
     var transition = nextTransition || ionic.DomUtil.cachedAttr(enteringEle, 'view-transition') || state.viewTransition || $ionicConfig.views.transition() || 'none';
     direction = nextDirection || ionic.DomUtil.cachedAttr(enteringEle, 'view-direction') || state.viewDirection || direction || 'none';
     var shouldAnimate = (transition !== 'none' && direction !== 'none');
-    showBack = (nextShowBack === true || nextShowBack === false ? nextShowBack : !!showBack);
 
     return {
       transition: transition,
@@ -43588,7 +43604,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
       stateId: enteringView.stateId,
       stateName: enteringView.stateName,
       stateParams: enteringView.stateParams,
-      showBack: showBack
+      showBack: !!showBack
     };
   }
 
@@ -43779,7 +43795,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
             }
 
             // remove any references that could cause memory issues
-            nextTransition = nextDirection = nextShowBack = enteringView = enteringEle = leavingEle = null;
+            nextTransition = nextDirection = enteringView = enteringEle = leavingEle = null;
           }
 
         },
@@ -43886,10 +43902,6 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
 
     nextDirection: function(val) {
       nextDirection = val;
-    },
-
-    nextShowBack: function(val) {
-      nextShowBack = val;
     },
 
     getTransitionData: getTransitionData,
@@ -47908,17 +47920,17 @@ function($timeout) {
  * ```
  */
 IonicModule
-.directive('menuClose', ['$ionicViewSwitcher', function($ionicViewSwitcher) {
+.directive('menuClose', ['$ionicViewSwitcher', '$ionicHistory', function($ionicViewSwitcher, $ionicHistory) {
   return {
     restrict: 'AC',
     link: function($scope, $element, $attr) {
       $element.bind('click', function() {
         var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
         if (sideMenuCtrl) {
-          // lower priority than navAnimation which allows navTransition
+          // lower priority than navTransition which allows navTransition
           // to override this directive's nextTransition() call
           $ionicViewSwitcher.nextTransition('none');
-          $ionicViewSwitcher.nextShowBack(false);
+          $ionicHistory.resetHistory();
           sideMenuCtrl.close();
         }
       });
