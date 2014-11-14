@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-731
+ * Ionic, v1.0.0-beta.13-nightly-732
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-731';
+window.ionic.version = '1.0.0-beta.13-nightly-732';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-731
+ * Ionic, v1.0.0-beta.13-nightly-732
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -48627,35 +48627,56 @@ IonicModule
  * This is good to do because the template will be cached for very fast loading, instead of
  * having to fetch them from the network.
  *
- *## Caching
+ * ## Caching
  *
- *Caching can disabled/enabled by multiple ways. By default, Ionic will cache a maximum of 10 views.
- *You could choose to disable caching through `$stateProvider.state`.
+ * By default views are cached to improve performance. When a view is navigated away from,
+ * its element is left in the DOM, and its scope is disconnected from the cycle. When navigating
+ * to a view which is already cached, its scope is then reconnected, and the existing element which
+ * was left in the DOM becomes the active view. This also allows for scroll position of previous
+ * views to be maintained.
  *
- *```
- *$stateProvider.state('myState', {
- *  cache: false,
- *  url : '/myUrl',
- *  abstract: true,
- *  cache: true,
- *  templateUrl : 'my-template.html'
- *})
- *```
+ * Caching can be disabled and enabled in multiple ways. By default, Ionic will cache a maximum
+ * of 10 views, and not only can this be configured, but apps can also explicitly state
+ * which views should and should not be cached.
  *
- *If you wish to disable caching globally in an app, you can edit the `$ionicConfigProvider.views.maxCache`
+ * Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are
+ * being disconnected from the watch cycle. Because scopes are not being destroyed and recreated,
+ * then controllers are not loading again on a subsequent viewing. If the app/controller needs to
+ * know when a view has entered or has left, then view events emitted from the
+ * {@link ionic.directive:ionView} scope, such as `$ionicView.afterEnter`, may be useful.
  *
- *```
- *$ionicConfigProvider.views.maxCache(0);
- *```
+ * #### Disable cache globally
  *
- *In this instance we’re setting the number of cached views to 0, essentially disabling the caching functionality.
+ * The {@link ionic.provider:$ionicConfigProvider} can be used to set the maximum allowable views
+ * which can be cached, but this can also be use to disable all caching by setting it to 0.
  *
- *Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are being disconnected.
- *Then when you travel back to that cached view, the scopes get reconnected.
+ * ```
+ * $ionicConfigProvider.views.maxCache(0);
+ * ```
  *
+ * #### Disable cache within state provider
+ *
+ * ```
+ * $stateProvider.state('myState', {
+ *    cache: false,
+ *    url : '/myUrl',
+ *    templateUrl : 'my-template.html'
+ * })
+ * ```
+ *
+ * #### Disable cache with an attribute
+ *
+ * ```
+ * <ion-view cache-view="false" view-title="My Title!">
+ *   ...
+ * </ion-view>
+ * ```
+ *
+ *
+ * ## AngularUI Router
  *
  * Please visit [AngularUI Router's docs](https://github.com/angular-ui/ui-router/wiki) for
- * more info. Below is a great video by the AngularUI Router guys that may help to explain
+ * more info. Below is a great video by the AngularUI Router team that may help to explain
  * how it all works:
  *
  * <iframe width="560" height="315" src="//www.youtube.com/embed/dqJRoh8MnBo"
@@ -48663,7 +48684,8 @@ IonicModule
  *
  * @param {string=} name A view name. The name should be unique amongst the other views in the
  * same state. You can have views of the same name that live in different states. For more
- * information, see ui-router's [ui-view documentation](http://angular-ui.github.io/ui-router/site/#/api/ui.router.state.directive:ui-view).
+ * information, see ui-router's
+ * [ui-view documentation](http://angular-ui.github.io/ui-router/site/#/api/ui.router.state.directive:ui-view).
  */
 IonicModule
 .directive('ionNavView', [
