@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-723
+ * Ionic, v1.0.0-beta.13-nightly-726
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1338,7 +1338,7 @@ function($rootScope, $state, $location, $window) {
   var DIRECTION_NONE = 'none';
 
   var stateChangeCounter = 0;
-  var lastStateId, setNextAsHistoryRoot;
+  var lastStateId, nextViewOptions;
 
   var viewHistory = {
     histories: { root: { historyId: 'root', parentHistoryId: null, stack: [], cursor: -1 } },
@@ -1656,17 +1656,21 @@ function($rootScope, $state, $location, $window) {
         hist.stack.push(viewHistory.views[viewId]);
       }
 
-      if (setNextAsHistoryRoot) {
-        for (x = 0; x < hist.stack.length; x++) {
-          if (hist.stack[x].viewId === viewId) {
-            hist.stack[x].index = 0;
-            hist.stack[x].backViewId = hist.stack[x].forwardViewId = null;
-          } else {
-            delete viewHistory.views[hist.stack[x].viewId];
+      if (nextViewOptions) {
+        if (nextViewOptions.disableAnimate) direction = DIRECTION_NONE;
+        if (nextViewOptions.disableBack) viewHistory.views[viewId].backViewId = null;
+        if (nextViewOptions.historyRoot) {
+          for (x = 0; x < hist.stack.length; x++) {
+            if (hist.stack[x].viewId === viewId) {
+              hist.stack[x].index = 0;
+              hist.stack[x].backViewId = hist.stack[x].forwardViewId = null;
+            } else {
+              delete viewHistory.views[hist.stack[x].viewId];
+            }
           }
+          hist.stack = [viewHistory.views[viewId]];
         }
-        hist.stack = [viewHistory.views[viewId]];
-        setNextAsHistoryRoot = false;
+        nextViewOptions = null;
       }
 
       setNavViews(viewId);
@@ -1790,8 +1794,16 @@ function($rootScope, $state, $location, $window) {
       }
     },
 
-    resetHistory: function() {
-      setNextAsHistoryRoot = true;
+    nextViewOptions: function(opts) {
+      if (arguments.length) {
+        if (opts === null) {
+          nextViewOptions = opts;
+        } else {
+          nextViewOptions = nextViewOptions || {};
+          extend(nextViewOptions, opts);
+        }
+      }
+      return nextViewOptions;
     }
 
   };
@@ -1848,7 +1860,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
   };
 
   // Set the document title when a new view is shown
-  $rootScope.$on('viewState.viewEnter', function(e, data) {
+  $rootScope.$on('$ionicView.afterEnter', function(ev, data) {
     if (data && data.title) {
       $document[0].title = data.title;
     }
@@ -8994,17 +9006,17 @@ function($timeout) {
  * ```
  */
 IonicModule
-.directive('menuClose', ['$ionicViewSwitcher', '$ionicHistory', function($ionicViewSwitcher, $ionicHistory) {
+.directive('menuClose', ['$ionicHistory', function($ionicHistory) {
   return {
     restrict: 'AC',
     link: function($scope, $element, $attr) {
       $element.bind('click', function() {
         var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
         if (sideMenuCtrl) {
-          // lower priority than navTransition which allows navTransition
-          // to override this directive's nextTransition() call
-          $ionicViewSwitcher.nextTransition('none');
-          $ionicHistory.resetHistory();
+          $ionicHistory.nextViewOptions({
+            historyRoot: true,
+            disableAnimate: true
+          });
           sideMenuCtrl.close();
         }
       });
