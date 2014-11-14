@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-730
+ * Ionic, v1.0.0-beta.13-nightly-731
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9632,6 +9632,33 @@ IonicModule
  * This is good to do because the template will be cached for very fast loading, instead of
  * having to fetch them from the network.
  *
+ *## Caching
+ *
+ *Caching can disabled/enabled by multiple ways. By default, Ionic will cache a maximum of 10 views.
+ *You could choose to disable caching through `$stateProvider.state`.
+ *
+ *```
+ *$stateProvider.state('myState', {
+ *  cache: false,
+ *  url : '/myUrl',
+ *  abstract: true,
+ *  cache: true,
+ *  templateUrl : 'my-template.html'
+ *})
+ *```
+ *
+ *If you wish to disable caching globally in an app, you can edit the `$ionicConfigProvider.views.maxCache`
+ *
+ *```
+ *$ionicConfigProvider.views.maxCache(0);
+ *```
+ *
+ *In this instance we’re setting the number of cached views to 0, essentially disabling the caching functionality.
+ *
+ *Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are being disconnected.
+ *Then when you travel back to that cached view, the scopes get reconnected.
+ *
+ *
  * Please visit [AngularUI Router's docs](https://github.com/angular-ui/ui-router/wiki) for
  * more info. Below is a great video by the AngularUI Router guys that may help to explain
  * how it all works:
@@ -11215,6 +11242,40 @@ function($ionicGesture, $timeout) {
  * * `$ionicView.beforeLeave`
  * * `$ionicView.afterEnter`
  * * `$ionicView.afterLeave`
+ *
+ *## Caching
+ *
+ *Caching can disabled/enabled by multiple ways. By default, Ionic will cache a maximum of 10 views. You can optionally choose to disable caching a view through the `cache-view` attribute directive.
+ *
+ *```html
+ *<ion-view cache-view="false" view-title="My Title"></ion-view>
+ *```
+ *
+ *Alternatively, you could choose to disable caching through `$stateProvider.state`.
+ *
+ *```
+ *$stateProvider.state('myState', {
+ *  cache: false,
+ *  url : '/myUrl',
+ *  views: {
+ *    'nav-view': {
+ *      templateUrl : 'my-template.html'
+ *    }
+ *  }
+ *})
+ *```
+ *
+ *If you wish to disable caching globally in an app, you can edit the `$ionicConfigProvider.views.maxCache`
+ *
+ *```
+ *$ionicConfigProvider.views.maxCache(0);
+ *```
+ *
+ *In this instance we’re setting the number of cached views to 0, essentially disabling the caching functionality.
+ *
+ *Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are being disconnected.
+ *Then when you travel back to that cached view, the scopes get reconnected.
+ *
  *
  * @param {string=} view-title The title to display on the parent {@link ionic.directive:ionNavBar}.
  * @param {boolean=} cache-view If this view should be allowed to be cached or not. Default `true`
