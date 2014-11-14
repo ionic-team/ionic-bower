@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-732
+ * Ionic, v1.0.0-beta.13-nightly-733
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5896,11 +5896,6 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   }
 
 
-  $scope.$on('ionHeaderBar.init', function(ev) {
-    ev.stopPropagation();
-  });
-
-
   $scope.$on('$destroy', function() {
     $scope.$parent.$hasHeader = false;
     $element.parent().removeData(DATA_NAV_BAR_CTRL);
@@ -7202,16 +7197,9 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
     navBarDelegateHandle = delegateHandle;
   });
 
-  var deregIonHeaderBarInit = $scope.$on('ionHeaderBar.init', function(ev){
-    // this view has its own ion-header-bar, remember it should trump other nav bars
-    ev.stopPropagation();
-    hasViewHeaderBar = true;
-  });
-
 
   self.init = function() {
     deregIonNavBarInit();
-    deregIonHeaderBarInit();
 
     var modalCtrl = $element.inheritedData('$ionModalController');
     navViewCtrl = $element.inheritedData('$ionNavViewController');
@@ -8340,7 +8328,6 @@ function headerFooterBarDirective(isHeader) {
               delete $scope.$hasSubheader;
             });
             ctrl.align();
-            $scope.$emit('ionHeaderBar.init');
 
           } else {
             $scope.$watch(function() { return $element[0].className; }, function(value) {
