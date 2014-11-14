@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-726
+ * Ionic, v1.0.0-beta.13-nightly-728
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5105,15 +5105,15 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   };
 
 
-  self.alignTitle = function(align) {
+  self.align = function(textAlign) {
     var titleEle = getEle(TITLE);
 
-    align = align || $attrs.alignTitle || $ionicConfig.navBar.alignTitle();
+    textAlign = textAlign || $attrs.alignTitle || $ionicConfig.navBar.alignTitle();
 
-    var widths = self.calcWidths(align, false);
+    var widths = self.calcWidths(textAlign, false);
 
     if (isBackShown && previousTitleText && $ionicConfig.backButton.previousTitleText()) {
-      var previousTitleWidths = self.calcWidths(align, true);
+      var previousTitleWidths = self.calcWidths(textAlign, true);
 
       var availableTitleWidth = $element[0].offsetWidth - previousTitleWidths.titleLeft - previousTitleWidths.titleRight;
 
@@ -5126,7 +5126,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   };
 
 
-  self.calcWidths = function(align, isPreviousTitle) {
+  self.calcWidths = function(textAlign, isPreviousTitle) {
     var titleEle = getEle(TITLE);
     var backBtnEle = getEle(BACK_BUTTON);
     var x, y, z, b, c, d, childSize, bounds;
@@ -5209,7 +5209,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
     // Size and align the header titleEle based on the sizes of the left and
     // right children, and the desired alignment mode
-    if (align == 'left') {
+    if (textAlign == 'left') {
       updateCss = 'title-left';
       if (buttonsLeft) {
         updateTitleLeft = buttonsLeft + 15;
@@ -5218,7 +5218,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
         updateTitleRight = buttonsRight + 15;
       }
 
-    } else if (align == 'right') {
+    } else if (textAlign == 'right') {
       updateCss = 'title-right';
       if (buttonsLeft) {
         updateTitleLeft = buttonsLeft + 15;
@@ -5680,7 +5680,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
     navBarTransition.run(0);
 
-    $timeout(enteringHeaderBarCtrl.alignTitle, 16);
+    $timeout(enteringHeaderBarCtrl.align, 16);
 
     queuedTransitionStart = function() {
       if (latestTransitionId !== transitionId) return;
@@ -5757,6 +5757,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     headerBar = headerBar || getOnScreenHeaderBar();
     headerBar && headerBar.showBack(show);
     $scope.$isBackButtonShown = !!show;
+    return !!show;
   };
 
 
@@ -5768,6 +5769,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
       $scope.$title = newTitleText;
     }
     return $scope.$title;
+  };
+
+
+  self.align = function(val, headerBar) {
+    headerBar = headerBar || getOnScreenHeaderBar();
+    headerBar && headerBar.controller().align(val);
   };
 
 
@@ -8240,7 +8247,7 @@ function headerFooterBarDirective(isHeader) {
               delete $scope.$hasHeader;
               delete $scope.$hasSubheader;
             });
-            ctrl.alignTitle();
+            ctrl.align();
             $scope.$emit('ionHeaderBar.init');
 
           } else {
