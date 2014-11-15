@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-733
+ * Ionic, v1.0.0-beta.13-nightly-735
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-733';
+window.ionic.version = '1.0.0-beta.13-nightly-735';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-733
+ * Ionic, v1.0.0-beta.13-nightly-735
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41128,15 +41128,12 @@ IonicModule
     views: {
       maxCache: PLATFORM,
       forwardCache: PLATFORM,
-      transition: PLATFORM,
-      transitionFn: PLATFORM
+      transition: PLATFORM
     },
     navBar: {
       alignTitle: PLATFORM,
       positionPrimaryButtons: PLATFORM,
-      positionSecondaryButtons: PLATFORM,
-      transition: PLATFORM,
-      transitionFn: PLATFORM
+      positionSecondaryButtons: PLATFORM
     },
     backButton: {
       icon: PLATFORM,
@@ -41169,8 +41166,7 @@ IonicModule
     navBar: {
       alignTitle: 'center',
       positionPrimaryButtons: 'left',
-      positionSecondaryButtons: 'right',
-      transition: 'ios'
+      positionSecondaryButtons: 'right'
     },
 
     backButton: {
@@ -41209,8 +41205,7 @@ IonicModule
     navBar: {
       alignTitle: 'left',
       positionPrimaryButtons: 'right',
-      positionSecondaryButtons: 'right',
-      transition: 'android'
+      positionSecondaryButtons: 'right'
     },
 
     backButton: {
@@ -41355,6 +41350,27 @@ IonicModule
     return provider.transitions.views.android(enteringHeaderBar.containerEle(),
                                               leavingHeaderBar && leavingHeaderBar.containerEle(),
                                               direction, shouldAnimate);
+  };
+
+
+  // No Transition
+  // -----------------------
+
+  provider.transitions.views.none = function(enteringEle, leavingEle) {
+    return {
+      run: function(step) {
+        provider.transitions.views.android(enteringEle, leavingEle, false, false).run(step);
+      }
+    };
+  };
+
+  provider.transitions.navBar.none = function(enteringHeaderBar, leavingHeaderBar) {
+    return {
+      run: function(step) {
+        provider.transitions.navBar.ios(enteringHeaderBar, leavingHeaderBar, false, false).run(step);
+        provider.transitions.navBar.android(enteringHeaderBar, leavingHeaderBar, false, false).run(step);
+      }
+    };
   };
 
 
@@ -44549,7 +44565,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
   self.init = function() {
     $element.addClass('nav-bar-container');
-    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', $ionicConfig.navBar.transition());
+    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', $ionicConfig.views.transition());
 
     // create two nav bar blocks which will trade out which one is shown
     self.createHeaderBar(false);
@@ -44712,7 +44728,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
   self.update = function(viewData) {
     var showNavBar = !viewData.hasHeaderBar && viewData.showNavBar;
-    viewData.transition = $ionicConfig.navBar.transition();
+    viewData.transition = $ionicConfig.views.transition();
 
     if (!showNavBar) {
       viewData.direction = 'none';
@@ -44746,14 +44762,14 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
   self.transition = function(enteringHeaderBar, leavingHeaderBar, viewData) {
     var enteringHeaderBarCtrl = enteringHeaderBar.controller();
-    var transitionFn = $ionicConfig.transitions.navBar[$ionicConfig.navBar.transition()];
+    var transitionFn = $ionicConfig.transitions.navBar[viewData.transition];
     var transitionId = viewData.transitionId;
 
     enteringHeaderBarCtrl.beforeEnter(viewData);
 
     var navBarTransition = transitionFn(enteringHeaderBar, leavingHeaderBar, viewData.direction, viewData.shouldAnimate && self.isInitialized);
 
-    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', $ionicConfig.navBar.transition());
+    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', viewData.transition);
     ionic.DomUtil.cachedAttr($element, 'nav-bar-direction', viewData.direction);
 
     if (navBarTransition.shouldAnimate) {
