@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-736
+ * Ionic, v1.0.0-beta.13-nightly-737
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-736';
+window.ionic.version = '1.0.0-beta.13-nightly-737';
 
 (function(window, document, ionic) {
 
@@ -38997,7 +38997,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-736
+ * Ionic, v1.0.0-beta.13-nightly-737
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42070,7 +42070,15 @@ IonicModule
    * supplied view data.
    * @param {object} viewData An object containing `title`, `showBar` properties.
    */
-  'update'
+  'update',
+
+  // DEPRECATED, as of v1.0.0-beta14 -------
+  'changeTitle',
+  'setTitle',
+  'getTitle',
+  'back',
+  'getPreviousTitle'
+  // END DEPRECATED -------
 ]));
 
 var PLATFORM_BACK_BUTTON_PRIORITY_VIEW = 100;
@@ -44541,7 +44549,8 @@ IonicModule
   '$timeout',
   '$ionicNavBarDelegate',
   '$ionicConfig',
-function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $ionicConfig) {
+  '$ionicHistory',
+function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $ionicConfig, $ionicHistory) {
 
   var CSS_HIDE = 'hide';
   var DATA_NAV_BAR_CTRL = '$ionNavBarController';
@@ -44879,6 +44888,34 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     headerBar = headerBar || getOnScreenHeaderBar();
     headerBar && headerBar.controller().align(val);
   };
+
+
+  // DEPRECATED, as of v1.0.0-beta14 -------
+  self.changeTitle = function(val) {
+    deprecatedWarning('changeTitle(val)', 'title(val)');
+    self.title(val);
+  };
+  self.setTitle = function(val) {
+    deprecatedWarning('setTitle(val)', 'title(val)');
+    self.title(val);
+  };
+  self.getTitle = function() {
+    deprecatedWarning('getTitle()', 'title()');
+    return self.title();
+  };
+  self.back = function() {
+    deprecatedWarning('back()', '$ionicHistory.goBack()');
+    $ionicHistory.goBack();
+  };
+  self.getPreviousTitle = function() {
+    deprecatedWarning('getPreviousTitle()', '$ionicHistory.backTitle()');
+    $ionicHistory.goBack();
+  };
+  function deprecatedWarning(oldMethod, newMethod) {
+    var warn = console.warn || console.log;
+    warn && warn('navBarController.' + oldMethod + ' is deprecated, please use ' + newMethod + ' instead');
+  }
+  // END DEPRECATED -------
 
 
   function createNavElement(type) {
