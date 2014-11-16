@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-738
+ * Ionic, v1.0.0-beta.13-nightly-739
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-738';
+window.ionic.version = '1.0.0-beta.13-nightly-739';
 
 (function(window, document, ionic) {
 
@@ -6526,11 +6526,10 @@ ionic.scroll = {
 
 
       // Kill the current drag
-      if (_this._lastDrag) {
-        _this._lastDrag.buttons = null;
-        _this._lastDrag.content = null;
+      if (!_this._lastDrag) {
+        _this._lastDrag = {};
       }
-      _this._lastDrag = _this._currentDrag;
+      angular.extend(_this._lastDrag, _this._currentDrag);
       if (_this._currentDrag) {
         _this._currentDrag.buttons = null;
         _this._currentDrag.content = null;
@@ -6872,6 +6871,11 @@ ionic.scroll = {
 
       var lastDragOp = this._lastDragOp;
       var item;
+
+      // If we have an open SlideDrag and we're scrolling the list. Clear it.
+      if (this._didDragUpOrDown && lastDragOp instanceof SlideDrag) {
+          lastDragOp.clean && lastDragOp.clean();
+      }
 
       // Check if this is a reorder drag
       if (ionic.DomUtil.getParentOrSelfWithClass(e.target, ITEM_REORDER_BTN_CLASS) && (e.gesture.direction == 'up' || e.gesture.direction == 'down')) {
