@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-743
+ * Ionic, v1.0.0-beta.13-nightly-744
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2158,7 +2158,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * @name $ionicConfigProvider#navBar.alignTitle
  * @description Which side of the navBar to align the title. Default `center`.
  *
- * @param {string} which side of the navBar to align the title.
+ * @param {string} value side of the navBar to align the title.
  *
  * * `platform`: Dynamically choose the correct title style depending on the platform
  * the app is running from. If the platform is `ios`, it will default to `center`.
@@ -2177,7 +2177,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
   * @name $ionicConfigProvider#navBar.positionPrimaryButtons
   * @description Which side of the navBar to align the primary navBar buttons. Default `left`.
   *
-  * @param {string} which side of the navBar to align the primary navBar buttons.
+  * @param {string} value side of the navBar to align the primary navBar buttons.
   *
   * * `platform`: Dynamically choose the correct title style depending on the platform
   * the app is running from. If the platform is `ios`, it will default to `left`.
@@ -2195,7 +2195,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * @name $ionicConfigProvider#navBar.positionSecondaryButtons
  * @description Which side of the navBar to align the secondary navBar buttons. Default `right`.
  *
- * @param {string} which side of the navBar to align the secondary navBar buttons.
+ * @param {string} value side of the navBar to align the secondary navBar buttons.
  *
  * * `platform`: Dynamically choose the correct title style depending on the platform
  * the app is running from. If the platform is `ios`, it will default to `right`.
