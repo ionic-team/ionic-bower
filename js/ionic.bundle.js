@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-740
+ * Ionic, v1.0.0-beta.13-nightly-741
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-740';
+window.ionic.version = '1.0.0-beta.13-nightly-741';
 
 (function(window, document, ionic) {
 
@@ -39001,7 +39001,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-740
+ * Ionic, v1.0.0-beta.13-nightly-741
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43696,6 +43696,39 @@ function($compile, $controller, $http, $q, $rootScope, $templateCache) {
       };
     });
   }
+
+}]);
+
+/**
+ * @private
+ * DEPRECATED
+ */
+IonicModule
+.factory('$ionicViewService', ['$ionicHistory', '$log', function($ionicHistory, $log) {
+
+  function warn(oldMethod, newMethod) {
+    $log.warn('$ionicViewService' + oldMethod + ' is deprecated, please use $ionicHistory' + newMethod + ' instead: http://ionicframework.com/docs/nightly/api/service/$ionicHistory/');
+  }
+
+  warn('', '');
+
+  var methodsMap = {
+    getCurrentView: 'currentView',
+    getBackView: 'backView',
+    getForwardView: 'forwardView',
+    getCurrentStateName: 'currentStateName',
+    nextViewOptions: 'nextViewOptions',
+    clearHistory: 'clearHistory'
+  };
+
+  forEach(methodsMap, function(newMethod, oldMethod){
+    methodsMap[oldMethod] = function() {
+      warn('.' + oldMethod, '.' + newMethod);
+      return $ionicHistory[newMethod].apply(this, arguments);
+    };
+  });
+
+  return methodsMap;
 
 }]);
 
