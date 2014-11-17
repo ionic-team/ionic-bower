@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-739
+ * Ionic, v1.0.0-beta.13-nightly-740
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1348,7 +1348,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
   var DIRECTION_NONE = 'none';
 
   var stateChangeCounter = 0;
-  var lastStateId, nextViewOptions;
+  var lastStateId, nextViewOptions, forcedNav;
 
   var viewHistory = {
     histories: { root: { historyId: 'root', parentHistoryId: null, stack: [], cursor: -1 } },
@@ -1498,10 +1498,12 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
         stateChangeCounter++;
       }
 
-      if (viewHistory.forcedNav) {
+      if (forcedNav) {
         // we've previously set exactly what to do
-        ionic.Utils.extend(rsp, viewHistory.forcedNav);
-        viewHistory.forcedNav = null;
+        viewId = forcedNav.viewId;
+        action = forcedNav.action;
+        direction = forcedNav.direction;
+        forcedNav = null;
 
       } else if (backView && backView.stateId === currentStateId) {
         // they went back one, set the old current view as a forward view
@@ -1825,7 +1827,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
           if (viewHistory.currentView && viewHistory.currentView.viewId === hist.stack[0].viewId) {
             return;
           }
-          viewHistory.forcedNav = {
+          forcedNav = {
             viewId: hist.stack[0].viewId,
             action: ACTION_MOVE_BACK,
             direction: DIRECTION_BACK
