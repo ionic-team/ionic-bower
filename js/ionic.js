@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-756
+ * Ionic, v1.0.0-beta.13-nightly-757
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-756';
+window.ionic.version = '1.0.0-beta.13-nightly-757';
 
 (function(window, document, ionic) {
 
@@ -3427,7 +3427,7 @@ function wrapList(initialList) {
   }
 
   function isInRange(index) {
-    return index > -1 && index < list.length;
+    return angular.isNumber(index) && index > -1 && index < list.length;
   }
 
   function loop(newIsLooping) {
