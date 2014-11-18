@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-760
+ * Ionic, v1.0.0-beta.13-nightly-761
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1160,6 +1160,10 @@ function($rootScope, $timeout) {
 
 function delegateService(methodNames) {
 
+  if (methodNames.indexOf('$getByHandle') > -1) {
+    throw new Error("Method '$getByHandle' is implicitly added to each delegate service. Do not list it as a method.");
+  }
+
   function trueFn() { return true; }
 
   return ['$log', function($log) {
@@ -1250,7 +1254,7 @@ function delegateService(methodNames) {
 
         //This logic is repeated above
         instances.forEach(function(instance, index) {
-          if (instance.$$filterFn()) {
+          if (instance.$$filterFn(instance)) {
             matchingInstancesFound++;
             result = instance[methodName].apply(instance, args);
             //Only return the value from the first call
@@ -1749,6 +1753,16 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
      */
     currentView: function() {
       return viewHistory.currentView;
+    },
+
+    /**
+     * @ngdoc method
+     * @name $ionicHistory#currentHistoryId
+     * @description The ID of the history stack which is the parent container of the current view.
+     * @returns {string} Returns the current history ID.
+     */
+    currentHistoryId: function() {
+      return viewHistory.currentView ? viewHistory.currentView.historyId : null;
     },
 
     /**
@@ -4264,7 +4278,6 @@ IonicModule
    *
    * Example: `$ionicScrollDelegate.$getByHandle('my-handle').scrollTop();`
    */
-   '$getByHandle'
 ]));
 
 
@@ -6017,11 +6030,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
 
   self.title = function(newTitleText, headerBar) {
-    if (arguments.length) {
+    if (isDefined(newTitleText)) {
       newTitleText = newTitleText || '';
       headerBar = headerBar || getOnScreenHeaderBar();
       headerBar && headerBar.title(newTitleText);
       $scope.$title = newTitleText;
+      $ionicHistory.currentTitle(newTitleText);
     }
     return $scope.$title;
   };
@@ -6267,7 +6281,8 @@ IonicModule
   '$location',
   '$document',
   '$ionicScrollDelegate',
-function($scope, scrollViewOptions, $timeout, $window, $location, $document, $ionicScrollDelegate) {
+  '$ionicHistory',
+function($scope, scrollViewOptions, $timeout, $window, $location, $document, $ionicScrollDelegate, $ionicHistory) {
 
   var self = this;
   // for testing
@@ -6287,7 +6302,7 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   var deregisterInstance = $ionicScrollDelegate._registerInstance(
     self, scrollViewOptions.delegateHandle, function() {
-      return !$scope.$$disconnected;
+      return !$scope.$$disconnected && $ionicHistory.currentHistoryId() == $scope.$historyId;
     }
   );
 
@@ -7430,9 +7445,8 @@ IonicModule
   '$element',
   '$attrs',
   '$compile',
-  '$ionicHistory',
   '$ionicViewSwitcher',
-function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) {
+function($scope, $element, $attrs, $compile, $ionicViewSwitcher) {
   var self = this;
   var navElementHtml = {};
   var navViewCtrl;
@@ -7470,8 +7484,6 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
 
       var viewTitle = $attrs.viewTitle || $attrs.title;
 
-      $ionicHistory.currentTitle(viewTitle);
-
       var buttons = {};
       for (var n in navElementHtml) {
         buttons[n] = generateButton(navElementHtml[n]);
@@ -7503,7 +7515,6 @@ function($scope, $element, $attrs, $compile, $ionicHistory, $ionicViewSwitcher) 
     if (viewTitleAttr) {
       deregisters.push($attrs.$observe(viewTitleAttr, function(val) {
         navViewCtrl.title(val);
-        $ionicHistory.currentTitle(val);
       }));
     }
 
