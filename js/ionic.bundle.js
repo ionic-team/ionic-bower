@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-759
+ * Ionic, v1.0.0-beta.13-nightly-760
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-759';
+window.ionic.version = '1.0.0-beta.13-nightly-760';
 
 (function(window, document, ionic) {
 
@@ -39016,7 +39016,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-759
+ * Ionic, v1.0.0-beta.13-nightly-760
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -45975,7 +45975,6 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
      console.warn,
      self.count
   );
-  self.slidesCount =
   self.stop = deprecated.method(
     '$ionicSlideBoxDelegate.stop() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(0) to stop instead.',
     console.warn,
