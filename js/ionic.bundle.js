@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-748
+ * Ionic, v1.0.0-beta.13-nightly-749
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-748';
+window.ionic.version = '1.0.0-beta.13-nightly-749';
 
 (function(window, document, ionic) {
 
@@ -39016,7 +39016,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-748
+ * Ionic, v1.0.0-beta.13-nightly-749
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -48849,20 +48849,20 @@ IonicModule
  * being disconnected from the watch cycle. Because scopes are not being destroyed and recreated,
  * then controllers are not loading again on a subsequent viewing. If the app/controller needs to
  * know when a view has entered or has left, then view events emitted from the
- * {@link ionic.directive:ionView} scope, such as `$ionicView.afterEnter`, may be useful.
+ * {@link ionic.directive:ionView} scope, such as `$ionicView.enter`, may be useful.
  *
  * #### Disable cache globally
  *
  * The {@link ionic.provider:$ionicConfigProvider} can be used to set the maximum allowable views
  * which can be cached, but this can also be use to disable all caching by setting it to 0.
  *
- * ```
+ * ```js
  * $ionicConfigProvider.views.maxCache(0);
  * ```
  *
  * #### Disable cache within state provider
  *
- * ```
+ * ```js
  * $stateProvider.state('myState', {
  *    cache: false,
  *    url : '/myUrl',
@@ -48872,7 +48872,7 @@ IonicModule
  *
  * #### Disable cache with an attribute
  *
- * ```
+ * ```html
  * <ion-view cache-view="false" view-title="My Title!">
  *   ...
  * </ion-view>
@@ -50455,61 +50455,38 @@ function($ionicGesture, $timeout) {
  *
  * ## View LifeCycle and Events
  *
- * Views can be cached which means controllers may only load once, which could change how you'd
- * expect controllers to fire. To know when a view has entered or left, events have been added that
- * get emitted from the view's scope. These events also contain data about the view,
- * such as the title and if the back button should show, along with transition data, such as the
- * transition type and direction that will be or was used.
+ * Views can be cached which means controllers normally only load once, which may
+ * affect your controller logic. To know when a view has entered or left, events
+ * have been added that are emitted from the view's scope. These events also
+ * contain data about the view, such as the title and if the back button should
+ * show. Also contained is transitiondata, such as the transition type and
+ * direction that will be or was used.
  *
- * * `$ionicView.loaded`: The view has loaded. This event only happens once per the scope being created
- * and view element added to the DOM. If a view leaves and is cached, then a subsequent time it enters
- * this this event will not fire again, rather it would only fire again if the view was not cached
- * and accessed again. This is good place to put your setup code for the View.
- * * `$ionicView.enter`: The view has fully entered and is now the active view. This event will fire
- * no matter if it was the first load or it was a cached view.
- * * `$ionicView.leave`: The view has finished leaving and is no longer the active view. This event will
- * fire no matter if it will be cached or destroyed.
+ * * `$ionicView.loaded`: The view has loaded. This event only happens once per
+ * view being created and added to the DOM. If a view leaves, but is cached,
+ * then on a subsequent viewing this event will not fire again. The loaded event
+ * is good place to put your setup code for the view, however, it is not the
+ * recommended event to listen to when a view becomes active.
+ * * `$ionicView.enter`: The view has fully entered and is now the active view.
+ * This event will fire no matter if it was the first load or it was a cached view.
+ * * `$ionicView.leave`: The view has finished leaving and is no longer the
+ * active view. This event will fire no matter if it will be cached or destroyed.
  * * `$ionicView.beforeEnter`: The view is about to enter and become the active view.
  * * `$ionicView.beforeLeave`: The view is about to leave and no longer be the active view.
  * * `$ionicView.afterEnter`: The view has fully entered and is now the active view.
  * * `$ionicView.afterLeave`: The view has finished leaving and is no longer the active view.
  *
- *## Caching
+ * ## Caching
  *
- *Caching can disabled/enabled by multiple ways. By default, Ionic will cache a maximum of 10 views. You can optionally choose to disable caching a view through the `cache-view` attribute directive.
- *
- *```html
- *<ion-view cache-view="false" view-title="My Title"></ion-view>
- *```
- *
- *Alternatively, you could choose to disable caching through `$stateProvider.state`.
- *
- *```
- *$stateProvider.state('myState', {
- *  cache: false,
- *  url : '/myUrl',
- *  views: {
- *    'nav-view': {
- *      templateUrl : 'my-template.html'
- *    }
- *  }
- *})
- *```
- *
- *If you wish to disable caching globally in an app, you can edit the `$ionicConfigProvider.views.maxCache`
- *
- *```
- *$ionicConfigProvider.views.maxCache(0);
- *```
- *
- *In this instance we’re setting the number of cached views to 0, essentially disabling the caching functionality.
- *
- *Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are being disconnected.
- *Then when you travel back to that cached view, the scopes get reconnected.
- *
+ * Caching can be disabled and enabled in multiple ways. By default, Ionic will
+ * cache a maximum of 10 views. You can optionally choose to disable caching at
+ * either an individual view basis, or by global configuration. Please see the
+ * _Caching_ section in {@link ionic.directive:ionNavView} for more info.
  *
  * @param {string=} view-title The title to display on the parent {@link ionic.directive:ionNavBar}.
- * @param {boolean=} cache-view If this view should be allowed to be cached or not. Default `true`
+ * @param {boolean=} cache-view If this view should be allowed to be cached or not.
+ * Please see the _Caching_ section in {@link ionic.directive:ionNavView} for
+ * more info. Default `true`
  * @param {boolean=} hide-back-button Whether to hide the back button on the parent
  * {@link ionic.directive:ionNavBar} by default.
  * @param {boolean=} hide-nav-bar Whether to hide the parent
