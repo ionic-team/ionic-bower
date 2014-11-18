@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-757
+ * Ionic, v1.0.0-beta.13-nightly-758
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6999,7 +6999,7 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
   /*
    * Select and change slides
    */
-  function select(newIndex, transitionDuration) {
+  function select(newIndex, transitionDuration, force) {
     if (!self.isInRange(newIndex)) return;
 
     scope.selectedIndex = newIndex;
@@ -7011,7 +7011,8 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
       next: self.at(self.next())
     };
 
-    if (oldRelevantSlides.next === relevantSlides.next &&
+    if (!force &&
+        oldRelevantSlides.next === relevantSlides.next &&
         oldRelevantSlides.previous === relevantSlides.previous &&
         oldRelevantSlides.selected === relevantSlides.selected) {
       // do nothing;
@@ -7075,7 +7076,7 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
       );
       self.select(nextIndex, transitionDuration);
     } else {
-      self.select(scope.selectedIndex);
+      self.select(scope.selectedIndex, 0, true);
     }
   }
 
