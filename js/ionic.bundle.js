@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-758
+ * Ionic, v1.0.0-beta.13-nightly-759
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-758';
+window.ionic.version = '1.0.0-beta.13-nightly-759';
 
 (function(window, document, ionic) {
 
@@ -39016,7 +39016,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-758
+ * Ionic, v1.0.0-beta.13-nightly-759
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -45954,6 +45954,45 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
   self.onDrag = onDrag;
   self.onDragEnd = onDragEnd;
 
+  /** DEPRECATED METHODS **/
+  self.update = deprecated.method(
+    '$ionicSlideBoxDelegate.update() has been deprecated! Slidebox updates on its own now.',
+    console.warn,
+    angular.noop
+  );
+  self.currentIndex = deprecated.method(
+     '$ionicSlideBoxDelegate.currentIndex() has been deprecated! Use self.selected() instead.',
+     console.warn,
+     self.selected
+  );
+  self.slide = deprecated.method(
+     '$ionicSlideBoxDelegate.slide(newIndex[, speed]) has been deprecated! Use self.select(newIndex[, speed]) instead.',
+     console.warn,
+     self.select
+  );
+  self.slidesCount = deprecated.method(
+     '$ionicSlideBoxDelegate.slidesCount has been deprecated! Use self.slidesCount() instead.',
+     console.warn,
+     self.count
+  );
+  self.slidesCount =
+  self.stop = deprecated.method(
+    '$ionicSlideBoxDelegate.stop() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(0) to stop instead.',
+    console.warn,
+    function() {
+      self._stoppedInterval = self.autoPlayInterval;
+      self.autoPlay(0);
+    }
+  );
+  self.start = deprecated.method(
+    '$ionicSlideBoxDelegate.start() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(newInterval) to start instead.',
+    console.warn,
+    function() {
+      self.autoPlay(self._stoppedInterval);
+    }
+  );
+
+
   // ***
   // Public Methods
   // ***
@@ -45997,6 +46036,7 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
   }
 
   function autoPlay(newInterval) {
+    self.autoPlayInterval = newInterval;
     $interval.cancel(self.autoPlayTimeout);
 
     if (angular.isNumber(newInterval) && newInterval > 0) {
@@ -46104,8 +46144,9 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
     // If one of the child nodes was destroyed but not yet removed
     // from the DOM, we'll enqueue a new digest to re-check
     // once the element is actually removed.
+    var slideScope;
     for (var i = 0; i < slideNodes.length; i++) {
-      if (angular.element(slideNodes[i]).scope().$$destroyed) {
+      if ( (slideScope = angular.element(slideNodes[i]).scope()) && slideScope.$$destroyed) {
         $timeout(angular.noop);
         break;
       }
