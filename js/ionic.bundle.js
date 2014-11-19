@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-766
+ * Ionic, v1.0.0-beta.13-nightly-767
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-766';
+window.ionic.version = '1.0.0-beta.13-nightly-767';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-766
+ * Ionic, v1.0.0-beta.13-nightly-767
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40791,7 +40791,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
         action: action,
         direction: direction,
         historyId: historyId,
-        showBack: !!(viewHistory.backView && viewHistory.backView.historyId === viewHistory.currentView.historyId),
+        enableBack: !!(viewHistory.backView && viewHistory.backView.historyId === viewHistory.currentView.historyId),
         isHistoryRoot: (viewHistory.currentView.index === 0),
         ele: ele
       };
@@ -42217,7 +42217,7 @@ IonicModule
    * @name $ionicNavBarDelegate#showBackButton
    * @description
    * Set/get whether the {@link ionic.directive:ionNavBackButton} is shown
-   * (if it exists).
+   * (if it exists and there is a previous view that can be navigated to).
    * @param {boolean=} show Whether to show the back button.
    * @returns {boolean} Whether the back button is shown.
    */
@@ -43912,7 +43912,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
     return locals && locals.$$state && locals.$$state.self || {};
   }
 
-  function getTransitionData(viewLocals, enteringEle, direction, showBack, view) {
+  function getTransitionData(viewLocals, enteringEle, direction, enableBack, view) {
     // Priority
     // 1) attribute directive on the button/link to this view
     // 2) entering element's attribute
@@ -43929,7 +43929,7 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
       transition: transition,
       direction: direction,
       shouldAnimate: (transition !== 'none' && direction !== 'none'),
-      showBack: !!showBack
+      enableBack: !!enableBack
     });
   }
 
@@ -44073,8 +44073,8 @@ function($timeout, $compile, $controller, $document, $ionicClickBlock, $ionicCon
           $timeout(callback, 16);
         },
 
-        transition: function(direction, showBack) {
-          var enteringData = getTransitionData(viewLocals, enteringEle, direction, showBack, enteringView);
+        transition: function(direction, enableBack) {
+          var enteringData = getTransitionData(viewLocals, enteringEle, direction, enableBack, enteringView);
           var leavingData = extend(extend({}, enteringData), getViewData(leavingView));
           enteringData.transitionId = leavingData.transitionId = transitionId;
           enteringData.fromCache = !!alreadyInDom;
@@ -44353,7 +44353,8 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   var titleLeft = 0;
   var titleRight = 0;
   var titleCss = '';
-  var isBackShown;
+  var isBackEnabled = false;
+  var isBackShown = false;
   var titleTextWidth = 0;
 
 
@@ -44372,13 +44373,25 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   };
 
 
+  self.enableBack = function(shouldEnable) {
+    // whether or not the back button show be visible, according
+    // to the navigation and history
+    if (arguments.length && shouldEnable !== isBackEnabled) {
+      var backBtnEle = getEle(BACK_BUTTON);
+      backBtnEle && backBtnEle.classList[ shouldEnable ? 'remove' : 'add' ](HIDE);
+      isBackEnabled = shouldEnable;
+    }
+    return isBackEnabled;
+  };
+
+
   self.showBack = function(shouldShow) {
+    // different from enableBack() because this will always have the back
+    // visually hidden if false, even if the history says it should show
     if (arguments.length && shouldShow !== isBackShown) {
       var backBtnEle = getEle(BACK_BUTTON);
-      if (backBtnEle) {
-        backBtnEle.classList[ shouldShow ? 'remove' : 'add' ](HIDE);
-        isBackShown = shouldShow;
-      }
+      if (backBtnEle) backBtnEle.style.display = (shouldShow ? '' : 'none');
+      isBackShown = shouldShow;
     }
     return isBackShown;
   };
@@ -44441,6 +44454,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
         defaultTitleEle.classList.remove(HIDE);
       }
     }
+    self.showBack(true);
   };
 
 
@@ -44846,6 +44860,9 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
     var headerBarInstance = {
       isActive: isActive,
+      enableBack: function(shouldEnable) {
+        headerBarCtrl.enableBack(shouldEnable);
+      },
       showBack: function(shouldShow) {
         headerBarCtrl.showBack(shouldShow);
       },
@@ -44978,6 +44995,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     var leavingHeaderBar = self.isInitialized ? getOnScreenHeaderBar() : null;
 
     // update if the entering header should show the back button or not
+    self.enableBackButton(viewData.enableBack, enteringHeaderBar);
     self.showBackButton(viewData.showBack, enteringHeaderBar);
 
     // update the entering header bar's title
@@ -45095,11 +45113,17 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   };
 
 
-  self.showBackButton = function(show, headerBar) {
+  self.enableBackButton = function(shouldEnable, headerBar) {
     headerBar = headerBar || getOnScreenHeaderBar();
-    headerBar && headerBar.showBack(show);
-    $scope.$isBackButtonShown = !!show;
-    return !!show;
+    headerBar && headerBar.enableBack(shouldEnable);
+  };
+
+
+  self.showBackButton = function(shouldShow, headerBar) {
+    headerBar = headerBar || getOnScreenHeaderBar();
+    headerBar && headerBar.showBack(shouldShow);
+    $scope.$isBackButtonShown = !!shouldShow;
+    return !!shouldShow;
   };
 
 
@@ -45279,7 +45303,7 @@ function($scope, $element, $attrs, $ionicNavBarDelegate, $ionicHistory, $ionicVi
       // the view is now compiled, in the dom and linked, now lets transition the views.
       // this uses a callback incase THIS nav-view has a nested nav-view, and after the NESTED
       // nav-view links, the NESTED nav-view would update which direction THIS nav-view should use
-      switcher.transition(self.direction(), registerData.showBack);
+      switcher.transition(self.direction(), registerData.enableBack);
     });
 
   };
@@ -45301,9 +45325,15 @@ function($scope, $element, $attrs, $ionicNavBarDelegate, $ionicHistory, $ionicVi
   };
 
 
-  self.showBackButton = function(val) {
+  self.enableBackButton = function(shouldEnable) {
     var associatedNavBarCtrl = getAssociatedNavBarCtrl();
-    associatedNavBarCtrl && associatedNavBarCtrl.showBackButton(val);
+    associatedNavBarCtrl && associatedNavBarCtrl.enableBackButton(shouldEnable);
+  };
+
+
+  self.showBackButton = function(shouldShow) {
+    var associatedNavBarCtrl = getAssociatedNavBarCtrl();
+    associatedNavBarCtrl && associatedNavBarCtrl.showBackButton(shouldShow);
   };
 
 
@@ -46579,7 +46609,8 @@ function($scope, $element, $attrs, $compile, $ionicViewSwitcher) {
         transition: transData.transition,
         transitionId: transData.transitionId,
         shouldAnimate: transData.shouldAnimate,
-        showBack: transData.showBack && !attrTrue('hideBackButton'),
+        enableBack: transData.enableBack,
+        showBack: !attrTrue('hideBackButton'),
         buttons: buttons,
         navBarDelegate: navBarDelegateHandle || null,
         showNavBar: !attrTrue('hideNavBar'),
@@ -46636,7 +46667,7 @@ function($scope, $element, $attrs, $compile, $ionicViewSwitcher) {
 
 
   function attrTrue(key) {
-    return $attrs[key] == 'true' || $attrs[key] === '';
+    return !!$scope.$eval($attrs[key]);
   }
 
 
@@ -48482,7 +48513,7 @@ IonicModule
     restrict: 'AC',
     link: function($scope, $element, $attr) {
       $scope.$on('$ionicView.beforeEnter', function(ev, viewData) {
-        if (viewData.showBack) {
+        if (viewData.enableBack) {
           var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
           if (!sideMenuCtrl.enableMenuWithBackViews()) {
             $element.addClass('hide');
