@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-762
+ * Ionic, v1.0.0-beta.13-nightly-763
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-762';
+window.ionic.version = '1.0.0-beta.13-nightly-763';
 
 (function(window, document, ionic) {
 
@@ -7236,7 +7236,7 @@ ionic.scroll = {
  */
 
 /**
- * @license AngularJS v1.3.2
+ * @license AngularJS v1.3.3
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -7279,40 +7279,23 @@ function minErr(module, ErrorConstructor) {
       prefix = '[' + (module ? module + ':' : '') + code + '] ',
       template = arguments[1],
       templateArgs = arguments,
-      stringify = function(obj) {
-        if (typeof obj === 'function') {
-          return obj.toString().replace(/ \{[\s\S]*$/, '');
-        } else if (typeof obj === 'undefined') {
-          return 'undefined';
-        } else if (typeof obj !== 'string') {
-          return JSON.stringify(obj);
-        }
-        return obj;
-      },
+
       message, i;
 
     message = prefix + template.replace(/\{\d+\}/g, function(match) {
       var index = +match.slice(1, -1), arg;
 
       if (index + 2 < templateArgs.length) {
-        arg = templateArgs[index + 2];
-        if (typeof arg === 'function') {
-          return arg.toString().replace(/ ?\{[\s\S]*$/, '');
-        } else if (typeof arg === 'undefined') {
-          return 'undefined';
-        } else if (typeof arg !== 'string') {
-          return toJson(arg);
-        }
-        return arg;
+        return toDebugString(templateArgs[index + 2]);
       }
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.3.2/' +
+    message = message + '\nhttp://errors.angularjs.org/1.3.3/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
-      message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
-        encodeURIComponent(stringify(arguments[i]));
+      message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
+        encodeURIComponent(toDebugString(arguments[i]));
     }
     return new ErrorConstructor(message);
   };
@@ -7952,7 +7935,7 @@ function includes(array, obj) {
 
 function arrayRemove(array, value) {
   var index = array.indexOf(value);
-  if (index >=0)
+  if (index >= 0)
     array.splice(index, 1);
   return value;
 }
@@ -8153,7 +8136,7 @@ function equals(o1, o2) {
       if (isArray(o1)) {
         if (!isArray(o2)) return false;
         if ((length = o1.length) == o2.length) {
-          for (key=0; key<length; key++) {
+          for (key = 0; key < length; key++) {
             if (!equals(o1[key], o2[key])) return false;
           }
           return true;
@@ -8239,7 +8222,7 @@ function bind(self, fn) {
     return curryArgs.length
       ? function() {
           return arguments.length
-            ? fn.apply(self, curryArgs.concat(slice.call(arguments, 0)))
+            ? fn.apply(self, concat(curryArgs, arguments, 0))
             : fn.apply(self, curryArgs);
         }
       : function() {
@@ -8439,7 +8422,7 @@ var ngAttrPrefixes = ['ng-', 'data-ng-', 'ng:', 'x-ng-'];
 function getNgAttribute(element, ngAttr) {
   var attr, i, ii = ngAttrPrefixes.length;
   element = jqLite(element);
-  for (i=0; i<ii; ++i) {
+  for (i = 0; i < ii; ++i) {
     attr = ngAttrPrefixes[i] + ngAttr;
     if (isString(attr = element.attr(attr))) {
       return attr;
@@ -9224,6 +9207,34 @@ function setupModuleLoader(window) {
 
 }
 
+/* global: toDebugString: true */
+
+function serializeObject(obj) {
+  var seen = [];
+
+  return JSON.stringify(obj, function(key, val) {
+    val = toJsonReplacer(key, val);
+    if (isObject(val)) {
+
+      if (seen.indexOf(val) >= 0) return '<<already seen>>';
+
+      seen.push(val);
+    }
+    return val;
+  });
+}
+
+function toDebugString(obj) {
+  if (typeof obj === 'function') {
+    return obj.toString().replace(/ \{[\s\S]*$/, '');
+  } else if (typeof obj === 'undefined') {
+    return 'undefined';
+  } else if (typeof obj !== 'string') {
+    return serializeObject(obj);
+  }
+  return obj;
+}
+
 /* global angularModule: true,
   version: true,
 
@@ -9326,11 +9337,11 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.3.2',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.3.3',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 3,
-  dot: 2,
-  codeName: 'cardiovasculatory-magnification'
+  dot: 3,
+  codeName: 'undersea-arithmetic'
 };
 
 
@@ -10063,7 +10074,7 @@ forEach({
         }
       } else {
         return (element[name] ||
-                 (element.attributes.getNamedItem(name)|| noop).specified)
+                 (element.attributes.getNamedItem(name) || noop).specified)
                ? lowercasedName
                : undefined;
       }
@@ -11399,7 +11410,7 @@ function $AnchorScrollProvider() {
    * @name $anchorScrollProvider#disableAutoScrolling
    *
    * @description
-   * By default, {@link ng.$anchorScroll $anchorScroll()} will automatically will detect changes to
+   * By default, {@link ng.$anchorScroll $anchorScroll()} will automatically detect changes to
    * {@link ng.$location#hash $location.hash()} and scroll to the element matching the new hash.<br />
    * Use this method to disable automatic scrolling.
    *
@@ -12048,8 +12059,7 @@ function $$AsyncCallbackProvider() {
 /**
  * @param {object} window The global window object.
  * @param {object} document jQuery wrapped document.
- * @param {function()} XHR XMLHttpRequest constructor.
- * @param {object} $log console.log or an object with the same interface.
+ * @param {object} $log window.console or an object with the same interface.
  * @param {object} $sniffer $sniffer service
  */
 function Browser(window, document, $log, $sniffer) {
@@ -12399,8 +12409,8 @@ function Browser(window, document, $log, $sniffer) {
           // - 20 cookies per unique domain
           // - 4096 bytes per cookie
           if (cookieLength > 4096) {
-            $log.warn("Cookie '"+ name +
-              "' possibly not set or overflowed because it was too large ("+
+            $log.warn("Cookie '" + name +
+              "' possibly not set or overflowed because it was too large (" +
               cookieLength + " > 4096 bytes)!");
           }
         }
@@ -13065,7 +13075,7 @@ function $TemplateCacheProvider() {
  *
  *
  * #### `bindToController`
- * When an isolate scope is used for a component (see above), and `controllerAs` is used, `bindToController` will
+ * When an isolate scope is used for a component (see above), and `controllerAs` is used, `bindToController: true` will
  * allow a component to have its properties bound to the controller, rather than to scope. When the controller
  * is instantiated, the initial values of the isolate scope bindings are already available.
  *
@@ -13914,16 +13924,16 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
           // for each tuples
           var nbrUrisWith2parts = Math.floor(rawUris.length / 2);
-          for (var i=0; i<nbrUrisWith2parts; i++) {
-            var innerIdx = i*2;
+          for (var i = 0; i < nbrUrisWith2parts; i++) {
+            var innerIdx = i * 2;
             // sanitize the uri
             result += $$sanitizeUri(trim(rawUris[innerIdx]), true);
             // add the descriptor
-            result += (" " + trim(rawUris[innerIdx+1]));
+            result += (" " + trim(rawUris[innerIdx + 1]));
           }
 
           // split the last item into uri and descriptor
-          var lastTuple = trim(rawUris[i*2]).split(/\s/);
+          var lastTuple = trim(rawUris[i * 2]).split(/\s/);
 
           // sanitize the last uri
           result += $$sanitizeUri(trim(lastTuple[0]), true);
@@ -14117,7 +14127,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       if (!node) {
         return 'html';
       } else {
-        return nodeName_(node) !== 'foreignobject' && node.toString().match(/SVG/) ? 'svg': 'html';
+        return nodeName_(node) !== 'foreignobject' && node.toString().match(/SVG/) ? 'svg' : 'html';
       }
     }
 
@@ -14930,7 +14940,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       var match = null;
       if (hasDirectives.hasOwnProperty(name)) {
         for (var directive, directives = $injector.get(name + Suffix),
-            i = 0, ii = directives.length; i<ii; i++) {
+            i = 0, ii = directives.length; i < ii; i++) {
           try {
             directive = directives[i];
             if ((maxPriority === undefined || maxPriority > directive.priority) &&
@@ -14959,7 +14969,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
     function directiveIsMultiElement(name) {
       if (hasDirectives.hasOwnProperty(name)) {
         for (var directive, directives = $injector.get(name + Suffix),
-            i = 0, ii = directives.length; i<ii; i++) {
+            i = 0, ii = directives.length; i < ii; i++) {
           directive = directives[i];
           if (directive.multiElement) {
             return true;
@@ -15178,7 +15188,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       case 'svg':
       case 'math':
         var wrapper = document.createElement('div');
-        wrapper.innerHTML = '<'+type+'>'+template+'</'+type+'>';
+        wrapper.innerHTML = '<' + type + '>' + template + '</' + type + '>';
         return wrapper.childNodes[0].childNodes;
       default:
         return template;
@@ -15535,6 +15545,10 @@ function $ControllerProvider() {
      *    * if $controllerProvider#allowGlobals, check `window[constructor]` on the global
      *      `window` object (not recommended)
      *
+     *    The string can use the `controller as property` syntax, where the controller instance is published
+     *    as the specified property on the `scope`; the `scope` must be injected into `locals` param for this
+     *    to work correctly.
+     *
      * @param {Object} locals Injection locals for Controller.
      * @return {Object} Instance of given controller.
      *
@@ -15709,7 +15723,7 @@ function defaultHttpResponseTransform(data, headers) {
     // strip json vulnerability protection prefix
     data = data.replace(JSON_PROTECTION_PREFIX, '');
     var contentType = headers('Content-Type');
-    if ((contentType && contentType.indexOf(APPLICATION_JSON) === 0) ||
+    if ((contentType && contentType.indexOf(APPLICATION_JSON) === 0 && data.trim()) ||
         (JSON_START.test(data) && JSON_END.test(data))) {
       data = fromJson(data);
     }
@@ -17280,7 +17294,8 @@ function $InterpolateProvider() {
 
       function parseStringifyInterceptor(value) {
         try {
-          return stringify(getValue(value));
+          value = getValue(value);
+          return allOrNothing && !isDefined(value) ? value : stringify(value);
         } catch (err) {
           var newErr = $interpolateMinErr('interr', "Can't interpolate: {0}\n{1}", text,
             err.toString());
@@ -17604,8 +17619,8 @@ function encodePath(path) {
   return segments.join('/');
 }
 
-function parseAbsoluteUrl(absoluteUrl, locationObj, appBase) {
-  var parsedUrl = urlResolve(absoluteUrl, appBase);
+function parseAbsoluteUrl(absoluteUrl, locationObj) {
+  var parsedUrl = urlResolve(absoluteUrl);
 
   locationObj.$$protocol = parsedUrl.protocol;
   locationObj.$$host = parsedUrl.hostname;
@@ -17613,12 +17628,12 @@ function parseAbsoluteUrl(absoluteUrl, locationObj, appBase) {
 }
 
 
-function parseAppUrl(relativeUrl, locationObj, appBase) {
+function parseAppUrl(relativeUrl, locationObj) {
   var prefixed = (relativeUrl.charAt(0) !== '/');
   if (prefixed) {
     relativeUrl = '/' + relativeUrl;
   }
-  var match = urlResolve(relativeUrl, appBase);
+  var match = urlResolve(relativeUrl);
   locationObj.$$path = decodeURIComponent(prefixed && match.pathname.charAt(0) === '/' ?
       match.pathname.substring(1) : match.pathname);
   locationObj.$$search = parseKeyValue(match.search);
@@ -17673,7 +17688,7 @@ function LocationHtml5Url(appBase, basePrefix) {
   this.$$html5 = true;
   basePrefix = basePrefix || '';
   var appBaseNoFile = stripFile(appBase);
-  parseAbsoluteUrl(appBase, this, appBase);
+  parseAbsoluteUrl(appBase, this);
 
 
   /**
@@ -17688,7 +17703,7 @@ function LocationHtml5Url(appBase, basePrefix) {
           appBaseNoFile);
     }
 
-    parseAppUrl(pathUrl, this, appBase);
+    parseAppUrl(pathUrl, this);
 
     if (!this.$$path) {
       this.$$path = '/';
@@ -17751,7 +17766,7 @@ function LocationHtml5Url(appBase, basePrefix) {
 function LocationHashbangUrl(appBase, hashPrefix) {
   var appBaseNoFile = stripFile(appBase);
 
-  parseAbsoluteUrl(appBase, this, appBase);
+  parseAbsoluteUrl(appBase, this);
 
 
   /**
@@ -17771,7 +17786,7 @@ function LocationHashbangUrl(appBase, hashPrefix) {
       throw $locationMinErr('ihshprfx', 'Invalid url "{0}", missing hash prefix "{1}".', url,
           hashPrefix);
     }
-    parseAppUrl(withoutHashUrl, this, appBase);
+    parseAppUrl(withoutHashUrl, this);
 
     this.$$path = removeWindowsDriveName(this.$$path, withoutHashUrl, appBase);
 
@@ -18411,11 +18426,19 @@ function $LocationProvider() {
       $rootScope.$evalAsync(function() {
         var oldUrl = $location.absUrl();
         var oldState = $location.$$state;
+        var defaultPrevented;
 
         $location.$$parse(newUrl);
         $location.$$state = newState;
-        if ($rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
-            newState, oldState).defaultPrevented) {
+
+        defaultPrevented = $rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
+            newState, oldState).defaultPrevented;
+
+        // if the location was changed by a `$locationChangeStart` handler then stop
+        // processing this location change
+        if ($location.absUrl() !== newUrl) return;
+
+        if (defaultPrevented) {
           $location.$$parse(oldUrl);
           $location.$$state = oldState;
           setBrowserUrlWithFallback(oldUrl, false, oldState);
@@ -18439,13 +18462,20 @@ function $LocationProvider() {
         initializing = false;
 
         $rootScope.$evalAsync(function() {
-          if ($rootScope.$broadcast('$locationChangeStart', $location.absUrl(), oldUrl,
-              $location.$$state, oldState).defaultPrevented) {
+          var newUrl = $location.absUrl();
+          var defaultPrevented = $rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
+              $location.$$state, oldState).defaultPrevented;
+
+          // if the location was changed by a `$locationChangeStart` handler then stop
+          // processing this location change
+          if ($location.absUrl() !== newUrl) return;
+
+          if (defaultPrevented) {
             $location.$$parse(oldUrl);
             $location.$$state = oldState;
           } else {
             if (urlOrStateChanged) {
-              setBrowserUrlWithFallback($location.absUrl(), currentReplace,
+              setBrowserUrlWithFallback(newUrl, currentReplace,
                                         oldState === $location.$$state ? null : $location.$$state);
             }
             afterLocationChange(oldUrl, oldState);
@@ -18635,7 +18665,7 @@ var $parseMinErr = minErr('$parse');
 // Sandboxing Angular Expressions
 // ------------------------------
 // Angular expressions are generally considered safe because these expressions only have direct
-// access to $scope and locals. However, one can obtain the ability to execute arbitrary JS code by
+// access to `$scope` and locals. However, one can obtain the ability to execute arbitrary JS code by
 // obtaining a reference to native JS functions such as the Function constructor.
 //
 // As an example, consider the following Angular expression:
@@ -18644,7 +18674,7 @@ var $parseMinErr = minErr('$parse');
 //
 // This sandboxing technique is not perfect and doesn't aim to be. The goal is to prevent exploits
 // against the expression language, but not to prevent exploits that were enabled by exposing
-// sensitive JavaScript or browser apis on Scope. Exposing such objects on a Scope is never a good
+// sensitive JavaScript or browser APIs on Scope. Exposing such objects on a Scope is never a good
 // practice and therefore we are not even trying to protect against interaction with an object
 // explicitly exposed in this way.
 //
@@ -18652,6 +18682,8 @@ var $parseMinErr = minErr('$parse');
 // window or some DOM object that has a reference to window is published onto a Scope.
 // Similarly we prevent invocations of function known to be dangerous, as well as assignments to
 // native objects.
+//
+// See https://docs.angularjs.org/guide/security
 
 
 function ensureSafeMemberName(name, fullExpression) {
@@ -18660,7 +18692,7 @@ function ensureSafeMemberName(name, fullExpression) {
       || name === "__proto__") {
     throw $parseMinErr('isecfld',
         'Attempting to access a disallowed field in Angular expressions! '
-        +'Expression: {0}', fullExpression);
+        + 'Expression: {0}', fullExpression);
   }
   return name;
 }
@@ -18737,24 +18769,24 @@ var OPERATORS = extend(createMap(), {
         }
         return a;
       }
-      return isDefined(b)?b:undefined;},
+      return isDefined(b) ? b : undefined;},
     '-':function(self, locals, a, b) {
           a=a(self, locals); b=b(self, locals);
-          return (isDefined(a)?a:0)-(isDefined(b)?b:0);
+          return (isDefined(a) ? a : 0) - (isDefined(b) ? b : 0);
         },
-    '*':function(self, locals, a, b) {return a(self, locals)*b(self, locals);},
-    '/':function(self, locals, a, b) {return a(self, locals)/b(self, locals);},
-    '%':function(self, locals, a, b) {return a(self, locals)%b(self, locals);},
-    '===':function(self, locals, a, b) {return a(self, locals)===b(self, locals);},
-    '!==':function(self, locals, a, b) {return a(self, locals)!==b(self, locals);},
-    '==':function(self, locals, a, b) {return a(self, locals)==b(self, locals);},
-    '!=':function(self, locals, a, b) {return a(self, locals)!=b(self, locals);},
-    '<':function(self, locals, a, b) {return a(self, locals)<b(self, locals);},
-    '>':function(self, locals, a, b) {return a(self, locals)>b(self, locals);},
-    '<=':function(self, locals, a, b) {return a(self, locals)<=b(self, locals);},
-    '>=':function(self, locals, a, b) {return a(self, locals)>=b(self, locals);},
-    '&&':function(self, locals, a, b) {return a(self, locals)&&b(self, locals);},
-    '||':function(self, locals, a, b) {return a(self, locals)||b(self, locals);},
+    '*':function(self, locals, a, b) {return a(self, locals) * b(self, locals);},
+    '/':function(self, locals, a, b) {return a(self, locals) / b(self, locals);},
+    '%':function(self, locals, a, b) {return a(self, locals) % b(self, locals);},
+    '===':function(self, locals, a, b) {return a(self, locals) === b(self, locals);},
+    '!==':function(self, locals, a, b) {return a(self, locals) !== b(self, locals);},
+    '==':function(self, locals, a, b) {return a(self, locals) == b(self, locals);},
+    '!=':function(self, locals, a, b) {return a(self, locals) != b(self, locals);},
+    '<':function(self, locals, a, b) {return a(self, locals) < b(self, locals);},
+    '>':function(self, locals, a, b) {return a(self, locals) > b(self, locals);},
+    '<=':function(self, locals, a, b) {return a(self, locals) <= b(self, locals);},
+    '>=':function(self, locals, a, b) {return a(self, locals) >= b(self, locals);},
+    '&&':function(self, locals, a, b) {return a(self, locals) && b(self, locals);},
+    '||':function(self, locals, a, b) {return a(self, locals) || b(self, locals);},
     '!':function(self, locals, a) {return !a(self, locals);},
 
     //Tokenized as operators but parsed as assignment/filters
@@ -18780,44 +18812,31 @@ Lexer.prototype = {
   lex: function(text) {
     this.text = text;
     this.index = 0;
-    this.ch = undefined;
     this.tokens = [];
 
     while (this.index < this.text.length) {
-      this.ch = this.text.charAt(this.index);
-      if (this.is('"\'')) {
-        this.readString(this.ch);
-      } else if (this.isNumber(this.ch) || this.is('.') && this.isNumber(this.peek())) {
+      var ch = this.text.charAt(this.index);
+      if (ch === '"' || ch === "'") {
+        this.readString(ch);
+      } else if (this.isNumber(ch) || ch === '.' && this.isNumber(this.peek())) {
         this.readNumber();
-      } else if (this.isIdent(this.ch)) {
+      } else if (this.isIdent(ch)) {
         this.readIdent();
-      } else if (this.is('(){}[].,;:?')) {
-        this.tokens.push({
-          index: this.index,
-          text: this.ch
-        });
+      } else if (this.is(ch, '(){}[].,;:?')) {
+        this.tokens.push({index: this.index, text: ch});
         this.index++;
-      } else if (this.isWhitespace(this.ch)) {
+      } else if (this.isWhitespace(ch)) {
         this.index++;
       } else {
-        var ch2 = this.ch + this.peek();
+        var ch2 = ch + this.peek();
         var ch3 = ch2 + this.peek(2);
-        var fn = OPERATORS[this.ch];
-        var fn2 = OPERATORS[ch2];
-        var fn3 = OPERATORS[ch3];
-        if (fn3) {
-          this.tokens.push({index: this.index, text: ch3, fn: fn3});
-          this.index += 3;
-        } else if (fn2) {
-          this.tokens.push({index: this.index, text: ch2, fn: fn2});
-          this.index += 2;
-        } else if (fn) {
-          this.tokens.push({
-            index: this.index,
-            text: this.ch,
-            fn: fn
-          });
-          this.index += 1;
+        var op1 = OPERATORS[ch];
+        var op2 = OPERATORS[ch2];
+        var op3 = OPERATORS[ch3];
+        if (op1 || op2 || op3) {
+          var token = op3 ? ch3 : (op2 ? ch2 : ch);
+          this.tokens.push({index: this.index, text: token, operator: true});
+          this.index += token.length;
         } else {
           this.throwError('Unexpected next character ', this.index, this.index + 1);
         }
@@ -18826,8 +18845,8 @@ Lexer.prototype = {
     return this.tokens;
   },
 
-  is: function(chars) {
-    return chars.indexOf(this.ch) !== -1;
+  is: function(ch, chars) {
+    return chars.indexOf(ch) !== -1;
   },
 
   peek: function(i) {
@@ -18836,7 +18855,7 @@ Lexer.prototype = {
   },
 
   isNumber: function(ch) {
-    return ('0' <= ch && ch <= '9');
+    return ('0' <= ch && ch <= '9') && typeof ch === "string";
   },
 
   isWhitespace: function(ch) {
@@ -18889,79 +18908,28 @@ Lexer.prototype = {
       }
       this.index++;
     }
-    number = 1 * number;
     this.tokens.push({
       index: start,
       text: number,
       constant: true,
-      fn: function() { return number; }
+      value: Number(number)
     });
   },
 
   readIdent: function() {
-    var expression = this.text;
-
-    var ident = '';
     var start = this.index;
-
-    var lastDot, peekIndex, methodName, ch;
-
     while (this.index < this.text.length) {
-      ch = this.text.charAt(this.index);
-      if (ch === '.' || this.isIdent(ch) || this.isNumber(ch)) {
-        if (ch === '.') lastDot = this.index;
-        ident += ch;
-      } else {
+      var ch = this.text.charAt(this.index);
+      if (!(this.isIdent(ch) || this.isNumber(ch))) {
         break;
       }
       this.index++;
     }
-
-    //check if the identifier ends with . and if so move back one char
-    if (lastDot && ident[ident.length - 1] === '.') {
-      this.index--;
-      ident = ident.slice(0, -1);
-      lastDot = ident.lastIndexOf('.');
-      if (lastDot === -1) {
-        lastDot = undefined;
-      }
-    }
-
-    //check if this is not a method invocation and if it is back out to last dot
-    if (lastDot) {
-      peekIndex = this.index;
-      while (peekIndex < this.text.length) {
-        ch = this.text.charAt(peekIndex);
-        if (ch === '(') {
-          methodName = ident.substr(lastDot - start + 1);
-          ident = ident.substr(0, lastDot - start);
-          this.index = peekIndex;
-          break;
-        }
-        if (this.isWhitespace(ch)) {
-          peekIndex++;
-        } else {
-          break;
-        }
-      }
-    }
-
     this.tokens.push({
       index: start,
-      text: ident,
-      fn: CONSTANTS[ident] || getterFn(ident, this.options, expression)
+      text: this.text.slice(start, this.index),
+      identifier: true
     });
-
-    if (methodName) {
-      this.tokens.push({
-        index: lastDot,
-        text: '.'
-      });
-      this.tokens.push({
-        index: lastDot + 1,
-        text: methodName
-      });
-    }
   },
 
   readString: function(quote) {
@@ -18992,9 +18960,8 @@ Lexer.prototype = {
         this.tokens.push({
           index: start,
           text: rawString,
-          string: string,
           constant: true,
-          fn: function() { return string; }
+          value: string
         });
         return;
       } else {
@@ -19055,16 +19022,12 @@ Parser.prototype = {
       primary = this.arrayDeclaration();
     } else if (this.expect('{')) {
       primary = this.object();
+    } else if (this.peek().identifier) {
+      primary = this.identifier();
+    } else if (this.peek().constant) {
+      primary = this.constant();
     } else {
-      var token = this.expect();
-      primary = token.fn;
-      if (!primary) {
-        this.throwError('not a primary expression', token);
-      }
-      if (token.constant) {
-        primary.constant = true;
-        primary.literal = true;
-      }
+      this.throwError('not a primary expression', this.peek());
     }
 
     var next, context;
@@ -19098,8 +19061,11 @@ Parser.prototype = {
   },
 
   peek: function(e1, e2, e3, e4) {
-    if (this.tokens.length > 0) {
-      var token = this.tokens[0];
+    return this.peekAhead(0, e1, e2, e3, e4);
+  },
+  peekAhead: function(i, e1, e2, e3, e4) {
+    if (this.tokens.length > i) {
+      var token = this.tokens[i];
       var t = token.text;
       if (t === e1 || t === e2 || t === e3 || t === e4 ||
           (!e1 && !e2 && !e3 && !e4)) {
@@ -19119,12 +19085,19 @@ Parser.prototype = {
   },
 
   consume: function(e1) {
-    if (!this.expect(e1)) {
+    if (this.tokens.length === 0) {
+      throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
+    }
+
+    var token = this.expect(e1);
+    if (!token) {
       this.throwError('is unexpected, expecting [' + e1 + ']', this.peek());
     }
+    return token;
   },
 
-  unaryFn: function(fn, right) {
+  unaryFn: function(op, right) {
+    var fn = OPERATORS[op];
     return extend(function $parseUnaryFn(self, locals) {
       return fn(self, locals, right);
     }, {
@@ -19133,12 +19106,35 @@ Parser.prototype = {
     });
   },
 
-  binaryFn: function(left, fn, right, isBranching) {
+  binaryFn: function(left, op, right, isBranching) {
+    var fn = OPERATORS[op];
     return extend(function $parseBinaryFn(self, locals) {
       return fn(self, locals, left, right);
     }, {
       constant: left.constant && right.constant,
       inputs: !isBranching && [left, right]
+    });
+  },
+
+  identifier: function() {
+    var id = this.consume().text;
+
+    //Continue reading each `.identifier` unless it is a method invocation
+    while (this.peek('.') && this.peekAhead(1).identifier && !this.peekAhead(2, '(')) {
+      id += this.consume().text + this.consume().text;
+    }
+
+    return CONSTANTS[id] || getterFn(id, this.options, this.text);
+  },
+
+  constant: function() {
+    var value = this.consume().value;
+
+    return extend(function $parseConstant() {
+      return value;
+    }, {
+      constant: true,
+      literal: true
     });
   },
 
@@ -19173,8 +19169,7 @@ Parser.prototype = {
   },
 
   filter: function(inputFn) {
-    var token = this.expect();
-    var fn = this.$filter(token.text);
+    var fn = this.$filter(this.consume().text);
     var argsFn;
     var args;
 
@@ -19237,7 +19232,7 @@ Parser.prototype = {
     var token;
     if ((token = this.expect('?'))) {
       middle = this.assignment();
-      if ((token = this.expect(':'))) {
+      if (this.consume(':')) {
         var right = this.assignment();
 
         return extend(function $parseTernary(self, locals) {
@@ -19245,9 +19240,6 @@ Parser.prototype = {
         }, {
           constant: left.constant && middle.constant && right.constant
         });
-
-      } else {
-        this.throwError('expected :', token);
       }
     }
 
@@ -19258,7 +19250,7 @@ Parser.prototype = {
     var left = this.logicalAND();
     var token;
     while ((token = this.expect('||'))) {
-      left = this.binaryFn(left, token.fn, this.logicalAND(), true);
+      left = this.binaryFn(left, token.text, this.logicalAND(), true);
     }
     return left;
   },
@@ -19267,7 +19259,7 @@ Parser.prototype = {
     var left = this.equality();
     var token;
     if ((token = this.expect('&&'))) {
-      left = this.binaryFn(left, token.fn, this.logicalAND(), true);
+      left = this.binaryFn(left, token.text, this.logicalAND(), true);
     }
     return left;
   },
@@ -19276,7 +19268,7 @@ Parser.prototype = {
     var left = this.relational();
     var token;
     if ((token = this.expect('==','!=','===','!=='))) {
-      left = this.binaryFn(left, token.fn, this.equality());
+      left = this.binaryFn(left, token.text, this.equality());
     }
     return left;
   },
@@ -19285,7 +19277,7 @@ Parser.prototype = {
     var left = this.additive();
     var token;
     if ((token = this.expect('<', '>', '<=', '>='))) {
-      left = this.binaryFn(left, token.fn, this.relational());
+      left = this.binaryFn(left, token.text, this.relational());
     }
     return left;
   },
@@ -19294,7 +19286,7 @@ Parser.prototype = {
     var left = this.multiplicative();
     var token;
     while ((token = this.expect('+','-'))) {
-      left = this.binaryFn(left, token.fn, this.multiplicative());
+      left = this.binaryFn(left, token.text, this.multiplicative());
     }
     return left;
   },
@@ -19303,7 +19295,7 @@ Parser.prototype = {
     var left = this.unary();
     var token;
     while ((token = this.expect('*','/','%'))) {
-      left = this.binaryFn(left, token.fn, this.unary());
+      left = this.binaryFn(left, token.text, this.unary());
     }
     return left;
   },
@@ -19313,9 +19305,9 @@ Parser.prototype = {
     if (this.expect('+')) {
       return this.primary();
     } else if ((token = this.expect('-'))) {
-      return this.binaryFn(Parser.ZERO, token.fn, this.unary());
+      return this.binaryFn(Parser.ZERO, token.text, this.unary());
     } else if ((token = this.expect('!'))) {
-      return this.unaryFn(token.fn, this.unary());
+      return this.unaryFn(token.text, this.unary());
     } else {
       return this.primary();
     }
@@ -19323,7 +19315,7 @@ Parser.prototype = {
 
   fieldAccess: function(object) {
     var expression = this.text;
-    var field = this.expect().text;
+    var field = this.consume().text;
     var getter = getterFn(field, this.options, expression);
 
     return extend(function $parseFieldAccess(scope, locals, self) {
@@ -19408,8 +19400,7 @@ Parser.prototype = {
           // Support trailing commas per ES5.1.
           break;
         }
-        var elementFn = this.expression();
-        elementFns.push(elementFn);
+        elementFns.push(this.expression());
       } while (this.expect(','));
     }
     this.consume(']');
@@ -19435,11 +19426,16 @@ Parser.prototype = {
           // Support trailing commas per ES5.1.
           break;
         }
-        var token = this.expect();
-        keys.push(token.string || token.text);
+        var token = this.consume();
+        if (token.constant) {
+          keys.push(token.value);
+        } else if (token.identifier) {
+          keys.push(token.text);
+        } else {
+          this.throwError("invalid key", token);
+        }
         this.consume(':');
-        var value = this.expression();
-        valueFns.push(value);
+        valueFns.push(this.expression());
       } while (this.expect(','));
     }
     this.consume('}');
@@ -19881,13 +19877,21 @@ function $ParseProvider() {
 
     function addInterceptor(parsedExpression, interceptorFn) {
       if (!interceptorFn) return parsedExpression;
+      var watchDelegate = parsedExpression.$$watchDelegate;
 
-      var fn = function interceptedExpression(scope, locals) {
+      var regularWatch =
+          watchDelegate !== oneTimeLiteralWatchDelegate &&
+          watchDelegate !== oneTimeWatchDelegate;
+
+      var fn = regularWatch ? function regularInterceptedExpression(scope, locals) {
+        var value = parsedExpression(scope, locals);
+        return interceptorFn(value, scope, locals);
+      } : function oneTimeInterceptedExpression(scope, locals) {
         var value = parsedExpression(scope, locals);
         var result = interceptorFn(value, scope, locals);
         // we only return the interceptor's result if the
         // initial value is defined (for bind-once)
-        return isDefined(value) || interceptorFn.$stateful ? result : value;
+        return isDefined(value) ? result : value;
       };
 
       // Propagate $$watchDelegates other then inputsWatchDelegate
@@ -19912,7 +19916,11 @@ function $ParseProvider() {
  * @requires $rootScope
  *
  * @description
- * A promise/deferred implementation inspired by [Kris Kowal's Q](https://github.com/kriskowal/q).
+ * A service that helps you run functions asynchronously, and use their return values (or exceptions)
+ * when they are done processing.
+ *
+ * This is an implementation of promises/deferred objects inspired by
+ * [Kris Kowal's Q](https://github.com/kriskowal/q).
  *
  * $q can be used in two fashions --- one which is more similar to Kris Kowal's Q or jQuery's Deferred
  * implementations, and the other which resembles ES6 promises to some degree.
@@ -20048,15 +20056,11 @@ function $ParseProvider() {
  *
  * - `catch(errorCallback)` – shorthand for `promise.then(null, errorCallback)`
  *
- * - `finally(callback)` – allows you to observe either the fulfillment or rejection of a promise,
+ * - `finally(callback, notifyCallback)` – allows you to observe either the fulfillment or rejection of a promise,
  *   but to do so without modifying the final value. This is useful to release resources or do some
  *   clean-up that needs to be done whether the promise was rejected or resolved. See the [full
  *   specification](https://github.com/kriskowal/q/wiki/API-Reference#promisefinallycallback) for
  *   more information.
- *
- *   Because `finally` is a reserved word in JavaScript and reserved keywords are not supported as
- *   property names by ES3, you'll need to invoke the method like `promise['finally'](callback)` to
- *   make your code IE8 and Android 2.x compatible.
  *
  * # Chaining promises
  *
@@ -21280,11 +21284,11 @@ function $RootScopeProvider() {
                       if (ttl < 5) {
                         logIdx = 4 - ttl;
                         if (!watchLog[logIdx]) watchLog[logIdx] = [];
-                        logMsg = (isFunction(watch.exp))
-                            ? 'fn: ' + (watch.exp.name || watch.exp.toString())
-                            : watch.exp;
-                        logMsg += '; newVal: ' + toJson(value) + '; oldVal: ' + toJson(last);
-                        watchLog[logIdx].push(logMsg);
+                        watchLog[logIdx].push({
+                          msg: isFunction(watch.exp) ? 'fn: ' + (watch.exp.name || watch.exp.toString()) : watch.exp,
+                          newVal: value,
+                          oldVal: last
+                        });
                       }
                     } else if (watch === lastDirtyWatch) {
                       // If the most recently dirty watcher is now clean, short circuit since the remaining watchers
@@ -21317,7 +21321,7 @@ function $RootScopeProvider() {
             throw $rootScopeMinErr('infdig',
                 '{0} $digest() iterations reached. Aborting!\n' +
                 'Watchers fired in the last 5 iterations: {1}',
-                TTL, toJson(watchLog));
+                TTL, watchLog);
           }
 
         } while (dirty || asyncQueue.length);
@@ -21668,7 +21672,7 @@ function $RootScopeProvider() {
         do {
           namedListeners = scope.$$listeners[name] || empty;
           event.currentScope = scope;
-          for (i=0, length=namedListeners.length; i<length; i++) {
+          for (i = 0, length = namedListeners.length; i < length; i++) {
 
             // if listeners were deregistered, defragment the array
             if (!namedListeners[i]) {
@@ -21742,7 +21746,7 @@ function $RootScopeProvider() {
         while ((current = next)) {
           event.currentScope = current;
           listeners = current.$$listeners[name] || [];
-          for (i=0, length = listeners.length; i<length; i++) {
+          for (i = 0, length = listeners.length; i < length; i++) {
             // if listeners were deregistered, defragment the array
             if (!listeners[i]) {
               listeners.splice(i, 1);
@@ -21898,7 +21902,7 @@ function $$SanitizeUriProvider() {
       var normalizedVal;
       normalizedVal = urlResolve(uri).href;
       if (normalizedVal !== '' && !normalizedVal.match(regex)) {
-        return 'unsafe:'+normalizedVal;
+        return 'unsafe:' + normalizedVal;
       }
       return uri;
     };
@@ -22997,7 +23001,7 @@ function $SnifferProvider() {
       transitions = !!(('transition' in bodyStyle) || (vendorPrefix + 'Transition' in bodyStyle));
       animations  = !!(('animation' in bodyStyle) || (vendorPrefix + 'Animation' in bodyStyle));
 
-      if (android && (!transitions||!animations)) {
+      if (android && (!transitions ||  !animations)) {
         transitions = isString(document.body.style.webkitTransition);
         animations = isString(document.body.style.webkitAnimation);
       }
@@ -23068,7 +23072,7 @@ function $TemplateRequestProvider() {
       if (isArray(transformResponse)) {
         var original = transformResponse;
         transformResponse = [];
-        for (var i=0; i<original.length; ++i) {
+        for (var i = 0; i < original.length; ++i) {
           var transformer = original[i];
           if (transformer !== defaultHttpResponseTransform) {
             transformResponse.push(transformer);
@@ -23312,7 +23316,7 @@ function $TimeoutProvider() {
 // exactly the behavior needed here.  There is little value is mocking these out for this
 // service.
 var urlParsingNode = document.createElement("a");
-var originUrl = urlResolve(window.location.href, true);
+var originUrl = urlResolve(window.location.href);
 
 
 /**
@@ -23367,7 +23371,7 @@ var originUrl = urlResolve(window.location.href, true);
  *   | pathname      | The pathname, beginning with "/"
  *
  */
-function urlResolve(url, base) {
+function urlResolve(url) {
   var href = url;
 
   if (msie) {
@@ -23747,8 +23751,8 @@ function filterFilter() {
             }
             return false;
           }
-          text = (''+text).toLowerCase();
-          return (''+obj).toLowerCase().indexOf(text) > -1;
+          text = ('' + text).toLowerCase();
+          return ('' + obj).toLowerCase().indexOf(text) > -1;
         };
       }
     }
@@ -24008,7 +24012,7 @@ function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
     if (whole.length >= (lgroup + group)) {
       pos = whole.length - lgroup;
       for (i = 0; i < pos; i++) {
-        if ((pos - i)%group === 0 && i !== 0) {
+        if ((pos - i) % group === 0 && i !== 0) {
           formatedText += groupSep;
         }
         formatedText += whole.charAt(i);
@@ -24016,7 +24020,7 @@ function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
     }
 
     for (i = pos; i < whole.length; i++) {
-      if ((whole.length - i)%lgroup === 0 && i !== 0) {
+      if ((whole.length - i) % lgroup === 0 && i !== 0) {
         formatedText += groupSep;
       }
       formatedText += whole.charAt(i);
@@ -24256,10 +24260,10 @@ function dateFilter($locale) {
         tzMin = int(match[9] + match[11]);
       }
       dateSetter.call(date, int(match[1]), int(match[2]) - 1, int(match[3]));
-      var h = int(match[4]||0) - tzHour;
-      var m = int(match[5]||0) - tzMin;
-      var s = int(match[6]||0);
-      var ms = Math.round(parseFloat('0.' + (match[7]||0)) * 1000);
+      var h = int(match[4] || 0) - tzHour;
+      var m = int(match[5] || 0) - tzMin;
+      var s = int(match[6] || 0);
+      var ms = Math.round(parseFloat('0.' + (match[7] || 0)) * 1000);
       timeSetter.call(date, h, m, s, ms);
       return date;
     }
@@ -24491,7 +24495,7 @@ function limitToFilter() {
       n = input.length;
     }
 
-    for (; i<n; i++) {
+    for (; i < n; i++) {
       out.push(input[i]);
     }
 
@@ -24618,7 +24622,7 @@ orderByFilter.$inject = ['$parse'];
 function orderByFilter($parse) {
   return function(array, sortPredicate, reverseOrder) {
     if (!(isArrayLike(array))) return array;
-    sortPredicate = isArray(sortPredicate) ? sortPredicate: [sortPredicate];
+    sortPredicate = isArray(sortPredicate) ? sortPredicate : [sortPredicate];
     if (sortPredicate.length === 0) { sortPredicate = ['+']; }
     sortPredicate = sortPredicate.map(function(predicate) {
       var descending = false, get = predicate || identity;
@@ -24645,9 +24649,7 @@ function orderByFilter($parse) {
         return compare(get(a),get(b));
       }, descending);
     });
-    var arrayCopy = [];
-    for (var i = 0; i < array.length; i++) { arrayCopy.push(array[i]); }
-    return arrayCopy.sort(reverseComparator(comparator, reverseOrder));
+    return slice.call(array).sort(reverseComparator(comparator, reverseOrder));
 
     function comparator(o1, o2) {
       for (var i = 0; i < sortPredicate.length; i++) {
@@ -25709,9 +25711,14 @@ var inputType = {
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
    *    maxlength.
-   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-   *    patterns defined as scope expressions.
+   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+   *    that contains the regular expression body that will be converted to a regular expression
+   *    as in the ngPattern directive.
+   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+   *    If the expression evaluates to a RegExp object then this is used directly.
+   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
    * @param {string=} ngChange Angular expression to be executed when input changes due to user
    *    interaction with the input element.
    * @param {boolean=} [ngTrim=true] If set to false Angular will not automatically trim the input.
@@ -26252,9 +26259,14 @@ var inputType = {
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
    *    maxlength.
-   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-   *    patterns defined as scope expressions.
+   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+   *    that contains the regular expression body that will be converted to a regular expression
+   *    as in the ngPattern directive.
+   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+   *    If the expression evaluates to a RegExp object then this is used directly.
+   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
    * @param {string=} ngChange Angular expression to be executed when input changes due to user
    *    interaction with the input element.
    *
@@ -26334,9 +26346,14 @@ var inputType = {
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
    *    maxlength.
-   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-   *    patterns defined as scope expressions.
+   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+   *    that contains the regular expression body that will be converted to a regular expression
+   *    as in the ngPattern directive.
+   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+   *    If the expression evaluates to a RegExp object then this is used directly.
+   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
    * @param {string=} ngChange Angular expression to be executed when input changes due to user
    *    interaction with the input element.
    *
@@ -26417,9 +26434,14 @@ var inputType = {
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
    *    maxlength.
-   * @param {string=} ngPattern Sets `pattern` validation error key if the value does not match the
-   *    RegExp pattern expression. Expected value is `/regexp/` for inline patterns or `regexp` for
-   *    patterns defined as scope expressions.
+   * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
+   *    that contains the regular expression body that will be converted to a regular expression
+   *    as in the ngPattern directive.
+   * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
+   *    a RegExp found by evaluating the Angular expression given in the attribute value.
+   *    If the expression evaluates to a RegExp object then this is used directly.
+   *    If the expression is a string then it will be converted to a RegExp after wrapping it in `^` and `$`
+   *    characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
    * @param {string=} ngChange Angular expression to be executed when input changes due to user
    *    interaction with the input element.
    *
@@ -26730,8 +26752,8 @@ function createDateParser(regexp, mapping) {
       // When a date is JSON'ified to wraps itself inside of an extra
       // set of double quotes. This makes the date parsing code unable
       // to match the date string and parse it as a date.
-      if (iso.charAt(0) == '"' && iso.charAt(iso.length-1) == '"') {
-        iso = iso.substring(1, iso.length-1);
+      if (iso.charAt(0) == '"' && iso.charAt(iso.length - 1) == '"') {
+        iso = iso.substring(1, iso.length - 1);
       }
       if (ISO_DATE_REGEXP.test(iso)) {
         return new Date(iso);
@@ -27178,12 +27200,17 @@ var VALID_CLASS = 'ng-valid',
  * @property {string} $viewValue Actual string value in the view.
  * @property {*} $modelValue The value in the model that the control is bound to.
  * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
-       the control reads value from the DOM. The functions are called in array order, each passing the value
-       through to the next. The last return value is forwarded to the $validators collection.
-       Used to sanitize / convert the value.
-       Returning undefined from a parser means a parse error occurred. No $validators will
-       run and the 'ngModel' will not be updated until the parse error is resolved. The parse error is stored
-       in 'ngModel.$error.parse'.
+       the control reads value from the DOM. The functions are called in array order, each passing
+       its return value through to the next. The last return value is forwarded to the
+       {@link ngModel.NgModelController#$validators `$validators`} collection.
+
+Parsers are used to sanitize / convert the {@link ngModel.NgModelController#$viewValue
+`$viewValue`}.
+
+Returning `undefined` from a parser means a parse error occurred. In that case,
+no {@link ngModel.NgModelController#$validators `$validators`} will run and the `ngModel`
+will be set to `undefined` unless {@link ngModelOptions `ngModelOptions.allowInvalid`}
+is set to `true`. The parse error is stored in `ngModel.$error.parse`.
 
  *
  * @property {Array.<Function>} $formatters Array of functions to execute, as a pipeline, whenever
@@ -27308,7 +27335,7 @@ var VALID_CLASS = 'ng-valid',
 
               // Listen for change events to enable binding
               element.on('blur keyup change', function() {
-                scope.$apply(read);
+                scope.$evalAsync(read);
               });
               read(); // initialize
 
@@ -28244,7 +28271,7 @@ var patternDirective = function() {
       var regexp, patternExp = attr.ngPattern || attr.pattern;
       attr.$observe('pattern', function(regex) {
         if (isString(regex) && regex.length > 0) {
-          regex = new RegExp(regex);
+          regex = new RegExp('^' + regex + '$');
         }
 
         if (regex && !regex.test) {
@@ -28535,7 +28562,7 @@ var ngValueDirective = function() {
  * `ngModelOptions` has an effect on the element it's declared on and its descendants.
  *
  * @param {Object} ngModelOptions options to apply to the current model. Valid keys are:
- *   - `updateOn`: string specifying which event should be the input bound to. You can set several
+ *   - `updateOn`: string specifying which event should the input be bound to. You can set several
  *     events using an space delimited list. There is a special event called `default` that
  *     matches the default events belonging of the control.
  *   - `debounce`: integer value which contains the debounce model update value in milliseconds. A
@@ -31403,7 +31430,7 @@ var ngRepeatDirective = ['$parse', '$animate', function($parse, $animate) {
               });
               throw ngRepeatMinErr('dupes',
                   "Duplicates in a repeater are not allowed. Use 'track by' expression to specify unique keys. Repeater: {0}, Duplicate key: {1}, Duplicate value: {2}",
-                  expression, trackById, toJson(value));
+                  expression, trackById, value);
             } else {
               // new never before seen block
               nextBlockOrder[index] = {id: trackById, scope: undefined, clone: undefined};
@@ -32209,7 +32236,7 @@ var ngOptionsMinErr = minErr('ngOptions');
  * In many cases, `ngRepeat` can be used on `<option>` elements instead of `ngOptions` to achieve a
  * similar result. However, the `ngOptions` provides some benefits such as reducing memory and
  * increasing speed by not creating a new scope for each repeated instance, as well as providing
- * more flexibility in how the `select`'s model is assigned via `select as`. `ngOptions should be
+ * more flexibility in how the `select`'s model is assigned via `select as`. `ngOptions` should be
  * used when the `select` model needs to be bound to a non-string value. This is because an option
  * element can only be bound to string values at present.
  *
@@ -32807,13 +32834,14 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
             lastElement = null;  // start at the beginning
             for (index = 0, length = optionGroup.length; index < length; index++) {
               option = optionGroup[index];
-              if ((existingOption = existingOptions[index+1])) {
+              if ((existingOption = existingOptions[index + 1])) {
                 // reuse elements
                 lastElement = existingOption.element;
                 if (existingOption.label !== option.label) {
                   updateLabelMap(labelMap, existingOption.label, false);
                   updateLabelMap(labelMap, option.label, true);
                   lastElement.text(existingOption.label = option.label);
+                  lastElement.prop('label', existingOption.label);
                 }
                 if (existingOption.id !== option.id) {
                   lastElement.val(existingOption.id = option.id);
@@ -32843,6 +32871,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                       .val(option.id)
                       .prop('selected', option.selected)
                       .attr('selected', option.selected)
+                      .prop('label', option.label)
                       .text(option.label);
                 }
 
@@ -32965,7 +32994,7 @@ var styleDirective = valueFn({
  */
 
 /**
- * @license AngularJS v1.3.2
+ * @license AngularJS v1.3.3
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -34855,7 +34884,7 @@ angular.module('ngAnimate', ['ng'])
           //the jqLite object, so we're safe to use a single variable to house
           //the styles since there is always only one element being animated
           var oldStyle = node.getAttribute('style') || '';
-          if (oldStyle.charAt(oldStyle.length-1) !== ';') {
+          if (oldStyle.charAt(oldStyle.length - 1) !== ';') {
             oldStyle += ';';
           }
           node.setAttribute('style', oldStyle + ' ' + style);
@@ -35109,7 +35138,7 @@ angular.module('ngAnimate', ['ng'])
  */
 
 /**
- * @license AngularJS v1.3.0
+ * @license AngularJS v1.3.3
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -35155,16 +35184,16 @@ var $sanitizeMinErr = angular.$$minErr('$sanitize');
  * @kind function
  *
  * @description
- *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
+ *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
  *   then serialized back to properly escaped html string. This means that no unsafe input can make
  *   it into the returned string, however, since our parser is more strict than a typical browser
  *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
- *   browser, won't make it through the sanitizer.
+ *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
  *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
  *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
  *
- * @param {string} html Html input.
- * @returns {string} Sanitized html.
+ * @param {string} html HTML input.
+ * @returns {string} Sanitized HTML.
  *
  * @example
    <example module="sanitizeExample" deps="angular-sanitize.js">
@@ -35308,6 +35337,12 @@ var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a
         "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
         "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
 
+// SVG Elements
+// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
+        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
+        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
+        "stop,svg,switch,text,title,tspan,use");
 
 // Special Elements (can contain anything)
 var specialElements = makeMap("script,style");
@@ -35316,16 +35351,41 @@ var validElements = angular.extend({},
                                    voidElements,
                                    blockElements,
                                    inlineElements,
-                                   optionalEndTagElements);
+                                   optionalEndTagElements,
+                                   svgElements);
 
 //Attributes that have href and hence need to be sanitized
-var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
-var validAttrs = angular.extend({}, uriAttrs, makeMap(
-    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
-    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
-    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
-    'valign,value,vspace,width'));
+var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
+
+var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+    'scope,scrolling,shape,size,span,start,summary,target,title,type,' +
+    'valign,value,vspace,width');
+
+// SVG attributes (without "id" and "name" attributes)
+// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,' +
+    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,' +
+    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,' +
+    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,' +
+    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,' +
+    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,' +
+    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,' +
+    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,' +
+    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,' +
+    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,' +
+    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,' +
+    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,' +
+    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,' +
+    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,' +
+    'zoomAndPan');
+
+var validAttrs = angular.extend({},
+                                uriAttrs,
+                                svgAttrs,
+                                htmlAttrs);
 
 function makeMap(str) {
   var obj = {}, items = str.split(','), i;
@@ -35346,7 +35406,7 @@ function makeMap(str) {
  * @param {string} html string
  * @param {object} handler
  */
-function htmlParser( html, handler ) {
+function htmlParser(html, handler) {
   if (typeof html !== 'string') {
     if (html === null || typeof html === 'undefined') {
       html = '';
@@ -35357,50 +35417,50 @@ function htmlParser( html, handler ) {
   var index, chars, match, stack = [], last = html, text;
   stack.last = function() { return stack[ stack.length - 1 ]; };
 
-  while ( html ) {
+  while (html) {
     text = '';
     chars = true;
 
     // Make sure we're not in a script or style element
-    if ( !stack.last() || !specialElements[ stack.last() ] ) {
+    if (!stack.last() || !specialElements[ stack.last() ]) {
 
       // Comment
-      if ( html.indexOf("<!--") === 0 ) {
+      if (html.indexOf("<!--") === 0) {
         // comments containing -- are not allowed unless they terminate the comment
         index = html.indexOf("--", 4);
 
-        if ( index >= 0 && html.lastIndexOf("-->", index) === index) {
-          if (handler.comment) handler.comment( html.substring( 4, index ) );
-          html = html.substring( index + 3 );
+        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
+          if (handler.comment) handler.comment(html.substring(4, index));
+          html = html.substring(index + 3);
           chars = false;
         }
       // DOCTYPE
-      } else if ( DOCTYPE_REGEXP.test(html) ) {
-        match = html.match( DOCTYPE_REGEXP );
+      } else if (DOCTYPE_REGEXP.test(html)) {
+        match = html.match(DOCTYPE_REGEXP);
 
-        if ( match ) {
-          html = html.replace( match[0], '');
+        if (match) {
+          html = html.replace(match[0], '');
           chars = false;
         }
       // end tag
-      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
-        match = html.match( END_TAG_REGEXP );
+      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
+        match = html.match(END_TAG_REGEXP);
 
-        if ( match ) {
-          html = html.substring( match[0].length );
-          match[0].replace( END_TAG_REGEXP, parseEndTag );
+        if (match) {
+          html = html.substring(match[0].length);
+          match[0].replace(END_TAG_REGEXP, parseEndTag);
           chars = false;
         }
 
       // start tag
-      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
-        match = html.match( START_TAG_REGEXP );
+      } else if (BEGIN_TAG_REGEXP.test(html)) {
+        match = html.match(START_TAG_REGEXP);
 
-        if ( match ) {
+        if (match) {
           // We only have a valid start-tag if there is a '>'.
-          if ( match[4] ) {
-            html = html.substring( match[0].length );
-            match[0].replace( START_TAG_REGEXP, parseStartTag );
+          if (match[4]) {
+            html = html.substring(match[0].length);
+            match[0].replace(START_TAG_REGEXP, parseStartTag);
           }
           chars = false;
         } else {
@@ -35410,29 +35470,29 @@ function htmlParser( html, handler ) {
         }
       }
 
-      if ( chars ) {
+      if (chars) {
         index = html.indexOf("<");
 
-        text += index < 0 ? html : html.substring( 0, index );
-        html = index < 0 ? "" : html.substring( index );
+        text += index < 0 ? html : html.substring(0, index);
+        html = index < 0 ? "" : html.substring(index);
 
-        if (handler.chars) handler.chars( decodeEntities(text) );
+        if (handler.chars) handler.chars(decodeEntities(text));
       }
 
     } else {
       html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
-        function(all, text){
+        function(all, text) {
           text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
 
-          if (handler.chars) handler.chars( decodeEntities(text) );
+          if (handler.chars) handler.chars(decodeEntities(text));
 
           return "";
       });
 
-      parseEndTag( "", stack.last() );
+      parseEndTag("", stack.last());
     }
 
-    if ( html == last ) {
+    if (html == last) {
       throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
                                         "of html: {0}", html);
     }
@@ -35442,22 +35502,22 @@ function htmlParser( html, handler ) {
   // Clean up any remaining tags
   parseEndTag();
 
-  function parseStartTag( tag, tagName, rest, unary ) {
+  function parseStartTag(tag, tagName, rest, unary) {
     tagName = angular.lowercase(tagName);
-    if ( blockElements[ tagName ] ) {
-      while ( stack.last() && inlineElements[ stack.last() ] ) {
-        parseEndTag( "", stack.last() );
+    if (blockElements[ tagName ]) {
+      while (stack.last() && inlineElements[ stack.last() ]) {
+        parseEndTag("", stack.last());
       }
     }
 
-    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
-      parseEndTag( "", tagName );
+    if (optionalEndTagElements[ tagName ] && stack.last() == tagName) {
+      parseEndTag("", tagName);
     }
 
     unary = voidElements[ tagName ] || !!unary;
 
-    if ( !unary )
-      stack.push( tagName );
+    if (!unary)
+      stack.push(tagName);
 
     var attrs = {};
 
@@ -35470,22 +35530,22 @@ function htmlParser( html, handler ) {
 
         attrs[name] = decodeEntities(value);
     });
-    if (handler.start) handler.start( tagName, attrs, unary );
+    if (handler.start) handler.start(tagName, attrs, unary);
   }
 
-  function parseEndTag( tag, tagName ) {
+  function parseEndTag(tag, tagName) {
     var pos = 0, i;
     tagName = angular.lowercase(tagName);
-    if ( tagName )
+    if (tagName)
       // Find the closest opened tag of the same type
-      for ( pos = stack.length - 1; pos >= 0; pos-- )
-        if ( stack[ pos ] == tagName )
+      for (pos = stack.length - 1; pos >= 0; pos--)
+        if (stack[ pos ] == tagName)
           break;
 
-    if ( pos >= 0 ) {
+    if (pos >= 0) {
       // Close all the open elements, up the stack
-      for ( i = stack.length - 1; i >= pos; i-- )
-        if (handler.end) handler.end( stack[ i ] );
+      for (i = stack.length - 1; i >= pos; i--)
+        if (handler.end) handler.end(stack[ i ]);
 
       // Remove the open elements from the stack
       stack.length = pos;
@@ -35531,12 +35591,12 @@ function decodeEntities(value) {
 function encodeEntities(value) {
   return value.
     replace(/&/g, '&amp;').
-    replace(SURROGATE_PAIR_REGEXP, function (value) {
+    replace(SURROGATE_PAIR_REGEXP, function(value) {
       var hi = value.charCodeAt(0);
       var low = value.charCodeAt(1);
       return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
     }).
-    replace(NON_ALPHANUMERIC_REGEXP, function(value){
+    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
       return '&#' + value.charCodeAt(0) + ';';
     }).
     replace(/</g, '&lt;').
@@ -35553,11 +35613,11 @@ function encodeEntities(value) {
  *     comment: function(text) {}
  * }
  */
-function htmlSanitizeWriter(buf, uriValidator){
+function htmlSanitizeWriter(buf, uriValidator) {
   var ignore = false;
   var out = angular.bind(buf, buf.push);
   return {
-    start: function(tag, attrs, unary){
+    start: function(tag, attrs, unary) {
       tag = angular.lowercase(tag);
       if (!ignore && specialElements[tag]) {
         ignore = tag;
@@ -35565,7 +35625,7 @@ function htmlSanitizeWriter(buf, uriValidator){
       if (!ignore && validElements[tag] === true) {
         out('<');
         out(tag);
-        angular.forEach(attrs, function(value, key){
+        angular.forEach(attrs, function(value, key) {
           var lkey=angular.lowercase(key);
           var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
           if (validAttrs[lkey] === true &&
@@ -35580,7 +35640,7 @@ function htmlSanitizeWriter(buf, uriValidator){
         out(unary ? '/>' : '>');
       }
     },
-    end: function(tag){
+    end: function(tag) {
         tag = angular.lowercase(tag);
         if (!ignore && validElements[tag] === true) {
           out('</');
@@ -35591,7 +35651,7 @@ function htmlSanitizeWriter(buf, uriValidator){
           ignore = false;
         }
       },
-    chars: function(chars){
+    chars: function(chars) {
         if (!ignore) {
           out(encodeEntities(chars));
         }
@@ -39016,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-762
+ * Ionic, v1.0.0-beta.13-nightly-763
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
