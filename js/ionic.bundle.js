@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-764
+ * Ionic, v1.0.0-beta.13-nightly-765
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-764';
+window.ionic.version = '1.0.0-beta.13-nightly-765';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-764
+ * Ionic, v1.0.0-beta.13-nightly-765
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -45391,13 +45391,14 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   if (!angular.isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
-      scrollView.options.bouncing = true;
-
-      if (ionic.Platform.isAndroid()) {
-        // No bouncing by default on Android
-        scrollView.options.bouncing = false;
-        // Faster scroll decel
-        scrollView.options.deceleration = 0.95;
+      if (scrollView.options) {
+        scrollView.options.bouncing = true;
+        if (ionic.Platform.isAndroid()) {
+          // No bouncing by default on Android
+          scrollView.options.bouncing = false;
+          // Faster scroll decel
+          scrollView.options.deceleration = 0.95;
+        }
       }
     });
   }
