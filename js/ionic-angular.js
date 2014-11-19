@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-767
+ * Ionic, v1.0.0-beta.13-nightly-769
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5280,7 +5280,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   var titleRight = 0;
   var titleCss = '';
   var isBackEnabled = false;
-  var isBackShown = false;
+  var isBackShown = true;
   var titleTextWidth = 0;
 
 
@@ -5304,7 +5304,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     // to the navigation and history
     if (arguments.length && shouldEnable !== isBackEnabled) {
       var backBtnEle = getEle(BACK_BUTTON);
-      backBtnEle && backBtnEle.classList[ shouldEnable ? 'remove' : 'add' ](HIDE);
+      backBtnEle && backBtnEle.classList[ shouldEnable ? 'remove' : 'add' ]('back-disabled');
       isBackEnabled = shouldEnable;
     }
     return isBackEnabled;
@@ -5316,7 +5316,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     // visually hidden if false, even if the history says it should show
     if (arguments.length && shouldShow !== isBackShown) {
       var backBtnEle = getEle(BACK_BUTTON);
-      if (backBtnEle) backBtnEle.style.display = (shouldShow ? '' : 'none');
+      backBtnEle && backBtnEle.classList[ shouldShow ? 'remove' : 'add' ](HIDE);
       isBackShown = shouldShow;
     }
     return isBackShown;
@@ -5380,7 +5380,6 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
         defaultTitleEle.classList.remove(HIDE);
       }
     }
-    self.showBack(true);
   };
 
 
@@ -5777,6 +5776,11 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
       // append and position buttons
       positionButtons(navEle[buttonType], buttonType);
     });
+
+    // add header-item to the root children
+    for (var x = 0; x < headerBarEle[0].children.length; x++) {
+      headerBarEle[0].children[x].classList.add('header-item');
+    }
 
     // compile header and append to the DOM
     containerEle.append(headerBarEle);
@@ -9557,7 +9561,7 @@ IonicModule
         buttonEle.setAttribute('ng-click', '$ionicGoBack($event)');
       }
 
-      buttonEle.className = 'button back-button hide buttons ' + (tElement.attr('class') || '');
+      buttonEle.className = 'button back-button back-disabled buttons ' + (tElement.attr('class') || '');
       buttonEle.innerHTML = tElement.html() || '';
 
       var childNode;
