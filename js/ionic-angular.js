@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-761
+ * Ionic, v1.0.0-beta.13-nightly-762
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1955,7 +1955,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
 
   // always reset the keyboard state when change stage
   $rootScope.$on('$stateChangeStart', function() {
-    ionic.keyboard.hide();
+    ionic.keyboard && ionic.keyboard.hide && ionic.keyboard.hide();
   });
 
   $rootScope.$on('$ionicHistory.change', function(e, data) {
@@ -6302,7 +6302,16 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   var deregisterInstance = $ionicScrollDelegate._registerInstance(
     self, scrollViewOptions.delegateHandle, function() {
-      return !$scope.$$disconnected && $ionicHistory.currentHistoryId() == $scope.$historyId;
+      if ($scope.$$disconnected) {
+        return false;
+      }
+
+      var currentHistoryId = $ionicHistory.currentHistoryId();
+      if (currentHistoryId) {
+        return currentHistoryId == (isDefined($scope.$historyId) ? $scope.$historyId : 'root');
+      }
+
+      return true;
     }
   );
 
