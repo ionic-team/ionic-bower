@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-770
+ * Ionic, v1.0.0-beta.13-nightly-771
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7169,7 +7169,7 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
     if (self.isInRange(nextIndex)) {
       var distanceRemaining = (1 - Math.abs(percent)) * slidesParent.prop('offsetWidth');
       var transitionDuration = Math.min(
-        distanceRemaining / velocity,
+        distanceRemaining / velocity * 1.25,
         SLIDE_TRANSITION_DURATION
       );
       self.select(nextIndex, transitionDuration);
@@ -10851,17 +10851,19 @@ IonicModule
  *
  * @usage
  * ```html
- * <ion-slide-box on-slide-changed="slideHasChanged($slideIndex)" loop="shouldLoop" auto-play="3000">
- *   <ion-slide>
- *     <div class="box blue"><h1>BLUE</h1></div>
- *   </ion-slide>
- *   <ion-slide>
- *     <div class="box yellow"><h1>YELLOW</h1></div>
- *   </ion-slide>
- *   <ion-slide>
- *     <div class="box pink"><h1>PINK</h1></div>
- *   </ion-slide>
- * </ion-slide-box>
+ * <ion-content>
+ *   <ion-slide-box on-slide-changed="slideHasChanged($slideIndex)" loop="shouldLoop" auto-play="3000">
+ *     <ion-slide>
+ *       <div class="box blue"><h1>BLUE</h1></div>
+ *     </ion-slide>
+ *     <ion-slide>
+ *       <div class="box yellow"><h1>YELLOW</h1></div>
+ *     </ion-slide>
+ *     <ion-slide>
+ *       <div class="box pink"><h1>PINK</h1></div>
+ *     </ion-slide>
+ *   </ion-slide-box>
+ * </ion-content>
  * ```
  *
  * @param {expression=} selected A model bound to the selected slide index.
