@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-769
+ * Ionic, v1.0.0-beta.13-nightly-770
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-769';
+window.ionic.version = '1.0.0-beta.13-nightly-770';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-769
+ * Ionic, v1.0.0-beta.13-nightly-770
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -48503,12 +48503,11 @@ IonicModule
  * would open the given side menu, and tapping it again would close it.
  *
  * ```html
- * <ion-view>
+ * <ion-nav-bar>
  *   <ion-nav-buttons side="left">
  *    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
  *   </ion-nav-buttons>
- *  ...
- * </ion-view>
+ * </ion-nav-bar>
  * ```
  */
 IonicModule
