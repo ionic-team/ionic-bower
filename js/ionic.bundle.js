@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-777
+ * Ionic, v1.0.0-beta.13-nightly-778
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-777';
+window.ionic.version = '1.0.0-beta.13-nightly-778';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-777
+ * Ionic, v1.0.0-beta.13-nightly-778
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44058,14 +44058,14 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
             // set the styles of where this element will end up going so
             // the DOM has some time to render its correct starting point
-            transitionFn(enteringEle, null, registerData.direction, false).run(0);
+            transitionFn(enteringEle, null, enteringData.direction, false).run(0);
 
           } else {
             // the entering element is not already in the DOM
             // set that the entering element should be "staged" and its
             // styles of where this element will go before it hits the DOM
             navViewAttr(enteringEle, VIEW_STATUS_STAGED);
-            transitionFn(enteringEle, null, registerData.direction, true).run(0);
+            transitionFn(enteringEle, null, enteringData.direction, true).run(0);
 
             historyCursorAttr(enteringEle, registerData.isHistoryRoot ? HISTORY_ROOT : HISTORY_AFTER_ROOT);
 
@@ -44109,7 +44109,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
           // 1) get the transition ready and see if it'll animate
           var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
-          var viewTransition = transitionFn(enteringEle, leavingEle, direction, enteringData.shouldAnimate);
+          var viewTransition = transitionFn(enteringEle, leavingEle, enteringData.direction, enteringData.shouldAnimate);
 
           if (viewTransition.shouldAnimate) {
             // 2) attach transitionend events (and fallback timer)
