@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-773
+ * Ionic, v1.0.0-beta.13-nightly-776
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6550,8 +6550,9 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
       refresher.classList.add('active');
       refresherScope.$onPulling();
     }, function() {
-      // deactivateCallback
-        refresher.classList.remove('active', 'refreshing', 'refreshing-tail');
+        refresher.classList.remove('active');
+        refresher.classList.remove('refreshing');
+        refresher.classList.remove('refreshing-tail');
     }, function() {
       // startCallback
       refresher.classList.add('refreshing');
