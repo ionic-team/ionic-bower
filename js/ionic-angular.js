@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-776
+ * Ionic, v1.0.0-beta.13-nightly-777
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1333,7 +1333,8 @@ IonicModule
   '$location',
   '$window',
   '$ionicViewSwitcher',
-function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
+  '$ionicNavViewDelegate',
+function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavViewDelegate) {
 
   // history actions while navigating views
   var ACTION_INITIAL_VIEW = 'initialView';
@@ -1895,6 +1896,18 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher) {
       if (currentView) {
         setNavViews(currentView.viewId);
       }
+    },
+
+    /**
+     * @ngdoc method
+     * @name $ionicHistory#clearCache
+     * @description Removes all cached views within every {@link ionic.directive:ionNavView}.
+     * This both removes the view element from the DOM, and destroy it's scope.
+     */
+    clearCache: function() {
+      $ionicNavViewDelegate._instances.forEach(function(instance) {
+        instance.clearCache();
+      });
     },
 
     /**
@@ -3174,6 +3187,13 @@ IonicModule
   'getPreviousTitle'
   // END DEPRECATED -------
 ]));
+
+
+IonicModule
+.service('$ionicNavViewDelegate', delegateService([
+  'clearCache'
+]));
+
 
 var PLATFORM_BACK_BUTTON_PRIORITY_VIEW = 100;
 var PLATFORM_BACK_BUTTON_PRIORITY_SIDE_MENU = 150;
@@ -4882,7 +4902,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
   function destroyViewEle(ele) {
     // we found an element that should be removed
     // destroy its scope, then remove the element
-    if (ele) {
+    if (ele && ele.length) {
       var viewScope = ele.scope();
       viewScope && viewScope.$destroy();
       ele.remove();
@@ -5045,9 +5065,9 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             // 7) start the transition
             viewTransition.run(1);
 
-            for (var x = 0; x < $ionicNavBarDelegate._instances.length; x++) {
-              $ionicNavBarDelegate._instances[x].triggerTransitionStart(transitionId);
-            }
+            $ionicNavBarDelegate._instances.forEach(function(instance) {
+              instance.triggerTransitionStart(transitionId);
+            });
 
             if (!viewTransition.shouldAnimate) {
               // no animated transition
@@ -5077,9 +5097,9 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
               switcher.cleanup(enteringData);
             }
 
-            for (var x = 0; x < $ionicNavBarDelegate._instances.length; x++) {
-              $ionicNavBarDelegate._instances[x].triggerTransitionEnd();
-            }
+            $ionicNavBarDelegate._instances.forEach(function(instance) {
+              instance.triggerTransitionEnd();
+            });
 
             // remove any references that could cause memory issues
             nextTransition = nextDirection = enteringView = leavingView = enteringEle = leavingEle = null;
@@ -5130,7 +5150,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
               oldestAccess = viewElement.data(DATA_VIEW_ACCESSED);
               removableEle = viewElements.eq(x);
 
-            } else if (viewElement.data(DATA_DESTROY_ELE) && cachedAttr(viewElement) != VIEW_STATUS_ACTIVE) {
+            } else if (viewElement.data(DATA_DESTROY_ELE) && navViewAttr(viewElement) != VIEW_STATUS_ACTIVE) {
               destroyViewEle(viewElement);
             }
           }
@@ -5207,6 +5227,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
     getTransitionData: getTransitionData,
     historyCursorAttr: historyCursorAttr,
     navViewAttr: navViewAttr,
+    destroyViewEle: destroyViewEle
 
   };
 
@@ -6137,9 +6158,10 @@ IonicModule
   '$compile',
   '$controller',
   '$ionicNavBarDelegate',
+  '$ionicNavViewDelegate',
   '$ionicHistory',
   '$ionicViewSwitcher',
-function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, $ionicHistory, $ionicViewSwitcher) {
+function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, $ionicNavViewDelegate, $ionicHistory, $ionicViewSwitcher) {
 
   var DATA_ELE_IDENTIFIER = '$eleId';
   var VIEW_STATUS_ACTIVE = 'active';
@@ -6166,6 +6188,9 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
     var viewData = { name: navViewName, state: null };
     $element.data('$uiView', viewData);
+
+    var deregisterInstance = $ionicNavViewDelegate._registerInstance(self, $attrs.delegateHandle);
+    $scope.$on('$destroy', deregisterInstance);
 
     return viewData;
   };
@@ -6282,6 +6307,18 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         }
       }
     }
+  };
+
+
+  self.clearCache = function() {
+    var viewElements = $element.children();
+
+    for (var x = 0, l = viewElements.length; x < l; x++) {
+      if (navViewAttr(viewElements.eq(x)) == VIEW_STATUS_CACHED) {
+        $ionicViewSwitcher.destroyViewEle(viewElements.eq(x));
+      }
+    }
+
   };
 
 
