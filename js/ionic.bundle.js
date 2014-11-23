@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-779
+ * Ionic, v1.0.0-beta.13-nightly-780
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-779';
+window.ionic.version = '1.0.0-beta.13-nightly-780';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-779
+ * Ionic, v1.0.0-beta.13-nightly-780
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43591,6 +43591,15 @@ IonicModule
    *
    * Example: `$ionicSlideBoxDelegate.$getByHandle('my-handle').select(0);`
    */
+
+   // DEPRECATED, as of v1.0.0-beta14 -------
+   'update',
+   'currentIndex',
+   'slide',
+   'slidesCount',
+   'stop',
+   'start'
+   // END DEPRECATED -------
 ]));
 
 
@@ -43853,7 +43862,7 @@ function($compile, $controller, $http, $q, $rootScope, $templateCache) {
 
 /**
  * @private
- * DEPRECATED
+ * DEPRECATED, as of v1.0.0-beta14 -------
  */
 IonicModule
 .factory('$ionicViewService', ['$ionicHistory', '$log', function($ionicHistory, $log) {
@@ -46112,7 +46121,8 @@ IonicModule
   '$interval',
   '$rootScope',
   '$timeout',
-function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
+  '$log',
+function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout, $log) {
   var self = this;
 
   var relevantSlides = {
@@ -46172,30 +46182,30 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
   self.onDrag = onDrag;
   self.onDragEnd = onDragEnd;
 
-  /** DEPRECATED METHODS **/
+  // DEPRECATED, as of v1.0.0-beta14 -------
   self.update = deprecated.method(
     '$ionicSlideBoxDelegate.update() has been deprecated! Slidebox updates on its own now.',
-    console.warn,
+    $log.warn,
     angular.noop
   );
   self.currentIndex = deprecated.method(
      '$ionicSlideBoxDelegate.currentIndex() has been deprecated! Use self.selected() instead.',
-     console.warn,
+     $log.warn,
      self.selected
   );
   self.slide = deprecated.method(
      '$ionicSlideBoxDelegate.slide(newIndex[, speed]) has been deprecated! Use self.select(newIndex[, speed]) instead.',
-     console.warn,
+     $log.warn,
      self.select
   );
   self.slidesCount = deprecated.method(
      '$ionicSlideBoxDelegate.slidesCount has been deprecated! Use self.slidesCount() instead.',
-     console.warn,
+     $log.warn,
      self.count
   );
   self.stop = deprecated.method(
     '$ionicSlideBoxDelegate.stop() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(0) to stop instead.',
-    console.warn,
+    $log.warn,
     function() {
       self._stoppedInterval = self.autoPlayInterval;
       self.autoPlay(0);
@@ -46203,11 +46213,12 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout) {
   );
   self.start = deprecated.method(
     '$ionicSlideBoxDelegate.start() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(newInterval) to start instead.',
-    console.warn,
+    $log.warn,
     function() {
       self.autoPlay(self._stoppedInterval);
     }
   );
+  // END DEPRECATED -------
 
 
   // ***
