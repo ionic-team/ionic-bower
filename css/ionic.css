@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-782
+ * Ionic, v1.0.0-beta.13-nightly-786
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5202,54 +5202,64 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   padding: 7px 7px;
   cursor: pointer; }
   .checkbox input:before, .checkbox .checkbox-icon:before {
-    border-color: #387ef5; }
+    border-color: #ddd; }
   .checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
-    background: #387ef5; }
+    background: #387ef5;
+    border-color: #387ef5; }
 
 .checkbox-light input:before, .checkbox-light .checkbox-icon:before {
   border-color: #ddd; }
 .checkbox-light input:checked:before, .checkbox-light input:checked + .checkbox-icon:before {
-  background: #ddd; }
+  background: #ddd;
+  border-color: #ddd; }
 
 .checkbox-stable input:before, .checkbox-stable .checkbox-icon:before {
   border-color: #b2b2b2; }
 .checkbox-stable input:checked:before, .checkbox-stable input:checked + .checkbox-icon:before {
-  background: #b2b2b2; }
+  background: #b2b2b2;
+  border-color: #b2b2b2; }
 
 .checkbox-positive input:before, .checkbox-positive .checkbox-icon:before {
   border-color: #387ef5; }
 .checkbox-positive input:checked:before, .checkbox-positive input:checked + .checkbox-icon:before {
-  background: #387ef5; }
+  background: #387ef5;
+  border-color: #387ef5; }
 
 .checkbox-calm input:before, .checkbox-calm .checkbox-icon:before {
   border-color: #11c1f3; }
 .checkbox-calm input:checked:before, .checkbox-calm input:checked + .checkbox-icon:before {
-  background: #11c1f3; }
+  background: #11c1f3;
+  border-color: #11c1f3; }
 
 .checkbox-assertive input:before, .checkbox-assertive .checkbox-icon:before {
   border-color: #ef473a; }
 .checkbox-assertive input:checked:before, .checkbox-assertive input:checked + .checkbox-icon:before {
-  background: #ef473a; }
+  background: #ef473a;
+  border-color: #ef473a; }
 
 .checkbox-balanced input:before, .checkbox-balanced .checkbox-icon:before {
   border-color: #33cd5f; }
 .checkbox-balanced input:checked:before, .checkbox-balanced input:checked + .checkbox-icon:before {
-  background: #33cd5f; }
+  background: #33cd5f;
+  border-color: #33cd5f; }
 
 .checkbox-energized input:before, .checkbox-energized .checkbox-icon:before {
   border-color: #ffc900; }
 .checkbox-energized input:checked:before, .checkbox-energized input:checked + .checkbox-icon:before {
-  background: #ffc900; }
+  background: #ffc900;
+  border-color: #ffc900; }
 
 .checkbox-royal input:before, .checkbox-royal .checkbox-icon:before {
   border-color: #886aea; }
 .checkbox-royal input:checked:before, .checkbox-royal input:checked + .checkbox-icon:before {
-  background: #886aea; }
+  background: #886aea;
+  border-color: #886aea; }
 
 .checkbox-dark input:before, .checkbox-dark .checkbox-icon:before {
   border-color: #444; }
 .checkbox-dark input:checked:before, .checkbox-dark input:checked + .checkbox-icon:before {
-  background: #444; }
+  background: #444;
+  border-color: #444; }
 
 .checkbox input:disabled:before, .checkbox input:disabled + .checkbox-icon:before {
   border-color: #ddd; }
@@ -5278,6 +5288,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
     border-radius: 28px;
     background: #fff;
     content: ' ';
+    -webkit-transition: background-color 20ms ease-in-out;
     transition: background-color 20ms ease-in-out; }
 
 .checkbox input:checked:before, input:checked + .checkbox-icon:before {
@@ -5289,16 +5300,31 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   position: absolute;
-  top: 30%;
-  left: 26%;
+  top: 33%;
+  left: 25%;
   display: table;
-  width: 15px;
-  height: 10.33333px;
-  border: 3px solid #fff;
+  width: 14px;
+  height: 6px;
+  border: 1px solid #fff;
   border-top: 0;
   border-right: 0;
   content: ' ';
   opacity: 0; }
+
+.platform-android .checkbox-platform input:before, .platform-android .checkbox-platform .checkbox-icon:before, .checkbox-square input:before, .checkbox-square .checkbox-icon:before {
+  border-radius: 2px;
+  width: 72%;
+  height: 72%;
+  margin-top: 14%;
+  margin-left: 14%;
+  border-width: 2px; }
+
+.platform-android .checkbox-platform input:after, .platform-android .checkbox-platform .checkbox-icon:after, .checkbox-square input:after, .checkbox-square .checkbox-icon:after {
+  border-width: 2px;
+  top: 19%;
+  left: 25%;
+  width: 13px;
+  height: 7px; }
 
 .grade-c .checkbox input:after, .grade-c .checkbox-icon:after {
   -webkit-transform: rotate(0);

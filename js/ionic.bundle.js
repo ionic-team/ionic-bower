@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-782
+ * Ionic, v1.0.0-beta.13-nightly-786
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-782';
+window.ionic.version = '1.0.0-beta.13-nightly-786';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-782
+ * Ionic, v1.0.0-beta.13-nightly-786
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41344,6 +41344,9 @@ IonicModule
       text: PLATFORM,
       previousTitleText: PLATFORM
     },
+    form: {
+      checkbox: PLATFORM
+    },
     tabs: {
       style: PLATFORM,
       position: PLATFORM
@@ -41377,6 +41380,10 @@ IonicModule
       icon: 'ion-ios7-arrow-back',
       text: 'Back',
       previousTitleText: true
+    },
+
+    form: {
+      checkbox: 'circle'
     },
 
     tabs: {
@@ -41416,6 +41423,10 @@ IonicModule
       icon: 'ion-android-arrow-back',
       text: false,
       previousTitleText: false
+    },
+
+    form: {
+      checkbox: 'square'
     },
 
     tabs: {
@@ -46872,7 +46883,7 @@ IonicModule
  */
 
 IonicModule
-.directive('ionCheckbox', function() {
+.directive('ionCheckbox', ['$ionicConfig', function($ionicConfig) {
   return {
     restrict: 'E',
     replace: true,
@@ -46902,10 +46913,11 @@ IonicModule
           input.attr(name, value);
         }
       });
+      var checkboxWrapper = element[0].querySelector('.checkbox');
+      checkboxWrapper.classList.add('checkbox-' + $ionicConfig.form.checkbox());
     }
-
   };
-});
+}]);
 
 /**
  * @ngdoc directive
