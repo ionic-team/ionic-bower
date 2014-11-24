@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-781
+ * Ionic, v1.0.0-beta.13-nightly-782
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1752,7 +1752,10 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
      * @description The app's current view.
      * @returns {object} Returns the current view.
      */
-    currentView: function() {
+    currentView: function(view) {
+      if (arguments.length) {
+        viewHistory.currentView = view;
+      }
       return viewHistory.currentView;
     },
 
@@ -1947,6 +1950,17 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
 
     isAbstractEle: function(ele) {
       return !!(ele && (isAbstractTag(ele) || isAbstractTag(ele.children())));
+    },
+
+    isActiveScope: function(scope) {
+      if (!scope || scope.$$disconnected) return false;
+
+      var currentHistoryId = this.currentHistoryId();
+      if (currentHistoryId) {
+        return currentHistoryId == (isDefined(scope.$historyId) ? scope.$historyId : 'root');
+      }
+
+      return true;
     }
 
   };
@@ -5688,13 +5702,18 @@ IonicModule
   '$scope',
   '$attrs',
   '$ionicListDelegate',
-function($scope, $attrs, $ionicListDelegate) {
+  '$ionicHistory',
+function($scope, $attrs, $ionicListDelegate, $ionicHistory) {
   var self = this;
   var isSwipeable = true;
   var isReorderShown = false;
   var isDeleteShown = false;
 
-  var deregisterInstance = $ionicListDelegate._registerInstance(self, $attrs.delegateHandle);
+  var deregisterInstance = $ionicListDelegate._registerInstance(
+    self, $attrs.delegateHandle, function() {
+      return $ionicHistory.isActiveScope($scope);
+    }
+  );
   $scope.$on('$destroy', deregisterInstance);
 
   self.showReorder = function(show) {
@@ -6443,16 +6462,7 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   var deregisterInstance = $ionicScrollDelegate._registerInstance(
     self, scrollViewOptions.delegateHandle, function() {
-      if ($scope.$$disconnected) {
-        return false;
-      }
-
-      var currentHistoryId = $ionicHistory.currentHistoryId();
-      if (currentHistoryId) {
-        return currentHistoryId == (isDefined($scope.$historyId) ? $scope.$historyId : 'root');
-      }
-
-      return true;
+      return $ionicHistory.isActiveScope($scope);
     }
   );
 
@@ -7015,7 +7025,9 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
   });
 
   var deregisterInstance = $ionicSideMenuDelegate._registerInstance(
-    self, $attrs.delegateHandle
+    self, $attrs.delegateHandle, function() {
+      return $ionicHistory.isActiveScope($scope);
+    }
   );
 
   $scope.$on('$destroy', function() {
@@ -10985,7 +10997,8 @@ IonicModule
 .directive('ionSlideBox', [
   '$ionicSlideBoxDelegate',
   '$window',
-function($ionicSlideBoxDelegate, $window) {
+  '$ionicHistory',
+function($ionicSlideBoxDelegate, $window, $ionicHistory) {
 
   return {
     restrict: 'E',
@@ -11010,7 +11023,11 @@ function($ionicSlideBoxDelegate, $window) {
   function postLink(scope, element, attr, slideBoxCtrl) {
     element.addClass('slider');
 
-    var deregister = $ionicSlideBoxDelegate._registerInstance(slideBoxCtrl, attr.delegateHandle);
+    var deregister = $ionicSlideBoxDelegate._registerInstance(
+      slideBoxCtrl, attr.delegateHandle, function() {
+        return $ionicHistory.isActiveScope(scope);
+      }
+    );
 
     watchSelected();
     isDefined(attr.loop) && watchLoop();
@@ -11453,7 +11470,8 @@ IonicModule
 .directive('ionTabs', [
   '$ionicTabsDelegate',
   '$ionicConfig',
-function($ionicTabsDelegate, $ionicConfig) {
+  '$ionicHistory',
+function($ionicTabsDelegate, $ionicConfig, $ionicHistory) {
   return {
     restrict: 'E',
     scope: true,
@@ -11471,7 +11489,9 @@ function($ionicTabsDelegate, $ionicConfig) {
       return { pre: prelink, post: postLink };
       function prelink($scope, $element, $attr, tabsCtrl) {
         var deregisterInstance = $ionicTabsDelegate._registerInstance(
-          tabsCtrl, $attr.delegateHandle
+          tabsCtrl, $attr.delegateHandle, function() {
+            return $ionicHistory.isActiveScope($scope);
+          }
         );
 
         tabsCtrl.$scope = $scope;
