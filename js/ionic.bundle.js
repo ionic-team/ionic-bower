@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-792
+ * Ionic, v1.0.0-beta.13-nightly-793
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-792';
+window.ionic.version = '1.0.0-beta.13-nightly-793';
 
 (function(window, document, ionic) {
 
@@ -39076,7 +39076,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-792
+ * Ionic, v1.0.0-beta.13-nightly-793
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40513,7 +40513,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
       // nothing found keep climbing up
       parentScope = parentScope.$parent;
     }
-    // no history for for the parent, use the root
+    // no history for the parent, use the root
     return { historyId: 'root', scope: $rootScope };
   }
 
@@ -41027,11 +41027,23 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
     },
 
     isActiveScope: function(scope) {
-      if (!scope || scope.$$disconnected) return false;
+      if (!scope) return false;
+
+      var climbScope = scope;
+      var historyId;
+      while (climbScope) {
+        if (climbScope.$$disconnected) {
+          return false;
+        }
+        if (!historyId && climbScope.hasOwnProperty('$historyId')) {
+          historyId = climbScope.$historyId;
+        }
+        climbScope = climbScope.$parent;
+      }
 
       var currentHistoryId = this.currentHistoryId();
       if (currentHistoryId) {
-        return currentHistoryId == (isDefined(scope.$historyId) ? scope.$historyId : 'root');
+        return currentHistoryId == (historyId || 'root');
       }
 
       return true;
