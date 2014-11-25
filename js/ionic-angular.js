@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-793
+ * Ionic, v1.0.0-beta.13-nightly-794
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5024,6 +5024,9 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           var enteringData = getTransitionData(viewLocals, enteringEle, registerData.direction, enteringView);
           var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
 
+          // disconnect the leaving scope before reconnecting or creating a scope for the entering view
+          leavingEle && ionic.Utils.disconnectScope(leavingEle.scope());
+
           if (alreadyInDom) {
             // it was already found in the DOM, just reconnect the scope
             ionic.Utils.reconnectScope(enteringEle.scope());
@@ -5202,8 +5205,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           }
 
           destroyViewEle(removableEle);
-
-          ionic.Utils.disconnectScope(leavingEle && leavingEle.scope());
 
           if (enteringEle.data(DATA_NO_CACHE)) {
             enteringEle.data(DATA_DESTROY_ELE, true);
