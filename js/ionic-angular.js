@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-799
+ * Ionic, v1.0.0-beta.13-nightly-800
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9870,6 +9870,8 @@ IonicModule
  * always be on an exact side, both `left` and `right` sides are still available. For
  * example, a toggle button for a left side menu should be on the left side, in this case
  * we'd recommend uses `side="left"` so it's always on the left, no matter what platform.
+ *
+ * Note that the `ion-nav-buttons` must be an immediate descendant of the `ion-view` element.
  *
  * @usage
  * ```html
