@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-800
+ * Ionic, v1.0.0-beta.13-nightly-801
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-800';
+window.ionic.version = '1.0.0-beta.13-nightly-801';
 
 (function(window, document, ionic) {
 
@@ -39240,7 +39240,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-800
+ * Ionic, v1.0.0-beta.13-nightly-801
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39877,6 +39877,7 @@ function($document, $ionicBody, $timeout) {
           cb.classList.remove(CSS_HIDE);
         } else {
           $ionicBody.append(cb);
+          isAttached = true;
         }
       });
 
@@ -44322,8 +44323,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           if (viewTransition.shouldAnimate) {
             // 2) attach transitionend events (and fallback timer)
             enteringEle.on(TRANSITIONEND_EVENT, transitionComplete);
-            leavingEle && leavingEle.on(TRANSITIONEND_EVENT, transitionComplete);
-            enteringEle.data(DATA_FALLBACK_TIMER, $timeout(transitionComplete, 750));
+            enteringEle.data(DATA_FALLBACK_TIMER, $timeout(transitionComplete, 1000));
           }
 
           // 3) stage entering element, opacity 0, no transition duration
@@ -44362,8 +44362,8 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             transitionComplete.x = true;
 
             enteringEle.off(TRANSITIONEND_EVENT, transitionComplete);
-            leavingEle && leavingEle.off(TRANSITIONEND_EVENT, transitionComplete);
             $timeout.cancel(enteringEle.data(DATA_FALLBACK_TIMER));
+            leavingEle && $timeout.cancel(leavingEle.data(DATA_FALLBACK_TIMER));
 
             // 8) emit that the views have finished transitioning
             // each parent nav-view will update which views are active and cached
