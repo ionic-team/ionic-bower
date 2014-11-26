@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-802
+ * Ionic, v1.0.0-beta.13-nightly-803
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-802';
+window.ionic.version = '1.0.0-beta.13-nightly-803';
 
 (function(window, document, ionic) {
 
@@ -39240,7 +39240,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-802
+ * Ionic, v1.0.0-beta.13-nightly-803
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40406,28 +40406,6 @@ function delegateService(methodNames) {
   function trueFn() { return true; }
 
   return ['$log', function($log) {
-    var delegate = this;
-
-    var instances = this._instances = [];
-    this._registerInstance = function(instance, handle, filterFn) {
-      instance.$$delegateHandle = handle;
-      instance.$$filterFn = filterFn || trueFn;
-      instances.push(instance);
-
-      return function deregister() {
-        var index = instances.indexOf(instance);
-        if (index !== -1) {
-          instances.splice(index, 1);
-        }
-      };
-    };
-
-    this.$getByHandle = function(handle) {
-      if (!handle) {
-        return delegate;
-      }
-      return new InstanceForHandle(handle);
-    };
 
     /*
      * Creates a new object that will have all the methodNames given,
@@ -40445,68 +40423,76 @@ function delegateService(methodNames) {
      * that will only try to fetch the controller with given handle
      * once the methods are actually called.
      */
-    function InstanceForHandle(handle) {
+    function DelegateInstance(instances, handle) {
+      this._instances = instances;
       this.handle = handle;
     }
-
     methodNames.forEach(function(methodName) {
-      InstanceForHandle.prototype[methodName] = function() {
+      DelegateInstance.prototype[methodName] = instanceMethodCaller(methodName);
+    });
+
+
+    /**
+     * The delegate service (eg $ionicNavBarDelegate) is just an instance
+     * with a non-defined handle, a couple extra methods for registering
+     * and narrowing down to a specific handle.
+     */
+    function DelegateService() {
+      this._instances = [];
+    }
+    DelegateService.prototype = DelegateInstance.prototype;
+    DelegateService.prototype._registerInstance = function(instance, handle, filterFn) {
+      var instances = this._instances;
+      instance.$$delegateHandle = handle;
+      instance.$$filterFn = filterFn || trueFn;
+      instances.push(instance);
+
+      return function deregister() {
+        var index = instances.indexOf(instance);
+        if (index !== -1) {
+          instances.splice(index, 1);
+        }
+      };
+    };
+    DelegateService.prototype.$getByHandle = function(handle) {
+      return new DelegateInstance(this._instances, handle);
+    };
+
+    return new DelegateService();
+
+    function instanceMethodCaller(methodName) {
+      return function caller() {
         var handle = this.handle;
         var args = arguments;
-        var matchingInstancesFound = 0;
-        var finalResult;
-        var result;
+        var foundInstancesCount = 0;
+        var returnValue;
 
-        //This logic is repeated below; we could factor some of it out to a function
-        //but don't because it lets this method be more performant (one loop versus 2)
-        instances.forEach(function(instance) {
-          if (instance.$$delegateHandle === handle && instance.$$filterFn(instance)) {
-            matchingInstancesFound++;
-            result = instance[methodName].apply(instance, args);
+        this._instances.forEach(function(instance) {
+          if ((!handle || handle == instance.$$delegateHandle) && instance.$$filterFn(instance)) {
+            foundInstancesCount++;
+            var ret = instance[methodName].apply(instance, args);
             //Only return the value from the first call
-            if (matchingInstancesFound === 1) {
-              finalResult = result;
+            if (foundInstancesCount === 1) {
+              returnValue = ret;
             }
           }
         });
 
-        if (!matchingInstancesFound) {
+        if (!foundInstancesCount && handle) {
           return $log.warn(
-            'Delegate for handle "' + this.handle + '" could not find a ' +
-            'corresponding element with delegate-handle="' + this.handle + '"! ' +
+            'Delegate for handle "' + handle + '" could not find a ' +
+            'corresponding element with delegate-handle="' + handle + '"! ' +
             methodName + '() was not called!\n' +
             'Possible cause: If you are calling ' + methodName + '() immediately, and ' +
-            'your element with delegate-handle="' + this.handle + '" is a child of your ' +
+            'your element with delegate-handle="' + handle + '" is a child of your ' +
             'controller, then your element may not be compiled yet. Put a $timeout ' +
             'around your call to ' + methodName + '() and try again.'
           );
         }
-
-        return finalResult;
+        return returnValue;
       };
+    }
 
-      delegate[methodName] = function() {
-        var args = arguments;
-        var matchingInstancesFound = 0;
-        var finalResult;
-        var result;
-
-        //This logic is repeated above
-        instances.forEach(function(instance, index) {
-          if (instance.$$filterFn(instance)) {
-            matchingInstancesFound++;
-            result = instance[methodName].apply(instance, args);
-            //Only return the value from the first call
-            if (matchingInstancesFound === 1) {
-              finalResult = result;
-            }
-          }
-        });
-
-        return finalResult;
-      };
-
-    });
   }];
 }
 
