@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-801
+ * Ionic, v1.0.0-beta.13-nightly-802
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7999,9 +7999,11 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
     transclude: 'element',
     terminal: true,
     $$tlb: true,
-    require: '^$ionicScroll',
+    require: ['^$ionicScroll', '^?ionNavView'],
     controller: [function(){}],
-    link: function($scope, $element, $attr, scrollCtrl, $transclude) {
+    link: function($scope, $element, $attr, ctrls, $transclude) {
+      var scrollCtrl = ctrls[0];
+      var navViewCtrl = ctrls[1];
       var wrap = jqLite('<div style="position:relative;">');
       $element.parent()[0].insertBefore(wrap[0], $element[0]);
       wrap.append($element);
@@ -8061,7 +8063,8 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         scrollView: scrollCtrl.scrollView,
       });
 
-      $scope.$watchCollection(listExpr, function(value) {
+      var listExprParsed = $parse(listExpr);
+      $scope.$watchCollection(listExprParsed, function(value) {
         if (value && !angular.isArray(value)) {
           throw new Error("collection-repeat expects an array to repeat over, but instead got '" + typeof value + "'.");
         }
@@ -8101,16 +8104,21 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         collectionRepeatManager.resize();
       }
       function rerenderOnResize() {
-        rerender($scope.$eval(listExpr));
+        rerender(listExprParsed($scope));
       }
 
       scrollCtrl.$element.on('scroll.resize', rerenderOnResize);
       ionic.on('resize', rerenderOnResize, window);
+      var deregisterViewListener;
+      if (navViewCtrl) {
+        deregisterViewListener = navViewCtrl.scope.$on('$ionicView.beforeEnter', rerenderOnResize);
+      }
 
       $scope.$on('$destroy', function() {
         collectionRepeatManager.destroy();
         dataSource.destroy();
         ionic.off('resize', rerenderOnResize, window);
+        (deregisterViewListener || angular.noop)();
       });
     }
   };
