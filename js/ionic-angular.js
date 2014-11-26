@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-803
+ * Ionic, v1.0.0-beta.13-nightly-804
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5317,6 +5317,8 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   var titleCss = '';
   var isBackEnabled = false;
   var isBackShown = true;
+  var isNavBackShown = true;
+  var isBackElementShown = false;
   var titleTextWidth = 0;
 
 
@@ -5335,27 +5337,42 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
   };
 
 
-  self.enableBack = function(shouldEnable) {
+  self.enableBack = function(shouldEnable, disableReset) {
     // whether or not the back button show be visible, according
     // to the navigation and history
-    if (arguments.length && shouldEnable !== isBackEnabled) {
-      var backBtnEle = getEle(BACK_BUTTON);
-      backBtnEle && backBtnEle.classList[ shouldEnable ? 'remove' : 'add' ]('back-disabled');
+    if (arguments.length) {
       isBackEnabled = shouldEnable;
+      if (!disableReset) self.updateBackButton();
     }
     return isBackEnabled;
   };
 
 
-  self.showBack = function(shouldShow) {
+  self.showBack = function(shouldShow, disableReset) {
     // different from enableBack() because this will always have the back
     // visually hidden if false, even if the history says it should show
-    if (arguments.length && shouldShow !== isBackShown) {
-      var backBtnEle = getEle(BACK_BUTTON);
-      backBtnEle && backBtnEle.classList[ shouldShow ? 'remove' : 'add' ](HIDE);
+    if (arguments.length) {
       isBackShown = shouldShow;
+      if (!disableReset) self.updateBackButton();
     }
     return isBackShown;
+  };
+
+
+  self.showNavBack = function(shouldShow) {
+    // different from showBack() because this is for the entire nav bar's
+    // setting for all of it's child headers. For internal use.
+    isNavBackShown = shouldShow;
+    self.updateBackButton();
+  };
+
+
+  self.updateBackButton = function() {
+    if ( (isBackShown && isNavBackShown && isBackEnabled) !== isBackElementShown) {
+      isBackElementShown = isBackShown && isNavBackShown && isBackEnabled;
+      var backBtnEle = getEle(BACK_BUTTON);
+      backBtnEle && backBtnEle.classList[ isBackElementShown ? 'remove' : 'add' ](HIDE);
+    }
   };
 
 
@@ -5614,7 +5631,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
   var eleCache = {};
   function getEle(className) {
-    if (!eleCache[className]) {
+    if (!isDefined(eleCache[className])) {
       eleCache[className] = $element[0].querySelector('.' + className);
     }
     return eleCache[className];
@@ -5831,12 +5848,6 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
     var headerBarInstance = {
       isActive: isActive,
-      enableBack: function(shouldEnable) {
-        headerBarCtrl.enableBack(shouldEnable);
-      },
-      showBack: function(shouldShow) {
-        headerBarCtrl.showBack(shouldShow);
-      },
       title: function(newTitleText) {
         headerBarCtrl.title(newTitleText);
       },
@@ -5964,10 +5975,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     self.enable(showNavBar);
     var enteringHeaderBar = self.isInitialized ? getOffScreenHeaderBar() : getOnScreenHeaderBar();
     var leavingHeaderBar = self.isInitialized ? getOnScreenHeaderBar() : null;
+    var enteringHeaderCtrl = enteringHeaderBar.controller();
 
     // update if the entering header should show the back button or not
-    self.enableBackButton(viewData.enableBack, enteringHeaderBar);
-    self.showBackButton(viewData.showBack, enteringHeaderBar);
+    enteringHeaderCtrl.enableBack(viewData.enableBack, true);
+    enteringHeaderCtrl.showBack(viewData.showBack, true);
+    enteringHeaderCtrl.updateBackButton();
 
     // update the entering header bar's title
     self.title(viewData.title, enteringHeaderBar);
@@ -6084,17 +6097,31 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   };
 
 
-  self.enableBackButton = function(shouldEnable, headerBar) {
-    headerBar = headerBar || getOnScreenHeaderBar();
-    headerBar && headerBar.enableBack(shouldEnable);
+  /**
+   * @ngdoc method
+   * @name $ionicNavBar#showBackButton
+   * @description Show/hide the nav bar back button when there is a
+   * back view. If the back button is not possible, for example, the
+   * first view in the stack, then this will not force the back button
+   * to show.
+   */
+  self.showBackButton = function(shouldShow) {
+    for (var x = 0; x < headerBars.length; x++) {
+      headerBars[x].controller().showNavBack(!!shouldShow);
+    }
+    $scope.$isBackButtonShown = !!shouldShow;
+    return $scope.$isBackButtonShown;
   };
 
 
-  self.showBackButton = function(shouldShow, headerBar) {
-    headerBar = headerBar || getOnScreenHeaderBar();
-    headerBar && headerBar.showBack(shouldShow);
-    $scope.$isBackButtonShown = !!shouldShow;
-    return !!shouldShow;
+  /**
+   * @ngdoc method
+   * @name $ionicNavBar#showActiveBackButton
+   * @description Show/hide only the active header bar's back button.
+   */
+  self.showActiveBackButton = function(shouldShow) {
+    var headerBar = getOnScreenHeaderBar();
+    headerBar && headerBar.controller().showBack(shouldShow);
   };
 
 
@@ -6387,15 +6414,29 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
   };
 
 
+  /**
+   * @ngdoc method
+   * @name $ionicNavView#enableBackButton
+   * @description Enable/disable if the back button can be shown or not. For
+   * example, the very first view in the navigation stack would not have a
+   * back view, so the back button would be disabled.
+   */
   self.enableBackButton = function(shouldEnable) {
     var associatedNavBarCtrl = getAssociatedNavBarCtrl();
     associatedNavBarCtrl && associatedNavBarCtrl.enableBackButton(shouldEnable);
   };
 
 
+  /**
+   * @ngdoc method
+   * @name $ionicNavView#showBackButton
+   * @description Show/hide the nav bar active back button. If the back button
+   * is not possible this will not force the back button to show. The
+   * `enableBackButton()` method handles if a back button is even possible or not.
+   */
   self.showBackButton = function(shouldShow) {
     var associatedNavBarCtrl = getAssociatedNavBarCtrl();
-    associatedNavBarCtrl && associatedNavBarCtrl.showBackButton(shouldShow);
+    associatedNavBarCtrl && associatedNavBarCtrl.showActiveBackButton(shouldShow);
   };
 
 
@@ -9695,7 +9736,7 @@ IonicModule
         buttonEle.setAttribute('ng-click', '$ionicGoBack($event)');
       }
 
-      buttonEle.className = 'button back-button back-disabled buttons ' + (tElement.attr('class') || '');
+      buttonEle.className = 'button back-button hide buttons ' + (tElement.attr('class') || '');
       buttonEle.innerHTML = tElement.html() || '';
 
       var childNode;
