@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-804
+ * Ionic, v1.0.0-beta.13-nightly-805
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-804';
+window.ionic.version = '1.0.0-beta.13-nightly-805';
 
 (function(window, document, ionic) {
 
@@ -39240,7 +39240,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-804
+ * Ionic, v1.0.0-beta.13-nightly-805
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44869,7 +44869,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
   var eleCache = {};
   function getEle(className) {
-    if (!isDefined(eleCache[className])) {
+    if (!eleCache[className]) {
       eleCache[className] = $element[0].querySelector('.' + className);
     }
     return eleCache[className];
