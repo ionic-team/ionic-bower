@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-806
+ * Ionic, v1.0.0-beta.13-nightly-807
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-806';
+window.ionic.version = '1.0.0-beta.13-nightly-807';
 
 (function(window, document, ionic) {
 
@@ -39240,7 +39240,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-806
+ * Ionic, v1.0.0-beta.13-nightly-807
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47368,15 +47368,24 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         dataSource.setData(value, beforeSiblings, afterSiblings);
         collectionRepeatManager.resize();
       }
+
+      var requiresRerender;
       function rerenderOnResize() {
         rerender(listExprParsed($scope));
+        requiresRerender = (!scrollViewContent.clientWidth && !scrollViewContent.clientHeight);
+      }
+
+      function viewEnter() {
+        if (requiresRerender) {
+          rerenderOnResize();
+        }
       }
 
       scrollCtrl.$element.on('scroll.resize', rerenderOnResize);
       ionic.on('resize', rerenderOnResize, window);
       var deregisterViewListener;
       if (navViewCtrl) {
-        deregisterViewListener = navViewCtrl.scope.$on('$ionicView.beforeEnter', rerenderOnResize);
+        deregisterViewListener = navViewCtrl.scope.$on('$ionicView.afterEnter', viewEnter);
       }
 
       $scope.$on('$destroy', function() {
