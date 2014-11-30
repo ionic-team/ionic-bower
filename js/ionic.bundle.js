@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-807
+ * Ionic, v1.0.0-beta.13-nightly-809
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-807';
+window.ionic.version = '1.0.0-beta.13-nightly-809';
 
 (function(window, document, ionic) {
 
@@ -3301,183 +3301,6 @@ ionic.DomUtil.ready(function(){
   ionic.debounce = ionic.Utils.debounce;
 
 })(window.ionic);
-
-(function() {
-
-function trueFn() { return true; }
-
-ionic.Utils.list = wrapList;
-
-// Expose previous and next publicly so we can use them
-// without having to instantiate a whole list wrapper.
-ionic.Utils.list.next = listNext;
-ionic.Utils.list.previous = listPrevious;
-
-// Get the index after the given index.
-// Takes looping and the given filterFn into account.
-function listNext(list, isLooping, index, filterFn) {
-  filterFn = filterFn || trueFn;
-  if (index < 0 || index >= list.length) return -1;
-
-  // Keep adding 1 to index, trying to find an index that passes filterFn.
-  // If we loop through *everything* and get back to our original index, return -1.
-  // We don't use recursion here because Javascript sucks at recursion.
-  var nextIndex = index + 1;
-  while ( nextIndex !== index ) {
-
-    if (nextIndex === list.length) {
-      if (isLooping) nextIndex -= list.length;
-      else break;
-    } else {
-      if (filterFn(list[nextIndex], nextIndex)) {
-        return nextIndex;
-      }
-      nextIndex++;
-    }
-  }
-  return -1;
-}
-
-// Get the index before the given index.
-// Takes looping and the given filterFn into account.
-function listPrevious(list, isLooping, index, filterFn) {
-  filterFn = filterFn || trueFn;
-  if (index < 0 || index >= list.length) return -1;
-
-  // Keep subtracting 1 from index, trying to find an index that passes filterFn.
-  // If we loop through *everything* and get back to our original index, return -1.
-  // We don't use recursion here because Javascript sucks at recursion.
-  var prevIndex = index - 1;
-  while ( prevIndex !== index ) {
-
-    if (prevIndex === -1) {
-      if (isLooping) prevIndex += list.length;
-      else break;
-    } else {
-      if (filterFn(list[prevIndex], prevIndex)) {
-        return prevIndex;
-      }
-      prevIndex--;
-    }
-  }
-  return -1;
-}
-
-
-// initialList may be a nodeList or an list,
-// so we don't expect it to have any list methods
-function wrapList(initialList) {
-
-  var list = initialList || [];
-  var self = {};
-  var isLooping = false;
-
-  // The Basics
-  self.items = items;
-
-  // add and remove are array-ONLY, if we're given a nodeList
-  // it's immutable
-  if (angular.isArray(list)) {
-    self.add = add;
-    self.remove = remove;
-  }
-
-  self.at = at;
-  self.count = count;
-  self.indexOf = indexOf;
-  self.isInRange = isInRange;
-  self.loop = loop;
-
-  // The Crazy Ones
-  self.delta = delta;
-  self.isRelevant = isRelevant;
-  self.previous = function(index, filterFn) {
-    return listPrevious(list, isLooping, index, filterFn);
-  };
-  self.next = function(index, filterFn) {
-    return listNext(list, isLooping, index, filterFn);
-  };
-
-  return self;
-
-  // ***************
-  // Public methods
-  // ***************
-  function items() {
-    return list;
-  }
-  function add(item, index) {
-    if (!self.isInRange(index)) index = list.length;
-    list.splice(index, 0, item);
-
-    return index;
-  }
-
-  function remove(index) {
-    if (!self.isInRange(index)) return;
-    list.splice(index, 1);
-  }
-
-  function at(index) {
-    return list[index];
-  }
-
-  function count() {
-    return list.length;
-  }
-
-  function indexOf(item) {
-    for (var i = 0, ii = list.length; i < ii; i++) {
-      if (list[i] === item) return i;
-    }
-    return -1;
-  }
-
-  function isInRange(index) {
-    return angular.isNumber(index) && index > -1 && index < list.length;
-  }
-
-  function loop(newIsLooping) {
-    if (arguments.length) {
-      isLooping = !!newIsLooping;
-    }
-    return isLooping;
-  }
-
-  function delta(fromIndex, toIndex) {
-    var difference = toIndex - fromIndex;
-    if (!isLooping) return difference;
-
-    // Is looping on? Then check for the looped difference.
-    // For example, going from the first item to the last item
-    // is actually a change of -1.
-    var loopedDifference = 0;
-    if (toIndex > fromIndex) {
-      loopedDifference = toIndex - fromIndex - self.count();
-    } else {
-      loopedDifference = self.count() - fromIndex + toIndex;
-    }
-
-    if (Math.abs(loopedDifference) < Math.abs(difference)) {
-      return loopedDifference;
-    }
-    return difference;
-  }
-
-  // Returns whether an index is 'relevant' to some index.
-  // Will return true if the index is equal to `someIndex`, the index
-  // previous of that index, or the index next of that index.
-  function isRelevant(index, someIndex) {
-    return self.isInRange(index) && (
-      index === someIndex ||
-      index === self.previous(someIndex) ||
-      index === self.next(someIndex)
-    );
-  }
-
-}
-
-})();
 
 /**
  * @ngdoc page
@@ -39240,7 +39063,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-807
+ * Ionic, v1.0.0-beta.13-nightly-809
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44971,7 +44794,8 @@ function($scope, $attrs, $ionicListDelegate, $ionicHistory) {
 
   var deregisterInstance = $ionicListDelegate._registerInstance(
     self, $attrs.delegateHandle, function() {
-      return $ionicHistory.isActiveScope($scope);
+    return true;
+      // return $ionicHistory.isActiveScope($scope);
     }
   );
   $scope.$on('$destroy', deregisterInstance);
@@ -46340,72 +46164,62 @@ IonicModule
 .controller('$ionSlideBox', [
   '$scope',
   '$element',
-  '$$ionicAttachDrag',
-  '$interval',
-  '$rootScope',
-  '$timeout',
   '$log',
-function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout, $log) {
+  '$document',
+  '$$q',
+  '$timeout',
+  '$interval',
+  '$$ionicAttachDrag',
+  '$rootScope',
+function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttachDrag, $rootScope) {
   var self = this;
-
-  var relevantSlides = {
-    previous: null,
-    selected: null,
-    next: null
-  };
-  var oldRelevantSlides = relevantSlides;
-
-  // This is a live nodeList that is updated whenever child ion-slides
-  // are added or removed
-  var slideNodes = element[0].getElementsByTagName('ion-slide');
-  var slideList = ionic.Utils.list(slideNodes);
-
-  var slidesParent = angular.element(element[0].querySelector('.slider-slides'));
-
-  // Successful slide requires velocity to be greater than this amount
+  var SLIDE_TRANSITION_DURATION = 250;
   var SLIDE_SUCCESS_VELOCITY = (1 / 4); // pixels / ms
-  var SLIDE_TRANSITION_DURATION = 250; //ms
 
-  $$ionicAttachDrag(scope, element, {
-    getDistance: function() { return slidesParent.prop('offsetWidth'); },
+  var container = angular.element(element[0].querySelector('.slider-slides'));
+  var containerId = 'slides_' + ionic.Utils.nextUid();
+  container.attr('id', containerId);
+
+  // Live-updated list of slides
+  var slideNodes = container[0].getElementsByTagName('ion-slide');
+
+  // Used in setDisplayedSlides() below
+  var styleElement = angular.element('<style>');
+  $document[0].body.appendChild(styleElement[0]);
+  scope.$on('$destroy', function() { styleElement.remove(); });
+
+  // If we're already sliding and a new selection is triggered, add it to the queue,
+  // to be taken off once the current slide animation is done
+  var slideQueue = [];
+  // Whether we're currently sliding through the slideQueue
+  var isSliding = false;
+
+  var slideCount = 0;
+  var selectedIndex = -1;
+  var isLoop = false;
+
+  self.element = element;
+
+  self.autoPlay = autoPlay;
+  self.count = count;
+  self.enableSlide = enableSlide;
+  self.isValidIndex = isValidIndex;
+  self.loop = loop;
+  self.next = next;
+  self.onAddSlide = onAddSlide;
+  self.onRemoveSlide = onRemoveSlide;
+  self.previous = previous;
+  self.select = select;
+  self.selected = selected;
+
+  $$ionicAttachDrag(scope, container, {
+    getDistance: function () { return container.prop('offsetWidth'); },
     onDragStart: onDragStart,
     onDrag: onDrag,
     onDragEnd: onDragEnd
   });
 
-  // At the very end of every digest, check if slides changed
-  // This is because our nodes won't be added until after data has been processed
-  // (eg you add a slide to data with ng-if, then the ng-if processes and the element
-  // now exists)
-  $rootScope.$watch(function() {
-    if (!checkSlidesChanged.queued) {
-      $rootScope.$$postDigest(checkSlidesChanged);
-    }
-    return true;
-  });
-
-  self.element = element;
-  self.isRelevant = isRelevant;
-  self.previous = previous;
-  self.next = next;
-
-  // Methods calling straight back to Utils.list
-  self.at = at;
-  self.count = slideList.count;
-  self.indexOf = indexOf;
-  self.isInRange = slideList.isInRange;
-  self.loop = slideList.loop;
-  self.delta = slideList.delta;
-
-  self.enableSlide = enableSlide;
-  self.autoPlay = autoPlay;
-  self.selected = selected;
-  self.select = select;
-  self.onDragStart = onDragStart;
-  self.onDrag = onDrag;
-  self.onDragEnd = onDragEnd;
-
-  // DEPRECATED, as of v1.0.0-beta14 -------
+  /****** DEPRECATED, as of v1.0.0-beta14 ********/
   self.update = deprecated.method(
     '$ionicSlideBoxDelegate.update() has been deprecated! Slidebox updates on its own now.',
     $log.warn,
@@ -46422,14 +46236,14 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout, $lo
      self.select
   );
   self.slidesCount = deprecated.method(
-     '$ionicSlideBoxDelegate.slidesCount has been deprecated! Use self.slidesCount() instead.',
+     '$ionicSlideBoxDelegate.slidesCount() has been deprecated! Use self.count() instead.',
      $log.warn,
      self.count
   );
   self.stop = deprecated.method(
     '$ionicSlideBoxDelegate.stop() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(0) to stop instead.',
     $log.warn,
-    function() {
+    function stopDeprecated() {
       self._stoppedInterval = self.autoPlayInterval;
       self.autoPlay(0);
     }
@@ -46437,54 +46251,14 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout, $lo
   self.start = deprecated.method(
     '$ionicSlideBoxDelegate.start() has been deprecated! Use $ionicSlideBoxDelegate.autoPlay(newInterval) to start instead.',
     $log.warn,
-    function() {
+    function startDeprecated() {
       self.autoPlay(self._stoppedInterval);
     }
   );
-  // END DEPRECATED -------
 
-
-  // ***
-  // Public Methods
-  // ***
-  function at(index) {
-    return jqLite( slideList.at(index) ).controller('ionSlide');
-  }
-
-  function indexOf(slide) {
-    return slide && slideList.indexOf(slide.node) || -1;
-  }
-
-
-  // Gets whether the given index is relevant to selected
-  // That is, whether the given index is previous, selected, or next
-  function isRelevant(index) {
-    return slideList.isRelevant(index, scope.selectedIndex);
-  }
-
-  // Gets the index to the previous of the given slide, default scope.selectedIndex
-  function previous(index) {
-    index = arguments.length ? index : scope.selectedIndex;
-    // If we only have two slides and loop is enabled, we cannot have a previous
-    // because previous === next. In this case, return -1.
-    if (self.loop() && self.count() === 2) {
-      return -1;
-    }
-    return slideList.previous(index);
-  }
-
-  // Gets the index to the next of the given slide, default scope.selectedIndex
-  function next(index) {
-    index = arguments.length ? index : scope.selectedIndex;
-    return slideList.next(index);
-  }
-
-  function enableSlide(isEnabled) {
-    if (arguments.length) {
-      self.dragDisabled = !isEnabled;
-    }
-    return !!self.dragDisabled;
-  }
+  /***************************
+   * Public Methods
+   ***************************/
 
   function autoPlay(newInterval) {
     self.autoPlayInterval = newInterval;
@@ -46497,272 +46271,296 @@ function(scope, element, $$ionicAttachDrag, $interval, $rootScope, $timeout, $lo
     }
   }
 
-  function selected() {
-    return self.isInRange(scope.selectedIndex) ? scope.selectedIndex : -1;
+  function count() {
+    return slideCount;
   }
 
-  /*
-   * Select and change slides
-   */
-  function select(newIndex, transitionDuration, force) {
-    if (!self.isInRange(newIndex)) return;
+  function enableSlide(enable) {
+    if (arguments.length) self.dragDisabled = !enable;
+    return !self.dragDisabled;
+  }
 
-    scope.selectedIndex = newIndex;
+  function isValidIndex(index) {
+    return index > -1 && index < self.count();
+  }
 
-    oldRelevantSlides = relevantSlides;
-    relevantSlides = {
-      previous: self.at(self.previous()),
-      selected: self.at(newIndex),
-      next: self.at(self.next())
-    };
+  function loop(loopValue) {
+    if (arguments.length) isLoop = !!loopValue;
+    return isLoop;
+  }
 
-    if (!force &&
-        oldRelevantSlides.next === relevantSlides.next &&
-        oldRelevantSlides.previous === relevantSlides.previous &&
-        oldRelevantSlides.selected === relevantSlides.selected) {
-      // do nothing;
-      return;
+  // gives the next index relative to the given index (default selectedIndex)
+  function next(index) {
+    index = arguments.length ? index : selectedIndex;
+    var nextIndex = index + 1;
+    if (nextIndex >= self.count()) {
+      // We can't have a next if there's only one item...
+      if (isLoop && self.count() > 1) return 0;
+      return -1;
     }
+    return nextIndex;
+  }
 
 
-    slidesParent.css(
-      ionic.CSS.TRANSITION_DURATION,
-      (transitionDuration || SLIDE_TRANSITION_DURATION) + 'ms'
-    );
-
-    var delta = self.delta(scope.selectedIndex, newIndex);
-    if (self.isInRange(scope.selectedIndex) && Math.abs(delta) > 1) {
-      // if the new slide is > 1 away, then it is currently not attached to the DOM.
-      // Attach it in the position from which it will slide in.
-      self.at(newIndex).setState(delta > 1 ? 'next' : 'previous');
-      // Wait one frame so the new slide can 'settle' in its new place and
-      // be ready to properly transition in
-      ionic.requestAnimationFrame(doSelect);
-    } else {
-      doSelect();
-    }
-
-    function doSelect() {
-      // If a new selection has happened before this frame, abort.
-      if (scope.selectedIndex !== newIndex) return;
-      scope.$evalAsync(function() {
-        if (scope.selectedIndex !== newIndex) return;
-        arrangeSlides(newIndex);
+  // If slides are added or removed, we only want to re-set the selected index
+  // once per digest.
+  function enqueueSelect(index) {
+    enqueueSelect.index = index;
+    if (!enqueueSelect.queued) {
+      enqueueSelect.queued = true;
+      scope.$$postDigest(function() {
+        enqueueSelect.queued = false;
+        select(enqueueSelect.index);
       });
     }
   }
 
+  // Called by ionSlide directive
+  function onAddSlide() {
+    slideCount++;
+    // If we're waiting for a certain slide to be added so we can select it,
+    // or we just have selectedIndex at -1, go ahead and select.
+    if ((!angular.isNumber(scope.selected) || scope.selected < self.count()) &&
+        !self.isValidIndex(selectedIndex)) {
+      enqueueSelect(self.isValidIndex(scope.selected) ? scope.selected : 0);
+
+    } else if (self.isValidIndex(selectedIndex)) {
+      // 'Refresh' the selection at end of digest when a new slide is added
+      enqueueSelect(selectedIndex);
+    }
+  }
+
+  // Called by ionSlide directive
+  function onRemoveSlide() {
+    slideCount--;
+    if (selectedIndex >= self.count()) {
+      enqueueSelect( Math.max(selectedIndex - 1, 0) );
+
+    } else if (self.isValidIndex(selectedIndex)) {
+      // 'Refresh' the selection at end of digest when a slide is removed
+      enqueueSelect(selectedIndex);
+    }
+  }
+
+  // gives the previous index relative to the given index (default selectedIndex)
+  function previous(index) {
+    index = arguments.length ? index : selectedIndex;
+    var previousIndex = index - 1;
+    if (previousIndex < 0) {
+      // EDGE CASE: If there are only two slides and loop is enabled, we cannot have a previous
+      // because previous === next. Only loop with previous if we have at least 3 slides
+      if (isLoop && slideCount > 2) {
+        return self.count() - 1;
+      }
+      return -1;
+    }
+    return previousIndex;
+  }
+
+  // adds data to the queue for selection.
+  // Index can be either a number or a getter (to be called when starting the slide)
+  function select(newIndex, transitionDuration, isDrag) {
+    // Don't add selection to queue if the last selection in the list is already
+    // the same index
+    if ( (slideQueue[0] || {}).index === newIndex ) return;
+
+    slideQueue.unshift([
+      angular.isFunction(newIndex) ? newIndex : function() { return newIndex; },
+      transitionDuration || SLIDE_TRANSITION_DURATION,
+      !!isDrag
+    ]);
+
+    if (!isSliding) {
+      runSelectQueue();
+    }
+  }
+
+  function selected() {
+    return selectedIndex;
+  }
+
+  /***************************
+   * Private Methods
+   ***************************/
+
+  function getDelta(fromIndex, toIndex) {
+    var difference = toIndex - fromIndex;
+    if (!isLoop) return difference;
+
+    // If looping is on, check for the looped difference.
+    // For example, going from the first item to the last item
+    // is actually a change of -1.
+    var loopedDifference = 0;
+    if (toIndex > fromIndex) {
+      loopedDifference = toIndex - fromIndex - self.count();
+    } else {
+      loopedDifference = self.count() - fromIndex + toIndex;
+    }
+    if (Math.abs(loopedDifference) < Math.abs(difference)) {
+      return loopedDifference;
+    }
+    return difference;
+  }
+
+  // Recursively takes an item off slideQueue array, selects it,
+  // then repeats until nothing is left in the slideQueue.
+  // Once slideQueue is empty, publishes the select data to scope.
+  function runSelectQueue() {
+    isSliding = slideQueue.length > 0;
+    if (isSliding) {
+      var data = slideQueue.pop();
+      data[0] = data[0](); //index is a getter
+      slideTo.apply(null, data).then(runSelectQueue);
+    } else {
+      // Publish the data to scope once we're all done
+      scope.$evalAsync(function() {
+        scope.selected = selectedIndex;
+        scope.onSlideChanged({
+          $index: selectedIndex, //DEPRECATED $index
+          $slideIndex: selectedIndex
+        });
+      });
+    }
+  }
+
+  function slideTo(newIndex, duration, isDrag) {
+    // Immediately finish invalid selection
+    if (!self.isValidIndex(newIndex)) return $$q.when();
+
+    var deferred = $$q.defer();
+    var delta = getDelta(selectedIndex, newIndex);
+    var width = slideNodes[newIndex].offsetWidth;
+    var direction;
+    var translatePx;
+
+    // We're interested in isDrag, because a failed drag is the only case
+    // where we want to run a slide animation yet have no change in selectedIndex
+    if (!isDrag && (delta === 0 || selectedIndex === -1)) {
+      // Instantly slide over if there's no change or we don't already have a selected index
+      finishSliding();
+    } else {
+      // Make sure the newIndex is one of the three displayed slides before
+      // trying to transition to it
+      if (delta < 0) {
+        direction = 'previous';
+        translatePx = width;
+        setDisplayedSlides(newIndex, selectedIndex, self.next());
+      } else if (delta > 0) {
+        direction = 'next';
+        translatePx = -width;
+        setDisplayedSlides(self.previous(), selectedIndex, newIndex);
+      } else {
+        direction = '';
+        translatePx = 0;
+        setDisplayedSlides(self.previous(), selectedIndex, self.next());
+      }
+
+      container.css(ionic.CSS.TRANSITION_DURATION, duration + 'ms');
+      // Wait for transitionDuration css to apply...
+      ionic.requestAnimationFrame(function() {
+        container.css(ionic.CSS.TRANSFORM, 'translate3d(' + translatePx + 'px,0,0)');
+        $timeout(finishSliding, duration, false);
+      });
+    }
+
+    return deferred.promise;
+
+    function finishSliding() {
+      container.css(ionic.CSS.TRANSITION_DURATION, '0ms');
+      // Wait for transitionDuration css to apply...
+      ionic.requestAnimationFrame(function() {
+        setSelectedSlide(newIndex);
+        deferred.resolve();
+      });
+    }
+  }
+
+  function setSelectedSlide(newIndex) {
+    selectedIndex = newIndex;
+    container.css(ionic.CSS.TRANSFORM, '');
+    setDisplayedSlides(self.previous(newIndex), newIndex, self.next(newIndex));
+  }
+
+  /**
+   * setDisplayedSlides: set css to show only the three given slide indexes
+   * note: prev & next could both be -1 if there's only one slide in the slidebox
+   */
+  var currentDisplayed = [];
+  function setDisplayedSlides(previous, selected, next) {
+    var newDisplayed = [
+      previous !== -1 && slideNodes[previous],
+      selected !== -1 && slideNodes[selected],
+      next !== -1 && slideNodes[next]
+    ];
+    var oldSlide;
+
+    // Hide & disconnect the currently displayed slides that aren't part of the new slides.
+    for (var i = 0; i < currentDisplayed.length; i++) {
+      oldSlide = currentDisplayed[i];
+      if (oldSlide && newDisplayed.indexOf(oldSlide) === -1) {
+        oldSlide.removeAttribute('slide-display');
+        ionic.Utils.disconnectScope( jqLite(oldSlide).children().scope() );
+      }
+    }
+
+    setDisplay(newDisplayed[0], 'previous');
+    setDisplay(newDisplayed[1], 'selected');
+    setDisplay(newDisplayed[2], 'next');
+
+    function setDisplay(slide, display) {
+      if (!slide) return;
+      var slideScope = jqLite(slide).children().scope();
+      if (slideScope) {
+        ionic.Utils.reconnectScope(slideScope);
+        // Digest the slide so it updates before being shown
+        if (!$rootScope.$$phase) slideScope.$digest();
+      }
+      slide.setAttribute('slide-display', display);
+    }
+
+    // Save the now displayed slides so we can check next time
+    currentDisplayed = newDisplayed;
+  }
+
+
+  /********** DRAGGING **********/
+  var dragWidth;
   function onDragStart() {
-    if (self.dragDisabled) return false;
+    if (self.dragDisabled || !self.count()) return false;
+    if (!isSliding) {
+      // Make sure that the correct slides are to the left and right
+      // before we start dragging
+      setSelectedSlide(selectedIndex);
+    }
+    dragWidth = slideNodes[selectedIndex].offsetWidth;
   }
 
   // percent is negative 0-1 for backward slide
   // positive 0-1 for forward slide
   function onDrag(percent) {
-    var target = self.at(percent > 0 ? self.next() : self.previous());
-    var current = self.at(self.selected());
-
-    target && target.transform(percent);
-    current && current.transform(percent);
+    // Only follow user's finger if we aren't currently sliding
+    if (!isSliding) {
+      container.css(ionic.CSS.TRANSFORM, 'translate3d(' + (-percent * dragWidth) + 'px,0,0)');
+    }
   }
 
   function onDragEnd(percent, velocity) {
-    var nextIndex = -1;
-    if (Math.abs(percent) > 0.5 || velocity > SLIDE_SUCCESS_VELOCITY) {
-      nextIndex = percent > 0 ? self.next() : self.previous();
+    var isSuccess = Math.abs(percent) > 0.5 || velocity > SLIDE_SUCCESS_VELOCITY;
+
+    if (isSuccess) {
+      var distanceRemaining = (1 - Math.abs(percent)) * dragWidth;
+      var transitionDuration = Math.min(distanceRemaining / velocity, SLIDE_TRANSITION_DURATION);
+
+      self.select(function getIndex() {
+        // This will be called once this dragend is reached in the select queue.
+        var nextIndex = percent > 0 ? self.next() : self.previous();
+        return self.isValidIndex(nextIndex) ? nextIndex : selectedIndex;
+      }, transitionDuration, true);
+
+    } else if (!isSliding) {
+      // If the drag failed, then just slide back to current slide being the center.
+      slideTo(selectedIndex, SLIDE_TRANSITION_DURATION, true);
     }
-
-    // Select a new slide if it's avaiable
-    if (self.isInRange(nextIndex)) {
-      var distanceRemaining = (1 - Math.abs(percent)) * slidesParent.prop('offsetWidth');
-      var transitionDuration = Math.min(
-        distanceRemaining / velocity * 1.25,
-        SLIDE_TRANSITION_DURATION
-      );
-      self.select(nextIndex, transitionDuration);
-    } else {
-      self.select(scope.selectedIndex, 0, true);
-    }
-  }
-
-  // ***
-  // Private Methods
-  // ***
-
-  function checkSlidesChanged() {
-    checkSlidesChanged.queued = false;
-
-    // If one of the child nodes was destroyed but not yet removed
-    // from the DOM, we'll enqueue a new digest to re-check
-    // once the element is actually removed.
-    var slideScope;
-    for (var i = 0; i < slideNodes.length; i++) {
-      if ( (slideScope = angular.element(slideNodes[i]).scope()) && slideScope.$$destroyed) {
-        $timeout(angular.noop);
-        break;
-      }
-    }
-
-    if (!relevantSlides.selected) {
-      if (!angular.isNumber(scope.selectedIndex) || scope.selectedIndex === -1) {
-        self.select(0);
-      } else if (self.isInRange(scope.selectedIndex)) {
-        // If we are waiting for a certain scope.selectedIndex that isn't yet selected, select it now.
-        self.select(scope.selectedIndex);
-      }
-
-    } else if (relevantSlides.selected !== self.at(scope.selectedIndex) ||
-               relevantSlides.next !== self.next() ||
-               relevantSlides.previous !== self.previous()) {
-      // If the next, previous, or selected item has been moved or removed,
-      // find what to reselect.
-      var newIndex = self.indexOf(relevantSlides.selected);
-      if (newIndex === -1) {
-        // If the selected slide was removed, try to select the nearest available slide
-        self.select(scope.selectedIndex > 0 ? scope.selectedIndex - 1 : scope.selectedIndex);
-      } else {
-        // Else, reselect the selected slide.
-        self.select(newIndex);
-      }
-    }
-
-  }
-
-  function arrangeSlides() {
-    relevantSlides.previous && relevantSlides.previous.setState('previous');
-    relevantSlides.selected && relevantSlides.selected.setState('selected');
-    relevantSlides.next && relevantSlides.next.setState('next');
-
-    if (oldRelevantSlides) {
-      var oldShown = oldRelevantSlides.selected;
-      var delta = self.delta(self.indexOf(oldRelevantSlides.selected), self.indexOf(relevantSlides.selected));
-      if (Math.abs(delta) > 1) {
-        // If we're changing by more than one slide, we need to manually transition
-        // the current slide out and then put it into its new state.
-        oldShown.setState(delta > 1 ? 'previous' : 'next').then(function() {
-          oldShown.setState(
-            relevantSlides.previous === oldShown ?  'previous' :
-            relevantSlides.next === oldShown ? 'next' :
-            'detached'
-          );
-        });
-      } else {
-        detachIfUnused(oldRelevantSlides.selected);
-      }
-      //Additionally, we need to detach both of the old slides.
-      detachIfUnused(oldRelevantSlides.previous);
-      detachIfUnused(oldRelevantSlides.next);
-    }
-
-    function detachIfUnused(oldSlide) {
-      if (oldSlide && oldSlide !== relevantSlides.previous &&
-          oldSlide !== relevantSlides.selected &&
-          oldSlide !== relevantSlides.next) {
-        oldSlide.setState('detached');
-      }
-    }
-  }
-
-}]);
-
-IonicModule
-.controller('$ionSlide', [
-  '$scope',
-  '$element',
-  '$q',
-function(scope, element, $q) {
-  var self = this;
-
-  element.on(ionic.CSS.TRANSITIONEND, onTransitionEnd);
-
-  self.scope = scope;
-  self.element = element;
-  self.node = element[0];
-
-  self.transform = transform;
-
-  self.state = '';
-  self.setState = setState;
-
-  self.setState('detached');
-
-  // ***
-  // Public Methods
-  // ***
-
-  var isTransforming;
-  // percent is negative 0-1 for dragging left
-  // percent is positive 0-1 for dragging right
-  function transform(percent) {
-    if (!isTransforming) {
-      self.element.addClass('no-animate');
-      isTransforming = true;
-    }
-
-    var startPercent = self.state === 'previous' ? -1 :
-      self.state === 'next' ? 1 :
-      0;
-    self.element.css(
-      ionic.CSS.TRANSFORM,
-      'translate3d(' + (100 * (startPercent - percent)) + '%, 0, 0)'
-    );
-  }
-
-  function setState(newState) {
-    if (newState !== self.state) {
-      self.state && self.element.attr('slide-previous-state', self.state);
-      self.element.attr('slide-state', newState);
-    }
-    self.element.css(ionic.CSS.TRANSFORM, '');
-    self.element.removeClass('no-animate');
-    isTransforming = false;
-
-    self.previousState = self.state;
-    self.state = newState;
-
-    switch(newState) {
-      case 'detached':
-        detachSlide();
-        break;
-      case 'previous':
-      case 'next':
-      case 'selected':
-        attachSlide();
-        break;
-    }
-
-    return getTransitionPromise();
-  }
-
-  // ***
-  // Private Methods
-  // ***
-
-  function attachSlide() {
-    ionic.Utils.reconnectScope(scope);
-  }
-
-  function detachSlide() {
-    ionic.Utils.disconnectScope(scope);
-  }
-
-  var transitionDeferred;
-  function getTransitionPromise() {
-    // If we aren't transitioning to or from selected, there's no transition, so instantly resolve.
-    if (self.previousState !== 'selected' && self.state !== 'selected') {
-      return $q.when();
-    }
-
-    // Interrupt current promise if a new state was set.
-    transitionDeferred && transitionDeferred.reject();
-    transitionDeferred = $q.defer();
-
-    return transitionDeferred.promise;
-  }
-
-  function onTransitionEnd(ev) {
-    if (ev.target !== element[0]) return; //don't let the event bubble up from children
-    transitionDeferred && transitionDeferred.resolve();
   }
 
 }]);
@@ -50250,14 +50048,28 @@ IonicModule
 .directive('ionSlide', ['$timeout', function($timeout) {
   return {
     restrict: 'E',
-    controller: '$ionSlide',
     require: '^ionSlideBox',
-    scope: true,
+    transclude: true,
     link: postLink
   };
 
-  function postLink(scope, element, attr, slideBoxCtrl) {
+  function postLink(scope, element, attr, slideBoxCtrl, transclude) {
     element.addClass('slider-slide');
+
+    slideBoxCtrl.onAddSlide();
+
+    var childScope = scope.$new();
+    // Disconnect by default, will be reconnected if shown
+    ionic.Utils.disconnectScope(childScope);
+
+    transclude(childScope, function(contents) {
+      element.append(contents);
+    });
+
+    scope.$on('$destroy', function() {
+      slideBoxCtrl.onRemoveSlide();
+      element.remove();
+    });
   }
 }]);
 
@@ -50303,7 +50115,8 @@ IonicModule
   '$ionicSlideBoxDelegate',
   '$window',
   '$ionicHistory',
-function($ionicSlideBoxDelegate, $window, $ionicHistory) {
+  '$parse',
+function($ionicSlideBoxDelegate, $window, $ionicHistory, $parse) {
 
   return {
     restrict: 'E',
@@ -50311,7 +50124,7 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory) {
     require: 'ionSlideBox',
     transclude: true,
     scope: {
-      selectedIndex: '=?selected',
+      selected: '=?',
       onSlideChanged: '&'
     },
     template: '<div class="slider-slides" ng-transclude></div>',
@@ -50319,6 +50132,7 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory) {
   };
 
   function compile(element, attr) {
+    element.addClass('slider');
     // DEPRECATED attr.doesContinue
     isDefined(attr.doesContinue) && attr.$set('loop', attr.doesContinue);
 
@@ -50326,7 +50140,6 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory) {
   }
 
   function postLink(scope, element, attr, slideBoxCtrl) {
-    element.addClass('slider');
 
     var deregister = $ionicSlideBoxDelegate._registerInstance(
       slideBoxCtrl, attr.delegateHandle, function() {
@@ -50338,38 +50151,16 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory) {
     isDefined(attr.loop) && watchLoop();
     isDefined(attr.autoPlay) && watchAutoPlay();
 
-    var throttledReposition = ionic.animationFrameThrottle(repositionSlideBox);
-    throttledReposition();
-    angular.element($window).on('resize', throttledReposition);
-
-    scope.$on('$destroy', function() {
-      deregister();
-      angular.element($window).off('resize', throttledReposition);
-    });
+    scope.$on('$destroy', deregister);
 
     // ***
     // Methods
     // ***
 
-    // There is no way to make the slidebox stretch to a large enough size
-    // when its children are all position: absolute elements.
-    // We just make it so the slidebox is *always* as large as its offsetParent.
-    function repositionSlideBox() {
-      element.css({
-        width: (element[0].offsetParent || element[0].parentNode || {}).offsetWidth + 'px',
-        height: (element[0].offsetParent || element[0].parentNode || {}).offsetHeight + 'px'
-      });
-    }
-
     function watchSelected() {
-      scope.$watch('selectedIndex', function selectedAttrWatchAction(newIndex) {
-        if (slideBoxCtrl.isInRange(newIndex)) {
-          scope.onSlideChanged({
-            //DEPRECATED $index
-            $index: newIndex,
-            $slideIndex: newIndex
-          });
-          slideBoxCtrl.select(newIndex);
+      scope.$watch('selected', function(index) {
+        if (slideBoxCtrl.selected() !== index) {
+          slideBoxCtrl.select(index);
         }
       });
     }
@@ -50439,13 +50230,6 @@ function($parse) {
   return {
     restrict: 'E',
     require: '^ionSlideBox',
-    scope: {},
-    template:
-      '<div class="slider-pager-page" ' +
-           'ng-repeat="i in pages" ' +
-           'ng-class="{active: i === slideBoxCtrl.selected()}" ' +
-           'ng-click="click(i)">' +
-      '</div>',
     link: postLink
   };
 
@@ -50455,27 +50239,62 @@ function($parse) {
       function(scope, locals) {
         slideBoxCtrl.select(locals.$slideIndex);
       };
+    var node = element[0];
+
+    // Put it outside the slides container it was transcluded into
+    slideBoxCtrl.element.append(element);
 
     element.addClass('slider-pager');
     scope.slideBoxCtrl = slideBoxCtrl;
     scope.pages = [];
 
-    scope.click = onPagerClicked;
+    element.on('click', onPagerClicked);
     scope.$watch(slideBoxCtrl.count, watchCountAction);
+    scope.$watch(slideBoxCtrl.selected, watchSelectedAction);
 
-    function onPagerClicked(index) {
-      clickFn(scope.$parent, {
-        // DEPRECATED pass in `index` variable
-        index: index,
-        $slideIndex: index,
-      });
+    function onPagerClicked(ev) {
+      for (var i = 0, pager; (pager = node.children[i]); i++) {
+        if (pager === ev.target) {
+          return doClick(i);
+        }
+      }
     }
 
-    function watchCountAction(slidesCount) {
-      scope.pages.length = slidesCount;
-      for (var i = 0; i < slidesCount; i++) {
-        scope.pages[i] = i;
+    function watchCountAction(count, oldCount) {
+      var i;
+      for (i = node.children.length; i < count; i++) {
+        addPager();
       }
+      for (i = count; i < oldCount; i++) {
+        removePager(i);
+      }
+    }
+
+    function watchSelectedAction(selected, oldSelected) {
+      var old = node.children[oldSelected];
+      if (old) old.classList.remove('active');
+      var current = node.children[selected];
+      if (current) current.classList.add('active');
+    }
+
+    //* Extra methods *//
+
+    function doClick(index) {
+      scope.$apply(function() {
+        clickFn(scope, {
+          index: index, // DEPRECATED `index`
+          $slideIndex: index,
+        });
+      });
+    }
+    function addPager() {
+      var pager = document.createElement('div');
+      pager.className = 'slider-pager-page';
+      node.appendChild(pager);
+    }
+    function removePager(i) {
+      var pager = node.children[i];
+      pager && node.removeChild(pager);
     }
   }
 
