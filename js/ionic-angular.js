@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-809
+ * Ionic, v1.0.0-beta.13-nightly-810
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5733,8 +5733,7 @@ function($scope, $attrs, $ionicListDelegate, $ionicHistory) {
 
   var deregisterInstance = $ionicListDelegate._registerInstance(
     self, $attrs.delegateHandle, function() {
-    return true;
-      // return $ionicHistory.isActiveScope($scope);
+      return $ionicHistory.isActiveScope($scope);
     }
   );
   $scope.$on('$destroy', deregisterInstance);
