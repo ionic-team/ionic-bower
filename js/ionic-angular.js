@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-810
+ * Ionic, v1.0.0-beta.13-nightly-811
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11315,17 +11315,19 @@ function($compile, $ionicConfig, $ionicBind, $ionicViewSwitcher) {
       var childElementCount = tabContentEle.childElementCount;
       element.empty();
 
-      var navViewName;
+      var navViewName, isNavView;
       if (childElementCount) {
         if (tabContentEle.children[0].tagName === 'ION-NAV-VIEW') {
           // get the name if it's a nav-view
           navViewName = tabContentEle.children[0].getAttribute('name');
+          tabContentEle.children[0].classList.add('view-container');
+          isNavView = true;
         }
         if(childElementCount === 1) {
           // make the 1 child element the primary tab content container
           tabContentEle = tabContentEle.children[0];
         }
-        tabContentEle.classList.add('pane');
+        if (!isNavView) tabContentEle.classList.add('pane');
         tabContentEle.classList.add('tab-content');
       }
 
