@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-818
+ * Ionic, v1.0.0-beta.13-nightly-819
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7344,7 +7344,7 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
     var deferred = $$q.defer();
     var delta = getDelta(selectedIndex, newIndex);
-    var width = slideNodes[newIndex].offsetWidth;
+    var width = (slideNodes[selectedIndex] || slideNodes[newIndex] || {}).offsetWidth || 0;
     var direction;
     var translatePx;
 
