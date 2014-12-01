@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-816
+ * Ionic, v1.0.0-beta.13-nightly-817
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1319,10 +1319,9 @@ IonicModule
   '$state',
   '$location',
   '$window',
-  '$timeout',
   '$ionicViewSwitcher',
   '$ionicNavViewDelegate',
-function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $ionicNavViewDelegate) {
+function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavViewDelegate) {
 
   // history actions while navigating views
   var ACTION_INITIAL_VIEW = 'initialView';
@@ -1339,7 +1338,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
   var DIRECTION_NONE = 'none';
 
   var stateChangeCounter = 0;
-  var lastStateId, nextViewOptions, nextViewExpireTimer, forcedNav;
+  var lastStateId, nextViewOptions, forcedNav;
 
   var viewHistory = {
     histories: { root: { historyId: 'root', parentHistoryId: null, stack: [], cursor: -1 } },
@@ -1663,7 +1662,6 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
         hist.stack.push(viewHistory.views[viewId]);
       }
 
-      $timeout.cancel(nextViewExpireTimer);
       if (nextViewOptions) {
         if (nextViewOptions.disableAnimate) direction = DIRECTION_NONE;
         if (nextViewOptions.disableBack) viewHistory.views[viewId].backViewId = null;
@@ -1927,17 +1925,11 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      */
     nextViewOptions: function(opts) {
       if (arguments.length) {
-        $timeout.cancel(nextViewExpireTimer);
         if (opts === null) {
           nextViewOptions = opts;
         } else {
           nextViewOptions = nextViewOptions || {};
           extend(nextViewOptions, opts);
-          if (nextViewOptions.expire) {
-            nextViewExpireTimer = $timeout(function(){
-              nextViewOptions = null;
-            }, nextViewOptions.expire);
-          }
         }
       }
       return nextViewOptions;
@@ -9571,8 +9563,7 @@ IonicModule
         if (sideMenuCtrl) {
           $ionicHistory.nextViewOptions({
             historyRoot: true,
-            disableAnimate: true,
-            expire: 300
+            disableAnimate: true
           });
           sideMenuCtrl.close();
         }
