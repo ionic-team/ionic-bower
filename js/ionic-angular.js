@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-820
+ * Ionic, v1.0.0-beta.13-nightly-821
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7414,7 +7414,7 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
       oldSlide = currentDisplayed[i];
       if (oldSlide && newDisplayed.indexOf(oldSlide) === -1) {
         oldSlide.removeAttribute('slide-display');
-        ionic.Utils.disconnectScope( jqLite(oldSlide).children().scope() );
+        ionic.Utils.disconnectScope( jqLite(oldSlide).data('$ionSlideScope') );
       }
     }
 
@@ -7424,7 +7424,7 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
     function setDisplay(slide, display) {
       if (!slide) return;
-      var slideScope = jqLite(slide).children().scope();
+      var slideScope = jqLite(slide).data('$ionSlideScope');
       if (slideScope) {
         ionic.Utils.reconnectScope(slideScope);
         // Digest the slide so it updates before being shown
@@ -11004,6 +11004,8 @@ IonicModule
     slideBoxCtrl.onAddSlide();
 
     var childScope = scope.$new();
+    element.data('$ionSlideScope', childScope);
+
     // Disconnect by default, will be reconnected if shown
     ionic.Utils.disconnectScope(childScope);
 
