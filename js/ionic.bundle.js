@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-817
+ * Ionic, v1.0.0-beta.13-nightly-818
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-817';
+window.ionic.version = '1.0.0-beta.13-nightly-818';
 
 (function(window, document, ionic) {
 
@@ -4801,7 +4801,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       }
       if (height !== self.__indicatorY.size) {
         ionic.requestAnimationFrame(function(){
-          self.__indicatorY.indicator.style.height = height + 'px';
+          self.__indicatorY && (self.__indicatorY.indicator.style.height = height + 'px');
         });
       }
       self.__indicatorY.size = height;
@@ -39063,7 +39063,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-817
+ * Ionic, v1.0.0-beta.13-nightly-818
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40380,9 +40380,10 @@ IonicModule
   '$state',
   '$location',
   '$window',
+  '$timeout',
   '$ionicViewSwitcher',
   '$ionicNavViewDelegate',
-function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavViewDelegate) {
+function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $ionicNavViewDelegate) {
 
   // history actions while navigating views
   var ACTION_INITIAL_VIEW = 'initialView';
@@ -40399,7 +40400,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
   var DIRECTION_NONE = 'none';
 
   var stateChangeCounter = 0;
-  var lastStateId, nextViewOptions, forcedNav;
+  var lastStateId, nextViewOptions, nextViewExpireTimer, forcedNav;
 
   var viewHistory = {
     histories: { root: { historyId: 'root', parentHistoryId: null, stack: [], cursor: -1 } },
@@ -40723,6 +40724,7 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
         hist.stack.push(viewHistory.views[viewId]);
       }
 
+      $timeout.cancel(nextViewExpireTimer);
       if (nextViewOptions) {
         if (nextViewOptions.disableAnimate) direction = DIRECTION_NONE;
         if (nextViewOptions.disableBack) viewHistory.views[viewId].backViewId = null;
@@ -40986,11 +40988,17 @@ function($rootScope, $state, $location, $window, $ionicViewSwitcher, $ionicNavVi
      */
     nextViewOptions: function(opts) {
       if (arguments.length) {
+        $timeout.cancel(nextViewExpireTimer);
         if (opts === null) {
           nextViewOptions = opts;
         } else {
           nextViewOptions = nextViewOptions || {};
           extend(nextViewOptions, opts);
+          if (nextViewOptions.expire) {
+            nextViewExpireTimer = $timeout(function(){
+              nextViewOptions = null;
+            }, nextViewOptions.expire);
+          }
         }
       }
       return nextViewOptions;
@@ -47086,16 +47094,16 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
       var heightGetter = function(scope, locals) {
         var result = heightParsed(scope, locals);
         if (isString(result) && result.indexOf('%') > -1) {
-          return Math.floor(parseInt(result, 10) / 100 * scrollView.__clientHeight);
+          return Math.floor(parseInt(result) / 100 * scrollView.__clientHeight);
         }
-        return result;
+        return parseInt(result);
       };
       var widthGetter = function(scope, locals) {
         var result = widthParsed(scope, locals);
         if (isString(result) && result.indexOf('%') > -1) {
-          return Math.floor(parseInt(result, 10) / 100 * scrollView.__clientWidth);
+          return Math.floor(parseInt(result) / 100 * scrollView.__clientWidth);
         }
-        return result;
+        return parseInt(result);
       };
 
       var match = $attr.collectionRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
@@ -48624,7 +48632,8 @@ IonicModule
         if (sideMenuCtrl) {
           $ionicHistory.nextViewOptions({
             historyRoot: true,
-            disableAnimate: true
+            disableAnimate: true,
+            expire: 300
           });
           sideMenuCtrl.close();
         }
