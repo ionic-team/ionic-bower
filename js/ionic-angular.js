@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-824
+ * Ionic, v1.0.0-beta.13-nightly-825
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -373,7 +373,9 @@ IonicModule
         handleDragEnd(ev);
         return;
       }
-      isDragging = true;
+      if (Math.abs(deltaX) > Math.abs(deltaY) * 2) {
+        isDragging = true;
+      }
 
       var percent = getDragPercent(ev.gesture.center.pageX);
       opts.onDrag(percent);
