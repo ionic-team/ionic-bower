@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-826
+ * Ionic, v1.0.0-beta.13-nightly-827
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-826';
+window.ionic.version = '1.0.0-beta.13-nightly-827';
 
 (function(window, document, ionic) {
 
@@ -39063,7 +39063,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-826
+ * Ionic, v1.0.0-beta.13-nightly-827
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -46422,6 +46422,8 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
     var direction;
     var translatePx;
 
+    element.triggerHandler('$ionSlideBox.slide', newIndex);
+
     // We're interested in isDrag, because a failed drag is the only case
     // where we want to run a slide animation yet have no change in selectedIndex
     if (!isDrag && (delta === 0 || selectedIndex === -1)) {
@@ -46466,8 +46468,8 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
   function setSelectedSlide(newIndex) {
     selectedIndex = newIndex;
-    container.css(ionic.CSS.TRANSFORM, '');
     setDisplayedSlides(self.previous(newIndex), newIndex, self.next(newIndex));
+    container.css(ionic.CSS.TRANSFORM, '');
   }
 
   /**
@@ -46557,7 +46559,7 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
     if (isSuccess) {
       var distanceRemaining = (1 - Math.abs(percent)) * dragWidth;
-      var transitionDuration = Math.min(distanceRemaining / velocity, SLIDE_TRANSITION_DURATION);
+      var transitionDuration = Math.min((distanceRemaining / velocity) - 34, SLIDE_TRANSITION_DURATION);
 
       self.select(function getIndex() {
         // This will be called once this dragend is reached in the select queue.
@@ -50142,12 +50144,20 @@ IonicModule
 .directive('ionSlide', ['$timeout', function($timeout) {
   return {
     restrict: 'E',
-    require: '^ionSlideBox',
+    require: ['^ionSlideBox', '^^?ionSlide'],
     transclude: true,
+    controller: angular.noop,
     link: postLink
   };
 
-  function postLink(scope, element, attr, slideBoxCtrl, transclude) {
+  function postLink(scope, element, attr, ctrls, transclude) {
+    var slideBoxCtrl = ctrls[0];
+    var slideCtrl = ctrls[1];
+
+    if (slideCtrl) {
+      throw new Error('You cannot have an ion-slide within another ion-slide!');
+    }
+
     element.addClass('slider-slide');
 
     slideBoxCtrl.onAddSlide();
@@ -50156,7 +50166,7 @@ IonicModule
     element.data('$ionSlideScope', childScope);
 
     // Disconnect by default, will be reconnected if shown
-    ionic.Utils.disconnectScope(childScope);
+    // ionic.Utils.disconnectScope(childScope);
 
     transclude(childScope, function(contents) {
       element.append(contents);
@@ -50201,18 +50211,22 @@ IonicModule
  *
  * @param {expression=} selected A model bound to the selected slide index.
  * @param {boolean=} loop Whether the slide box should loop. Default false.
- * @param {number=} auto-play If a positive number, then every time the given number of milliseconds have passed, slideBox will go to the next slide. Set to a non-positive number to disable. Default: -1.
- * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed a '$slideIndex' variable.
+ * @param {number=} auto-play If a positive number, then every time the given number of
+ * milliseconds have passed, slideBox will go to the next slide. Set to a non-positive number
+ * to disable. Default: -1.
+ * @param {expression=} on-slide-changed Expression called when all currently queued slide
+ * animations finish.  Is passed a '$slideIndex' variable.
+ * @param {expression=} on-slide-start Expression called whenever a slide animation starts.
+ * Is passed a '$slideIndex' variable.
  * @param {string=} delegate-handle The handle used to identify this slideBox with
  * {@link ionic.service:$ionicSlideBoxDelegate}.
  */
 IonicModule
 .directive('ionSlideBox', [
   '$ionicSlideBoxDelegate',
-  '$window',
   '$ionicHistory',
-  '$parse',
-function($ionicSlideBoxDelegate, $window, $ionicHistory, $parse) {
+  '$timeout',
+function($ionicSlideBoxDelegate, $ionicHistory, $timeout) {
 
   return {
     restrict: 'E',
@@ -50221,7 +50235,8 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory, $parse) {
     transclude: true,
     scope: {
       selected: '=?',
-      onSlideChanged: '&'
+      onSlideChanged: '&',
+      onSlideStart: '&'
     },
     template: '<div class="slider-slides" ng-transclude></div>',
     compile: compile
@@ -50243,6 +50258,7 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory, $parse) {
       }
     );
 
+    listenForSlide();
     watchSelected();
     isDefined(attr.loop) && watchLoop();
     isDefined(attr.autoPlay) && watchAutoPlay();
@@ -50252,6 +50268,15 @@ function($ionicSlideBoxDelegate, $window, $ionicHistory, $parse) {
     // ***
     // Methods
     // ***
+
+    function listenForSlide() {
+      element.on('$ionSlideBox.slide', function(ev, index) {
+        scope.onSlideStart({
+          $slideIndex: index
+        });
+        $timeout(angular.noop);
+      });
+    }
 
     function watchSelected() {
       scope.$watch('selected', function(index) {
@@ -50326,6 +50351,7 @@ function($parse) {
   return {
     restrict: 'E',
     require: '^ionSlideBox',
+    scope: {},
     link: postLink
   };
 
@@ -50338,15 +50364,26 @@ function($parse) {
     var node = element[0];
 
     // Put it outside the slides container it was transcluded into
-    slideBoxCtrl.element.append(element);
+    slideBoxCtrl.element.prepend(element);
 
-    element.addClass('slider-pager');
-    scope.slideBoxCtrl = slideBoxCtrl;
-    scope.pages = [];
 
     element.on('click', onPagerClicked);
     scope.$watch(slideBoxCtrl.count, watchCountAction);
     scope.$watch(slideBoxCtrl.selected, watchSelectedAction);
+
+    slideBoxCtrl.element.on('$ionSlideBox.slide', onSlideStart);
+    scope.$on('$destroy', function() {
+      slideBoxCtrl.element.off('$ionSlideBox.slide', onSlideStart);
+    });
+
+    element.addClass('ng-hide');
+    ionic.requestAnimationFrame(function() {
+      element.removeClass('ng-hide').addClass('slider-pager');
+    });
+
+    function onSlideStart(ev, index) {
+      watchSelectedAction(index);
+    }
 
     function onPagerClicked(ev) {
       for (var i = 0, pager; (pager = node.children[i]); i++) {
@@ -50366,18 +50403,20 @@ function($parse) {
       }
     }
 
-    function watchSelectedAction(selected, oldSelected) {
+    var oldSelected;
+    function watchSelectedAction(selected) {
       var old = node.children[oldSelected];
       if (old) old.classList.remove('active');
       var current = node.children[selected];
       if (current) current.classList.add('active');
+      oldSelected = selected;
     }
 
     //* Extra methods *//
 
     function doClick(index) {
       scope.$apply(function() {
-        clickFn(scope, {
+        clickFn(scope.$parent, {
           index: index, // DEPRECATED `index`
           $slideIndex: index,
         });
