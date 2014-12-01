@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-819
+ * Ionic, v1.0.0-beta.13-nightly-820
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4943,6 +4943,7 @@ a.item-content {
     border-radius: 15px;
     background-color: black;
     text-decoration: none;
+    cursor: pointer;
     opacity: 0.3; }
     .slider-pager .slider-pager-page.active {
       -webkit-transition: opacity 0.4s ease-in;
