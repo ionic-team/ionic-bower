@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-832
+ * Ionic, v1.0.0-beta.13-nightly-833
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7626,7 +7626,7 @@ function($scope, $ionicHistory, $element) {
       (tab.onSelect || angular.noop)();
 
       if (shouldEmitEvent) {
-        var viewData = {
+        $scope.$emit('$ionicHistory.change', {
           type: 'tab',
           tabIndex: tabIndex,
           historyId: tab.$historyId,
@@ -7635,11 +7635,20 @@ function($scope, $ionicHistory, $element) {
           title: tab.title,
           url: tab.href,
           uiSref: tab.uiSref
-        };
-        $scope.$emit('$ionicHistory.change', viewData);
+        });
       }
     }
   };
+
+  self.hasActiveScope = function() {
+    for (var x = 0; x < self.tabs.length; x++) {
+      if ($ionicHistory.isActiveScope(self.tabs[x])) {
+        return true;
+      }
+    }
+    return false;
+  };
+
 }]);
 
 IonicModule
@@ -11711,9 +11720,7 @@ function($ionicTabsDelegate, $ionicConfig, $ionicHistory) {
       return { pre: prelink, post: postLink };
       function prelink($scope, $element, $attr, tabsCtrl) {
         var deregisterInstance = $ionicTabsDelegate._registerInstance(
-          tabsCtrl, $attr.delegateHandle, function() {
-            return $ionicHistory.isActiveScope($scope);
-          }
+          tabsCtrl, $attr.delegateHandle, tabsCtrl.hasActiveScope
         );
 
         tabsCtrl.$scope = $scope;
