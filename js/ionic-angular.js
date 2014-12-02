@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-831
+ * Ionic, v1.0.0-beta.13-nightly-832
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6394,10 +6394,15 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
   self.clearCache = function() {
     var viewElements = $element.children();
+    var viewElement, viewScope;
 
     for (var x = 0, l = viewElements.length; x < l; x++) {
-      if (navViewAttr(viewElements.eq(x)) == VIEW_STATUS_CACHED) {
-        $ionicViewSwitcher.destroyViewEle(viewElements.eq(x));
+      viewElement = viewElements.eq(x);
+      if (navViewAttr(viewElement) == VIEW_STATUS_CACHED) {
+        $ionicViewSwitcher.destroyViewEle(viewElement);
+      } else if (navViewAttr(viewElement) == VIEW_STATUS_ACTIVE) {
+        viewScope = viewElement.scope();
+        viewScope && viewScope.$broadcast('$ionicView.clearCache');
       }
     }
 
@@ -11545,18 +11550,28 @@ function($compile, $ionicConfig, $ionicBind, $ionicViewSwitcher) {
 
             } else {
               // do not keep tabs in the DOM
-              childScope && childScope.$destroy();
-              childElement && childElement.remove();
-              isTabContentAttached = childScope = childElement = null;
+              destroyTab();
             }
 
           }
+        }
+
+        function destroyTab() {
+          childScope && childScope.$destroy();
+          isTabContentAttached && childElement && childElement.remove();
+          isTabContentAttached = childScope = childElement = null;
         }
 
         $scope.$watch('$tabSelected', tabSelected);
 
         $scope.$on('$ionicView.afterEnter', function() {
           $ionicViewSwitcher.viewEleIsActive(childElement, $scope.$tabSelected);
+        });
+
+        $scope.$on('$ionicView.clearCache', function() {
+          if (!$scope.$tabSelected) {
+            destroyTab();
+          }
         });
 
       };
