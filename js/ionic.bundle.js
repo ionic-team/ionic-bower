@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-834
+ * Ionic, v1.0.0-beta.13-nightly-835
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-834';
+window.ionic.version = '1.0.0-beta.13-nightly-835';
 
 (function(window, document, ionic) {
 
@@ -7061,7 +7061,7 @@ ionic.scroll = {
  */
 
 /**
- * @license AngularJS v1.3.4
+ * @license AngularJS v1.3.5
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -7116,7 +7116,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.3.4/' +
+    message = message + '\nhttp://errors.angularjs.org/1.3.5/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i - 2) + '=' +
@@ -7288,8 +7288,8 @@ if ('i' !== 'I'.toLowerCase()) {
 }
 
 
-var /** holds major version number for IE or NaN for real browsers */
-    msie,
+var
+    msie,             // holds major version number for IE, or NaN if UA is not IE.
     jqLite,           // delay binding since jQuery could be loaded after us.
     jQuery,           // delay binding
     slice             = [].slice,
@@ -9162,11 +9162,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.3.4',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.3.5',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 3,
-  dot: 4,
-  codeName: 'highfalutin-petroglyph'
+  dot: 5,
+  codeName: 'cybernetic-mercantilism'
 };
 
 
@@ -13529,7 +13529,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * Retrieves or overrides the default regular expression that is used for whitelisting of safe
    * urls during a[href] sanitization.
    *
-   * The sanitization is a security measure aimed at prevent XSS attacks via html links.
+   * The sanitization is a security measure aimed at preventing XSS attacks via html links.
    *
    * Any url about to be assigned to a[href] via data-binding is first normalized and turned into
    * an absolute url. Afterwards, the url is matched against the `aHrefSanitizationWhitelist`
@@ -13596,7 +13596,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * * `ng-binding` CSS class
    * * `$binding` data property containing an array of the binding expressions
    *
-   * You may want to use this in production for a significant performance boost. See
+   * You may want to disable this in production for a significant performance boost. See
    * {@link guide/production#disabling-debug-data Disabling Debug Data} for more.
    *
    * The default value is true.
@@ -16153,12 +16153,14 @@ function $HttpProvider() {
      *      `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
      *      transform function or an array of such functions. The transform function takes the http
      *      request body and headers and returns its transformed (typically serialized) version.
-     *      See {@link #overriding-the-default-transformations-per-request Overriding the Default Transformations}
+     *      See {@link ng.$http#overriding-the-default-transformations-per-request
+     *      Overriding the Default Transformations}
      *    - **transformResponse** –
      *      `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
      *      transform function or an array of such functions. The transform function takes the http
      *      response body and headers and returns its transformed (typically deserialized) version.
-     *      See {@link #overriding-the-default-transformations-per-request Overriding the Default Transformations}
+     *      See {@link ng.$http#overriding-the-default-transformations-per-request
+     *      Overriding the Default Transformations}
      *    - **cache** – `{boolean|Cache}` – If true, a default $http cache will be used to cache the
      *      GET request, otherwise if a cache instance built with
      *      {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
@@ -16808,7 +16810,9 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
 
     function completeRequest(callback, status, response, headersString, statusText) {
       // cancel timeout and subsequent timeout promise resolution
-      timeoutId && $browserDefer.cancel(timeoutId);
+      if (timeoutId !== undefined) {
+        $browserDefer.cancel(timeoutId);
+      }
       jsonpDone = xhr = null;
 
       callback(status, response, headersString, statusText);
@@ -19290,13 +19294,13 @@ Parser.prototype = {
       ensureSafeObject(context, expressionText);
       ensureSafeFunction(fn, expressionText);
 
-      // IE stupidity! (IE doesn't have apply for some native functions)
+      // IE doesn't have apply for some native functions
       var v = fn.apply
             ? fn.apply(context, args)
             : fn(args[0], args[1], args[2], args[3], args[4]);
 
       return ensureSafeObject(v, expressionText);
-    };
+      };
   },
 
   // This is used with json array declaration
@@ -22978,14 +22982,9 @@ function $TemplateRequestProvider() {
       var transformResponse = $http.defaults && $http.defaults.transformResponse;
 
       if (isArray(transformResponse)) {
-        var original = transformResponse;
-        transformResponse = [];
-        for (var i = 0; i < original.length; ++i) {
-          var transformer = original[i];
-          if (transformer !== defaultHttpResponseTransform) {
-            transformResponse.push(transformer);
-          }
-        }
+        transformResponse = transformResponse.filter(function(transformer) {
+          return transformer !== defaultHttpResponseTransform;
+        });
       } else if (transformResponse === defaultHttpResponseTransform) {
         transformResponse = null;
       }
@@ -23003,12 +23002,12 @@ function $TemplateRequestProvider() {
           return html;
         }, handleError);
 
-      function handleError() {
+      function handleError(resp) {
         self.totalPendingRequests--;
         if (!ignoreRequestError) {
           throw $compileMinErr('tpload', 'Failed to load template: {0}', tpl);
         }
-        return $q.reject();
+        return $q.reject(resp);
       }
     }
 
@@ -24644,9 +24643,8 @@ var htmlAnchorDirective = valueFn({
  * make the link go to the wrong URL if the user clicks it before
  * Angular has a chance to replace the `{{hash}}` markup with its
  * value. Until Angular replaces the markup the link will be broken
- * and will most likely return a 404 error.
- *
- * The `ngHref` directive solves this problem.
+ * and will most likely return a 404 error. The `ngHref` directive
+ * solves this problem.
  *
  * The wrong way to write it:
  * ```html
@@ -32198,7 +32196,6 @@ var scriptDirective = ['$templateCache', function($templateCache) {
     compile: function(element, attr) {
       if (attr.type == 'text/ng-template') {
         var templateUrl = attr.id,
-            // IE is not consistent, in scripts we have to read .text but in other nodes we have to read .textContent
             text = element[0].text;
 
         $templateCache.put(templateUrl, text);
@@ -32419,7 +32416,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
       self.removeOption = function(value) {
         if (this.hasOption(value)) {
           delete optionsMap[value];
-          if (ngModelCtrl.$viewValue == value) {
+          if (ngModelCtrl.$viewValue === value) {
             this.renderUnknownOption(value);
           }
         }
@@ -32886,18 +32883,23 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               updateLabelMap(labelMap, option.label, false);
               option.element.remove();
             }
-            forEach(labelMap, function(count, label) {
-              if (count > 0) {
-                selectCtrl.addOption(label);
-              } else if (count < 0) {
-                selectCtrl.removeOption(label);
-              }
-            });
           }
           // remove any excessive OPTGROUPs from select
           while (optionGroupsCache.length > groupIndex) {
-            optionGroupsCache.pop()[0].element.remove();
+            // remove all the labels in the option group
+            optionGroup = optionGroupsCache.pop();
+            for (index = 1; index < optionGroup.length; ++index) {
+              updateLabelMap(labelMap, optionGroup[index].label, false);
+            }
+            optionGroup[0].element.remove();
           }
+          forEach(labelMap, function(count, label) {
+            if (count > 0) {
+              selectCtrl.addOption(label);
+            } else if (count < 0) {
+              selectCtrl.removeOption(label);
+            }
+          });
         }
       }
     }
@@ -32983,7 +32985,7 @@ var styleDirective = valueFn({
  */
 
 /**
- * @license AngularJS v1.3.4
+ * @license AngularJS v1.3.5
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -35127,7 +35129,7 @@ angular.module('ngAnimate', ['ng'])
  */
 
 /**
- * @license AngularJS v1.3.4
+ * @license AngularJS v1.3.5
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -35794,7 +35796,7 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
                   '" ');
       }
       html.push('href="',
-                url.replace('"', '&quot;'),
+                url.replace(/"/g, '&quot;'),
                 '">');
       addText(text);
       html.push('</a>');
@@ -39065,7 +39067,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-834
+ * Ionic, v1.0.0-beta.13-nightly-835
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
