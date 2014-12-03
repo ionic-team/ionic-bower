@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-837
+ * Ionic, v1.0.0-beta.13-nightly-838
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-837';
+window.ionic.version = '1.0.0-beta.13-nightly-838';
 
 (function(window, document, ionic) {
 
@@ -39062,7 +39062,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-837
+ * Ionic, v1.0.0-beta.13-nightly-838
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39690,29 +39690,32 @@ IonicModule
 function($document, $ionicBody, $timeout) {
   var fallbackTimer, isAttached;
   var CSS_HIDE = 'click-block-hide';
+  var pendingShow;
 
   var cb = $document[0].createElement('div');
   cb.className = 'click-block';
 
   return {
     show: function(autoExpire) {
+      pendingShow = true;
       // cancel the fallback timer
       $timeout.cancel(fallbackTimer);
 
       ionic.requestAnimationFrame(function() {
-        if (isAttached) {
-          cb.classList.remove(CSS_HIDE);
-        } else {
-          $ionicBody.append(cb);
-          isAttached = true;
+        if (pendingShow) {
+          if (isAttached) {
+            cb.classList.remove(CSS_HIDE);
+          } else {
+            $ionicBody.append(cb);
+            isAttached = true;
+          }
         }
       });
 
-      fallbackTimer = $timeout(function() {
-        cb.classList.add(CSS_HIDE);
-      }, autoExpire || 300);
+      fallbackTimer = $timeout(this.hide, autoExpire || 310);
     },
     hide: function() {
+      pendingShow = false;
       $timeout.cancel(fallbackTimer);
       cb.classList.add(CSS_HIDE);
     }
