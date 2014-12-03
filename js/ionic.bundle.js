@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-833
+ * Ionic, v1.0.0-beta.13-nightly-834
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-833';
+window.ionic.version = '1.0.0-beta.13-nightly-834';
 
 (function(window, document, ionic) {
 
@@ -39065,7 +39065,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-833
+ * Ionic, v1.0.0-beta.13-nightly-834
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -45308,6 +45308,7 @@ IonicModule
 function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, $ionicNavViewDelegate, $ionicHistory, $ionicViewSwitcher) {
 
   var DATA_ELE_IDENTIFIER = '$eleId';
+  var DATA_DESTROY_ELE = '$destroyEle';
   var VIEW_STATUS_ACTIVE = 'active';
   var VIEW_STATUS_CACHED = 'cached';
   var HISTORY_AFTER_ROOT = 'after-root';
@@ -45336,6 +45337,8 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
     var deregisterInstance = $ionicNavViewDelegate._registerInstance(self, $attrs.delegateHandle);
     $scope.$on('$destroy', deregisterInstance);
+
+    $scope.$on('$ionicHistory.deselect', self.cacheCleanup);
 
     return viewData;
   };
@@ -45450,6 +45453,16 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         if ($ionicViewSwitcher.isHistoryRoot(viewElement) && navViewAttr(viewElement) !== VIEW_STATUS_ACTIVE) {
           $ionicViewSwitcher.historyCursorAttr(viewElement, HISTORY_AFTER_ROOT);
         }
+      }
+    }
+  };
+
+
+  self.cacheCleanup = function() {
+    var viewElements = $element.children();
+    for (var x = 0, l = viewElements.length; x < l; x++) {
+      if (viewElements.eq(x).data(DATA_DESTROY_ELE)) {
+        $ionicViewSwitcher.destroyViewEle(viewElements.eq(x));
       }
     }
   };
@@ -46657,6 +46670,7 @@ function($scope, $ionicHistory, $element) {
       _selectedTab = null;
       tab.$tabSelected = false;
       (tab.onDeselect || angular.noop)();
+      tab.$broadcast && tab.$broadcast('$ionicHistory.deselect');
     }
   };
 
