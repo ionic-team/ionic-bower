@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-841
+ * Ionic, v1.0.0-beta.13-nightly-842
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2851,6 +2851,7 @@ a.subdued {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 17px;
+    font-weight: 500;
     line-height: 44px; }
     .bar .title.title-left {
       text-align: left; }
