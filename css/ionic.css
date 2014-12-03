@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-840
+ * Ionic, v1.0.0-beta.13-nightly-841
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3630,7 +3630,7 @@ a.subdued {
   white-space: nowrap;
   font-weight: 400;
   font-size: 14px;
-  font-family: "HelveticaNeue-Light", "Roboto-Light", sans-serif-light;
+  font-family: "Helvetica Neue", "Roboto", sans-serif;
   opacity: 0.7; }
   .tab-item:hover {
     cursor: pointer; }
@@ -3641,7 +3641,7 @@ a.subdued {
   display: none; }
 
 .tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
-  font-size: 12px;
+  font-size: 10px;
   line-height: 14px; }
 
 .tab-item .icon {
@@ -3651,7 +3651,7 @@ a.subdued {
   font-size: 32px; }
 
 .tabs-icon-left.tabs .tab-item, .tabs-icon-left > .tabs .tab-item, .tabs-icon-right.tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
-  font-size: 12px; }
+  font-size: 10px; }
   .tabs-icon-left.tabs .tab-item .icon, .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
     display: inline-block;
     vertical-align: top;
