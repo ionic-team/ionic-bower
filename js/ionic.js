@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-836
+ * Ionic, v1.0.0-beta.13-nightly-837
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-836';
+window.ionic.version = '1.0.0-beta.13-nightly-837';
 
 (function(window, document, ionic) {
 
@@ -2979,7 +2979,7 @@ ionic.DomUtil.ready(function() {
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
       ionic.requestAnimationFrame(function() {
-        if (ionic.tap.requiresNativeClick(e.target)) return;
+        if ((ionic.scroll && ionic.scroll.isScrolling) || ionic.tap.requiresNativeClick(e.target)) return;
         var ele = e.target;
         var eleToActivate;
 
@@ -2998,7 +2998,7 @@ ionic.DomUtil.ready(function() {
             break;
           }
           // no sense climbing past these
-          if (ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT') {
+          if (ele.tagName == 'ION-CONTENT' || ele.classList.contains('pane') || ele.tagName == 'BODY') {
             break;
           }
           ele = ele.parentElement;
@@ -3008,14 +3008,10 @@ ionic.DomUtil.ready(function() {
           // queue that this element should be set to active
           queueElements[keyId] = eleToActivate;
 
-          // in XX milliseconds, set the queued elements to active
-          if (e.type === 'touchstart') {
-            self._activateTimeout = setTimeout(activateElements, 80);
-          } else {
-            ionic.requestAnimationFrame(activateElements);
-          }
+          // on the next frame, set the queued elements to active
+          ionic.requestAnimationFrame(activateElements);
 
-          keyId = (keyId > 19 ? 0 : keyId + 1);
+          keyId = (keyId > 29 ? 0 : keyId + 1);
         }
 
       });
@@ -3023,7 +3019,6 @@ ionic.DomUtil.ready(function() {
 
     end: function() {
       // clear out any active/queued elements after XX milliseconds
-      clearTimeout(self._activateTimeout);
       setTimeout(clear, 200);
     }
 
@@ -3050,7 +3045,7 @@ ionic.DomUtil.ready(function() {
 
   function deactivateElements() {
     if (ionic.transition && ionic.transition.isActive) {
-      setTimeout(deactivateElements, 500);
+      setTimeout(deactivateElements, 400);
       return;
     }
 

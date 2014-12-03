@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-836
+ * Ionic, v1.0.0-beta.13-nightly-837
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-836';
+window.ionic.version = '1.0.0-beta.13-nightly-837';
 
 (function(window, document, ionic) {
 
@@ -2986,7 +2986,7 @@ ionic.DomUtil.ready(function() {
       // when an element is touched/clicked, it climbs up a few
       // parents to see if it is an .item or .button element
       ionic.requestAnimationFrame(function() {
-        if (ionic.tap.requiresNativeClick(e.target)) return;
+        if ((ionic.scroll && ionic.scroll.isScrolling) || ionic.tap.requiresNativeClick(e.target)) return;
         var ele = e.target;
         var eleToActivate;
 
@@ -3005,7 +3005,7 @@ ionic.DomUtil.ready(function() {
             break;
           }
           // no sense climbing past these
-          if (ele.classList.contains('pane') || ele.tagName == 'BODY' || ele.tagName == 'ION-CONTENT') {
+          if (ele.tagName == 'ION-CONTENT' || ele.classList.contains('pane') || ele.tagName == 'BODY') {
             break;
           }
           ele = ele.parentElement;
@@ -3015,14 +3015,10 @@ ionic.DomUtil.ready(function() {
           // queue that this element should be set to active
           queueElements[keyId] = eleToActivate;
 
-          // in XX milliseconds, set the queued elements to active
-          if (e.type === 'touchstart') {
-            self._activateTimeout = setTimeout(activateElements, 80);
-          } else {
-            ionic.requestAnimationFrame(activateElements);
-          }
+          // on the next frame, set the queued elements to active
+          ionic.requestAnimationFrame(activateElements);
 
-          keyId = (keyId > 19 ? 0 : keyId + 1);
+          keyId = (keyId > 29 ? 0 : keyId + 1);
         }
 
       });
@@ -3030,7 +3026,6 @@ ionic.DomUtil.ready(function() {
 
     end: function() {
       // clear out any active/queued elements after XX milliseconds
-      clearTimeout(self._activateTimeout);
       setTimeout(clear, 200);
     }
 
@@ -3057,7 +3052,7 @@ ionic.DomUtil.ready(function() {
 
   function deactivateElements() {
     if (ionic.transition && ionic.transition.isActive) {
-      setTimeout(deactivateElements, 500);
+      setTimeout(deactivateElements, 400);
       return;
     }
 
@@ -39067,7 +39062,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-836
+ * Ionic, v1.0.0-beta.13-nightly-837
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39700,12 +39695,12 @@ function($document, $ionicBody, $timeout) {
   cb.className = 'click-block';
 
   return {
-    show: function() {
+    show: function(autoExpire) {
       // cancel the fallback timer
-      $timeout.cancel( fallbackTimer );
+      $timeout.cancel(fallbackTimer);
 
-      ionic.requestAnimationFrame(function(){
-        if(isAttached) {
+      ionic.requestAnimationFrame(function() {
+        if (isAttached) {
           cb.classList.remove(CSS_HIDE);
         } else {
           $ionicBody.append(cb);
@@ -39713,18 +39708,13 @@ function($document, $ionicBody, $timeout) {
         }
       });
 
-      fallbackTimer = $timeout(function(){
+      fallbackTimer = $timeout(function() {
         cb.classList.add(CSS_HIDE);
-      }, 750);
+      }, autoExpire || 300);
     },
     hide: function() {
-      // cancel the fallback timer
-      $timeout.cancel( fallbackTimer );
-
-      // should be a minimum time it should hide
-      ionic.requestAnimationFrame(function(){
-        cb.classList.add(CSS_HIDE);
-      });
+      $timeout.cancel(fallbackTimer);
+      cb.classList.add(CSS_HIDE);
     }
   };
 }]);
@@ -44081,9 +44071,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
         },
 
         render: function(registerData, callback) {
-          var enteringData = getTransitionData(viewLocals, enteringEle, registerData.direction, enteringView);
-          var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
-
           // disconnect the leaving scope before reconnecting or creating a scope for the entering view
           leavingEle && ionic.Utils.disconnectScope(leavingEle.scope());
 
@@ -44091,15 +44078,14 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             // it was already found in the DOM, just reconnect the scope
             ionic.Utils.reconnectScope(enteringEle.scope());
 
-            // set the styles of where this element will end up going so
-            // the DOM has some time to render its correct starting point
-            transitionFn(enteringEle, null, enteringData.direction, false).run(0);
-
           } else {
             // the entering element is not already in the DOM
             // set that the entering element should be "staged" and its
             // styles of where this element will go before it hits the DOM
             navViewAttr(enteringEle, VIEW_STATUS_STAGED);
+
+            var enteringData = getTransitionData(viewLocals, enteringEle, registerData.direction, enteringView);
+            var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
             transitionFn(enteringEle, null, enteringData.direction, true).run(0);
 
             historyCursorAttr(enteringEle, registerData.isHistoryRoot ? HISTORY_ROOT : HISTORY_AFTER_ROOT);
@@ -44121,7 +44107,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           // update that this view was just accessed
           enteringEle.data(DATA_VIEW_ACCESSED, Date.now());
 
-          $timeout(callback, 16);
+          callback && callback();
         },
 
         transition: function(direction, enableBack) {
