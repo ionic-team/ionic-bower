@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-839
+ * Ionic, v1.0.0-beta.13-nightly-840
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-839';
+window.ionic.version = '1.0.0-beta.13-nightly-840';
 
 (function(window, document, ionic) {
 
@@ -39062,7 +39062,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-839
+ * Ionic, v1.0.0-beta.13-nightly-840
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41153,7 +41153,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * var myApp = angular.module('reallyCoolApp', ['ionic']);
  *
  * myApp.config(function($ionicConfigProvider) {
- *   $ionicConfigProvider.templates.maxCache(20);
+ *   $ionicConfigProvider.views.maxCache(20);
  *
  *   // note that you can also chain configs
  *   $ionicConfigProvider.backButton.text('Go Back').icon('ion-chevron-left');
