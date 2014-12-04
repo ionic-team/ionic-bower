@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-845
+ * Ionic, v1.0.0-beta.13-nightly-846
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6809,15 +6809,15 @@ a.button {
     display: none; }
 
 [nav-view-transition="android"] [nav-view="entering"], [nav-view-transition="android"] [nav-view="leaving"] {
-  -webkit-transition-duration: 250ms;
-  transition-duration: 250ms;
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   -webkit-transition-property: opacity, -webkit-transform;
   transition-property: opacity, transform; }
 [nav-view-transition="android"] [nav-view="leaving"] {
-  -webkit-transition-duration: 160ms;
-  transition-duration: 160ms;
+  -webkit-transition-duration: 200ms;
+  transition-duration: 200ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
 [nav-view-transition="android"] [nav-view="active"], [nav-view-transition="android"][nav-view-direction="forward"] [nav-view="entering"], [nav-view-transition="android"][nav-view-direction="back"] [nav-view="leaving"] {
@@ -6832,15 +6832,15 @@ a.button {
   position: static; }
 
 [nav-bar-transition="android"] [nav-bar="entering"], [nav-bar-transition="android"] [nav-bar="leaving"] {
-  -webkit-transition-duration: 250ms;
-  transition-duration: 250ms;
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
   -webkit-transition-property: opacity, -webkit-transform;
   transition-property: opacity, transform; }
 [nav-bar-transition="android"] [nav-bar="leaving"] {
-  -webkit-transition-duration: 160ms;
-  transition-duration: 160ms;
+  -webkit-transition-duration: 200ms;
+  transition-duration: 200ms;
   -webkit-transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
 [nav-bar-transition="android"] [nav-bar="cached"] {

@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-845
+ * Ionic, v1.0.0-beta.13-nightly-846
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-845';
+window.ionic.version = '1.0.0-beta.13-nightly-846';
 
 (function(window, document, ionic) {
 
@@ -39062,7 +39062,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-845
+ * Ionic, v1.0.0-beta.13-nightly-846
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -39688,36 +39688,37 @@ IonicModule
   '$ionicBody',
   '$timeout',
 function($document, $ionicBody, $timeout) {
-  var fallbackTimer, isAttached;
   var CSS_HIDE = 'click-block-hide';
-  var pendingShow;
+  var cbEle, fallbackTimer, pendingShow;
 
-  var cb = $document[0].createElement('div');
-  cb.className = 'click-block';
+  function addClickBlock() {
+    if (pendingShow) {
+      if (cbEle) {
+        cbEle.classList.remove(CSS_HIDE);
+      } else {
+        cbEle = $document[0].createElement('div');
+        cbEle.className = 'click-block';
+        $ionicBody.append(cbEle);
+      }
+      pendingShow = false;
+    }
+  }
+
+  function removeClickBlock() {
+    cbEle && cbEle.classList.add(CSS_HIDE);
+  }
 
   return {
     show: function(autoExpire) {
       pendingShow = true;
-      // cancel the fallback timer
       $timeout.cancel(fallbackTimer);
-
-      ionic.requestAnimationFrame(function() {
-        if (pendingShow) {
-          if (isAttached) {
-            cb.classList.remove(CSS_HIDE);
-          } else {
-            $ionicBody.append(cb);
-            isAttached = true;
-          }
-        }
-      });
-
       fallbackTimer = $timeout(this.hide, autoExpire || 310);
+      ionic.requestAnimationFrame(addClickBlock);
     },
     hide: function() {
       pendingShow = false;
       $timeout.cancel(fallbackTimer);
-      cb.classList.add(CSS_HIDE);
+      ionic.requestAnimationFrame(removeClickBlock);
     }
   };
 }]);
@@ -44029,7 +44030,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
         init: function(registerData, callback) {
           ionicViewSwitcher.isTransitioning(true);
 
-          $ionicClickBlock.show();
           switcher.loadViewElements(registerData);
 
           switcher.render(registerData, function() {
@@ -44145,6 +44145,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             // 2) attach transitionend events (and fallback timer)
             enteringEle.on(TRANSITIONEND_EVENT, transitionComplete);
             enteringEle.data(DATA_FALLBACK_TIMER, $timeout(transitionComplete, 1000));
+            $ionicClickBlock.show();
           }
 
           // 3) stage entering element, opacity 0, no transition duration
