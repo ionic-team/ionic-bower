@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-847
+ * Ionic, v1.0.0-beta.13-nightly-849
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-847';
+window.ionic.version = '1.0.0-beta.13-nightly-849';
 
 (function(window, document, ionic) {
 
@@ -1897,6 +1897,13 @@ window.ionic.version = '1.0.0-beta.13-nightly-847';
 
 (function(window, document, ionic) {
 
+  function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
   var IOS = 'ios';
   var ANDROID = 'android';
   var WINDOWS_PHONE = 'windowsphone';
@@ -2105,6 +2112,8 @@ window.ionic.version = '1.0.0-beta.13-nightly-847';
     setPlatform: function(n) {
       if (typeof n != 'undefined' && n !== null && n.length) {
         platformName = n.toLowerCase();
+      } else if(getParameterByName('ionicplatform')) {
+        platformName = getParameterByName('ionicplatform');
       } else if (this.ua.indexOf('Android') > 0) {
         platformName = ANDROID;
       } else if (this.ua.indexOf('iPhone') > -1 || this.ua.indexOf('iPad') > -1 || this.ua.indexOf('iPod') > -1) {
@@ -39062,7 +39071,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-847
+ * Ionic, v1.0.0-beta.13-nightly-849
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
