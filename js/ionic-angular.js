@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-844
+ * Ionic, v1.0.0-beta.13-nightly-845
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1783,9 +1783,12 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * @description Returns the view that was before the current view in the history stack.
      * If the user navigated from View A to View B, then View A would be the back view, and
      * View B would be the current view.
-     * @returns {string} Returns the back view.
+     * @returns {object} Returns the back view.
      */
-    backView: function() {
+    backView: function(view) {
+      if (arguments.length) {
+        viewHistory.backView = view;
+      }
       return viewHistory.backView;
     },
 
@@ -1808,9 +1811,12 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * A forward view would exist if the user navigated from View A to View B, then
      * navigated back to View A. At this point then View B would be the forward view, and View
      * A would be the current view.
-     * @returns {string} Returns the back view.
+     * @returns {object} Returns the forward view.
      */
-    forwardView: function() {
+    forwardView: function(view) {
+      if (arguments.length) {
+        viewHistory.forwardView = view;
+      }
       return viewHistory.forwardView;
     },
 
@@ -7075,7 +7081,12 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       startX <= self.edgeThreshold ||
       startX >= self.content.element.offsetWidth - self.edgeThreshold;
 
-    var menuEnabled = self.enableMenuWithBackViews() ? true : !$ionicHistory.backView();
+    var backView = $ionicHistory.backView();
+    var menuEnabled = enableMenuWithBackViews ? true : !backView;
+    if (!menuEnabled) {
+      var currentView = $ionicHistory.currentView() || {};
+      return backView.historyId !== currentView.historyId;
+    }
 
     return ($scope.dragContent || self.isOpen()) &&
       dragIsWithinBounds &&
