@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-851
+ * Ionic, v1.0.0-beta.13-nightly-852
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-851';
+window.ionic.version = '1.0.0-beta.13-nightly-852';
 
 (function(window, document, ionic) {
 
@@ -39071,7 +39071,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-851
+ * Ionic, v1.0.0-beta.13-nightly-852
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41928,7 +41928,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
  *
  * - This example assumes your modal is in your main index file or another template file. If it is in its own
  * template file, remove the script tags and call it by file name.
- * 
+ *
  * @usage
  * ```html
  * <script id="my-modal.html" type="text/ng-template">
@@ -42029,7 +42029,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
     show: function(target) {
       var self = this;
 
-      if(self.scope.$$destroyed) {
+      if (self.scope.$$destroyed) {
         $log.error('Cannot call ' +  self.viewType + '.show() after remove(). Please create a new ' +  self.viewType + ' instance.');
         return;
       }
@@ -42037,19 +42037,19 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       var modalEl = jqLite(self.modalEl);
 
       self.el.classList.remove('hide');
-      $timeout(function(){
+      $timeout(function() {
         $ionicBody.addClass(self.viewType + '-open');
       }, 400);
 
-      if(!self.el.parentElement) {
+      if (!self.el.parentElement) {
         modalEl.addClass(self.animation);
         $ionicBody.append(self.el);
       }
 
-      if(target && self.positionView) {
+      if (target && self.positionView) {
         self.positionView(target, modalEl);
         // set up a listener for in case the window size changes
-        ionic.on('resize',function(){
+        ionic.on('resize',function() {
           ionic.off('resize',null,window);
           self.positionView(target,modalEl);
         },window);
@@ -42068,11 +42068,12 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
 
       ionic.views.Modal.prototype.show.call(self);
 
-      $timeout(function(){
+      $timeout(function() {
         modalEl.addClass('ng-enter-active');
         ionic.trigger('resize');
         self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.shown', self);
         self.el.classList.add('active');
+        self.scope.$broadcast('$ionicHeader.align');
       }, 20);
 
       return $timeout(function() {
@@ -42098,7 +42099,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       self.el.classList.remove('active');
       modalEl.addClass('ng-leave');
 
-      $timeout(function(){
+      $timeout(function() {
         modalEl.addClass('ng-leave-active')
                .removeClass('ng-enter ng-enter-active active');
       }, 20);
@@ -42111,11 +42112,11 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       ionic.views.Modal.prototype.hide.call(self);
 
       // clean up event listeners
-      if(self.positionView) {
+      if (self.positionView) {
         ionic.off('resize',null,window);
       }
 
-      return $timeout(function(){
+      return $timeout(function() {
         $ionicBody.removeClass(self.viewType + '-open');
         self.el.classList.add('hide');
       }, self.hideDelay || 320);
@@ -42174,7 +42175,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
 
     // If this wasn't a defined scope, we can assign the viewType to the isolated scope
     // we created
-    if(!options.scope) {
+    if (!options.scope) {
       scope[ options.viewType ] = modal;
     }
 
@@ -47931,6 +47932,9 @@ function headerFooterBarDirective(isHeader) {
               delete $scope.$hasSubheader;
             });
             ctrl.align();
+            $scope.$on('$ionicHeader.align', function() {
+              ctrl.align();
+            });
 
           } else {
             $scope.$watch(function() { return $element[0].className; }, function(value) {
