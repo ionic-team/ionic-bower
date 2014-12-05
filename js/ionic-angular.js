@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-854
+ * Ionic, v1.0.0-beta.13-nightly-856
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2683,11 +2683,13 @@ IonicModule
   '$log',
   '$compile',
   '$ionicPlatform',
-function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
+  '$rootScope',
+function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform, $rootScope) {
 
   var loaderInstance;
   //default values
   var deregisterBackAction = angular.noop;
+  var deregisterStateListener = angular.noop;
   var loadingShowDelay = $q.when();
 
   return {
@@ -2701,6 +2703,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
      *  - `{string=}` `templateUrl` The url of an html template to load as the content of the indicator.
      *  - `{object=}` `scope` The scope to be a child of. Default: creates a child of $rootScope.
      *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop. By default it will be shown.
+     *  - `{boolean=}` `hideOnStateChange` Whether to hide the loading spinner when navigating
+     *    to a new state. Default false.
      *  - `{number=}` `delay` How many milliseconds to delay showing the indicator. By default there is no delay.
      *  - `{number=}` `duration` How many milliseconds to wait until automatically
      *  hiding the indicator. By default, the indicator will be shown until `.hide()` is called.
@@ -2732,10 +2736,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             $ionicTemplateLoader.load(options.templateUrl) :
             //options.content: deprecated
             $q.when(options.template || options.content || '');
-            
-        
-          self.scope = options.scope || self.scope;
 
+          self.scope = options.scope || self.scope;
 
           if (!this.isShown) {
             //options.showBackdrop: deprecated
@@ -2815,6 +2817,9 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     loadingShowDelay = $timeout(angular.noop, delay);
 
     loadingShowDelay.then(getLoader).then(function(loader) {
+      if (options.hideOnStateChange) {
+        deregisterStateListener = $rootScope.$on('$stateChangeSuccess', hideLoader);
+      }
       return loader.show(options);
     });
 
@@ -2832,6 +2837,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
   }
 
   function hideLoader() {
+    deregisterStateListener();
     $timeout.cancel(loadingShowDelay);
     getLoader().then(function(loader) {
       loader.hide();
