@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-852
+ * Ionic, v1.0.0-beta.13-nightly-853
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1966,7 +1966,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
         if (climbScope.$$disconnected) {
           return false;
         }
-        if (currentHistoryId && currentHistoryId == climbScope.$historyId) {
+        if (currentHistoryId && (currentHistoryId == climbScope.$historyId || currentHistoryId == climbScope.$activeHistoryId)) {
           return true;
         }
         climbScope = climbScope.$parent;
@@ -7586,18 +7586,19 @@ function($scope, $ionicHistory, $attrs, $location, $state) {
 IonicModule
 .controller('$ionicTabs', [
   '$scope',
-  '$ionicHistory',
   '$element',
-function($scope, $ionicHistory, $element) {
-  var _selectedTab = null;
+  '$ionicHistory',
+function($scope, $element, $ionicHistory) {
   var self = this;
+  var selectedTab = null;
+  var selectedTabIndex;
   self.tabs = [];
 
   self.selectedIndex = function() {
-    return self.tabs.indexOf(_selectedTab);
+    return self.tabs.indexOf(selectedTab);
   };
   self.selectedTab = function() {
-    return _selectedTab;
+    return selectedTab;
   };
 
   self.add = function(tab) {
@@ -7627,7 +7628,7 @@ function($scope, $ionicHistory, $element) {
 
   self.deselect = function(tab) {
     if (tab.$tabSelected) {
-      _selectedTab = null;
+      selectedTab = selectedTabIndex = null;
       tab.$tabSelected = false;
       (tab.onDeselect || angular.noop)();
       tab.$broadcast && tab.$broadcast('$ionicHistory.deselect');
@@ -7648,16 +7649,23 @@ function($scope, $ionicHistory, $element) {
       shouldEmitEvent = !!(tab.navViewName || tab.uiSref);
     }
 
-    if (_selectedTab && _selectedTab.$historyId == tab.$historyId) {
+    if (selectedTab && selectedTab.$historyId == tab.$historyId) {
       if (shouldEmitEvent) {
         $ionicHistory.goToHistoryRoot(tab.$historyId);
       }
-    } else {
+
+    } else if (selectedTabIndex !== tabIndex) {
       forEach(self.tabs, function(tab) {
         self.deselect(tab);
       });
 
-      _selectedTab = tab;
+      selectedTab = tab;
+      selectedTabIndex = tabIndex;
+
+      if (self.$scope && self.$scope.$parent) {
+        self.$scope.$parent.$activeHistoryId = tab.$historyId;
+      }
+
       //Use a funny name like $tabSelected so the developer doesn't overwrite the var in a child scope
       tab.$tabSelected = true;
       (tab.onSelect || angular.noop)();
