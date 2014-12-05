@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-853
+ * Ionic, v1.0.0-beta.13-nightly-854
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3579,6 +3579,43 @@ a.subdued {
     .tabs-striped.tabs-color-dark .tab-item.tab-item-active .badge, .tabs-striped.tabs-color-dark .tab-item.active .badge, .tabs-striped.tabs-color-dark .tab-item.activated .badge {
       top: 2px;
       opacity: 1; }
+
+ion-tabs.tabs-color-active-light .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-light .tab-item.tab-item-active, ion-tabs.tabs-color-active-light .tab-item.active, ion-tabs.tabs-color-active-light .tab-item.activated {
+    color: #fff; }
+ion-tabs.tabs-color-active-stable .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-stable .tab-item.tab-item-active, ion-tabs.tabs-color-active-stable .tab-item.active, ion-tabs.tabs-color-active-stable .tab-item.activated {
+    color: #f8f8f8; }
+ion-tabs.tabs-color-active-positive .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-positive .tab-item.tab-item-active, ion-tabs.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-color-active-positive .tab-item.activated {
+    color: #387ef5; }
+ion-tabs.tabs-color-active-calm .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-calm .tab-item.tab-item-active, ion-tabs.tabs-color-active-calm .tab-item.active, ion-tabs.tabs-color-active-calm .tab-item.activated {
+    color: #11c1f3; }
+ion-tabs.tabs-color-active-assertive .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-assertive .tab-item.tab-item-active, ion-tabs.tabs-color-active-assertive .tab-item.active, ion-tabs.tabs-color-active-assertive .tab-item.activated {
+    color: #ef473a; }
+ion-tabs.tabs-color-active-balanced .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-balanced .tab-item.tab-item-active, ion-tabs.tabs-color-active-balanced .tab-item.active, ion-tabs.tabs-color-active-balanced .tab-item.activated {
+    color: #33cd5f; }
+ion-tabs.tabs-color-active-energized .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-energized .tab-item.tab-item-active, ion-tabs.tabs-color-active-energized .tab-item.active, ion-tabs.tabs-color-active-energized .tab-item.activated {
+    color: #ffc900; }
+ion-tabs.tabs-color-active-royal .tab-item {
+  color: #444; }
+  ion-tabs.tabs-color-active-royal .tab-item.tab-item-active, ion-tabs.tabs-color-active-royal .tab-item.active, ion-tabs.tabs-color-active-royal .tab-item.activated {
+    color: #886aea; }
+ion-tabs.tabs-color-active-dark .tab-item {
+  color: #fff; }
+  ion-tabs.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs.tabs-color-active-dark .tab-item.active, ion-tabs.tabs-color-active-dark .tab-item.activated {
+    color: #444; }
 
 .tabs-top.tabs-striped {
   padding-bottom: 0; }
