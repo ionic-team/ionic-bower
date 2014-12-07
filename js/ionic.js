@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-860
+ * Ionic, v1.0.0-beta.13-nightly-861
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-860';
+window.ionic.version = '1.0.0-beta.13-nightly-861';
 
 (function(window, document, ionic) {
 
@@ -4437,7 +4437,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       if ( !self.isScrolledIntoView ) {
         // shrink scrollview so we can actually scroll if the input is hidden
         // if it isn't shrink so we can scroll to inputs under the keyboard
-        if ((ionic.Platform.isIOS() || ionic.Platform.isFullScreen) && !container.parentNode.classList.contains('modal')){
+        if ((ionic.Platform.isIOS() || ionic.Platform.isFullScreen)){
 
           // if there are things below the scroll view account for them and
           // subtract them from the keyboard height when resizing

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-860
+ * Ionic, v1.0.0-beta.13-nightly-861
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1993,7 +1993,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
 function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory) {
 
   // always reset the keyboard state when change stage
-  $rootScope.$on('$stateChangeStart', function() {
+  $rootScope.$on('$ionicView.beforeEnter', function() {
     ionic.keyboard && ionic.keyboard.hide && ionic.keyboard.hide();
   });
 
