@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-861
+ * Ionic, v1.0.0-beta.13-nightly-862
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-861';
+window.ionic.version = '1.0.0-beta.13-nightly-862';
 
 (function(window, document, ionic) {
 
@@ -39071,7 +39071,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-861
+ * Ionic, v1.0.0-beta.13-nightly-862
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42510,11 +42510,22 @@ IonicModule
  * ```js
  * angular.module('testApp', ['ionic'])
  * .controller('MyController', function($scope, $ionicPopover) {
+ * 
+ *   // .fromTemplate() method
+ *   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
+ * 
+ *   $scope.popover = $ionicPopover.fromTemplate(template, {
+ *     scope: $scope,
+ *   });
+ * 
+ *   // .fromTemplateUrl() method
  *   $ionicPopover.fromTemplateUrl('my-popover.html', {
  *     scope: $scope,
  *   }).then(function(popover) {
  *     $scope.popover = popover;
  *   });
+ * 
+ * 
  *   $scope.openPopover = function($event) {
  *     $scope.popover.show($event);
  *   };
