@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-859
+ * Ionic, v1.0.0-beta.13-nightly-860
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-859';
+window.ionic.version = '1.0.0-beta.13-nightly-860';
 
 (function(window, document, ionic) {
 
@@ -2128,7 +2128,7 @@ window.ionic.version = '1.0.0-beta.13-nightly-859';
     /**
      * @ngdoc method
      * @name ionic.Platform#version
-     * @returns {string} The version of the current device platform.
+     * @returns {number} The version of the current device platform.
      */
     version: function() {
       // singleton to get the platform version
@@ -39071,7 +39071,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-859
+ * Ionic, v1.0.0-beta.13-nightly-860
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
