@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-866
+ * Ionic, v1.0.0-beta.13-nightly-867
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7527,7 +7527,7 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
     function setDisplay(slide, display) {
       if (!slide) return;
       var slideScope = jqLite(slide).data('$ionSlideScope');
-      if (slideScope) {
+      if (slideScope && !ionic.Utils.isScopeDisconnected(scope)) {
         ionic.Utils.reconnectScope(slideScope);
         // Digest the slide so it updates before being shown
         if (!$rootScope.$$phase) slideScope.$digest();
@@ -7538,6 +7538,10 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
     // Save the now displayed slides so we can check next time
     currentDisplayed = newDisplayed;
   }
+
+  scope.$on('$ionic.reconnectScope', function() {
+    setDisplayedSlides(self.previous(), self.selected(), self.next());
+  });
 
   function getDelta(fromIndex, toIndex) {
     var difference = toIndex - fromIndex;
