@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-869
+ * Ionic, v1.0.0-beta.13-nightly-870
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2732,8 +2732,7 @@ a.subdued {
   background-color: white;
   /* border-width: 1px will actually create 2 device pixels on retina */
   /* this nifty trick sets an actual 1px border on hi-res displays */
-  background-size: 0;
-  pointer-events: auto; }
+  background-size: 0; }
   @media (min--moz-device-pixel-ratio: 1.5), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
     .bar {
       border: none;
@@ -3137,7 +3136,6 @@ a.subdued {
   top: 0;
   right: 0;
   left: 0;
-  pointer-events: none;
   z-index: 9; }
 
 .bar .back-button.hide, .bar .buttons .hide {
