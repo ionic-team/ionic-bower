@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-863
+ * Ionic, v1.0.0-beta.13-nightly-864
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1965,13 +1965,37 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
 
       var climbScope = scope;
       var currentHistoryId = this.currentHistoryId();
+      var foundHistoryId;
+
       while (climbScope) {
         if (climbScope.$$disconnected) {
           return false;
         }
-        if (currentHistoryId && (currentHistoryId == climbScope.$historyId || currentHistoryId == climbScope.$activeHistoryId)) {
-          return true;
+
+        if (!foundHistoryId && climbScope.hasOwnProperty('$historyId')) {
+          foundHistoryId = true;
         }
+
+        if (currentHistoryId) {
+          if (climbScope.hasOwnProperty('$historyId') && currentHistoryId == climbScope.$historyId) {
+            return true;
+          }
+          if (climbScope.hasOwnProperty('$activeHistoryId')) {
+            if (currentHistoryId == climbScope.$activeHistoryId) {
+              if (climbScope.hasOwnProperty('$historyId')) {
+                return true;
+              }
+              if (!foundHistoryId) {
+                return true;
+              }
+            }
+          }
+        }
+
+        if (foundHistoryId && climbScope.hasOwnProperty('$activeHistoryId')) {
+          foundHistoryId = false;
+        }
+
         climbScope = climbScope.$parent;
       }
 
@@ -4948,6 +4972,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
     view = view || {};
     return {
       viewId: view.viewId,
+      historyId: view.historyId,
       stateId: view.stateId,
       stateName: view.stateName,
       stateParams: view.stateParams
@@ -11130,6 +11155,12 @@ IonicModule
           if (!$scope.$exposeAside) $scope.$exposeAside = {};
           $scope.$exposeAside.active = isAsideExposed;
           $ionicBody.enableClass(isAsideExposed, 'aside-open');
+        });
+
+        $scope.$on('$ionicView.beforeEnter', function(ev, d){
+          if (d.historyId) {
+            $scope.$activeHistoryId = d.historyId;
+          }
         });
 
         $scope.$on('$destroy', function() {
