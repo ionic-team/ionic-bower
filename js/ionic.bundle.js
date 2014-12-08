@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-865
+ * Ionic, v1.0.0-beta.13-nightly-866
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-865';
+window.ionic.version = '1.0.0-beta.13-nightly-866';
 
 (function(window, document, ionic) {
 
@@ -39080,7 +39080,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-865
+ * Ionic, v1.0.0-beta.13-nightly-866
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -40383,16 +40383,17 @@ IonicModule
  * @name $ionicHistory
  * @module ionic
  * @description
- * $ionicHistory is what keeps track of an app's views as the user navigates. Like browser,
- * an Ionic app is able to know what the previous view was, the current view, and what the
- * forward view was (if there was one). However, a typical web browser only keeps track of one
+ * $ionicHistory keeps track of views as the user navigates through an app. Similar to the way a
+ * browser behaves, an Ionic app is able to keep track of the previous view, the current view, and
+ * the forward view (if there is one).  However, a typical web browser only keeps track of one
  * history stack in a linear fashion.
  *
- * Ionic's `$ionicHistory` is able to keep track of multiple histories, and persist where the
- * user is as they navigate between different views, and different histories. For example, an
- * app with tabs has it's own history stack for each tab. This meaning you can navigate a few
- * views in Tab A, then navigate a few in Tab B, and when you return to Tab A, the existing
- * stack is maintained.
+ * Unlike a traditional browser environment, apps and webapps have parallel independent histories,
+ * such as with tabs. Should a user navigate few pages deep on one tab, and then switch to a new
+ * tab and back, the back button relates not to the previous tab, but to the previous pages
+ * visited within _that_ tab.
+ *
+ * `$ionicHistory` facilitates this parallel history architecture.
  */
 
 IonicModule
@@ -40995,10 +40996,10 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * @name $ionicHistory#nextViewOptions
      * @description Sets options for the next view. This method can be useful to override
      * certain view/transition defaults right before a view transition happens. For example,
-     * the {@link ionic.directive:menuClose} directive uses this methond internally to ensure
-     * an animated view transition does not happen when a menu is closed, and also sets that
-     * the next view should become this root of its history stack. After the next view has
-     * entered then these options are set back to null.
+     * the {@link ionic.directive:menuClose} directive uses this method internally to ensure
+     * an animated view transition does not happen when a side menu is open, and also sets
+     * the next view as the root of its history stack. After the transition these options
+     * are set back to null.
      *
      * Available options:
      *
@@ -41170,23 +41171,21 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * @name $ionicConfigProvider
  * @module ionic
  * @description
- * Ionic automatically takes platform configurations into account to adjust things like
- * what transition style to use, and if tab icons should show on the top or bottom.
- * For example, iOS will move forward by transitioning the entering view from right to
- * center, and the leaving view from center to left. However, Android will transition
- * with the entering view going from bottom to center, covering the previous view which
- * remains stationary. Platform transitions are automatically applied by default, but
- * config variables. It should be noted that when a platform is not iOS or Android, then
- * it'll default to iOS. So if you are developing on a desktop browser it'd going to
- * take on iOS default configs.
+ * Ionic automatically takes platform configurations into account to adjust things like what
+ * transition style to use and whether tab icons should show on the top or bottom. For example,
+ * iOS will move forward by transitioning the entering view from right to center and the leaving
+ * view from center to left. However, Android will transition with the entering view going from
+ * bottom to center, covering the previous view, which remains stationary. It should be noted
+ * that when a platform is not iOS or Android, then it'll default to iOS. So if you are
+ * developing on a desktop browser, it's going to take on iOS default configs.
  *
- * These configs can be changed using the `$ionicConfigProvider` during the
- * configuration phase of your app. Additionally, `$ionicConfig` can also set and get
- * config values during the run phase and within the app itself.
+ * These configs can be changed using the `$ionicConfigProvider` during the configuration phase
+ * of your app. Additionally, `$ionicConfig` can also set and get config values during the run
+ * phase and within the app itself.
  *
  * By default, all base config variables are set to `'platform'`, which means it'll take on the
- * default config of the platform it's running on. Config variables can be set
- * at this level so all platforms follow the same setting, rather than its platform config.
+ * default config of the platform on which it's running. Config variables can be set at this
+ * level so all platforms follow the same setting, rather than its platform config.
  * The following code would set the same config variable for all platforms:
  *
  * ```js
@@ -41233,13 +41232,13 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
 /**
  * @ngdoc method
  * @name $ionicConfigProvider#views.maxCache
- * @description Maximum number of view elements to cache in the DOM. When the max number is
- * exceeded, the view with the longest time period since it was accessed is removed. Views
- * which stay in the DOM essentially caches the view's scope, current state and scroll position.
- * However, the scope is disconnected from the cycle when it is cached, and reconnected when it enters again.
- * When the maximum cached is `0`, then after each view transition, the leaving view's element will
- * be removed from the DOM, and the next time the same view is shown it will have to
- * re-compile, attach to the DOM, and link the element again.
+ * @description  Maximum number of view elements to cache in the DOM. When the max number is
+ * exceeded, the view with the longest time period since it was accessed is removed. Views that
+ * stay in the DOM cache the view's scope, current state, and scroll position. The scope is
+ * disconnected from the `$watch` cycle when it is cached and reconnected when it enters again.
+ * When the maximum cache is `0`, the leaving view's element will be removed from the DOM after
+ * each view transition, and the next time the same view is shown, it will have to re-compile,
+ * attach to the DOM, and link the element again. This disables caching, in effect.
  * @param {number} maxNumber Maximum number of views to retain. Default `10`.
  * @returns {number} How many views Ionic will hold onto until the a view is removed.
  */
@@ -41247,11 +41246,11 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
 /**
  * @ngdoc method
  * @name $ionicConfigProvider#views.forwardCache
- * @description When navigating between views, by default, views that were recently visited
- * are cached, and the same data and DOM elements are referenced when navigating back. However,
- * when navigating back in the history, the "forward" view is removed so its not cached. If
- * you navigate forward to the same view again it'll create a new DOM element, re-compiled and
- * link. Basically any forward views are reset each time. Set this config to `true` to have
+ * @description  By default, when navigating, views that were recently visited are cached, and
+ * the same instance data and DOM elements are referenced when navigating back. However, when
+ * navigating back in the history, the "forward" views are removed from the cache. If you
+ * navigate forward to the same view again, it'll create a new DOM element and controller
+ * instance. Basically, any forward views are reset each time. Set this config to `true` to have
  * forward views cached and not reset on each load.
  * @param {boolean} value
  * @returns {boolean}
@@ -48744,14 +48743,13 @@ function($timeout) {
  * @restrict AC
  *
  * @description
- * Attribute directive which closes a currently opened side menu. By default,
- * navigation transitions will not animate between views when the menu is open and
- * this directive is used to close the menu. Additionally, this directive
- * will reset the history and make the entering view the root of its history
- * stack. Having the entering view become the root of the history stack is done
- * to replicate the user experience seen on most side menu implementations, which is
- * to not show the back button at the root of the stack, and only show the
- * menu button. It's recommended to also use the `enable-menu-with-back-views="false"`
+ * `menu-close` is an attribute directive that closes a currently opened side menu.
+ * Note that by default, navigation transitions will not animate between views when
+ * the menu is open. Additionally, this directive will reset the entering view's
+ * history stack, making the new page the root of the history stack. This is done
+ * to replicate the user experience seen in most side menu implementations, which is
+ * to not show the back button at the root of the stack and show only the
+ * menu button. We recommend that you also use the `enable-menu-with-back-views="false"`
  * {@link ionic.directive:ionSideMenus} attribute when using the menuClose directive.
  *
  * @usage
@@ -48766,7 +48764,7 @@ IonicModule
 .directive('menuClose', ['$ionicHistory', function($ionicHistory) {
   return {
     restrict: 'AC',
-    link: function($scope, $element, $attr) {
+    link: function($scope, $element) {
       $element.bind('click', function() {
         var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
         if (sideMenuCtrl) {
@@ -48863,13 +48861,13 @@ IonicModule
  * @description
  * Creates a back button inside an {@link ionic.directive:ionNavBar}.
  *
- * Will show up when the user is able to go back in the current navigation stack. By default,
- * the inner HTML of the back button is automatically built using platform defaults (iOS back button
- * icon on iOS, and Android icon on Android).
+ * The back button will appear when the user is able to go back in the current navigation stack. By
+ * default, the markup of the back button is automatically built using platform-appropriate defaults
+ * (iOS back button icon on iOS and Android icon on Android).
  *
- * Additionally, it's click behavior is automatically wired up to `$ionicGoBack()`.By default the
- * app will navigation back one view when the back button is clicked.  If you wish for more
- * advanced behavior, see the examples below.
+ * Additionally, the button is automatically set to `$ionicGoBack()` on click/tap. By default, the
+ * app will navigate back one view when the back button is clicked.  More advanced behavior is also
+ * possible, as outlined below.
  *
  * @usage
  *
@@ -49081,26 +49079,26 @@ IonicModule
  *
  * @description
  * Use nav buttons to set the buttons on your {@link ionic.directive:ionNavBar}
- * from within an {@link ionic.directive:ionView}. This gives each individual
- * view the ability to specify which buttons should show in the nav bar, and
+ * from within an {@link ionic.directive:ionView}. This gives each
+ * view template the ability to specify which buttons should show in the nav bar,
  * overriding any default buttons already placed in the nav bar.
  *
- * Any buttons you declare will be placed onto the navbar's corresponding side. Primary
+ * Any buttons you declare will be positioned on the navbar's corresponding side. Primary
  * buttons generally map to the left side of the header, and secondary buttons are
- * generally on the right side. However, their exact locations are platform specific.
- * For example, in iOS the primary buttons are on the far left of the header, and
+ * generally on the right side. However, their exact locations are platform-specific.
+ * For example, in iOS, the primary buttons are on the far left of the header, and
  * secondary buttons are on the far right, with the header title centered between them.
- * For Android however, both groups of buttons are on the far right of the header,
+ * For Android, however, both groups of buttons are on the far right of the header,
  * with the header title aligned left.
  *
- * Recommendation is to always use `primary` and `secondary` so buttons correctly map
- * to the side familiar to users of a platform. However, in cases where buttons should
+ * We recommend always using `primary` and `secondary`, so the buttons correctly map
+ * to the side familiar to users of each platform. However, in cases where buttons should
  * always be on an exact side, both `left` and `right` sides are still available. For
- * example, a toggle button for a left side menu should be on the left side, in this case
- * we'd recommend uses `side="left"` so it's always on the left, no matter what platform.
+ * example, a toggle button for a left side menu should be on the left side; in this case,
+ * we'd recommend using `side="left"`, so it's always on the left, no matter the platform.
  *
- * Note that `ion-nav-buttons` must be an immediate descendant of the `ion-view` or
- * `ion-nav-bar` element (basically don't wrap it in another div).
+ * Note that `ion-nav-buttons` must be immediate descendants of the `ion-view` or
+ * `ion-nav-bar` element (basically, don't wrap it in another div).
  *
  * @usage
  * ```html
@@ -49172,8 +49170,8 @@ IonicModule
  * @restrict A
  *
  * @description
- * The direction which the nav view transition should animate. Available:
- * `forward`, `back`, `enter`, `exit`, `swap`.
+ * The direction which the nav view transition should animate. Available options
+ * are: `forward`, `back`, `enter`, `exit`, `swap`.
  *
  * @usage
  *
@@ -49202,9 +49200,10 @@ IonicModule
  * @parent ionNavView
  *
  * @description
- * Use the nav title directive to set custom HTML as the {@link ionic.directive:ionNavBar}
- * title, from within an {@link ionic.directive:ionView}. This gives each
- * view the ability to specify its own custom title, such as an image or any HTML,
+ *
+ * The nav title directive replaces an {@link ionic.directive:ionNavBar} title text with
+ * custom HTML from within an {@link ionic.directive:ionView} template. This gives each
+ * view the ability to specify its own custom title element, such as an image or any HTML,
  * rather than being text-only. Alternatively, text-only titles can be updated using the
  * `view-title` {@link ionic.directive:ionView} attribute.
  *
@@ -49274,7 +49273,7 @@ IonicModule
  *
  * @description
  * The transition type which the nav view transition should use when it animates.
- * Using `none` will disable an animation.
+ * Current, options are `ios`, `android`, and `none`. More options coming soon.
  *
  * @usage
  *
@@ -49367,23 +49366,23 @@ IonicModule
  * This is good to do because the template will be cached for very fast loading, instead of
  * having to fetch them from the network.
  *
- * ## Caching
+ ## Caching
  *
- * By default views are cached to improve performance. When a view is navigated away from,
- * its element is left in the DOM, and its scope is disconnected from the cycle. When navigating
- * to a view which is already cached, its scope is then reconnected, and the existing element which
- * was left in the DOM becomes the active view. This also allows for scroll position of previous
- * views to be maintained.
+ * By default, views are cached to improve performance. When a view is navigated away from, its
+ * element is left in the DOM, and its scope is disconnected from the `$watch` cycle. When
+ * navigating to a view that is already cached, its scope is then reconnected, and the existing
+ * element that was left in the DOM becomes the active view. This also allows for the scroll
+ * position of previous views to be maintained.
  *
- * Caching can be disabled and enabled in multiple ways. By default, Ionic will cache a maximum
- * of 10 views, and not only can this be configured, but apps can also explicitly state
- * which views should and should not be cached.
+ * Caching can be disabled and enabled in multiple ways. By default, Ionic will cache a maximum of
+ * 10 views, and not only can this be configured, but apps can also explicitly state which views
+ * should and should not be cached.
  *
- * Note that because we are caching these views, we aren’t destroying scopes. Instead, scopes are
- * being disconnected from the watch cycle. Because scopes are not being destroyed and recreated,
- * then controllers are not loading again on a subsequent viewing. If the app/controller needs to
- * know when a view has entered or has left, then view events emitted from the
- * {@link ionic.directive:ionView} scope, such as `$ionicView.enter`, may be useful.
+ * Note that because we are caching these views, *we aren’t destroying scopes*. Instead, scopes
+ * are being disconnected from the watch cycle. Because scopes are not being destroyed and
+ * recreated, controllers are not loading again on a subsequent viewing. If the app/controller
+ * needs to know when a view has entered or has left, then view events emitted from the
+ * {@link ionic.directive:ionView} scope, such as `$ionicView.enter`, may be useful
  *
  * #### Disable cache globally
  *
@@ -50157,20 +50156,19 @@ IonicModule
  * @restrict E
  *
  * @description
- * A container element for side menu(s) and the main content. Allows the left
- * and/or right side menu to be toggled by dragging the main content area side
- * to side.
+ * A container element for side menu(s) and the main content. Allows the left and/or right side menu
+ * to be toggled by dragging the main content area side to side.
  *
- * To automatically close an opened menu you can add the {@link ionic.directive:menuClose}
- * attribute directive. Including the `menu-close` attribute is usually added to
- * links and buttons within `ion-side-menu` content, so that when the element is
- * clicked then the opened side menu will automatically close.
+ * To automatically close an opened menu, you can add the {@link ionic.directive:menuClose} attribute
+ * directive. The `menu-close` attribute is usually added to links and buttons within
+ * `ion-side-menu-content`, so that when the element is clicked, the opened side menu will
+ * automatically close.
  *
- * By default, side menus are hidden underneath its side menu content, and can be opened by
- * either swiping the content left or right, or toggling a button to show the side menu. However,
- * by adding the {@link ionic.directive:exposeAsideWhen} attribute directive to an
- * {@link ionic.directive:ionSideMenu} element directive, a side menu can be given instructions
- * on "when" the menu should be exposed (always viewable).
+ * By default, side menus are hidden underneath their side menu content and can be opened by swiping
+ * the content left or right or by toggling a button to show the side menu. Additionally, by adding the
+ * {@link ionic.directive:exposeAsideWhen} attribute directive to an
+ * {@link ionic.directive:ionSideMenu} element directive, a side menu can be given instructions about
+ * "when" the menu should be exposed (always viewable).
  *
  * ![Side Menu](http://ionicframework.com.s3.amazonaws.com/docs/controllers/sidemenu.gif)
  *
@@ -50210,11 +50208,11 @@ IonicModule
  * }
  * ```
  *
- * @param {bool=} enable-menu-with-back-views Determines if the side menu is enabled when the
- * back button is showing. When set to `false`, any {@link ionic.directive:menuToggle} will
- * be hidden, and the user cannot swipe to open the menu. When going back to the root page of the
- * side menu (the page without a back button visible), then any menuToggle buttons will show
- * again, and menus are enabled again.
+ * @param {bool=} enable-menu-with-back-views Determines whether the side menu is enabled when the
+ * back button is showing. When set to `false`, any {@link ionic.directive:menuToggle} will be hidden,
+ * and the user cannot swipe to open the menu. When going back to the root page of the side menu (the
+ * page without a back button visible), then any menuToggle buttons will show again, and menus will be
+ * enabled again.
  * @param {string=} delegate-handle The handle used to identify this side menu
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
@@ -51044,17 +51042,18 @@ function($ionicGesture, $timeout) {
  * @parent ionNavView
  *
  * @description
- * A container for view content and any navigational and header bar information.
- * When a view enters and exists its parent {@link ionic.directive:ionNavView}, the view
- * also emits view information, such as its title, if the back button should show or not, if
- * the corresponding {@link ionic.directive:ionNavBar} should show or not, which transition the view
- * should use to animate, and what direction to animate.
+ * A container for view content and any navigational and header bar information. When a view
+ * enters and exists its parent {@link ionic.directive:ionNavView}, the view also emits view
+ * information, such as its title, whether the back button should show or not, whether the
+ * corresponding {@link ionic.directive:ionNavBar} should show or not, which transition the view
+ * should use to animate, and which direction to animate.
  *
- * Views are cached to improve performance. When a view is navigated away from, its
- * element is left in the DOM, and its scope is disconnected from the cycle. When navigating
- * to a view which is already cached, its scope is reconnected, and the existing element which
- * was left in the DOM becomes the active view. Config variables can be used to disable this
- * feature, or change the maximum number of views which can be cached.
+ * *Views are cached to improve performance.* When a view is navigated away from, its element is
+ * left in the DOM, and its scope is disconnected from the `$watch` cycle. When navigating to a
+ * view that is already cached, its scope is reconnected, and the existing element, which was
+ * left in the DOM, becomes active again. This can be disabled, or the maximum number of cached
+ * views changed in {@link ionic.directive:ionicConfig}, in the view's `$state` configuration, or
+ * as an attribute on the view itself (see below).
  *
  * @usage
  * Below is an example where our page will load with a {@link ionic.directive:ionNavBar} containing
@@ -51071,28 +51070,28 @@ function($ionicGesture, $timeout) {
  * </ion-nav-view>
  * ```
  *
- * ## View LifeCycle and Events
- *
- * Views can be cached which means controllers normally only load once, which may
- * affect your controller logic. To know when a view has entered or left, events
- * have been added that are emitted from the view's scope. These events also
- * contain data about the view, such as the title and if the back button should
- * show. Also contained is transitiondata, such as the transition type and
- * direction that will be or was used.
- *
- * * `$ionicView.loaded`: The view has loaded. This event only happens once per
- * view being created and added to the DOM. If a view leaves, but is cached,
- * then on a subsequent viewing this event will not fire again. The loaded event
- * is good place to put your setup code for the view, however, it is not the
- * recommended event to listen to when a view becomes active.
- * * `$ionicView.enter`: The view has fully entered and is now the active view.
- * This event will fire no matter if it was the first load or it was a cached view.
- * * `$ionicView.leave`: The view has finished leaving and is no longer the
- * active view. This event will fire no matter if it will be cached or destroyed.
- * * `$ionicView.beforeEnter`: The view is about to enter and become the active view.
- * * `$ionicView.beforeLeave`: The view is about to leave and no longer be the active view.
- * * `$ionicView.afterEnter`: The view has fully entered and is now the active view.
- * * `$ionicView.afterLeave`: The view has finished leaving and is no longer the active view.
+ ## View LifeCycle and Events
+
+ Views can be cached, which means *controllers normally only load once*, which may
+ affect your controller logic. To know when a view has entered or left, events
+ have been added that are emitted from the view's scope. These events also
+ contain data about the view, such as the title and whether the back button should
+ show. Also contained is transition data, such as the transition type and
+ direction that will be or was used.
+
+ * `$ionicView.loaded`: The view has loaded. This event only happens once per
+ view being created and added to the DOM. If a view leaves but is cached,
+ then this event will not fire again on a subsequent viewing. The loaded event
+ is good place to put your setup code for the view; however, it is not the
+ recommended event to listen to when a view becomes active.
+ * `$ionicView.enter`: The view has fully entered and is now the active view.
+ This event will fire, whether it was the first load or a cached view.
+ * `$ionicView.leave`: The view has finished leaving and is no longer the
+ active view. This event will fire, whether it is cached or destroyed.
+ * `$ionicView.beforeEnter`: The view is about to enter and become the active view.
+ * `$ionicView.beforeLeave`: The view is about to leave and no longer be the active view.
+ * `$ionicView.afterEnter`: The view has fully entered and is now the active view.
+ * `$ionicView.afterLeave`: The view has finished leaving and is no longer the active view.
  *
  * ## Caching
  *
