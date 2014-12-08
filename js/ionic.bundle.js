@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-864
+ * Ionic, v1.0.0-beta.13-nightly-865
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-864';
+window.ionic.version = '1.0.0-beta.13-nightly-865';
 
 (function(window, document, ionic) {
 
@@ -3294,6 +3294,15 @@ ionic.DomUtil.ready(function() {
       } else {
         parent.$$childHead = parent.$$childTail = scope;
       }
+    },
+
+    isScopeDisconnected: function(scope) {
+      var climbScope = scope;
+      while (climbScope) {
+        if (climbScope.$$disconnected) return true;
+        climbScope = climbScope.$parent;
+      }
+      return false;
     }
   };
 
@@ -39071,7 +39080,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-864
+ * Ionic, v1.0.0-beta.13-nightly-865
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -46373,7 +46382,9 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
     if (angular.isNumber(newInterval) && newInterval > 0) {
       self.autoPlayTimeout = $interval(function() {
-        self.select(self.next());
+        if (!ionic.Utils.isScopeDisconnected(scope)) {
+          self.select(self.next());
+        }
       }, newInterval);
     }
   }

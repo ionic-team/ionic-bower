@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-864
+ * Ionic, v1.0.0-beta.13-nightly-865
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7304,7 +7304,9 @@ function(scope, element, $log, $document, $$q, $timeout, $interval, $$ionicAttac
 
     if (angular.isNumber(newInterval) && newInterval > 0) {
       self.autoPlayTimeout = $interval(function() {
-        self.select(self.next());
+        if (!ionic.Utils.isScopeDisconnected(scope)) {
+          self.select(self.next());
+        }
       }, newInterval);
     }
   }
