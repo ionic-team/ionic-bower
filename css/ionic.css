@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-876
+ * Ionic, v1.0.0-beta.13-nightly-877
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4899,36 +4899,21 @@ a.item-content {
  * --------------------------------------------------
  */
 .slider {
+  position: relative;
+  visibility: hidden;
   overflow: hidden; }
 
 .slider-slides {
-  width: 100%;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  -webkit-transition: linear -webkit-transform;
-  transition: linear transform; }
-
-ion-slide {
-  display: block; }
+  position: relative;
+  height: 100%; }
 
 .slider-slide {
+  position: relative;
+  display: block;
+  float: left;
   width: 100%;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
-  .slider-slide:not([slide-display]) {
-    display: none !important; }
-  .slider-slide[slide-display="previous"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0); }
-  .slider-slide[slide-display="next"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0); }
+  height: 100%;
+  vertical-align: top; }
 
 .slider-slide-image > img {
   width: 100%; }
@@ -4939,44 +4924,18 @@ ion-slide {
   z-index: 1;
   width: 100%;
   height: 15px;
-  text-align: center;
-  z-index: 2;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  justify-content: center; }
+  text-align: center; }
   .slider-pager .slider-pager-page {
+    display: inline-block;
     margin: 0px 3px;
     width: 15px;
-    height: 15px;
-    border-radius: 15px;
-    background-color: black;
+    color: #000;
     text-decoration: none;
-    cursor: pointer;
     opacity: 0.3; }
     .slider-pager .slider-pager-page.active {
       -webkit-transition: opacity 0.4s ease-in;
       transition: opacity 0.4s ease-in;
       opacity: 1; }
-
-.modal .slider {
-  position: absolute;
-  width: 100%;
-  height: 100%; }
-.modal .slider-slides, .modal .slider-slide {
-  height: 100%; }
 
 /**
  * Forms
