@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-874
+ * Ionic, v1.0.0-beta.13-nightly-876
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-874';
+window.ionic.version = '1.0.0-beta.13-nightly-876';
 
 (function(window, document, ionic) {
 
@@ -5063,6 +5063,11 @@ ionic.views.Scroll = ionic.views.View.inherit({
    */
   setDimensions: function(clientWidth, clientHeight, contentWidth, contentHeight) {
     var self = this;
+
+    if (!clientWidth && !clientHeight && !contentWidth && !contentHeight) {
+      // this scrollview isn't rendered, don't bother
+      return;
+    }
 
     // Only update values which are defined
     if (clientWidth === +clientWidth) {
