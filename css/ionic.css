@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-871
+ * Ionic, v1.0.0-beta.13-nightly-872
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3107,7 +3107,8 @@ a.subdued {
   border-top-width: 0;
   border-bottom-width: 1px; }
   .bar-header.has-tabs-top {
-    border-bottom-width: 0px; }
+    border-bottom-width: 0px;
+    background-image: none; }
 
 .bar-footer {
   bottom: 0;
@@ -3284,166 +3285,142 @@ a.subdued {
   border-style: solid;
   border-width: 2px 0 0 0;
   border-color: #444; }
+  .tabs-striped .tab-item.tab-item-active .badge, .tabs-striped .tab-item.active .badge, .tabs-striped .tab-item.activated .badge {
+    top: 2px;
+    opacity: 1; }
 .tabs-striped.tabs-light .tabs {
-  background-color: #444; }
+  background-color: #fff; }
 .tabs-striped.tabs-light .tab-item {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(68, 68, 68, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-light .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-light .tab-item.tab-item-active, .tabs-striped.tabs-light .tab-item.active, .tabs-striped.tabs-light .tab-item.activated {
     margin-top: -2px;
-    color: #fff;
+    color: #444;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #fff; }
-    .tabs-striped.tabs-light .tab-item.tab-item-active .badge, .tabs-striped.tabs-light .tab-item.active .badge, .tabs-striped.tabs-light .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #444; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-stable .tabs {
-  background-color: #444; }
+  background-color: #f8f8f8; }
 .tabs-striped.tabs-stable .tab-item {
-  color: rgba(248, 248, 248, 0.4);
+  color: rgba(68, 68, 68, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-stable .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-stable .tab-item.tab-item-active, .tabs-striped.tabs-stable .tab-item.active, .tabs-striped.tabs-stable .tab-item.activated {
     margin-top: -2px;
-    color: #f8f8f8;
+    color: #444;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #f8f8f8; }
-    .tabs-striped.tabs-stable .tab-item.tab-item-active .badge, .tabs-striped.tabs-stable .tab-item.active .badge, .tabs-striped.tabs-stable .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #444; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-positive .tabs {
-  background-color: #fff; }
+  background-color: #387ef5; }
 .tabs-striped.tabs-positive .tab-item {
-  color: rgba(56, 126, 245, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-positive .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-positive .tab-item.tab-item-active, .tabs-striped.tabs-positive .tab-item.active, .tabs-striped.tabs-positive .tab-item.activated {
     margin-top: -2px;
-    color: #387ef5;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #387ef5; }
-    .tabs-striped.tabs-positive .tab-item.tab-item-active .badge, .tabs-striped.tabs-positive .tab-item.active .badge, .tabs-striped.tabs-positive .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-calm .tabs {
-  background-color: #fff; }
+  background-color: #11c1f3; }
 .tabs-striped.tabs-calm .tab-item {
-  color: rgba(17, 193, 243, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-calm .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-calm .tab-item.tab-item-active, .tabs-striped.tabs-calm .tab-item.active, .tabs-striped.tabs-calm .tab-item.activated {
     margin-top: -2px;
-    color: #11c1f3;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #11c1f3; }
-    .tabs-striped.tabs-calm .tab-item.tab-item-active .badge, .tabs-striped.tabs-calm .tab-item.active .badge, .tabs-striped.tabs-calm .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-assertive .tabs {
-  background-color: #fff; }
+  background-color: #ef473a; }
 .tabs-striped.tabs-assertive .tab-item {
-  color: rgba(239, 71, 58, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-assertive .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-assertive .tab-item.tab-item-active, .tabs-striped.tabs-assertive .tab-item.active, .tabs-striped.tabs-assertive .tab-item.activated {
     margin-top: -2px;
-    color: #ef473a;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #ef473a; }
-    .tabs-striped.tabs-assertive .tab-item.tab-item-active .badge, .tabs-striped.tabs-assertive .tab-item.active .badge, .tabs-striped.tabs-assertive .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-balanced .tabs {
-  background-color: #fff; }
+  background-color: #33cd5f; }
 .tabs-striped.tabs-balanced .tab-item {
-  color: rgba(51, 205, 95, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-balanced .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-balanced .tab-item.tab-item-active, .tabs-striped.tabs-balanced .tab-item.active, .tabs-striped.tabs-balanced .tab-item.activated {
     margin-top: -2px;
-    color: #33cd5f;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #33cd5f; }
-    .tabs-striped.tabs-balanced .tab-item.tab-item-active .badge, .tabs-striped.tabs-balanced .tab-item.active .badge, .tabs-striped.tabs-balanced .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-energized .tabs {
-  background-color: #fff; }
+  background-color: #ffc900; }
 .tabs-striped.tabs-energized .tab-item {
-  color: rgba(255, 201, 0, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-energized .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-energized .tab-item.tab-item-active, .tabs-striped.tabs-energized .tab-item.active, .tabs-striped.tabs-energized .tab-item.activated {
     margin-top: -2px;
-    color: #ffc900;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #ffc900; }
-    .tabs-striped.tabs-energized .tab-item.tab-item-active .badge, .tabs-striped.tabs-energized .tab-item.active .badge, .tabs-striped.tabs-energized .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-royal .tabs {
-  background-color: #fff; }
+  background-color: #886aea; }
 .tabs-striped.tabs-royal .tab-item {
-  color: rgba(136, 106, 234, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-royal .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-royal .tab-item.tab-item-active, .tabs-striped.tabs-royal .tab-item.active, .tabs-striped.tabs-royal .tab-item.activated {
     margin-top: -2px;
-    color: #886aea;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #886aea; }
-    .tabs-striped.tabs-royal .tab-item.tab-item-active .badge, .tabs-striped.tabs-royal .tab-item.active .badge, .tabs-striped.tabs-royal .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-dark .tabs {
-  background-color: #fff; }
+  background-color: #444; }
 .tabs-striped.tabs-dark .tab-item {
-  color: rgba(68, 68, 68, 0.4);
+  color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
   .tabs-striped.tabs-dark .tab-item .badge {
     opacity: 0.4; }
   .tabs-striped.tabs-dark .tab-item.tab-item-active, .tabs-striped.tabs-dark .tab-item.active, .tabs-striped.tabs-dark .tab-item.activated {
     margin-top: -2px;
-    color: #444;
+    color: #fff;
     border-style: solid;
     border-width: 2px 0 0 0;
-    border-color: #444; }
-    .tabs-striped.tabs-dark .tab-item.tab-item-active .badge, .tabs-striped.tabs-dark .tab-item.active .badge, .tabs-striped.tabs-dark .tab-item.activated .badge {
-      top: 2px;
-      opacity: 1; }
+    border-color: #fff; }
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-background-light .tabs {
