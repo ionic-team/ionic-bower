@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-872
+ * Ionic, v1.0.0-beta.13-nightly-873
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-872';
+window.ionic.version = '1.0.0-beta.13-nightly-873';
 
 (function(window, document, ionic) {
 
@@ -39082,7 +39082,7 @@ angular.module('ui.router.compat')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-872
+ * Ionic, v1.0.0-beta.13-nightly-873
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44165,7 +44165,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
             // if the current state has cache:false
             // or the element has cache-view="false" attribute
-            if (viewState(viewLocals).cache === false || enteringEle.attr('cache-view') == 'false') {
+            if (viewState(viewLocals).cache === false || viewState(viewLocals).cache === 'false' || enteringEle.attr('cache-view') == 'false') {
               enteringEle.data(DATA_NO_CACHE, true);
             }
 
@@ -45386,6 +45386,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
   var DATA_ELE_IDENTIFIER = '$eleId';
   var DATA_DESTROY_ELE = '$destroyEle';
+  var DATA_NO_CACHE = '$noCache';
   var VIEW_STATUS_ACTIVE = 'active';
   var VIEW_STATUS_CACHED = 'cached';
   var HISTORY_AFTER_ROOT = 'after-root';
@@ -45505,11 +45506,10 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
   self.transitionEnd = function() {
     var viewElements = $element.children();
-    var viewElementsLength = viewElements.length;
-    var x, viewElement;
+    var x, l, viewElement;
     var isHistoryRoot;
 
-    for (x = 0; x < viewElementsLength; x++) {
+    for (x = 0, l = viewElements.length; x < l; x++) {
       viewElement = viewElements.eq(x);
 
       if (viewElement.data(DATA_ELE_IDENTIFIER) === activeEleId) {
@@ -45517,14 +45517,21 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         navViewAttr(viewElement, VIEW_STATUS_ACTIVE);
         isHistoryRoot = $ionicViewSwitcher.isHistoryRoot(viewElement);
 
-      } else if (navViewAttr(viewElement) === 'leaving' || navViewAttr(viewElement) === VIEW_STATUS_ACTIVE) {
-        // this is a leaving element or was the former active element
-        navViewAttr(viewElement, VIEW_STATUS_CACHED);
+      } else if (navViewAttr(viewElement) === 'leaving' || navViewAttr(viewElement) === VIEW_STATUS_ACTIVE || navViewAttr(viewElement) === VIEW_STATUS_CACHED) {
+        // this is a leaving element or was the former active element, or is an cached element
+        if (viewElement.data(DATA_DESTROY_ELE) || viewElement.data(DATA_NO_CACHE)) {
+          // this element shouldn't stay cached
+          $ionicViewSwitcher.destroyViewEle(viewElement);
+        } else {
+          // keep in the DOM, mark as cached
+          navViewAttr(viewElement, VIEW_STATUS_CACHED);
+        }
       }
     }
 
     if (isHistoryRoot) {
-      for (x = 0; x < viewElementsLength; x++) {
+      viewElements = $element.children();
+      for (x = 0, l = viewElements.length; x < l; x++) {
         viewElement = viewElements.eq(x);
 
         if ($ionicViewSwitcher.isHistoryRoot(viewElement) && navViewAttr(viewElement) !== VIEW_STATUS_ACTIVE) {
