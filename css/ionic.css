@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-880
+ * Ionic, v1.0.0-beta.13-nightly-881
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3424,23 +3424,32 @@ a.subdued {
 .tabs-striped.tabs-top .tab-item.tab-item-active .badge, .tabs-striped.tabs-top .tab-item.active .badge, .tabs-striped.tabs-top .tab-item.activated .badge {
   top: 4%; }
 .tabs-striped.tabs-background-light .tabs {
-  background-color: #fff; }
+  background-color: #fff;
+  background-image: none; }
 .tabs-striped.tabs-background-stable .tabs {
-  background-color: #f8f8f8; }
+  background-color: #f8f8f8;
+  background-image: none; }
 .tabs-striped.tabs-background-positive .tabs {
-  background-color: #387ef5; }
+  background-color: #387ef5;
+  background-image: none; }
 .tabs-striped.tabs-background-calm .tabs {
-  background-color: #11c1f3; }
+  background-color: #11c1f3;
+  background-image: none; }
 .tabs-striped.tabs-background-assertive .tabs {
-  background-color: #ef473a; }
+  background-color: #ef473a;
+  background-image: none; }
 .tabs-striped.tabs-background-balanced .tabs {
-  background-color: #33cd5f; }
+  background-color: #33cd5f;
+  background-image: none; }
 .tabs-striped.tabs-background-energized .tabs {
-  background-color: #ffc900; }
+  background-color: #ffc900;
+  background-image: none; }
 .tabs-striped.tabs-background-royal .tabs {
-  background-color: #886aea; }
+  background-color: #886aea;
+  background-image: none; }
 .tabs-striped.tabs-background-dark .tabs {
-  background-color: #444; }
+  background-color: #444;
+  background-image: none; }
 .tabs-striped.tabs-color-light .tab-item {
   color: rgba(255, 255, 255, 0.4);
   opacity: 1; }
@@ -3557,6 +3566,141 @@ a.subdued {
     border-top-width: 2px; }
     .tabs-striped.tabs-color-dark .tab-item.tab-item-active .badge, .tabs-striped.tabs-color-dark .tab-item.active .badge, .tabs-striped.tabs-color-dark .tab-item.activated .badge {
       top: 2px;
+      opacity: 1; }
+
+.tabs-background-light .tabs, .tabs-background-light > .tabs {
+  background-color: #fff;
+  background-image: linear-gradient(0deg, #ddd, #ddd 50%, transparent 50%); }
+
+.tabs-background-stable .tabs, .tabs-background-stable > .tabs {
+  background-color: #f8f8f8;
+  background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%); }
+
+.tabs-background-positive .tabs, .tabs-background-positive > .tabs {
+  background-color: #387ef5;
+  background-image: linear-gradient(0deg, #0c63ee, #0c63ee 50%, transparent 50%); }
+
+.tabs-background-calm .tabs, .tabs-background-calm > .tabs {
+  background-color: #11c1f3;
+  background-image: linear-gradient(0deg, #0a9ec7, #0a9ec7 50%, transparent 50%); }
+
+.tabs-background-assertive .tabs, .tabs-background-assertive > .tabs {
+  background-color: #ef473a;
+  background-image: linear-gradient(0deg, #e42012, #e42012 50%, transparent 50%); }
+
+.tabs-background-balanced .tabs, .tabs-background-balanced > .tabs {
+  background-color: #33cd5f;
+  background-image: linear-gradient(0deg, #28a54c, #28a54c 50%, transparent 50%); }
+
+.tabs-background-energized .tabs, .tabs-background-energized > .tabs {
+  background-color: #ffc900;
+  background-image: linear-gradient(0deg, #e6b400, #e6b400 50%, transparent 50%); }
+
+.tabs-background-royal .tabs, .tabs-background-royal > .tabs {
+  background-color: #886aea;
+  background-image: linear-gradient(0deg, #6b46e5, #6b46e5 50%, transparent 50%); }
+
+.tabs-background-dark .tabs, .tabs-background-dark > .tabs {
+  background-color: #444;
+  background-image: linear-gradient(0deg, #111, #111 50%, transparent 50%); }
+
+.tabs-color-light .tab-item {
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 1; }
+  .tabs-color-light .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-light .tab-item.tab-item-active, .tabs-color-light .tab-item.active, .tabs-color-light .tab-item.activated {
+    color: #fff;
+    border: 0 solid #fff; }
+    .tabs-color-light .tab-item.tab-item-active .badge, .tabs-color-light .tab-item.active .badge, .tabs-color-light .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-stable .tab-item {
+  color: rgba(248, 248, 248, 0.4);
+  opacity: 1; }
+  .tabs-color-stable .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-stable .tab-item.tab-item-active, .tabs-color-stable .tab-item.active, .tabs-color-stable .tab-item.activated {
+    color: #f8f8f8;
+    border: 0 solid #f8f8f8; }
+    .tabs-color-stable .tab-item.tab-item-active .badge, .tabs-color-stable .tab-item.active .badge, .tabs-color-stable .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-positive .tab-item {
+  color: rgba(56, 126, 245, 0.4);
+  opacity: 1; }
+  .tabs-color-positive .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-positive .tab-item.tab-item-active, .tabs-color-positive .tab-item.active, .tabs-color-positive .tab-item.activated {
+    color: #387ef5;
+    border: 0 solid #387ef5; }
+    .tabs-color-positive .tab-item.tab-item-active .badge, .tabs-color-positive .tab-item.active .badge, .tabs-color-positive .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-calm .tab-item {
+  color: rgba(17, 193, 243, 0.4);
+  opacity: 1; }
+  .tabs-color-calm .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-calm .tab-item.tab-item-active, .tabs-color-calm .tab-item.active, .tabs-color-calm .tab-item.activated {
+    color: #11c1f3;
+    border: 0 solid #11c1f3; }
+    .tabs-color-calm .tab-item.tab-item-active .badge, .tabs-color-calm .tab-item.active .badge, .tabs-color-calm .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-assertive .tab-item {
+  color: rgba(239, 71, 58, 0.4);
+  opacity: 1; }
+  .tabs-color-assertive .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-assertive .tab-item.tab-item-active, .tabs-color-assertive .tab-item.active, .tabs-color-assertive .tab-item.activated {
+    color: #ef473a;
+    border: 0 solid #ef473a; }
+    .tabs-color-assertive .tab-item.tab-item-active .badge, .tabs-color-assertive .tab-item.active .badge, .tabs-color-assertive .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-balanced .tab-item {
+  color: rgba(51, 205, 95, 0.4);
+  opacity: 1; }
+  .tabs-color-balanced .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-balanced .tab-item.tab-item-active, .tabs-color-balanced .tab-item.active, .tabs-color-balanced .tab-item.activated {
+    color: #33cd5f;
+    border: 0 solid #33cd5f; }
+    .tabs-color-balanced .tab-item.tab-item-active .badge, .tabs-color-balanced .tab-item.active .badge, .tabs-color-balanced .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-energized .tab-item {
+  color: rgba(255, 201, 0, 0.4);
+  opacity: 1; }
+  .tabs-color-energized .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-energized .tab-item.tab-item-active, .tabs-color-energized .tab-item.active, .tabs-color-energized .tab-item.activated {
+    color: #ffc900;
+    border: 0 solid #ffc900; }
+    .tabs-color-energized .tab-item.tab-item-active .badge, .tabs-color-energized .tab-item.active .badge, .tabs-color-energized .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-royal .tab-item {
+  color: rgba(136, 106, 234, 0.4);
+  opacity: 1; }
+  .tabs-color-royal .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-royal .tab-item.tab-item-active, .tabs-color-royal .tab-item.active, .tabs-color-royal .tab-item.activated {
+    color: #886aea;
+    border: 0 solid #886aea; }
+    .tabs-color-royal .tab-item.tab-item-active .badge, .tabs-color-royal .tab-item.active .badge, .tabs-color-royal .tab-item.activated .badge {
+      opacity: 1; }
+
+.tabs-color-dark .tab-item {
+  color: rgba(68, 68, 68, 0.4);
+  opacity: 1; }
+  .tabs-color-dark .tab-item .badge {
+    opacity: 0.4; }
+  .tabs-color-dark .tab-item.tab-item-active, .tabs-color-dark .tab-item.active, .tabs-color-dark .tab-item.activated {
+    color: #444;
+    border: 0 solid #444; }
+    .tabs-color-dark .tab-item.tab-item-active .badge, .tabs-color-dark .tab-item.active .badge, .tabs-color-dark .tab-item.activated .badge {
       opacity: 1; }
 
 ion-tabs.tabs-color-active-light .tab-item {
