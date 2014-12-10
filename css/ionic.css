@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-884
+ * Ionic, v1.0.0-beta.13-nightly-885
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2890,9 +2890,7 @@ a.subdued {
       margin-right: 5px;
       padding: 0;
       white-space: nowrap;
-      font-weight: 400;
-      -webkit-transition-duration: 0;
-      transition-duration: 0; }
+      font-weight: 400; }
     .bar .button.back-button.active, .bar .button.back-button.activated {
       opacity: 0.2; }
   .bar .button-bar > .button, .bar .buttons > .button {
@@ -6935,46 +6933,37 @@ a.button {
   display: block; }
   [nav-bar-transition="ios"] [nav-bar="cached"] .header-item {
     display: none; }
+[nav-bar-transition="ios"] .back-button {
+  -webkit-transition-duration: 0;
+  transition-duration: 0; }
 
 [nav-view-transition="android"] [nav-view="entering"], [nav-view-transition="android"] [nav-view="leaving"] {
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  -webkit-transition-property: opacity, -webkit-transform;
-  transition-property: opacity, transform; }
-[nav-view-transition="android"] [nav-view="leaving"] {
   -webkit-transition-duration: 200ms;
   transition-duration: 200ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-  transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
+  -webkit-transition-property: -webkit-transform;
+  transition-property: transform; }
 [nav-view-transition="android"] [nav-view="active"], [nav-view-transition="android"][nav-view-direction="forward"] [nav-view="entering"], [nav-view-transition="android"][nav-view-direction="back"] [nav-view="leaving"] {
   z-index: 3; }
 [nav-view-transition="android"][nav-view-direction="back"] [nav-view="entering"], [nav-view-transition="android"][nav-view-direction="forward"] [nav-view="leaving"] {
   z-index: 2; }
-[nav-view-transition="android"] .tabs-top > .view-container > [history-cursor="after-root"] {
-  z-index: 6; }
-[nav-view-transition="android"] [history-cursor="after-root"] > .has-tabs-top {
-  top: 44px; }
-[nav-view-transition="android"] .tabs-top.tabs-striped > .view-container {
-  position: static; }
 
-[nav-bar-transition="android"] [nav-bar="entering"], [nav-bar-transition="android"] [nav-bar="leaving"] {
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
-  -webkit-transition-property: opacity, -webkit-transform;
-  transition-property: opacity, transform; }
-[nav-bar-transition="android"] [nav-bar="leaving"] {
+[nav-bar-transition="android"] .title, [nav-bar-transition="android"] .buttons {
   -webkit-transition-duration: 200ms;
   transition-duration: 200ms;
-  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-  transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
-[nav-bar-transition="android"] [nav-bar="cached"] {
-  display: none; }
-[nav-bar-transition="android"] [nav-bar="active"], [nav-bar-transition="android"][nav-bar-direction="forward"] [nav-bar="entering"], [nav-bar-transition="android"][nav-bar-direction="back"] [nav-bar="leaving"] {
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0.6, 0.2, 1);
+  -webkit-transition-property: opacity;
+  transition-property: opacity; }
+[nav-bar-transition="android"] [nav-bar="active"], [nav-bar-transition="android"] [nav-bar="entering"] {
   z-index: 10; }
+  [nav-bar-transition="android"] [nav-bar="active"] .bar, [nav-bar-transition="android"] [nav-bar="entering"] .bar {
+    background: transparent; }
+[nav-bar-transition="android"] [nav-bar="cached"] {
+  display: block; }
+  [nav-bar-transition="android"] [nav-bar="cached"] .header-item {
+    display: none; }
 
 [nav-view="cached"], [nav-bar="cached"] {
   display: none; }

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-884
+ * Ionic, v1.0.0-beta.13-nightly-885
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2301,7 +2301,8 @@ IonicModule
     navBar: {
       alignTitle: PLATFORM,
       positionPrimaryButtons: PLATFORM,
-      positionSecondaryButtons: PLATFORM
+      positionSecondaryButtons: PLATFORM,
+      transition: PLATFORM
     },
     backButton: {
       icon: PLATFORM,
@@ -2337,7 +2338,8 @@ IonicModule
     navBar: {
       alignTitle: 'center',
       positionPrimaryButtons: 'left',
-      positionSecondaryButtons: 'right'
+      positionSecondaryButtons: 'right',
+      transition: 'view'
     },
 
     backButton: {
@@ -2384,7 +2386,7 @@ IonicModule
     },
 
     backButton: {
-      icon: 'ion-android-arrow-back',
+      icon: 'ion-arrow-left-c',
       text: false,
       previousTitleText: false
     },
@@ -2495,30 +2497,27 @@ IonicModule
   provider.transitions.views.android = function(enteringEle, leavingEle, direction, shouldAnimate) {
     shouldAnimate = shouldAnimate && (direction == 'forward' || direction == 'back');
 
-    function setStyles(ele, opacity, y) {
+    function setStyles(ele, x) {
       var css = {};
       css[ionic.CSS.TRANSITION_DURATION] = shouldAnimate ? '' : 0;
-      css.opacity = opacity;
-      css[ionic.CSS.TRANSFORM] = 'translate3d(0,' + y + 'px,0)';
+      css[ionic.CSS.TRANSFORM] = 'translate3d(' + x + '%,0,0)';
       ionic.DomUtil.cachedStyles(ele, css);
     }
-
-    var startX = Math.max(window.innerHeight, screen.height) * 0.15;
 
     return {
       run: function(step) {
         if (direction == 'forward') {
-          setStyles(enteringEle, step, (1 - step) * startX);
-          setStyles(leavingEle, 1, 0);
+          setStyles(enteringEle, (1 - step) * 99); // starting at 98% prevents a flicker
+          setStyles(leavingEle, step * -100);
 
         } else if (direction == 'back') {
-          setStyles(enteringEle, 1, 0);
-          setStyles(leavingEle, (1 - step), step * startX);
+          setStyles(enteringEle, (1 - step) * -100);
+          setStyles(leavingEle, step * 100);
 
         } else {
           // swap, enter, exit
-          setStyles(enteringEle, 1, 0);
-          setStyles(leavingEle, 0, 0);
+          setStyles(enteringEle, 0);
+          setStyles(leavingEle, 0);
         }
       },
       shouldAnimate: shouldAnimate
@@ -2526,9 +2525,27 @@ IonicModule
   };
 
   provider.transitions.navBar.android = function(enteringHeaderBar, leavingHeaderBar, direction, shouldAnimate) {
-    return provider.transitions.views.android(enteringHeaderBar.containerEle(),
-                                              leavingHeaderBar && leavingHeaderBar.containerEle(),
-                                              direction, shouldAnimate);
+    shouldAnimate = shouldAnimate && (direction == 'forward' || direction == 'back');
+
+    function setStyles(ctrl, opacity) {
+      if (!ctrl) return;
+      var css = {};
+      css.opacity = opacity === 1 ? '' : opacity;
+
+      ctrl.setCss('buttons-left', css);
+      ctrl.setCss('buttons-right', css);
+      ctrl.setCss('back-button', css);
+      ctrl.setCss('back-text', css);
+      ctrl.setCss('title', css);
+    }
+
+    return {
+      run: function(step) {
+        setStyles(enteringHeaderBar.controller(), step);
+        setStyles(leavingHeaderBar && leavingHeaderBar.controller(), 1 - step);
+      },
+      shouldAnimate: true
+    };
   };
 
 
@@ -4924,8 +4941,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
   var DATA_FALLBACK_TIMER = '$fallbackTimer';
   var NAV_VIEW_ATTR = 'nav-view';
   var HISTORY_CURSOR_ATTR = 'history-cursor';
-  var HISTORY_ROOT = 'root';
-  var HISTORY_AFTER_ROOT = 'after-root';
   var VIEW_STATUS_ACTIVE = 'active';
   var VIEW_STATUS_CACHED = 'cached';
   var VIEW_STATUS_STAGED = 'stage';
@@ -4958,13 +4973,15 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
     // 6) fallback value
 
     var state = viewState(viewLocals);
-    var transition = nextTransition || cachedAttr(enteringEle, 'view-transition') || state.viewTransition || $ionicConfig.views.transition() || 'ios';
+    var viewTransition = nextTransition || cachedAttr(enteringEle, 'view-transition') || state.viewTransition || $ionicConfig.views.transition() || 'ios';
+    var navBarTransition = $ionicConfig.navBar.transition();
     direction = nextDirection || cachedAttr(enteringEle, 'view-direction') || state.viewDirection || direction || 'none';
 
     return extend(getViewData(view), {
-      transition: transition,
+      transition: viewTransition,
+      navBarTransition: navBarTransition === 'view' ? viewTransition : navBarTransition,
       direction: direction,
-      shouldAnimate: (transition !== 'none' && direction !== 'none')
+      shouldAnimate: (viewTransition !== 'none' && direction !== 'none')
     });
   }
 
@@ -4985,10 +5002,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
     } else {
       return cachedAttr(ele, NAV_VIEW_ATTR);
     }
-  }
-
-  function historyCursorAttr(ele, value) {
-    cachedAttr(ele, HISTORY_CURSOR_ATTR, value);
   }
 
   function destroyViewEle(ele) {
@@ -5080,10 +5093,8 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             navViewAttr(enteringEle, VIEW_STATUS_STAGED);
 
             var enteringData = getTransitionData(viewLocals, enteringEle, registerData.direction, enteringView);
-            var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
+            var transitionFn = $ionicConfig.transitions.views[enteringData.transition] || $ionicConfig.transitions.views.none;
             transitionFn(enteringEle, null, enteringData.direction, true).run(0);
-
-            historyCursorAttr(enteringEle, registerData.isHistoryRoot ? HISTORY_ROOT : HISTORY_AFTER_ROOT);
 
             // if the current state has cache:false
             // or the element has cache-view="false" attribute
@@ -5124,7 +5135,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           switcher.emit('before', enteringData, leavingData);
 
           // 1) get the transition ready and see if it'll animate
-          var transitionFn = $ionicConfig.transitions.views[enteringData.transition];
+          var transitionFn = $ionicConfig.transitions.views[enteringData.transition] || $ionicConfig.transitions.views.none;
           var viewTransition = transitionFn(enteringEle, leavingEle, enteringData.direction, enteringData.shouldAnimate);
 
           if (viewTransition.shouldAnimate) {
@@ -5136,10 +5147,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
           // 3) stage entering element, opacity 0, no transition duration
           navViewAttr(enteringEle, VIEW_STATUS_STAGED);
-
-          if (enteringData.direction == 'swap') {
-            historyCursorAttr(enteringEle, HISTORY_ROOT);
-          }
 
           // 4) place the elements in the correct step to begin
           viewTransition.run(0);
@@ -5308,12 +5315,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
       navViewAttr(viewEle, isActiveAttr ? VIEW_STATUS_ACTIVE : VIEW_STATUS_CACHED);
     },
 
-    isHistoryRoot: function(viewElement) {
-      return cachedAttr(viewElement, HISTORY_CURSOR_ATTR) === HISTORY_ROOT;
-    },
-
     getTransitionData: getTransitionData,
-    historyCursorAttr: historyCursorAttr,
     navViewAttr: navViewAttr,
     destroyViewEle: destroyViewEle
 
@@ -6086,14 +6088,14 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
 
   self.transition = function(enteringHeaderBar, leavingHeaderBar, viewData) {
     var enteringHeaderBarCtrl = enteringHeaderBar.controller();
-    var transitionFn = $ionicConfig.transitions.navBar[viewData.transition];
+    var transitionFn = $ionicConfig.transitions.navBar[viewData.navBarTransition] || $ionicConfig.transitions.navBar.none;
     var transitionId = viewData.transitionId;
 
     enteringHeaderBarCtrl.beforeEnter(viewData);
 
     var navBarTransition = transitionFn(enteringHeaderBar, leavingHeaderBar, viewData.direction, viewData.shouldAnimate && self.isInitialized);
 
-    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', viewData.transition);
+    ionic.DomUtil.cachedAttr($element, 'nav-bar-transition', viewData.navBarTransition);
     ionic.DomUtil.cachedAttr($element, 'nav-bar-direction', viewData.direction);
 
     if (navBarTransition.shouldAnimate) {
@@ -6311,7 +6313,6 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
   var DATA_NO_CACHE = '$noCache';
   var VIEW_STATUS_ACTIVE = 'active';
   var VIEW_STATUS_CACHED = 'cached';
-  var HISTORY_AFTER_ROOT = 'after-root';
 
   var self = this;
   var direction;
@@ -6429,7 +6430,6 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
   self.transitionEnd = function() {
     var viewElements = $element.children();
     var x, l, viewElement;
-    var isHistoryRoot;
 
     for (x = 0, l = viewElements.length; x < l; x++) {
       viewElement = viewElements.eq(x);
@@ -6437,7 +6437,6 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
       if (viewElement.data(DATA_ELE_IDENTIFIER) === activeEleId) {
         // this is the active element
         navViewAttr(viewElement, VIEW_STATUS_ACTIVE);
-        isHistoryRoot = $ionicViewSwitcher.isHistoryRoot(viewElement);
 
       } else if (navViewAttr(viewElement) === 'leaving' || navViewAttr(viewElement) === VIEW_STATUS_ACTIVE || navViewAttr(viewElement) === VIEW_STATUS_CACHED) {
         // this is a leaving element or was the former active element, or is an cached element
@@ -6447,17 +6446,6 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         } else {
           // keep in the DOM, mark as cached
           navViewAttr(viewElement, VIEW_STATUS_CACHED);
-        }
-      }
-    }
-
-    if (isHistoryRoot) {
-      viewElements = $element.children();
-      for (x = 0, l = viewElements.length; x < l; x++) {
-        viewElement = viewElements.eq(x);
-
-        if ($ionicViewSwitcher.isHistoryRoot(viewElement) && navViewAttr(viewElement) !== VIEW_STATUS_ACTIVE) {
-          $ionicViewSwitcher.historyCursorAttr(viewElement, HISTORY_AFTER_ROOT);
         }
       }
     }
@@ -7409,6 +7397,7 @@ function($scope, $element, $attrs, $compile, $rootScope, $ionicViewSwitcher) {
         title: viewTitle,
         direction: transData.direction,
         transition: transData.transition,
+        navBarTransition: transData.navBarTransition,
         transitionId: transData.transitionId,
         shouldAnimate: transData.shouldAnimate,
         enableBack: transData.enableBack,
