@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-879
+ * Ionic, v1.0.0-beta.13-nightly-880
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10827,7 +10827,8 @@ IonicModule
   '$timeout',
   '$compile',
   '$ionicSlideBoxDelegate',
-function($timeout, $compile, $ionicSlideBoxDelegate) {
+  '$ionicHistory',
+function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
   return {
     restrict: 'E',
     replace: true,
@@ -10893,7 +10894,11 @@ function($timeout, $compile, $ionicSlideBoxDelegate) {
       //Exposed for testing
       this.__slider = slider;
 
-      var deregisterInstance = $ionicSlideBoxDelegate._registerInstance(slider, $attrs.delegateHandle);
+      var deregisterInstance = $ionicSlideBoxDelegate._registerInstance(
+        slider, $attrs.delegateHandle, function() {
+          return $ionicHistory.isActiveScope($scope);
+        }
+      );
       $scope.$on('$destroy', deregisterInstance);
 
       this.slidesCount = function() {
