@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-891
+ * Ionic, v1.0.0-beta.13-nightly-895
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4759,6 +4759,32 @@ a.item-content {
 .list-right-editing .item-right-editable .item-content, .item-right-editing.item-right-editable .item-content {
   -webkit-transform: translate3d(-50px, 0, 0);
   transform: translate3d(-50px, 0, 0); }
+
+.item-remove-animate.ng-leave {
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms; }
+.item-remove-animate.ng-leave .item-content, .item-remove-animate.ng-leave:last-of-type {
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
+  -webkit-transition-property: all;
+  transition-property: all; }
+.item-remove-animate.ng-leave.ng-leave-active .item-content {
+  opacity: 0;
+  -webkit-transform: translate3d(-100%, 0, 0) !important;
+  transform: translate3d(-100%, 0, 0) !important; }
+.item-remove-animate.ng-leave.ng-leave-active:last-of-type {
+  opacity: 0; }
+.item-remove-animate.ng-leave.ng-leave-active ~ ion-item:not(.ng-leave) {
+  -webkit-transform: translate3d(0, -webkit-calc(-100% + 1px), 0);
+  transform: translate3d(0, calc(-100% + 1px), 0);
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: cubic-bezier(0.25, 0.81, 0.24, 1);
+  transition-timing-function: cubic-bezier(0.25, 0.81, 0.24, 1);
+  -webkit-transition-property: all;
+  transition-property: all; }
 
 .item-left-edit {
   -webkit-transition: all ease-in-out 125ms;
