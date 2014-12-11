@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-890
+ * Ionic, v1.0.0-beta.13-nightly-891
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8899,6 +8899,8 @@ IonicModule
           itemCtrl.$element.append(itemCtrl.optionsContainer);
         }
         itemCtrl.optionsContainer.append($element);
+
+        itemCtrl.$element.addClass('item-right-editable');
 
         //Don't bubble click up to main .item
         $element.on('click', stopPropagation);
