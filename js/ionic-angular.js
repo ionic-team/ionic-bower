@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-887
+ * Ionic, v1.0.0-beta.13-nightly-888
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5098,7 +5098,8 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
             // if the current state has cache:false
             // or the element has cache-view="false" attribute
-            if (viewState(viewLocals).cache === false || viewState(viewLocals).cache === 'false' || enteringEle.attr('cache-view') == 'false') {
+            if (viewState(viewLocals).cache === false || viewState(viewLocals).cache === 'false' ||
+                enteringEle.attr('cache-view') == 'false' || $ionicConfig.views.maxCache() === 0) {
               enteringEle.data(DATA_NO_CACHE, true);
             }
 
