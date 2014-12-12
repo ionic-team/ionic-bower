@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-895
+ * Ionic, v1.0.0-beta.13-nightly-897
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3765,7 +3765,9 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .tabs-top > .tabs, .tabs.tabs-top {
   top: 44px;
   padding-top: 0;
-  background-position: bottom; }
+  background-position: bottom;
+  border-top-width: 0;
+  border-bottom-width: 1px; }
   .tabs-top > .tabs .tab-item.tab-item-active .badge, .tabs-top > .tabs .tab-item.active .badge, .tabs-top > .tabs .tab-item.activated .badge, .tabs.tabs-top .tab-item.tab-item-active .badge, .tabs.tabs-top .tab-item.active .badge, .tabs.tabs-top .tab-item.activated .badge {
     top: 4%; }
 

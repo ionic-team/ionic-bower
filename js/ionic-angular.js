@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-895
+ * Ionic, v1.0.0-beta.13-nightly-897
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8501,9 +8501,9 @@ function headerFooterBarDirective(isHeader) {
       controller: '$ionicHeaderBar',
       compile: function(tElement, $attr) {
         tElement.addClass(isHeader ? 'bar bar-header' : 'bar bar-footer');
-        // android style tabs? if so, remove bottom border for seamless display
+        // top style tabs? if so, remove bottom border for seamless display
         $timeout(function() {
-          if ($document[0].getElementsByClassName('tabs-top').length) tElement.addClass('has-tabs-top');
+          if (isHeader && $document[0].getElementsByClassName('tabs-top').length) tElement.addClass('has-tabs-top');
         });
 
         return { pre: prelink };
