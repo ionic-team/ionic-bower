@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-899
+ * Ionic, v1.0.0-beta.13-nightly-901
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10386,7 +10386,8 @@ function($timeout, $controller, $ionicBind) {
           scrollingY: $scope.direction.indexOf('y') >= 0,
           zooming: $scope.$eval($scope.zooming) === true,
           maxZoom: $scope.$eval($scope.maxZoom) || 3,
-          minZoom: $scope.$eval($scope.minZoom) || 0.5
+          minZoom: $scope.$eval($scope.minZoom) || 0.5,
+          preventDefault: true
         };
         if (isPaging) {
           scrollViewOptions.speedMultiplier = 0.8;

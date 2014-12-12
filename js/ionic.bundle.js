@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-899
+ * Ionic, v1.0.0-beta.13-nightly-901
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-899';
+window.ionic.version = '1.0.0-beta.13-nightly-901';
 
 (function(window, document, ionic) {
 
@@ -4180,6 +4180,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
       deceleration: 0.97,
 
+      /** Whether to prevent default on a scroll operation to capture drag events **/
+      preventDefault: false,
+
       /** Callback that is fired on the later of touch end or deceleration end,
         provided that another scrolling action has not begun. Used to know
         when to fade out a scrollbar. */
@@ -4560,7 +4563,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     self.touchMove = function(e) {
       if (!self.__isDown ||
-        e.defaultPrevented ||
+        (!self.__isDown && e.defaultPrevented) ||
         (e.target.tagName === 'TEXTAREA' && e.target.parentElement.querySelector(':focus')) ) {
         return;
       }
@@ -4599,6 +4602,12 @@ ionic.views.Scroll = ionic.views.View.inherit({
       self.__isDown = true;
     };
 
+    self.touchMoveBubble = function(e) {
+      if(self.__isDown && self.options.preventDefault) {
+        e.preventDefault();
+      }
+    };
+
     self.touchEnd = function(e) {
       if (!self.__isDown) return;
 
@@ -4616,6 +4625,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     if ('ontouchstart' in window) {
       // Touch Events
       container.addEventListener("touchstart", self.touchStart, false);
+      if(self.options.preventDefault) container.addEventListener("touchmove", self.touchMoveBubble, false);
       document.addEventListener("touchmove", self.touchMove, false);
       document.addEventListener("touchend", self.touchEnd, false);
       document.addEventListener("touchcancel", self.touchEnd, false);
@@ -4623,6 +4633,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     } else if (window.navigator.pointerEnabled) {
       // Pointer Events
       container.addEventListener("pointerdown", self.touchStart, false);
+      if(self.options.preventDefault) container.addEventListener("pointermove", self.touchMoveBubble, false);
       document.addEventListener("pointermove", self.touchMove, false);
       document.addEventListener("pointerup", self.touchEnd, false);
       document.addEventListener("pointercancel", self.touchEnd, false);
@@ -4630,6 +4641,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     } else if (window.navigator.msPointerEnabled) {
       // IE10, WP8 (Pointer Events)
       container.addEventListener("MSPointerDown", self.touchStart, false);
+      if(self.options.preventDefault) container.addEventListener("MSPointerMove", self.touchMoveBubble, false);
       document.addEventListener("MSPointerMove", self.touchMove, false);
       document.addEventListener("MSPointerUp", self.touchEnd, false);
       document.addEventListener("MSPointerCancel", self.touchEnd, false);
@@ -4651,13 +4663,19 @@ ionic.views.Scroll = ionic.views.View.inherit({
       };
 
       self.mouseMove = function(e) {
-        if (!mousedown || e.defaultPrevented) {
+        if (!mousedown || (!mousedown && e.defaultPrevented)) {
           return;
         }
 
         self.doTouchMove(getEventTouches(e), e.timeStamp);
 
         mousedown = true;
+      };
+
+      self.mouseMoveBubble = function(e) {
+        if (mousedown && self.options.preventDefault) {
+          e.preventDefault();
+        }
       };
 
       self.mouseUp = function(e) {
@@ -4689,6 +4707,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       });
 
       container.addEventListener("mousedown", self.mouseDown, false);
+      if(self.options.preventDefault) container.addEventListener("mousemove", self.mouseMoveBubble, false);
       document.addEventListener("mousemove", self.mouseMove, false);
       document.addEventListener("mouseup", self.mouseUp, false);
       document.addEventListener('mousewheel', self.mouseWheel, false);
@@ -4701,21 +4720,25 @@ ionic.views.Scroll = ionic.views.View.inherit({
     var container = self.__container;
 
     container.removeEventListener('touchstart', self.touchStart);
+    container.removeEventListener('touchmove', self.touchMoveBubble);
     document.removeEventListener('touchmove', self.touchMove);
     document.removeEventListener('touchend', self.touchEnd);
     document.removeEventListener('touchcancel', self.touchCancel);
 
     container.removeEventListener("pointerdown", self.touchStart);
+    container.removeEventListener("pointermove", self.touchMoveBubble);
     document.removeEventListener("pointermove", self.touchMove);
     document.removeEventListener("pointerup", self.touchEnd);
     document.removeEventListener("pointercancel", self.touchEnd);
 
     container.removeEventListener("MSPointerDown", self.touchStart);
+    container.removeEventListener("MSPointerMove", self.touchMoveBubble);
     document.removeEventListener("MSPointerMove", self.touchMove);
     document.removeEventListener("MSPointerUp", self.touchEnd);
     document.removeEventListener("MSPointerCancel", self.touchEnd);
 
     container.removeEventListener("mousedown", self.mouseDown);
+    container.removeEventListener("mousemove", self.mouseMoveBubble);
     document.removeEventListener("mousemove", self.mouseMove);
     document.removeEventListener("mouseup", self.mouseUp);
     document.removeEventListener('mousewheel', self.mouseWheel);
@@ -40780,7 +40803,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-899
+ * Ionic, v1.0.0-beta.13-nightly-901
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -51164,7 +51187,8 @@ function($timeout, $controller, $ionicBind) {
           scrollingY: $scope.direction.indexOf('y') >= 0,
           zooming: $scope.$eval($scope.zooming) === true,
           maxZoom: $scope.$eval($scope.maxZoom) || 3,
-          minZoom: $scope.$eval($scope.minZoom) || 0.5
+          minZoom: $scope.$eval($scope.minZoom) || 0.5,
+          preventDefault: true
         };
         if (isPaging) {
           scrollViewOptions.speedMultiplier = 0.8;
