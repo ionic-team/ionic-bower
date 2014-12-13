@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-905
+ * Ionic, v1.0.0-beta.13-nightly-906
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.13-nightly-905';
+window.ionic.version = '1.0.0-beta.13-nightly-906';
 
 (function (ionic) {
 
@@ -40906,7 +40906,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-905
+ * Ionic, v1.0.0-beta.13-nightly-906
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -44289,22 +44289,22 @@ IonicModule
  * ```js
  * angular.module('testApp', ['ionic'])
  * .controller('MyController', function($scope, $ionicPopover) {
- * 
+ *
  *   // .fromTemplate() method
  *   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
- * 
+ *
  *   $scope.popover = $ionicPopover.fromTemplate(template, {
  *     scope: $scope,
  *   });
- * 
+ *
  *   // .fromTemplateUrl() method
  *   $ionicPopover.fromTemplateUrl('my-popover.html', {
  *     scope: $scope,
  *   }).then(function(popover) {
  *     $scope.popover = popover;
  *   });
- * 
- * 
+ *
+ *
  *   $scope.openPopover = function($event) {
  *     $scope.popover.show($event);
  *   };
@@ -44343,7 +44343,7 @@ function($ionicModal, $ionicPosition, $document, $window) {
 
   function positionView(target, popoverEle) {
     var targetEle = angular.element(target.target || target);
-    var buttonOffset = $ionicPosition.offset( targetEle );
+    var buttonOffset = $ionicPosition.offset(targetEle);
     var popoverWidth = popoverEle.prop('offsetWidth');
     var popoverHeight = popoverEle.prop('offsetHeight');
     var bodyWidth = $document[0].body.clientWidth;
@@ -44357,7 +44357,7 @@ function($ionicModal, $ionicPosition, $document, $window) {
 
     if (popoverCSS.left < POPOVER_BODY_PADDING) {
       popoverCSS.left = POPOVER_BODY_PADDING;
-    } else if(popoverCSS.left + popoverWidth + POPOVER_BODY_PADDING > bodyWidth) {
+    } else if (popoverCSS.left + popoverWidth + POPOVER_BODY_PADDING > bodyWidth) {
       popoverCSS.left = bodyWidth - popoverWidth - POPOVER_BODY_PADDING;
     }
 
@@ -44455,7 +44455,7 @@ function($ionicModal, $ionicPosition, $document, $window) {
      * controller (ionicPopover is built on top of $ionicPopover).
      */
     fromTemplate: function(templateString, options) {
-      return $ionicModal.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicModal.fromTemplate(templateString, ionic.Utils.extend(POPOVER_OPTIONS, options || {}));
     },
     /**
      * @ngdoc method
@@ -44466,7 +44466,7 @@ function($ionicModal, $ionicPosition, $document, $window) {
      * an {@link ionic.controller:ionicPopover} controller (ionicPopover is built on top of $ionicPopover).
      */
     fromTemplateUrl: function(url, options, _) {
-      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(POPOVER_OPTIONS, options || {}));
     }
   };
 
