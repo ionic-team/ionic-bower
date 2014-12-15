@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.13-nightly-908
+ * Ionic, v1.0.0-beta.13-nightly-909
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3562,8 +3562,8 @@ function($ionicModal, $ionicPosition, $document, $window) {
      * @returns {promise} A promise that will be resolved with an instance of
      * an {@link ionic.controller:ionicPopover} controller (ionicPopover is built on top of $ionicPopover).
      */
-    fromTemplateUrl: function(url, options, _) {
-      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(POPOVER_OPTIONS, options || {}));
+    fromTemplateUrl: function(url, options) {
+      return $ionicModal.fromTemplateUrl(url, ionic.Utils.extend(POPOVER_OPTIONS, options || {}));
     }
   };
 
