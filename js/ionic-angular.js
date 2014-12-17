@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-923
+ * Ionic, v1.0.0-beta.14-nightly-924
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9247,14 +9247,14 @@ IonicModule
  *   </ion-nav-buttons>
  * </ion-nav-bar>
  * ```
- * 
- * 
- *  **Note**: By default, the menu toggle button will only appear on a root
+ *
+ * ### Button Hidden On Child Views
+ * By default, the menu toggle button will only appear on a root
  * level side-menu page. Navigating in to child views will hide the menu-
  * toggle button. They can be made visible on child pages by setting the
- * enable-menu-with-back-views attribute of the {@link ionic.directive:ionSideMenus} 
- * directive to true. 
- * 
+ * enable-menu-with-back-views attribute of the {@link ionic.directive:ionSideMenus}
+ * directive to true.
+ *
  * ```html
  * <ion-side-menus enable-menu-with-back-views="true">
  * ```
@@ -9555,7 +9555,7 @@ IonicModule
  * example, a toggle button for a left side menu should be on the left side; in this case,
  * we'd recommend using `side="left"`, so it's always on the left, no matter the platform.
  *
- * Note that `ion-nav-buttons` must be immediate descendants of the `ion-view` or
+ * ***Note*** that `ion-nav-buttons` must be immediate descendants of the `ion-view` or
  * `ion-nav-bar` element (basically, don't wrap it in another div).
  *
  * @usage
@@ -10623,6 +10623,11 @@ IonicModule
  * `ion-side-menu-content`, so that when the element is clicked, the opened side menu will
  * automatically close.
  *
+ * "Burger Icon" toggles can be added to the header with the {@link ionic.directive:menuToggle}
+ * attribute directive. Clicking the toggle will open and close the side menu like the `menu-close`
+ * directive. The side menu will automatically hide on child pages, but can be overridden with the
+ * enable-menu-with-back-views attribute mentioned below.
+ *
  * By default, side menus are hidden underneath their side menu content and can be opened by swiping
  * the content left or right or by toggling a button to show the side menu. Additionally, by adding the
  * {@link ionic.directive:exposeAsideWhen} attribute directive to an
@@ -11409,7 +11414,7 @@ function($ionicGesture, $timeout) {
  *
  * ## View LifeCycle and Events
  *
- * Views can be cached, which means *controllers normally only load once*, which may
+ * Views can be cached, which means ***controllers normally only load once***, which may
  * affect your controller logic. To know when a view has entered or left, events
  * have been added that are emitted from the view's scope. These events also
  * contain data about the view, such as the title and whether the back button should
