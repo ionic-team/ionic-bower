@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-921
+ * Ionic, v1.0.0-beta.14-nightly-922
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9247,6 +9247,7 @@ IonicModule
  *   </ion-nav-buttons>
  * </ion-nav-bar>
  * ```
+ * 
  * 
  *  **Note**: By default, the menu toggle button will only appear on a root
  * level side-menu page. Navigating in to child views will hide the menu-
