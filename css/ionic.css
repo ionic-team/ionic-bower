@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-929
+ * Ionic, v1.0.0-beta.14-nightly-930
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2625,7 +2625,7 @@ a.subdued {
   height: 100%;
   background-color: rgba(0, 0, 0, 0); }
   .action-sheet-backdrop.active {
-    background-color: rgba(0, 0, 0, 0.5); }
+    background-color: rgba(0, 0, 0, 0.4); }
 
 .action-sheet-wrapper {
   -webkit-transform: translate3d(0, 100%, 0);
@@ -2641,8 +2641,8 @@ a.subdued {
   transform: translate3d(0, 0, 0); }
 
 .action-sheet {
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 8px;
+  margin-right: 8px;
   width: auto;
   z-index: 11;
   overflow: hidden; }
@@ -2651,30 +2651,43 @@ a.subdued {
     padding: 1px;
     width: 100%;
     border-radius: 0;
+    border-color: #d1d3d6;
     background-color: transparent;
     color: #387ef5;
     font-size: 18px; }
+    .action-sheet .button:hover {
+      color: #387ef5; }
     .action-sheet .button.destructive {
       color: #ef473a; }
+      .action-sheet .button.destructive:hover {
+        color: #ef473a; }
+  .action-sheet .button.active, .action-sheet .button.activated {
+    box-shadow: none;
+    border-color: #d1d3d6;
+    color: #387ef5;
+    background: #ecedee; }
 
 .action-sheet-title {
-  padding: 10px;
+  padding: 8px;
   color: #666666;
   text-align: center;
   font-size: 12px; }
 
 .action-sheet-group {
-  margin-bottom: 5px;
-  border-radius: 3px 3px 3px 3px;
-  background-color: #fff; }
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow: hidden; }
   .action-sheet-group .button {
-    border-width: 1px 0px 0px 0px;
-    border-radius: 0; }
-    .action-sheet-group .button.active {
-      background-color: transparent;
-      color: inherit; }
+    border-width: 1px 0px 0px 0px; }
   .action-sheet-group .button:first-child:last-child {
     border-width: 0; }
+
+.action-sheet-options {
+  background: #f6f7f8; }
+
+.action-sheet-cancel .button {
+  font-weight: 500; }
 
 .action-sheet-open {
   pointer-events: none; }
