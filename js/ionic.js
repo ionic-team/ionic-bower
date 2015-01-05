@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-933
+ * Ionic, v1.0.0-beta.14-nightly-934
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-933';
+window.ionic.version = '1.0.0-beta.14-nightly-934';
 
 (function (ionic) {
 
@@ -4481,6 +4481,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
   /** Callback to execute to start the actual refresh. Call {@link #refreshFinish} when done */
   __refreshStart: null,
 
+  /** Callback to state the progress while pulling to refresh */
+  __refreshPullProgress: null,
+
   /** Zoom level */
   __zoomLevel: 1,
 
@@ -5285,17 +5288,19 @@ ionic.views.Scroll = ionic.views.View.inherit({
    * @param showCallback {Function} Callback to execute when the refresher should be shown. This is for showing the refresher during a negative scrollTop.
    * @param hideCallback {Function} Callback to execute when the refresher should be hidden. This is for hiding the refresher when it's behind the nav bar.
    * @param tailCallback {Function} Callback to execute just before the refresher returns to it's original state. This is for zooming out the refresher.
+   * @param pullProgressCallback Callback to state the progress while pulling to refresh
    */
-  activatePullToRefresh: function(height, activateCallback, deactivateCallback, startCallback, showCallback, hideCallback, tailCallback) {
+  activatePullToRefresh: function(height, activateCallback, deactivateCallback, startCallback, showCallback, hideCallback, tailCallback, pullProgressCallback) {
     var self = this;
 
     self.__refreshHeight = height;
-    self.__refreshActivate = function(){ionic.requestAnimationFrame(activateCallback);};
-    self.__refreshDeactivate = function(){ionic.requestAnimationFrame(deactivateCallback);};
-    self.__refreshStart = function(){ionic.requestAnimationFrame(startCallback);};
-    self.__refreshShow = function(){ionic.requestAnimationFrame(showCallback);};
-    self.__refreshHide = function(){ionic.requestAnimationFrame(hideCallback);};
-    self.__refreshTail = function(){ionic.requestAnimationFrame(tailCallback);};
+    self.__refreshActivate = function() {ionic.requestAnimationFrame(activateCallback);};
+    self.__refreshDeactivate = function() {ionic.requestAnimationFrame(deactivateCallback);};
+    self.__refreshStart = function() {ionic.requestAnimationFrame(startCallback);};
+    self.__refreshShow = function() {ionic.requestAnimationFrame(showCallback);};
+    self.__refreshHide = function() {ionic.requestAnimationFrame(hideCallback);};
+    self.__refreshTail = function() {ionic.requestAnimationFrame(tailCallback);};
+    self.__refreshPullProgress = pullProgressCallback;
     self.__refreshTailTime = 100;
     self.__minSpinTime = 600;
   },
@@ -5326,19 +5331,19 @@ ionic.views.Scroll = ionic.views.View.inherit({
     // delay to make sure the spinner has a chance to spin for a split second before it's dismissed
     var d = new Date();
     var delay = 0;
-    if (self.refreshStartTime + self.__minSpinTime > d.getTime()){
+    if (self.refreshStartTime + self.__minSpinTime > d.getTime()) {
       delay = self.refreshStartTime + self.__minSpinTime - d.getTime();
     }
-    setTimeout(function(){
-      if (self.__refreshTail){
+    setTimeout(function() {
+      if (self.__refreshTail) {
         self.__refreshTail();
       }
-      setTimeout(function(){
+      setTimeout(function() {
         self.__refreshActive = false;
         if (self.__refreshDeactivate) {
           self.__refreshDeactivate();
         }
-        if (self.__refreshHide){
+        if (self.__refreshHide) {
           self.__refreshHide();
         }
 
@@ -5766,7 +5771,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
             if (!self.__enableScrollX && self.__refreshHeight != null) {
 
               // hide the refresher when it's behind the header bar in case of header transparency
-              if (scrollTop < 0){
+              if (scrollTop < 0) {
                 self.__refreshHidden = false;
                 self.__refreshShow();
               } else {
@@ -5788,6 +5793,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
                   self.__refreshDeactivate();
                 }
 
+              } else if (!self.__refreshActive && self.__refreshPullProgress) {
+                self.__refreshPullProgress(scrollTop / -self.__refreshHeight);
+
               }
             }
 
@@ -5800,7 +5808,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
             scrollTop = 0;
 
           }
-        } else if (self.__refreshHeight && !self.__refreshHidden){
+        } else if (self.__refreshHeight && !self.__refreshHidden) {
           // if a positive scroll value and the refresher is still not hidden, hide it
           self.__refreshHide();
           self.__refreshHidden = true;
@@ -6138,7 +6146,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       self.__minDecelerationScrollTop = 0;
       self.__maxDecelerationScrollLeft = self.__maxScrollLeft;
       self.__maxDecelerationScrollTop = self.__maxScrollTop;
-      if (self.__refreshActive) self.__minDecelerationScrollTop = self.__refreshHeight *-1;
+      if (self.__refreshActive) self.__minDecelerationScrollTop = self.__refreshHeight * -1;
     }
 
     // Wrap class method
