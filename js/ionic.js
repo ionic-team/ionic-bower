@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-935
+ * Ionic, v1.0.0-beta.14-nightly-937
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-935';
+window.ionic.version = '1.0.0-beta.14-nightly-937';
 
 (function (ionic) {
 
@@ -2003,40 +2003,41 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
   var IOS = 'ios';
   var ANDROID = 'android';
   var WINDOWS_PHONE = 'windowsphone';
+  var requestAnimationFrame = ionic.requestAnimationFrame;
 
   /**
    * @ngdoc utility
    * @name ionic.Platform
    * @module ionic
    * @description
-   * A set of utility methods that can be used to retrieve the device ready state and 
+   * A set of utility methods that can be used to retrieve the device ready state and
    * various other information such as what kind of platform the app is currently installed on.
    *
    * @usage
    * ```js
    * angular.module('PlatformApp', ['ionic'])
    * .controller('PlatformCtrl', function($scope) {
-   * 
+   *
    *   ionic.Platform.ready(function(){
    *     // will execute when device is ready, or immediately if the device is already ready.
    *   });
-   * 
+   *
    *   var deviceInformation = ionic.Platform.device();
-   * 
+   *
    *   var isWebView = ionic.Platform.isWebView();
    *   var isIPad = ionic.Platform.isIPad();
    *   var isIOS = ionic.Platform.isIOS();
    *   var isAndroid = ionic.Platform.isAndroid();
    *   var isWindowsPhone = ionic.Platform.isWindowsPhone();
-   *  
+   *
    *   var currentPlatform = ionic.Platform.platform();
    *   var currentPlatformVersion = ionic.Platform.version();
-   * 
+   *
    *   ionic.Platform.exit(); // stops the app
    * });
    * ```
    */
-  ionic.Platform = {
+  var self = ionic.Platform = {
 
     // Put navigator on platform so it can be mocked and set
     // the browser does not allow window.navigator to be set
@@ -2084,7 +2085,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      */
     ready: function(cb) {
       // run through tasks to complete now that the device is ready
-      if (this.isReady) {
+      if (self.isReady) {
         cb();
       } else {
         // the platform isn't ready yet, add it to this array
@@ -2097,12 +2098,12 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @private
      */
     detect: function() {
-      ionic.Platform._checkPlatforms();
+      self._checkPlatforms();
 
-      ionic.requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
         // only add to the body class if we got platform info
-        for (var i = 0; i < ionic.Platform.platforms.length; i++) {
-          document.body.classList.add('platform-' + ionic.Platform.platforms[i]);
+        for (var i = 0; i < self.platforms.length; i++) {
+          document.body.classList.add('platform-' + self.platforms[i]);
         }
       });
     },
@@ -2116,9 +2117,9 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @param {string} grade The new grade to set.
      */
     setGrade: function(grade) {
-      var oldGrade = this.grade;
-      this.grade = grade;
-      ionic.requestAnimationFrame(function() {
+      var oldGrade = self.grade;
+      self.grade = grade;
+      requestAnimationFrame(function() {
         if (oldGrade) {
           document.body.classList.remove('grade-' + oldGrade);
         }
@@ -2136,23 +2137,23 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
       return window.device || {};
     },
 
-    _checkPlatforms: function(platforms) {
-      this.platforms = [];
+    _checkPlatforms: function() {
+      self.platforms = [];
       var grade = 'a';
 
-      if (this.isWebView()) {
-        this.platforms.push('webview');
-        this.platforms.push('cordova');
+      if (self.isWebView()) {
+        self.platforms.push('webview');
+        self.platforms.push('cordova');
       } else {
-        this.platforms.push('browser');
+        self.platforms.push('browser');
       }
-      if (this.isIPad()) this.platforms.push('ipad');
+      if (self.isIPad()) self.platforms.push('ipad');
 
-      var platform = this.platform();
+      var platform = self.platform();
       if (platform) {
-        this.platforms.push(platform);
+        self.platforms.push(platform);
 
-        var version = this.version();
+        var version = self.version();
         if (version) {
           var v = version.toString();
           if (v.indexOf('.') > 0) {
@@ -2160,18 +2161,18 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
           } else {
             v += '_0';
           }
-          this.platforms.push(platform + v.split('_')[0]);
-          this.platforms.push(platform + v);
+          self.platforms.push(platform + v.split('_')[0]);
+          self.platforms.push(platform + v);
 
-          if (this.isAndroid() && version < 4.4) {
+          if (self.isAndroid() && version < 4.4) {
             grade = (version < 4 ? 'c' : 'b');
-          } else if (this.isWindowsPhone()) {
+          } else if (self.isWindowsPhone()) {
             grade = 'b';
           }
         }
       }
 
-      this.setGrade(grade);
+      self.setGrade(grade);
     },
 
     /**
@@ -2188,10 +2189,10 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @returns {boolean} Whether we are running on iPad.
      */
     isIPad: function() {
-      if (/iPad/i.test(ionic.Platform.navigator.platform)) {
+      if (/iPad/i.test(self.navigator.platform)) {
         return true;
       }
-      return /iPad/i.test(this.ua);
+      return /iPad/i.test(self.ua);
     },
     /**
      * @ngdoc method
@@ -2199,7 +2200,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @returns {boolean} Whether we are running on iOS.
      */
     isIOS: function() {
-      return this.is(IOS);
+      return self.is(IOS);
     },
     /**
      * @ngdoc method
@@ -2207,7 +2208,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @returns {boolean} Whether we are running on Android.
      */
     isAndroid: function() {
-      return this.is(ANDROID);
+      return self.is(ANDROID);
     },
     /**
      * @ngdoc method
@@ -2215,7 +2216,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @returns {boolean} Whether we are running on Windows Phone.
      */
     isWindowsPhone: function() {
-      return this.is(WINDOWS_PHONE);
+      return self.is(WINDOWS_PHONE);
     },
 
     /**
@@ -2225,7 +2226,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      */
     platform: function() {
       // singleton to get the platform name
-      if (platformName === null) this.setPlatform(this.device().platform);
+      if (platformName === null) self.setPlatform(self.device().platform);
       return platformName;
     },
 
@@ -2235,16 +2236,16 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
     setPlatform: function(n) {
       if (typeof n != 'undefined' && n !== null && n.length) {
         platformName = n.toLowerCase();
-      } else if(getParameterByName('ionicplatform')) {
+      } else if (getParameterByName('ionicplatform')) {
         platformName = getParameterByName('ionicplatform');
-      } else if (this.ua.indexOf('Android') > 0) {
+      } else if (self.ua.indexOf('Android') > 0) {
         platformName = ANDROID;
-      } else if (this.ua.indexOf('iPhone') > -1 || this.ua.indexOf('iPad') > -1 || this.ua.indexOf('iPod') > -1) {
+      } else if (self.ua.indexOf('iPhone') > -1 || self.ua.indexOf('iPad') > -1 || self.ua.indexOf('iPod') > -1) {
         platformName = IOS;
-      } else if (this.ua.indexOf('Windows Phone') > -1) {
+      } else if (self.ua.indexOf('Windows Phone') > -1) {
         platformName = WINDOWS_PHONE;
       } else {
-        platformName = ionic.Platform.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
+        platformName = self.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
       }
     },
 
@@ -2255,7 +2256,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      */
     version: function() {
       // singleton to get the platform version
-      if (platformVersion === null) this.setVersion(this.device().version);
+      if (platformVersion === null) self.setVersion(self.device().version);
       return platformVersion;
     },
 
@@ -2275,14 +2276,14 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
       platformVersion = 0;
 
       // fallback to user-agent checking
-      var pName = this.platform();
+      var pName = self.platform();
       var versionMatch = {
         'android': /Android (\d+).(\d+)?/,
         'ios': /OS (\d+)_(\d+)?/,
         'windowsphone': /Windows Phone (\d+).(\d+)?/
       };
       if (versionMatch[pName]) {
-        v = this.ua.match(versionMatch[pName]);
+        v = self.ua.match(versionMatch[pName]);
         if (v &&  v.length > 2) {
           platformVersion = parseFloat(v[1] + '.' + v[2]);
         }
@@ -2293,19 +2294,19 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
     is: function(type) {
       type = type.toLowerCase();
       // check if it has an array of platforms
-      if (this.platforms) {
-        for (var x = 0; x < this.platforms.length; x++) {
-          if (this.platforms[x] === type) return true;
+      if (self.platforms) {
+        for (var x = 0; x < self.platforms.length; x++) {
+          if (self.platforms[x] === type) return true;
         }
       }
       // exact match
-      var pName = this.platform();
+      var pName = self.platform();
       if (pName) {
         return pName === type.toLowerCase();
       }
 
       // A quick hack for to check userAgent
-      return this.ua.toLowerCase().indexOf(type) >= 0;
+      return self.ua.toLowerCase().indexOf(type) >= 0;
     },
 
     /**
@@ -2314,7 +2315,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      * @description Exit the app.
      */
     exitApp: function() {
-      this.ready(function() {
+      self.ready(function() {
         navigator.app && navigator.app.exitApp && navigator.app.exitApp();
       });
     },
@@ -2327,11 +2328,11 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      */
     showStatusBar: function(val) {
       // Only useful when run within cordova
-      this._showStatusBar = val;
-      this.ready(function() {
+      self._showStatusBar = val;
+      self.ready(function() {
         // run this only when or if the platform (cordova) is ready
-        ionic.requestAnimationFrame(function() {
-          if (ionic.Platform._showStatusBar) {
+        requestAnimationFrame(function() {
+          if (self._showStatusBar) {
             // they do not want it to be full screen
             window.StatusBar && window.StatusBar.show();
             document.body.classList.remove('status-bar-hide');
@@ -2354,25 +2355,25 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
      */
     fullScreen: function(showFullScreen, showStatusBar) {
       // showFullScreen: default is true if no param provided
-      this.isFullScreen = (showFullScreen !== false);
+      self.isFullScreen = (showFullScreen !== false);
 
       // add/remove the fullscreen classname to the body
       ionic.DomUtil.ready(function() {
         // run this only when or if the DOM is ready
-        ionic.requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
           // fixing pane height before we adjust this
-          panes = document.getElementsByClassName('pane');
+          var panes = document.getElementsByClassName('pane');
           for (var i = 0; i < panes.length; i++) {
             panes[i].style.height = panes[i].offsetHeight + "px";
           }
-          if (ionic.Platform.isFullScreen) {
+          if (self.isFullScreen) {
             document.body.classList.add('fullscreen');
           } else {
             document.body.classList.remove('fullscreen');
           }
         });
         // showStatusBar: default is false if no param provided
-        ionic.Platform.showStatusBar((showStatusBar === true));
+        self.showStatusBar((showStatusBar === true));
       });
     }
 
@@ -2385,7 +2386,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
 
   // setup listeners to know when the device is ready to go
   function onWindowLoad() {
-    if (ionic.Platform.isWebView()) {
+    if (self.isWebView()) {
       // the window and scripts are fully loaded, and a cordova/phonegap
       // object exists then let's listen for the deviceready
       document.addEventListener("deviceready", onPlatformReady, false);
@@ -2409,8 +2410,8 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
 
   function onPlatformReady() {
     // the device is all set to go, init our own stuff then fire off our event
-    ionic.Platform.isReady = true;
-    ionic.Platform.detect();
+    self.isReady = true;
+    self.detect();
     for (var x = 0; x < readyCallbacks.length; x++) {
       // fire off all the callbacks that were added before the platform was ready
       readyCallbacks[x]();
@@ -2418,7 +2419,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-935';
     readyCallbacks = [];
     ionic.trigger('platformready', { target: document });
 
-    ionic.requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
       document.body.classList.add('platform-ready');
     });
   }
