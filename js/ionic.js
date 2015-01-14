@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-937
+ * Ionic, v1.0.0-beta.14-nightly-941
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-937';
+window.ionic.version = '1.0.0-beta.14-nightly-941';
 
 (function (ionic) {
 
@@ -2240,7 +2240,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-937';
         platformName = getParameterByName('ionicplatform');
       } else if (self.ua.indexOf('Android') > 0) {
         platformName = ANDROID;
-      } else if (self.ua.indexOf('iPhone') > -1 || self.ua.indexOf('iPad') > -1 || self.ua.indexOf('iPod') > -1) {
+      } else if (/iPhone|iPad|iPod/.test(self.ua)) {
         platformName = IOS;
       } else if (self.ua.indexOf('Windows Phone') > -1) {
         platformName = WINDOWS_PHONE;

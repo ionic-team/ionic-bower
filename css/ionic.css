@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-937
+ * Ionic, v1.0.0-beta.14-nightly-941
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2395,10 +2395,7 @@ body.grade-b, body.grade-c {
 ion-infinite-scroll {
   height: 60px;
   width: 100%;
-  opacity: 0;
   display: block;
-  -webkit-transition: opacity 0.25s;
-  transition: opacity 0.25s;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -2425,8 +2422,16 @@ ion-infinite-scroll {
     color: #666666;
     font-size: 30px;
     color: #666666; }
-  ion-infinite-scroll.active {
-    opacity: 1; }
+    ion-infinite-scroll .icon:before {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0); }
+  ion-infinite-scroll:not(.active) .icon:before {
+    -webkit-transform: translate3d(-1000px, 0, 0);
+    transform: translate3d(-1000px, 0, 0); }
+
+body:not(.platform-ios) ion-infinite-scroll:not(.active) .icon {
+  -webkit-animation: none;
+  animation: none; }
 
 .overflow-scroll {
   overflow-x: hidden;
