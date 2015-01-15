@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-948
+ * Ionic, v1.0.0-beta.14-nightly-949
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7370,10 +7370,10 @@ a.button {
     opacity: 1; } }
 
 [nav-view-transition="ios"] [nav-view="entering"], [nav-view-transition="ios"] [nav-view="leaving"] {
-  -webkit-transition-duration: 450ms;
-  transition-duration: 450ms;
-  -webkit-transition-timing-function: cubic-bezier(0.3, 0.9, 0.4, 1);
-  transition-timing-function: cubic-bezier(0.3, 0.9, 0.4, 1);
+  -webkit-transition-duration: 500ms;
+  transition-duration: 500ms;
+  -webkit-transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
+  transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
   -webkit-transition-property: opacity, -webkit-transform;
   transition-property: opacity, transform; }
 [nav-view-transition="ios"][nav-view-direction="forward"], [nav-view-transition="ios"][nav-view-direction="back"] {
@@ -7384,10 +7384,10 @@ a.button {
   z-index: 2; }
 
 [nav-bar-transition="ios"] .title, [nav-bar-transition="ios"] .buttons, [nav-bar-transition="ios"] .back-text {
-  -webkit-transition-duration: 450ms;
-  transition-duration: 450ms;
-  -webkit-transition-timing-function: cubic-bezier(0.3, 0.9, 0.4, 1);
-  transition-timing-function: cubic-bezier(0.3, 0.9, 0.4, 1);
+  -webkit-transition-duration: 500ms;
+  transition-duration: 500ms;
+  -webkit-transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
+  transition-timing-function: cubic-bezier(0.36, 0.66, 0.04, 1);
   -webkit-transition-property: opacity, -webkit-transform;
   transition-property: opacity, transform; }
 [nav-bar-transition="ios"] [nav-bar="active"], [nav-bar-transition="ios"] [nav-bar="entering"] {
