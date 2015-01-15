@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-945
+ * Ionic, v1.0.0-beta.14-nightly-946
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3155,6 +3155,10 @@ a.subdued {
     border-bottom-width: 0px;
     background-image: none; }
 
+.tabs-top .bar-header {
+  border-bottom-width: 0px;
+  background-image: none; }
+
 .bar-footer {
   bottom: 0;
   border-top-width: 1px;
@@ -3798,22 +3802,23 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding-bottom: 0; }
   .tabs-top.tabs-striped .tab-item {
     background: transparent;
-    -webkit-transition: all 0.1s ease;
-    -moz-transition: all 0.1s ease;
-    -ms-transition: all 0.1s ease;
-    -o-transition: all 0.1s ease;
-    transition: all 0.1s ease; }
+    -webkit-transition: color 0.1s ease;
+    -moz-transition: color 0.1s ease;
+    -ms-transition: color 0.1s ease;
+    -o-transition: color 0.1s ease;
+    transition: color 0.1s ease; }
     .tabs-top.tabs-striped .tab-item.tab-item-active, .tabs-top.tabs-striped .tab-item.active, .tabs-top.tabs-striped .tab-item.activated {
-      margin-top: 0;
-      margin-bottom: -2px;
+      margin-top: 1px;
       border-width: 0px 0px 2px 0px !important;
       border-style: solid; }
+      .tabs-top.tabs-striped .tab-item.tab-item-active > .badge, .tabs-top.tabs-striped .tab-item.tab-item-active > i, .tabs-top.tabs-striped .tab-item.active > .badge, .tabs-top.tabs-striped .tab-item.active > i, .tabs-top.tabs-striped .tab-item.activated > .badge, .tabs-top.tabs-striped .tab-item.activated > i {
+        margin-top: -1px; }
     .tabs-top.tabs-striped .tab-item .badge {
-      -webkit-transition: all 0.2s ease;
-      -moz-transition: all 0.2s ease;
-      -ms-transition: all 0.2s ease;
-      -o-transition: all 0.2s ease;
-      transition: all 0.2s ease; }
+      -webkit-transition: color 0.2s ease;
+      -moz-transition: color 0.2s ease;
+      -ms-transition: color 0.2s ease;
+      -o-transition: color 0.2s ease;
+      transition: color 0.2s ease; }
 
 /* Allow parent element to have tabs-top */
 /* If you change this, change platform.scss as well */
