@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-949
+ * Ionic, v1.0.0-beta.14-nightly-950
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5982,8 +5982,8 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   margin: -5px;
   padding: 5px; }
   .toggle input:checked + .track {
-    border-color: #387ef5;
-    background-color: #387ef5; }
+    border-color: #4cd964;
+    background-color: #4cd964; }
   .toggle.dragging .handle {
     background-color: #f2f2f2 !important; }
   .toggle.toggle-light input:checked + .track {
@@ -6021,17 +6021,17 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 .toggle .track {
   -webkit-transition-timing-function: ease-in-out;
   transition-timing-function: ease-in-out;
-  -webkit-transition-duration: 0.2s;
-  transition-duration: 0.2s;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
   -webkit-transition-property: background-color, border;
   transition-property: background-color, border;
   display: inline-block;
   box-sizing: border-box;
-  width: 54px;
-  height: 32px;
-  border: solid 2px #E5E5E5;
+  width: 51px;
+  height: 31px;
+  border: solid 2px #e6e6e6;
   border-radius: 20px;
-  background-color: #E5E5E5;
+  background-color: #fff;
   content: ' ';
   cursor: pointer;
   pointer-events: none; }
@@ -6044,40 +6044,41 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 /* the handle (circle) thats inside the toggle's track area */
 /* also the handle's appearance when it is "off" */
 .toggle .handle {
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
+  -webkit-transition: 0.3s cubic-bezier(0, 1.1, 1, 1.1);
+  transition: 0.3s cubic-bezier(0, 1.1, 1, 1.1);
   position: absolute;
   display: block;
-  width: 28px;
-  height: 28px;
-  border-radius: 28px;
+  width: 27px;
+  height: 27px;
+  border-radius: 27px;
   background-color: #fff;
   top: 7px;
-  left: 7px; }
+  left: 7px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.35), 0 1px 1px rgba(0, 0, 0, 0.15); }
   .toggle .handle:before {
     position: absolute;
     top: -4px;
-    left: -22px;
-    padding: 19px 35px;
+    left: -21.5px;
+    padding: 18.5px 34px;
     content: " "; }
 
 .toggle input:checked + .track .handle {
-  -webkit-transform: translate3d(22px, 0, 0);
-  transform: translate3d(22px, 0, 0);
+  -webkit-transform: translate3d(20px, 0, 0);
+  transform: translate3d(20px, 0, 0);
   background-color: #fff; }
 
 .item-toggle.active {
   box-shadow: none; }
 
 .item-toggle, .item-toggle.item-complex .item-content {
-  padding-right: 102px; }
+  padding-right: 99px; }
 
 .item-toggle.item-complex {
   padding-right: 0; }
 
 .item-toggle .toggle {
   position: absolute;
-  top: 8px;
+  top: 10px;
   right: 16px;
   z-index: 3; }
 
