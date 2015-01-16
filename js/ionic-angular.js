@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-950
+ * Ionic, v1.0.0-beta.14-nightly-951
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11928,7 +11928,7 @@ function($ionicGesture, $timeout) {
  * left in the DOM, and its scope is disconnected from the `$watch` cycle. When navigating to a
  * view that is already cached, its scope is reconnected, and the existing element, which was
  * left in the DOM, becomes active again. This can be disabled, or the maximum number of cached
- * views changed in {@link ionic.directive:ionicConfig}, in the view's `$state` configuration, or
+ * views changed in {@link ionic.provider:$ionicConfigProvider}, in the view's `$state` configuration, or
  * as an attribute on the view itself (see below).
  *
  * @usage
