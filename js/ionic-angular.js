@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-953
+ * Ionic, v1.0.0-beta.14-nightly-954
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9587,6 +9587,14 @@ function keyboardAttachGetClientHeight(element) {
 *   </ion-item>
 * </ion-list>
 * ```
+*
+*```javascript
+* app.controller('MyCtrl', function($scope, $ionicLoading) {
+*  $scope.shouldShowDelete = false;
+*  $scope.shouldShowReorder = false;
+*  $scope.listCanSwipe = true
+* });
+*```
 *
 * @param {string=} delegate-handle The handle used to identify this list with
 * {@link ionic.service:$ionicListDelegate}.
