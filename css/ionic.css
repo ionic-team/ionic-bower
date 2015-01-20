@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-956
+ * Ionic, v1.0.0-beta.14-nightly-957
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5531,20 +5531,32 @@ a.item-content {
     transform: translate3d(0, 0, 0) rotate(0); } }
 
 /**
- * Loaders (Spinners)
+ * Spinners
  * --------------------------------------------------
  */
-svg.loader {
-  width: 28px;
-  height: 28px;
-  stroke: #333;
-  fill: #333; }
+.spinner {
+  stroke: #444;
+  fill: #444; }
+  .spinner svg {
+    width: 28px;
+    height: 28px; }
+  .spinner.spinner-inverse {
+    stroke: #fff;
+    fill: #fff; }
 
-.loader-ios line, .loader-ios-small line {
+.spinner-android {
+  stroke: #4b8bf4; }
+
+.spinner-ios, .spinner-ios-small {
   stroke: #69717d; }
 
-.loader-android circle {
-  stroke: #4b8bf4; }
+.spinner-spiral .stop1 {
+  stop-color: #fff;
+  stop-opacity: 0; }
+.spinner-spiral.spinner-inverse .stop1 {
+  stop-color: #000; }
+.spinner-spiral.spinner-inverse .stop2 {
+  stop-color: #fff; }
 
 /**
  * Forms
