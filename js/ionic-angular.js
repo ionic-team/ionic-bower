@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-959
+ * Ionic, v1.0.0-beta.14-nightly-960
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5669,7 +5669,11 @@ IonicModule
   self.isLoading = false;
 
   $scope.icon = function() {
-    return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-loading-d';
+    return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-load-d';
+  };
+
+  $scope.spinner = function() {
+    return angular.isDefined($attrs.spinner) ? $attrs.spinner : '';
   };
 
   $scope.$on('scroll.infiniteScrollComplete', function() {
@@ -9056,7 +9060,10 @@ function headerFooterBarDirective(isHeader) {
  * bottom.
  * @param {string=} distance The distance from the bottom that the scroll must
  * reach to trigger the on-infinite expression. Default: 1%.
- * @param {string=} icon The icon to show while loading. Default: 'ion-loading-d'.
+ * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while loading. The SVG
+ * {@link ionic.directive:ionSpinner} is now the default, replacing rotating font icons.
+ * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreicated
+ * in favor of the SVG {@link ionic.directive:ionSpinner}.
  * @param {boolean=} immediate-check Whether to check the infinite scroll bounds immediately on load.
  *
  * @usage
@@ -9105,7 +9112,10 @@ IonicModule
   return {
     restrict: 'E',
     require: ['?^$ionicScroll', 'ionInfiniteScroll'],
-    template: '<i class="icon {{icon()}} icon-refreshing {{scrollingType}}"></i>',
+    template: function($element, $attrs){
+      if ($attrs.icon) return '<i class="icon {{icon()}} icon-refreshing {{scrollingType}}"></i>';
+      return '<ion-spinner icon="{{spinner()}}"></ion-spinner>';
+    },
     scope: true,
     controller: '$ionInfiniteScroll',
     link: function($scope, $element, $attrs, ctrls) {
