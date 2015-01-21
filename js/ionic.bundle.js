@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-961
+ * Ionic, v1.0.0-beta.14-nightly-962
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-961';
+window.ionic.version = '1.0.0-beta.14-nightly-962';
 
 (function (ionic) {
 
@@ -40942,7 +40942,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-961
+ * Ionic, v1.0.0-beta.14-nightly-962
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41703,9 +41703,8 @@ function($cacheFactory, $parse, $rootScope) {
       // Subtract so we start at the beginning of this.data, after
       // this.beforeSiblings.
       index -= this.dataStartIndex;
-
       if (index > this.data.length - 1) {
-        return this.afterSiblings[index - this.dataStartIndex];
+        return this.afterSiblings[index - this.data.length];
       }
 
       var item = this.getItem(index);
@@ -49259,7 +49258,6 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
             before = false;
           } else {
             if (node.hasAttribute('collection-repeat-ignore')) return;
-            if (node.nodeName === 'ION-INFINITE-SCROLL')return;
             var width = node.offsetWidth;
             var height = node.offsetHeight;
             if (width && height) {
