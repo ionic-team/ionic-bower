@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-960
+ * Ionic, v1.0.0-beta.14-nightly-961
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2119,6 +2119,22 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
 
 /**
  * @ngdoc method
+ * @name $ionicConfigProvider#form.checkbox
+ * @description Checkbox style. Android defaults to `square` and iOS defaults to `circle`.
+ * @param {string} value
+ * @returns {string}
+ */
+
+/**
+ * @ngdoc method
+ * @name $ionicConfigProvider#form.toggle
+ * @description Toggle item style. Android defaults to `small` and iOS defaults to `large`.
+ * @param {string} value
+ * @returns {string}
+ */
+
+/**
+ * @ngdoc method
  * @name $ionicConfigProvider#tabs.style
  * @description Tab style. Android defaults to `striped` and iOS defaults to `standard`.
  * @param {string} value Available values include `striped` and `standard`.
@@ -2224,7 +2240,8 @@ IonicModule
       previousTitleText: PLATFORM
     },
     form: {
-      checkbox: PLATFORM
+      checkbox: PLATFORM,
+      toggle: PLATFORM
     },
     scrolling: {
       jsScrolling: PLATFORM
@@ -2266,7 +2283,8 @@ IonicModule
     },
 
     form: {
-      checkbox: 'circle'
+      checkbox: 'circle',
+      toggle: 'large'
     },
 
     scrolling: {
@@ -2313,7 +2331,8 @@ IonicModule
     },
 
     form: {
-      checkbox: 'square'
+      checkbox: 'square',
+      toggle: 'small'
     },
 
     tabs: {
@@ -12037,9 +12056,9 @@ function($ionicTabsDelegate, $ionicConfig, $ionicHistory) {
  */
 IonicModule
 .directive('ionToggle', [
-  '$ionicGesture',
   '$timeout',
-function($ionicGesture, $timeout) {
+  '$ionicConfig',
+function($timeout, $ionicConfig) {
 
   return {
     restrict: 'E',
@@ -12078,34 +12097,32 @@ function($ionicGesture, $timeout) {
         element[0].getElementsByTagName('label')[0].classList.add(attr.toggleClass);
       }
 
-      return function($scope, $element, $attr) {
-         var el, checkbox, track, handle;
+      element.addClass('toggle-' + $ionicConfig.form.toggle());
 
-         el = $element[0].getElementsByTagName('label')[0];
-         checkbox = el.children[0];
-         track = el.children[1];
-         handle = track.children[0];
+      return function($scope, $element) {
+        var el = $element[0].getElementsByTagName('label')[0];
+        var checkbox = el.children[0];
+        var track = el.children[1];
+        var handle = track.children[0];
 
-         var ngModelController = jqLite(checkbox).controller('ngModel');
+        var ngModelController = jqLite(checkbox).controller('ngModel');
 
-         $scope.toggle = new ionic.views.Toggle({
-           el: el,
-           track: track,
-           checkbox: checkbox,
-           handle: handle,
-           onChange: function() {
-             if(checkbox.checked) {
-               ngModelController.$setViewValue(true);
-             } else {
-               ngModelController.$setViewValue(false);
-             }
-             $scope.$apply();
-           }
-         });
+        $scope.toggle = new ionic.views.Toggle({
+          el: el,
+          track: track,
+          checkbox: checkbox,
+          handle: handle,
+          onChange: function() {
+            if (ngModelController) {
+              ngModelController.$setViewValue(checkbox.checked);
+              $scope.$apply();
+            }
+          }
+        });
 
-         $scope.$on('$destroy', function() {
-           $scope.toggle.destroy();
-         });
+        $scope.$on('$destroy', function() {
+          $scope.toggle.destroy();
+        });
       };
     }
 

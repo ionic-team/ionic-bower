@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-960
+ * Ionic, v1.0.0-beta.14-nightly-961
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6023,43 +6023,6 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
   border-color: #444;
   background-color: #444; }
 
-.platform-android .toggle.toggle-light input:checked + .track {
-  background-color: rgba(221, 221, 221, 0.5); }
-.platform-android .toggle.toggle-light input:checked + .track .handle {
-  background-color: #ddd; }
-.platform-android .toggle.toggle-stable input:checked + .track {
-  background-color: rgba(178, 178, 178, 0.5); }
-.platform-android .toggle.toggle-stable input:checked + .track .handle {
-  background-color: #b2b2b2; }
-.platform-android .toggle.toggle-positive input:checked + .track {
-  background-color: rgba(56, 126, 245, 0.5); }
-.platform-android .toggle.toggle-positive input:checked + .track .handle {
-  background-color: #387ef5; }
-.platform-android .toggle.toggle-calm input:checked + .track {
-  background-color: rgba(17, 193, 243, 0.5); }
-.platform-android .toggle.toggle-calm input:checked + .track .handle {
-  background-color: #11c1f3; }
-.platform-android .toggle.toggle-assertive input:checked + .track {
-  background-color: rgba(239, 71, 58, 0.5); }
-.platform-android .toggle.toggle-assertive input:checked + .track .handle {
-  background-color: #ef473a; }
-.platform-android .toggle.toggle-balanced input:checked + .track {
-  background-color: rgba(51, 205, 95, 0.5); }
-.platform-android .toggle.toggle-balanced input:checked + .track .handle {
-  background-color: #33cd5f; }
-.platform-android .toggle.toggle-energized input:checked + .track {
-  background-color: rgba(255, 201, 0, 0.5); }
-.platform-android .toggle.toggle-energized input:checked + .track .handle {
-  background-color: #ffc900; }
-.platform-android .toggle.toggle-royal input:checked + .track {
-  background-color: rgba(136, 106, 234, 0.5); }
-.platform-android .toggle.toggle-royal input:checked + .track .handle {
-  background-color: #886aea; }
-.platform-android .toggle.toggle-dark input:checked + .track {
-  background-color: rgba(68, 68, 68, 0.5); }
-.platform-android .toggle.toggle-dark input:checked + .track .handle {
-  background-color: #444; }
-
 .toggle input {
   display: none; }
 
@@ -6133,25 +6096,61 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
 .toggle input:disabled + .track {
   opacity: 0.6; }
 
-.platform-android .toggle .track {
+.toggle-small .track {
   border: 0;
   width: 34px;
   height: 15px;
   background: #9e9e9e; }
-.platform-android .toggle input:checked + .track {
+.toggle-small input:checked + .track {
   background: rgba(0, 150, 137, 0.5); }
-.platform-android .toggle .handle {
+.toggle-small .handle {
   top: 2px;
   left: 4px;
   width: 21px;
   height: 21px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25); }
-.platform-android .toggle input:checked + .track .handle {
+.toggle-small input:checked + .track .handle {
   -webkit-transform: translate3d(16px, 0, 0);
   transform: translate3d(16px, 0, 0);
   background: #009689; }
-.platform-android .item-toggle .toggle {
+.toggle-small.item-toggle .toggle {
   top: 19px; }
+.toggle-small .toggle-light input:checked + .track {
+  background-color: rgba(221, 221, 221, 0.5); }
+.toggle-small .toggle-light input:checked + .track .handle {
+  background-color: #ddd; }
+.toggle-small .toggle-stable input:checked + .track {
+  background-color: rgba(178, 178, 178, 0.5); }
+.toggle-small .toggle-stable input:checked + .track .handle {
+  background-color: #b2b2b2; }
+.toggle-small .toggle-positive input:checked + .track {
+  background-color: rgba(56, 126, 245, 0.5); }
+.toggle-small .toggle-positive input:checked + .track .handle {
+  background-color: #387ef5; }
+.toggle-small .toggle-calm input:checked + .track {
+  background-color: rgba(17, 193, 243, 0.5); }
+.toggle-small .toggle-calm input:checked + .track .handle {
+  background-color: #11c1f3; }
+.toggle-small .toggle-assertive input:checked + .track {
+  background-color: rgba(239, 71, 58, 0.5); }
+.toggle-small .toggle-assertive input:checked + .track .handle {
+  background-color: #ef473a; }
+.toggle-small .toggle-balanced input:checked + .track {
+  background-color: rgba(51, 205, 95, 0.5); }
+.toggle-small .toggle-balanced input:checked + .track .handle {
+  background-color: #33cd5f; }
+.toggle-small .toggle-energized input:checked + .track {
+  background-color: rgba(255, 201, 0, 0.5); }
+.toggle-small .toggle-energized input:checked + .track .handle {
+  background-color: #ffc900; }
+.toggle-small .toggle-royal input:checked + .track {
+  background-color: rgba(136, 106, 234, 0.5); }
+.toggle-small .toggle-royal input:checked + .track .handle {
+  background-color: #886aea; }
+.toggle-small .toggle-dark input:checked + .track {
+  background-color: rgba(68, 68, 68, 0.5); }
+.toggle-small .toggle-dark input:checked + .track .handle {
+  background-color: #444; }
 
 /**
  * Radio Button Inputs
