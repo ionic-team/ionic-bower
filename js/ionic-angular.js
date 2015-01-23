@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-963
+ * Ionic, v1.0.0-beta.14-nightly-964
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7162,7 +7162,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   // Handle a drag event
   self._handleDrag = function(e) {
-    if (isAsideExposed) return;
+    if (isAsideExposed || !$scope.dragContent) return;
 
     // If we don't have start coords, grab and store them
     if (!startX) {
