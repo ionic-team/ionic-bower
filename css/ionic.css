@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-965
+ * Ionic, v1.0.0-beta.14-nightly-966
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5759,7 +5759,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 .platform-ios input[type="datetime-local"], .platform-ios input[type="date"], .platform-ios input[type="month"], .platform-ios input[type="time"], .platform-ios input[type="week"], .platform-android input[type="datetime-local"], .platform-android input[type="date"], .platform-android input[type="month"], .platform-android input[type="time"], .platform-android input[type="week"] {
   padding-top: 8px; }
 
-input, textarea {
+.item-input input, .item-input textarea {
   width: 100%; }
 
 textarea {
@@ -5782,7 +5782,7 @@ input[type="radio"], input[type="checkbox"] {
   margin: 0;
   line-height: normal; }
 
-input[type="file"], input[type="image"], input[type="submit"], input[type="reset"], input[type="button"], input[type="radio"], input[type="checkbox"] {
+.item-input input[type="file"], .item-input input[type="image"], .item-input input[type="submit"], .item-input input[type="reset"], .item-input input[type="button"], .item-input input[type="radio"], .item-input input[type="checkbox"] {
   width: auto; }
 
 input[type="file"] {
@@ -6201,7 +6201,7 @@ input[type="radio"][disabled], input[type="checkbox"][disabled], input[type="rad
  * Range
  * --------------------------------------------------
  */
-input[type="range"] {
+.range input {
   display: inline-block;
   overflow: hidden;
   margin-top: 5px;
@@ -6217,7 +6217,7 @@ input[type="range"] {
   background-size: 99% 2px;
   background-repeat: no-repeat;
   -webkit-appearance: none; }
-  input[type="range"]::-webkit-slider-thumb {
+  .range input::-webkit-slider-thumb {
     position: relative;
     width: 28px;
     height: 28px;
@@ -6227,7 +6227,7 @@ input[type="range"] {
     cursor: pointer;
     -webkit-appearance: none;
     border: 0; }
-  input[type="range"]::-webkit-slider-thumb:before {
+  .range input::-webkit-slider-thumb:before {
     /* what creates the colorful line on the left side of the slider */
     position: absolute;
     top: 13px;
@@ -6236,7 +6236,7 @@ input[type="range"] {
     height: 2px;
     background: #444;
     content: ' '; }
-  input[type="range"]::-webkit-slider-thumb:after {
+  .range input::-webkit-slider-thumb:after {
     /* create a larger (but hidden) hit area */
     position: absolute;
     top: -15px;
