@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-969
+ * Ionic, v1.0.0-beta.14-nightly-971
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -64,8 +64,8 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
   isDefined = angular.isDefined,
   isNumber = angular.isNumber,
   isString = angular.isString,
-  jqLite = angular.element;
-
+  jqLite = angular.element,
+  noop = angular.noop;
 
 /**
  * @ngdoc service
@@ -163,11 +163,11 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
   function actionSheet(opts) {
     var scope = $rootScope.$new(true);
 
-    angular.extend(scope, {
-      cancel: angular.noop,
-      destructiveButtonClicked: angular.noop,
-      buttonClicked: angular.noop,
-      $deregisterBackButton: angular.noop,
+    extend(scope, {
+      cancel: noop,
+      destructiveButtonClicked: noop,
+      buttonClicked: noop,
+      $deregisterBackButton: noop,
       buttons: [],
       cancelOnStateChange: true
     }, opts || {});
@@ -192,7 +192,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
 
     var stateChangeListenDone = scope.cancelOnStateChange ?
       $rootScope.$on('$stateChangeSuccess', function() { scope.cancel(); }) :
-      angular.noop;
+      noop;
 
     // removes the actionSheet from the screen
     scope.removeSheet = function(done) {
@@ -213,7 +213,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
         element.remove();
         // scope.cancel.$scope is defined near the bottom
         scope.cancel.$scope = sheetEl = null;
-        (done || angular.noop)();
+        (done || noop)();
       });
     };
 
@@ -225,7 +225,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
 
       $animate.addClass(element, 'active').then(function() {
         if (scope.removed) return;
-        (done || angular.noop)();
+        (done || noop)();
       });
       $timeout(function() {
         if (scope.removed) return;
@@ -327,86 +327,6 @@ jqLite.prototype.removeClass = function(cssClasses) {
   }
   return this;
 };
-
-
-/**
- * @private
- */
-IonicModule
-.factory('$$ionicAttachDrag', [function() {
-
-  return attachDrag;
-
-  function attachDrag(scope, element, options) {
-    var opts = extend({}, {
-      getDistance: function() { return opts.element.prop('offsetWidth'); },
-      onDragStart: angular.noop,
-      onDrag: angular.noop,
-      onDragEnd: angular.noop
-    }, options);
-
-    var dragStartGesture = ionic.onGesture('dragstart', handleDragStart, element[0]);
-    var dragGesture = ionic.onGesture('drag', handleDrag, element[0]);
-    var dragEndGesture = ionic.onGesture('dragend', handleDragEnd, element[0]);
-
-    scope.$on('$destroy', function() {
-      ionic.offGesture(dragStartGesture, 'dragstart', handleDragStart);
-      ionic.offGesture(dragGesture, 'drag', handleDrag);
-      ionic.offGesture(dragEndGesture, 'dragend', handleDragEnd);
-    });
-
-    var isDragging = false;
-    element.on('touchmove pointermove mousemove', function(ev) {
-      if (isDragging) ev.preventDefault();
-    });
-    element.on('touchend mouseup mouseleave', function(ev) {
-      isDragging = false;
-    });
-
-    var dragState;
-    function handleDragStart(ev) {
-      if (dragState) return;
-      if (opts.onDragStart() !== false) {
-        dragState = {
-          startX: ev.gesture.center.pageX,
-          startY: ev.gesture.center.pageY,
-          distance: opts.getDistance()
-        };
-      }
-    }
-    function handleDrag(ev) {
-      if (!dragState) return;
-      var deltaX = dragState.startX - ev.gesture.center.pageX;
-      var deltaY = dragState.startY - ev.gesture.center.pageY;
-      var isVertical = ev.gesture.direction === 'up' || ev.gesture.direction === 'down';
-
-      if (isVertical && Math.abs(deltaY) > Math.abs(deltaX) * 2) {
-        handleDragEnd(ev);
-        return;
-      }
-      if (Math.abs(deltaX) > Math.abs(deltaY) * 2) {
-        isDragging = true;
-      }
-
-      var percent = getDragPercent(ev.gesture.center.pageX);
-      opts.onDrag(percent);
-    }
-    function handleDragEnd(ev) {
-      if (!dragState) return;
-      var percent = getDragPercent(ev.gesture.center.pageX);
-      options.onDragEnd(percent, ev.gesture.velocityX);
-
-      dragState = null;
-    }
-
-    function getDragPercent(x) {
-      var delta = dragState.startX - x;
-      var percent = delta / dragState.distance;
-      return percent;
-    }
-  }
-
-}]);
 
 /**
  * @ngdoc service
@@ -874,7 +794,7 @@ function($rootScope, $timeout) {
         return this.scrollView.__clientWidth;
       };
       this.transformString = function(y, x) {
-        return 'translate3d('+x+'px,'+y+'px,0)';
+        return 'translate3d(' + x + 'px,' + y + 'px,0)';
       };
       this.primaryDimension = function(dim) {
         return dim.height;
@@ -898,7 +818,7 @@ function($rootScope, $timeout) {
         return this.scrollView.__clientHeight;
       };
       this.transformString = function(x, y) {
-        return 'translate3d('+x+'px,'+y+'px,0)';
+        return 'translate3d(' + x + 'px,' + y + 'px,0)';
       };
       this.primaryDimension = function(dim) {
         return dim.width;
@@ -912,8 +832,8 @@ function($rootScope, $timeout) {
   CollectionRepeatManager.prototype = {
     destroy: function() {
       this.renderedItems = {};
-      this.render = angular.noop;
-      this.calculateDimensions = angular.noop;
+      this.render = noop;
+      this.calculateDimensions = noop;
       this.dimensions = [];
     },
 
@@ -1058,7 +978,7 @@ function($rootScope, $timeout) {
         }
       //Scrolling down
       } else {
-        while ( (rect = this.dimensions[i + 1]) && rect.primaryPos < scrollValue) {
+        while ((rect = this.dimensions[i + 1]) && rect.primaryPos < scrollValue) {
           i++;
         }
       }
@@ -1071,7 +991,7 @@ function($rootScope, $timeout) {
     render: function(shouldRedrawAll) {
       var self = this;
       var i;
-      var isOutOfBounds = ( this.currentIndex >= this.dataSource.getLength() );
+      var isOutOfBounds = (this.currentIndex >= this.dataSource.getLength());
       // We want to remove all the items and redraw everything if we're out of bounds
       // or a flag is passed in.
       if (isOutOfBounds || shouldRedrawAll) {
@@ -2670,8 +2590,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
 
   var loaderInstance;
   //default values
-  var deregisterBackAction = angular.noop;
-  var deregisterStateListener = angular.noop;
+  var deregisterBackAction = noop;
+  var deregisterStateListener = noop;
   var loadingShowDelay = $q.when();
 
   return {
@@ -2741,7 +2661,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           deregisterBackAction();
           //Disable hardware back button while loading
           deregisterBackAction = $ionicPlatform.registerBackButtonAction(
-            angular.noop,
+            noop,
             PLATFORM_BACK_BUTTON_PRIORITY_LOADING
           );
 
@@ -2796,7 +2716,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
 
     //If loading.show() was called previously, cancel it and show with our new options
     loadingShowDelay && $timeout.cancel(loadingShowDelay);
-    loadingShowDelay = $timeout(angular.noop, delay);
+    loadingShowDelay = $timeout(noop, delay);
 
     loadingShowDelay.then(getLoader).then(function(loader) {
       if (options.hideOnStateChange) {
@@ -2979,7 +2899,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
 
       self._isShown = true;
       self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(
-        self.hardwareBackButtonClose ? angular.bind(self, self.hide) : angular.noop,
+        self.hardwareBackButtonClose ? angular.bind(self, self.hide) : noop,
         PLATFORM_BACK_BUTTON_PRIORITY_MODAL
       );
 
@@ -3474,7 +3394,7 @@ function($ionicModal, $ionicPosition, $document, $window) {
   };
 
   function positionView(target, popoverEle) {
-    var targetEle = angular.element(target.target || target);
+    var targetEle = jqLite(target.target || target);
     var buttonOffset = $ionicPosition.offset(targetEle);
     var popoverWidth = popoverEle.prop('offsetWidth');
     var popoverHeight = popoverEle.prop('offsetHeight');
@@ -3918,7 +3838,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
         subTitle: options.subTitle,
         cssClass: options.cssClass,
         $buttonTapped: function(button, event) {
-          var result = (button.onTap || angular.noop)(event);
+          var result = (button.onTap || noop)(event);
           event = event.originalEvent || event; //jquery events
 
           if (!event.defaultPrevented) {
@@ -3941,7 +3861,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
         });
       };
       self.hide = function(callback) {
-        callback = callback || angular.noop;
+        callback = callback || noop;
         if (!self.isShown) return callback();
 
         self.isShown = false;
@@ -3976,7 +3896,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
       previousPopup.hide();
     }
 
-    var resultPromise = $timeout(angular.noop, previousPopup ? config.stackPushDelay : 0)
+    var resultPromise = $timeout(noop, previousPopup ? config.stackPushDelay : 0)
     .then(function() { return popupPromise; })
     .then(function(popup) {
       if (!previousPopup) {
@@ -4017,7 +3937,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
           $timeout(function() {
             $ionicBackdrop.release();
           }, config.stackPushDelay || 0);
-          ($ionicPopup._backButtonActionDone || angular.noop)();
+          ($ionicPopup._backButtonActionDone || noop)();
         }
         return result;
       });
@@ -4155,7 +4075,7 @@ IonicModule
       var offsetParentBCR = { top: 0, left: 0 };
       var offsetParentEl = parentOffsetEl(element[0]);
       if (offsetParentEl != $document[0]) {
-        offsetParentBCR = this.offset(angular.element(offsetParentEl));
+        offsetParentBCR = this.offset(jqLite(offsetParentEl));
         offsetParentBCR.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
         offsetParentBCR.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
       }
@@ -5308,7 +5228,7 @@ function($provide) {
     //found nearest to body's scrollTop is set to scroll to an element
     //with that ID.
     $location.hash = function(value) {
-      if (angular.isDefined(value)) {
+      if (isDefined(value)) {
         $timeout(function() {
           var scroll = document.querySelector('.scroll-content');
           if (scroll)
@@ -5687,11 +5607,11 @@ IonicModule
   self.isLoading = false;
 
   $scope.icon = function() {
-    return angular.isDefined($attrs.icon) ? $attrs.icon : 'ion-load-d';
+    return isDefined($attrs.icon) ? $attrs.icon : 'ion-load-d';
   };
 
   $scope.spinner = function() {
-    return angular.isDefined($attrs.spinner) ? $attrs.spinner : '';
+    return isDefined($attrs.spinner) ? $attrs.spinner : '';
   };
 
   $scope.$on('scroll.infiniteScrollComplete', function() {
@@ -6714,7 +6634,10 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   $scope.$on('$destroy', function() {
     deregisterInstance();
-    scrollView.__cleanup();
+    //Windows: make sure the scrollView.__cleanup exists before calling it
+    if (scrollView.__cleanup) {
+        scrollView.__cleanup();
+    }
     ionic.off('resize', resize, $window);
     $window.removeEventListener('resize', resize);
     scrollViewOptions = null;
@@ -7201,7 +7124,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
   self.edgeThresholdEnabled = false;
   self.edgeDragThreshold = function(value) {
     if (arguments.length) {
-      if (angular.isNumber(value) && value > 0) {
+      if (isNumber(value) && value > 0) {
         self.edgeThreshold = value;
         self.edgeThresholdEnabled = true;
       } else {
@@ -7239,7 +7162,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   $scope.sideMenuContentTranslateX = 0;
 
-  var deregisterBackButtonAction = angular.noop;
+  var deregisterBackButtonAction = noop;
   var closeSideMenu = angular.bind(self, self.close);
 
   $scope.$watch(function() {
@@ -7784,14 +7707,14 @@ function($scope, $element, $ionicHistory) {
     if (tab.$tabSelected) {
       selectedTab = selectedTabIndex = null;
       tab.$tabSelected = false;
-      (tab.onDeselect || angular.noop)();
+      (tab.onDeselect || noop)();
       tab.$broadcast && tab.$broadcast('$ionicHistory.deselect');
     }
   };
 
   self.select = function(tab, shouldEmitEvent) {
     var tabIndex;
-    if (angular.isNumber(tab)) {
+    if (isNumber(tab)) {
       tabIndex = tab;
       if (tabIndex >= self.tabs.length) return;
       tab = self.tabs[tabIndex];
@@ -7822,7 +7745,7 @@ function($scope, $element, $ionicHistory) {
 
       //Use a funny name like $tabSelected so the developer doesn't overwrite the var in a child scope
       tab.$tabSelected = true;
-      (tab.onSelect || angular.noop)();
+      (tab.onSelect || noop)();
 
       if (shouldEmitEvent) {
         $scope.$emit('$ionicHistory.change', {
@@ -8234,7 +8157,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
     terminal: true,
     $$tlb: true,
     require: ['^$ionicScroll', '^?ionNavView'],
-    controller: [function(){}],
+    controller: [function() {}],
     link: function($scope, $element, $attr, ctrls, $transclude) {
       var scrollCtrl = ctrls[0];
       var navViewCtrl = ctrls[1];
@@ -8294,7 +8217,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
       var collectionRepeatManager = new $collectionRepeatManager({
         dataSource: dataSource,
         element: scrollCtrl.$element,
-        scrollView: scrollCtrl.scrollView,
+        scrollView: scrollCtrl.scrollView
       });
 
       var listExprParsed = $parse(listExpr);
@@ -8314,7 +8237,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         var before = true;
 
         forEach(scrollViewContent.children, function(node, i) {
-          if ( ionic.DomUtil.elementIsDescendant($element[0], node, scrollViewContent) ) {
+          if (ionic.DomUtil.elementIsDescendant($element[0], node, scrollViewContent)) {
             before = false;
           } else {
             if (node.hasAttribute('collection-repeat-ignore')) return;
@@ -8361,7 +8284,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         collectionRepeatManager.destroy();
         dataSource.destroy();
         ionic.off('resize', rerenderOnResize, window);
-        (deregisterViewListener || angular.noop)();
+        (deregisterViewListener || noop)();
       });
     }
   };
@@ -8498,7 +8421,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
         });
         $scope.direction = $scope.direction || 'y';
 
-        if (angular.isDefined($attr.padding)) {
+        if (isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
               (innerElement || $element).toggleClass('padding', !!newVal);
           });
@@ -8535,7 +8458,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
           });
 
           $scope.$on('$destroy', function() {
-            scrollViewOptions.scrollingComplete = angular.noop;
+            scrollViewOptions.scrollingComplete = noop;
             delete scrollViewOptions.el;
             innerElement = null;
             $element = null;
@@ -9129,7 +9052,7 @@ IonicModule
   return {
     restrict: 'E',
     require: ['?^$ionicScroll', 'ionInfiniteScroll'],
-    template: function($element, $attrs){
+    template: function($element, $attrs) {
       if ($attrs.icon) return '<i class="icon {{icon()}} icon-refreshing {{scrollingType}}"></i>';
       return '<ion-spinner icon="{{spinner()}}"></ion-spinner>';
     },
@@ -9159,7 +9082,7 @@ IonicModule
         infiniteScrollCtrl.scrollEl.addEventListener('scroll', infiniteScrollCtrl.checkBounds);
       }
       // Optionally check bounds on start after scrollView is fully rendered
-      var doImmediateCheck = angular.isDefined($attrs.immediateCheck) ? $scope.$eval($attrs.immediateCheck) : true;
+      var doImmediateCheck = isDefined($attrs.immediateCheck) ? $scope.$eval($attrs.immediateCheck) : true;
       if (doImmediateCheck) {
         $timeout(function() { infiniteScrollCtrl.checkBounds(); });
       }
@@ -9206,9 +9129,9 @@ IonicModule
     }],
     scope: true,
     compile: function($element, $attrs) {
-      var isAnchor = angular.isDefined($attrs.href) ||
-                     angular.isDefined($attrs.ngHref) ||
-                     angular.isDefined($attrs.uiSref);
+      var isAnchor = isDefined($attrs.href) ||
+                     isDefined($attrs.ngHref) ||
+                     isDefined($attrs.uiSref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
         /ion-(delete|option|reorder)-button/i.test($element.html());
@@ -9303,10 +9226,10 @@ IonicModule
       var input = el.querySelector('input, textarea');
       var inputLabel = el.querySelector('.input-label');
 
-      if ( !input || !inputLabel ) return;
+      if (!input || !inputLabel) return;
 
       var onInput = function() {
-        if ( input.value ) {
+        if (input.value) {
           inputLabel.classList.add('has-input');
         } else {
           inputLabel.classList.remove('has-input');
@@ -9315,8 +9238,8 @@ IonicModule
 
       input.addEventListener('input', onInput);
 
-      var ngModelCtrl = angular.element(input).controller('ngModel');
-      if ( ngModelCtrl ) {
+      var ngModelCtrl = jqLite(input).controller('ngModel');
+      if (ngModelCtrl) {
         ngModelCtrl.$render = function() {
           input.value = ngModelCtrl.$viewValue || '';
           onInput();
@@ -10586,7 +10509,7 @@ IonicModule
   return {
     restrict: 'E',
     compile: function(element) {
-      element.append( angular.element('<div class="popover-arrow"></div>') );
+      element.append(jqLite('<div class="popover-arrow">'));
       element.addClass('popover');
     }
   };
@@ -10857,7 +10780,7 @@ function($timeout, $controller, $ionicBind) {
         });
         $scope.direction = $scope.direction || 'y';
 
-        if (angular.isDefined($attr.padding)) {
+        if (isDefined($attr.padding)) {
           $scope.$watch($attr.padding, function(newVal) {
             innerElement.toggleClass('padding', !!newVal);
           });
@@ -11367,7 +11290,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       slider.enableSlide($scope.$eval($attrs.disableScroll) !== true);
 
       $scope.$watch('activeSlide', function(nv) {
-        if(angular.isDefined(nv)){
+        if(isDefined(nv)){
           slider.slide(nv);
         }
       });
@@ -11704,7 +11627,7 @@ function($compile, $ionicConfig, $ionicBind, $ionicViewSwitcher) {
 
   //Returns ' key="value"' if value exists
   function attrStr(k, v) {
-    return angular.isDefined(v) ? ' ' + k + '="' + v + '"' : '';
+    return isDefined(v) ? ' ' + k + '="' + v + '"' : '';
   }
   return {
     restrict: 'E',

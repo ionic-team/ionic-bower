@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-969
+ * Ionic, v1.0.0-beta.14-nightly-971
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2566,7 +2566,8 @@ body, .ionic-body {
   line-height: 20px;
   text-rendering: optimizeLegibility;
   -webkit-backface-visibility: hidden;
-  -webkit-user-drag: none; }
+  -webkit-user-drag: none;
+  -ms-content-zooming: none; }
 
 body.grade-b, body.grade-c {
   text-rendering: auto; }
