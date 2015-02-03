@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-968
+ * Ionic, v1.0.0-beta.14-nightly-969
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4985,6 +4985,7 @@ a.item-content {
     max-width: 40px;
     max-height: 40px;
     width: 100%;
+    height: 100%;
     border-radius: 50%; }
 
 .item-avatar-right, .item-avatar-right .item-content {
@@ -4997,6 +4998,7 @@ a.item-content {
     max-width: 40px;
     max-height: 40px;
     width: 100%;
+    height: 100%;
     border-radius: 50%; }
 
 .item-thumbnail-left, .item-thumbnail-left .item-content {
@@ -5009,7 +5011,8 @@ a.item-content {
     left: 10px;
     max-width: 80px;
     max-height: 80px;
-    width: 100%; }
+    width: 100%;
+    height: 100%; }
 
 .item-avatar.item-complex, .item-avatar-left.item-complex, .item-thumbnail-left.item-complex {
   padding-top: 0;
@@ -5025,7 +5028,8 @@ a.item-content {
     right: 10px;
     max-width: 80px;
     max-height: 80px;
-    width: 100%; }
+    width: 100%;
+    height: 100%; }
 
 .item-avatar-right.item-complex, .item-thumbnail-right.item-complex {
   padding-top: 0;
@@ -7370,7 +7374,7 @@ a.button {
   top: 64px; }
 .platform-ios.platform-cordova:not(.fullscreen) .has-subheader {
   top: 108px; }
-.platform-ios.platform-cordova:not(.fullscreen) .has-tabs-top {
+.platform-ios.platform-cordova:not(.fullscreen) .has-header.has-tabs-top {
   top: 113px; }
 .platform-ios.platform-cordova:not(.fullscreen) .has-header.has-subheader.has-tabs-top {
   top: 157px; }
