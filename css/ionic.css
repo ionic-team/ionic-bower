@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-982
+ * Ionic, v1.0.0-beta.14-nightly-984
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5502,6 +5502,12 @@ a.item-content {
     .scroll-refresher.active.refreshing.refreshing-tail {
       -webkit-transform: scale(0, 0);
       transform: scale(0, 0); }
+
+.overflow-scroll > .scroll {
+  -webkit-overflow-scrolling: touch;
+  width: 100%; }
+  .overflow-scroll > .scroll.overscroll {
+    position: fixed; }
 
 @-webkit-keyframes refresh-spin {
   0% {
