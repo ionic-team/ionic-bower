@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-985
+ * Ionic, v1.0.0-beta.14-nightly-986
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-985';
+window.ionic.version = '1.0.0-beta.14-nightly-986';
 
 (function (ionic) {
 
@@ -41066,7 +41066,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-985
+ * Ionic, v1.0.0-beta.14-nightly-986
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47746,7 +47746,7 @@ IonicModule
 
       isDragging = true;
       // overscroll according to the user's drag so far
-      overscroll(parseInt(deltaY - dragOffset, 10));
+      overscroll(parseInt((deltaY - dragOffset)/3, 10));
 
       // update the icon accordingly
       if (!activated && lastOverscroll > ptrThreshold) {
