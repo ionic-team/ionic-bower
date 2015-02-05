@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-978
+ * Ionic, v1.0.0-beta.14-nightly-981
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-978';
+window.ionic.version = '1.0.0-beta.14-nightly-981';
 
 (function (ionic) {
 
@@ -6397,6 +6397,7 @@ ionic.scroll = {
   var SlideDrag = function(opts) {
     this.dragThresholdX = opts.dragThresholdX || 10;
     this.el = opts.el;
+    this.item = opts.item;
     this.canSwipe = opts.canSwipe;
   };
 
@@ -6561,7 +6562,7 @@ ionic.scroll = {
     this.dragThresholdY = opts.dragThresholdY || 0;
     this.onReorder = opts.onReorder;
     this.listEl = opts.listEl;
-    this.el = opts.el;
+    this.el = this.item = opts.el;
     this.scrollEl = opts.scrollEl;
     this.scrollView = opts.scrollView;
     // Get the True Top of the list el http://www.quirksmode.org/js/findpos.html
@@ -6918,7 +6919,11 @@ ionic.scroll = {
         // Make sure this is an item with buttons
         item = this._getItem(e.target);
         if (item && item.querySelector('.item-options')) {
-          this._dragOp = new SlideDrag({ el: this.el, canSwipe: this.canSwipe });
+          this._dragOp = new SlideDrag({
+            el: this.el,
+            item: item,
+            canSwipe: this.canSwipe
+          });
           this._dragOp.start(e);
           e.preventDefault();
         }

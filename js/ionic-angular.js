@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-978
+ * Ionic, v1.0.0-beta.14-nightly-981
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9136,24 +9136,39 @@ IonicModule
         //Lame way of testing, but we have to know at compile what to do with the element
         /ion-(delete|option|reorder)-button/i.test($element.html());
 
-        if (isComplexItem) {
-          var innerElement = jqLite(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
-          innerElement.append($element.contents());
+      if (isComplexItem) {
+        var innerElement = jqLite(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
+        innerElement.append($element.contents());
 
-          $element.append(innerElement);
-          $element.addClass('item item-complex');
-        } else {
-          $element.addClass('item');
-        }
+        $element.append(innerElement);
+        $element.addClass('item item-complex');
+      } else {
+        $element.addClass('item');
+      }
 
-        return function link($scope, $element, $attrs) {
-          $scope.$href = function() {
-            return $attrs.href || $attrs.ngHref;
-          };
-          $scope.$target = function() {
-            return $attrs.target || '_self';
-          };
+      return function link($scope, $element, $attrs) {
+        var listCtrl;
+        $scope.$href = function() {
+          return $attrs.href || $attrs.ngHref;
         };
+        $scope.$target = function() {
+          return $attrs.target || '_self';
+        };
+
+        $scope.$on('$ionic.disconnectScope', cleanupDragOp);
+
+        function cleanupDragOp() {
+          // lazily fetch list parent controller
+          listCtrl || (listCtrl = $element.controller('ionList'));
+          if (!listCtrl || !listCtrl.listView) return;
+
+          if (listCtrl.listView._lastDragOp) {
+            listCtrl.listView.clearDragEffects();
+          }
+
+        }
+      };
+
     }
   };
 });
@@ -9570,8 +9585,8 @@ function($timeout) {
     controller: '$ionicList',
     compile: function($element, $attr) {
       var listEl = jqLite('<div class="list">')
-      .append( $element.contents() )
-      .addClass($attr.type);
+        .append( $element.contents() )
+        .addClass($attr.type);
       $element.append(listEl);
 
       return function($scope, $element, $attrs, ctrls) {

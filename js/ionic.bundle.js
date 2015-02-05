@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-978
+ * Ionic, v1.0.0-beta.14-nightly-981
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-978';
+window.ionic.version = '1.0.0-beta.14-nightly-981';
 
 (function (ionic) {
 
@@ -6404,6 +6404,7 @@ ionic.scroll = {
   var SlideDrag = function(opts) {
     this.dragThresholdX = opts.dragThresholdX || 10;
     this.el = opts.el;
+    this.item = opts.item;
     this.canSwipe = opts.canSwipe;
   };
 
@@ -6568,7 +6569,7 @@ ionic.scroll = {
     this.dragThresholdY = opts.dragThresholdY || 0;
     this.onReorder = opts.onReorder;
     this.listEl = opts.listEl;
-    this.el = opts.el;
+    this.el = this.item = opts.el;
     this.scrollEl = opts.scrollEl;
     this.scrollView = opts.scrollView;
     // Get the True Top of the list el http://www.quirksmode.org/js/findpos.html
@@ -6925,7 +6926,11 @@ ionic.scroll = {
         // Make sure this is an item with buttons
         item = this._getItem(e.target);
         if (item && item.querySelector('.item-options')) {
-          this._dragOp = new SlideDrag({ el: this.el, canSwipe: this.canSwipe });
+          this._dragOp = new SlideDrag({
+            el: this.el,
+            item: item,
+            canSwipe: this.canSwipe
+          });
           this._dragOp.start(e);
           e.preventDefault();
         }
@@ -41068,7 +41073,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-978
+ * Ionic, v1.0.0-beta.14-nightly-981
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -50202,24 +50207,39 @@ IonicModule
         //Lame way of testing, but we have to know at compile what to do with the element
         /ion-(delete|option|reorder)-button/i.test($element.html());
 
-        if (isComplexItem) {
-          var innerElement = jqLite(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
-          innerElement.append($element.contents());
+      if (isComplexItem) {
+        var innerElement = jqLite(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
+        innerElement.append($element.contents());
 
-          $element.append(innerElement);
-          $element.addClass('item item-complex');
-        } else {
-          $element.addClass('item');
-        }
+        $element.append(innerElement);
+        $element.addClass('item item-complex');
+      } else {
+        $element.addClass('item');
+      }
 
-        return function link($scope, $element, $attrs) {
-          $scope.$href = function() {
-            return $attrs.href || $attrs.ngHref;
-          };
-          $scope.$target = function() {
-            return $attrs.target || '_self';
-          };
+      return function link($scope, $element, $attrs) {
+        var listCtrl;
+        $scope.$href = function() {
+          return $attrs.href || $attrs.ngHref;
         };
+        $scope.$target = function() {
+          return $attrs.target || '_self';
+        };
+
+        $scope.$on('$ionic.disconnectScope', cleanupDragOp);
+
+        function cleanupDragOp() {
+          // lazily fetch list parent controller
+          listCtrl || (listCtrl = $element.controller('ionList'));
+          if (!listCtrl || !listCtrl.listView) return;
+
+          if (listCtrl.listView._lastDragOp) {
+            listCtrl.listView.clearDragEffects();
+          }
+
+        }
+      };
+
     }
   };
 });
@@ -50636,8 +50656,8 @@ function($timeout) {
     controller: '$ionicList',
     compile: function($element, $attr) {
       var listEl = jqLite('<div class="list">')
-      .append( $element.contents() )
-      .addClass($attr.type);
+        .append( $element.contents() )
+        .addClass($attr.type);
       $element.append(listEl);
 
       return function($scope, $element, $attrs, ctrls) {
