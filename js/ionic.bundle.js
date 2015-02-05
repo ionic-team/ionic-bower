@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-984
+ * Ionic, v1.0.0-beta.14-nightly-985
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-984';
+window.ionic.version = '1.0.0-beta.14-nightly-985';
 
 (function (ionic) {
 
@@ -41066,7 +41066,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-984
+ * Ionic, v1.0.0-beta.14-nightly-985
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49629,6 +49629,7 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
 
       var requiresRerender;
       function rerenderOnResize() {
+        if ($scope.$$disconnected) return;
         rerender(listExprParsed($scope));
         requiresRerender = (!scrollViewContent.clientWidth && !scrollViewContent.clientHeight);
       }
