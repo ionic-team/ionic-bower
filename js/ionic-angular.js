@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-991
+ * Ionic, v1.0.0-beta.14-nightly-992
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1076,10 +1076,12 @@ function($rootScope, $timeout) {
         var width = this.isVertical ? itemDimensions.secondarySize : itemDimensions.primarySize;
         var height = this.isVertical ? itemDimensions.primarySize : itemDimensions.secondarySize;
         if (item.cssWidth !== width) {
-          item.element[0].style.width = (item.cssWidth = width) + 'px';
+          item.element[0].style.width = width + 'px';
+          item.cssWidth = width;
         }
         if (item.cssHeight !== height) {
-          item.element[0].style.height = (item.cssHeight = height) + 'px';
+          item.element[0].style.height = height + 'px';
+          item.cssHeight = height;
         }
         // Save the item in rendered items
         this.renderedItems[dataIndex] = item;
