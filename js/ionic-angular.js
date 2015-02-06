@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-993
+ * Ionic, v1.0.0-beta.14-nightly-994
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9715,10 +9715,10 @@ IonicModule
 
           var lastDragOp = listCtrl.listView._lastDragOp || {};
           if (lastDragOp.item === $element[0]) {
-            listCtrl.listView.clearDragEffects();
+            listCtrl.listView.clearDragEffects(true);
           }
-
         }
+
       };
 
     }

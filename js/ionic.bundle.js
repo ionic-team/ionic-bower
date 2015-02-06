@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-993
+ * Ionic, v1.0.0-beta.14-nightly-994
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-993';
+window.ionic.version = '1.0.0-beta.14-nightly-994';
 
 (function (ionic) {
 
@@ -6463,18 +6463,27 @@ ionic.scroll = {
     return false;
   };
 
-  SlideDrag.prototype.clean = function(e) {
+  SlideDrag.prototype.clean = function(isInstant) {
     var lastDrag = this._lastDrag;
 
     if (!lastDrag || !lastDrag.content) return;
 
     lastDrag.content.style[ionic.CSS.TRANSITION] = '';
     lastDrag.content.style[ionic.CSS.TRANSFORM] = '';
-    ionic.requestAnimationFrame(function() {
-      setTimeout(function() {
-        lastDrag.buttons && lastDrag.buttons.classList.add('invisible');
-      }, 250);
-    });
+    if (isInstant) {
+      lastDrag.content.style[ionic.CSS.TRANSITION] = 'none';
+      makeInvisible();
+      ionic.requestAnimationFrame(function() {
+        lastDrag.content.style[ionic.CSS.TRANSITION] = '';
+      });
+    } else {
+      ionic.requestAnimationFrame(function() {
+        setTimeout(makeInvisible, 250);
+      });
+    }
+    function makeInvisible() {
+      lastDrag.buttons && lastDrag.buttons.classList.add('invisible');
+    }
   };
 
   SlideDrag.prototype.drag = ionic.animationFrameThrottle(function(e) {
@@ -6854,9 +6863,9 @@ ionic.scroll = {
     /**
      * Clear any active drag effects on the list.
      */
-    clearDragEffects: function() {
+    clearDragEffects: function(isInstant) {
       if (this._lastDragOp) {
-        this._lastDragOp.clean && this._lastDragOp.clean();
+        this._lastDragOp.clean && this._lastDragOp.clean(isInstant);
         this._lastDragOp.deregister && this._lastDragOp.deregister();
         this._lastDragOp = null;
       }
@@ -41073,7 +41082,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-993
+ * Ionic, v1.0.0-beta.14-nightly-994
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -50786,10 +50795,10 @@ IonicModule
 
           var lastDragOp = listCtrl.listView._lastDragOp || {};
           if (lastDragOp.item === $element[0]) {
-            listCtrl.listView.clearDragEffects();
+            listCtrl.listView.clearDragEffects(true);
           }
-
         }
+
       };
 
     }
