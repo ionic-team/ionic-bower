@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-987
+ * Ionic, v1.0.0-beta.14-nightly-988
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2630,10 +2630,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
         template: LOADING_TPL,
         appendTo: $ionicBody.get()
       })
-      .then(function(loader) {
-        var self = loader;
-
-        loader.show = function(options) {
+      .then(function(self) {
+        self.show = function(options) {
           var templatePromise = options.templateUrl ?
             $ionicTemplateLoader.load(options.templateUrl) :
             //options.content: deprecated
@@ -2641,19 +2639,19 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
 
           self.scope = options.scope || self.scope;
 
-          if (!this.isShown) {
+          if (!self.isShown) {
             //options.showBackdrop: deprecated
-            this.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
-            if (this.hasBackdrop) {
+            self.hasBackdrop = !options.noBackdrop && options.showBackdrop !== false;
+            if (self.hasBackdrop) {
               $ionicBackdrop.retain();
               $ionicBackdrop.getElement().addClass('backdrop-loading');
             }
           }
 
           if (options.duration) {
-            $timeout.cancel(this.durationTimeout);
-            this.durationTimeout = $timeout(
-              angular.bind(this, this.hide),
+            $timeout.cancel(self.durationTimeout);
+            self.durationTimeout = $timeout(
+              angular.bind(self, self.hide),
               +options.duration
             );
           }
@@ -2684,13 +2682,13 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             }
           });
 
-          this.isShown = true;
+          self.isShown = true;
         };
-        loader.hide = function() {
+        self.hide = function() {
 
           deregisterBackAction();
-          if (this.isShown) {
-            if (this.hasBackdrop) {
+          if (self.isShown) {
+            if (self.hasBackdrop) {
               $ionicBackdrop.release();
               $ionicBackdrop.getElement().removeClass('backdrop-loading');
             }
@@ -2700,11 +2698,11 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
               !self.isShown && self.element.removeClass('visible');
             }, 200);
           }
-          $timeout.cancel(this.durationTimeout);
-          this.isShown = false;
+          $timeout.cancel(self.durationTimeout);
+          self.isShown = false;
         };
 
-        return loader;
+        return self;
       });
     }
     return loaderInstance;
@@ -2714,14 +2712,15 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     options = extend({}, $ionicLoadingConfig || {}, options || {});
     var delay = options.delay || options.showDelay || 0;
 
-    //If loading.show() was called previously, cancel it and show with our new options
-    loadingShowDelay && $timeout.cancel(loadingShowDelay);
-    loadingShowDelay = $timeout(noop, delay);
+    deregisterStateListener();
+    if (options.hideOnStateChange) {
+      deregisterStateListener = $rootScope.$on('$stateChangeSuccess', hideLoader);
+    }
 
+    //If loading.show() was called previously, cancel it and show with our new options
+    $timeout.cancel(loadingShowDelay);
+    loadingShowDelay = $timeout(noop, delay);
     loadingShowDelay.then(getLoader).then(function(loader) {
-      if (options.hideOnStateChange) {
-        deregisterStateListener = $rootScope.$on('$stateChangeSuccess', hideLoader);
-      }
       return loader.show(options);
     });
 
@@ -6994,14 +6993,12 @@ function($scope,
   };
 
   self.scrollTop = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollTo(0, 0, !!shouldAnimate);
     });
   };
 
   self.scrollBottom = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       var max = scrollView.getScrollMax();
       scrollView.scrollTo(max.left, max.top, !!shouldAnimate);
@@ -7009,35 +7006,30 @@ function($scope,
   };
 
   self.scrollTo = function(left, top, shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
     });
   };
 
   self.zoomTo = function(zoom, shouldAnimate, originLeft, originTop) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.zoomTo(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   self.zoomBy = function(zoom, shouldAnimate, originLeft, originTop) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.zoomBy(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   self.scrollBy = function(left, top, shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollBy(left, top, !!shouldAnimate);
     });
   };
 
   self.anchorScroll = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
@@ -7061,11 +7053,7 @@ function($scope,
   /**
    * @private
    */
-  self._setRefresher = function(
-    refresherScope,
-    refresherElement,
-    refresherMethods
-  ) {
+  self._setRefresher = function(refresherScope, refresherElement, refresherMethods) {
     self.refresher = refresherElement;
     var refresherHeight = self.refresher.clientHeight || 60;
     scrollView.activatePullToRefresh(
