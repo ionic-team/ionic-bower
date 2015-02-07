@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-994
+ * Ionic, v1.0.0-beta.14-nightly-995
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-994';
+window.ionic.version = '1.0.0-beta.14-nightly-995';
 
 (function (ionic) {
 
@@ -41082,7 +41082,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-994
+ * Ionic, v1.0.0-beta.14-nightly-995
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41511,7 +41511,7 @@ IonicModule
         parentGet,
         unwatch;
 
-      switch(mode) {
+      switch (mode) {
         case '@':
           if (!attrs[attrName]) {
             return;
@@ -43791,7 +43791,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             if (self.isShown) {
               self.element.addClass('visible');
               ionic.requestAnimationFrame(function() {
-                if(self.isShown) {
+                if (self.isShown) {
                   self.element.addClass('active');
                   $ionicBody.addClass('loading-active');
                 }
@@ -45484,7 +45484,7 @@ IonicModule
    *  - If false or 0 is given, the edge drag threshold is disabled, and dragging from anywhere on the content is allowed.
    * @returns {boolean} Whether the drag can start only from within the edge of screen threshold.
    */
-  'edgeDragThreshold',
+  'edgeDragThreshold'
   /**
    * @ngdoc method
    * @name $ionicSideMenuDelegate#$getByHandle
@@ -45599,7 +45599,7 @@ IonicModule
    */
   'slidesCount',
   'count',
-  'loop',
+  'loop'
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#$getByHandle
@@ -48049,7 +48049,7 @@ IonicModule
 
       isDragging = true;
       // overscroll according to the user's drag so far
-      overscroll(parseInt((deltaY - dragOffset)/3, 10));
+      overscroll(parseInt((deltaY - dragOffset) / 3, 10));
 
       // update the icon accordingly
       if (!activated && lastOverscroll > ptrThreshold) {
@@ -48932,7 +48932,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
         return {
           y1: spinnerName == 'ios' ? 17 : 12,
           y2: spinnerName == 'ios' ? 29 : 20,
-          t: TRANSLATE32 + ' rotate(' + (30 * i + (i < 6 ? 180: -180)) + ')',
+          t: TRANSLATE32 + ' rotate(' + (30 * i + (i < 6 ? 180 : -180)) + ')',
           a: [{
             fn: function() {
               return {
@@ -49238,9 +49238,9 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   function easeInOutCubic(t, c) {
     t /= c / 2;
-    if (t < 1) return 1/2*t*t*t;
+    if (t < 1) return 1 / 2 * t * t * t;
     t -= 2;
-    return 1/2*(t*t*t + 2);
+    return 1 / 2 * (t * t * t + 2);
   }
 
 
@@ -49262,7 +49262,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       var container = document.createElement('div');
       createSvgElement('svg', {
         viewBox: '0 0 64 64',
-        g: [ spinners[spinnerName] ]
+        g: [spinners[spinnerName]]
       }, container, spinnerName);
 
       // Specifically for animations to work,
@@ -50152,7 +50152,7 @@ IonicModule
 
       function checkAsideExpose() {
         var mq = $attr.exposeAsideWhen == 'large' ? '(min-width:768px)' : $attr.exposeAsideWhen;
-        sideMenuCtrl.exposeAside( $window.matchMedia(mq).matches );
+        sideMenuCtrl.exposeAside($window.matchMedia(mq).matches);
         sideMenuCtrl.activeAsideResizing(false);
       }
 
@@ -50162,9 +50162,7 @@ IonicModule
       }
 
       var debouncedCheck = ionic.debounce(function() {
-        $scope.$apply(function(){
-          checkAsideExpose();
-        });
+        $scope.$apply(checkAsideExpose);
       }, 300, false);
 
       checkAsideExpose();
@@ -51093,7 +51091,7 @@ IonicModule
       var keyboardHeight = e.keyboardHeight || e.detail.keyboardHeight;
       element.css('bottom', keyboardHeight + "px");
       scrollCtrl = element.controller('$ionicScroll');
-      if ( scrollCtrl ) {
+      if (scrollCtrl) {
         scrollCtrl.scrollView.__container.style.bottom = keyboardHeight + keyboardAttachGetClientHeight(element[0]) + "px";
       }
     }
@@ -51104,7 +51102,7 @@ IonicModule
       }
 
       element.css('bottom', '');
-      if ( scrollCtrl ) {
+      if (scrollCtrl) {
         scrollCtrl.scrollView.__container.style.bottom = '';
       }
     }
@@ -51428,7 +51426,7 @@ IonicModule
     restrict: 'E',
     transclude: true,
     replace: true,
-    controller: [function(){}],
+    controller: [function() {}],
     template: '<div class="modal-backdrop">' +
                 '<div class="modal-wrapper" ng-transclude></div>' +
                 '</div>'
@@ -52179,7 +52177,7 @@ IonicModule
  * <ion-radio ng-model="choice" ng-value="'B'">Choose B</ion-radio>
  * <ion-radio ng-model="choice" ng-value="'C'">Choose C</ion-radio>
  * ```
- * 
+ *
  * @param {string=} name The name of the radio input.
  * @param {expression=} value The value of the radio input.
  * @param {boolean=} disabled The state of the radio input.
@@ -52204,7 +52202,10 @@ IonicModule
       '</label>',
 
     compile: function(element, attr) {
-      if(attr.icon) element.children().eq(2).removeClass('ion-checkmark').addClass(attr.icon);
+      if (attr.icon) {
+        element.children().eq(2).removeClass('ion-checkmark').addClass(attr.icon);
+      }
+
       var input = element.find('input');
       forEach({
           'name': attr.name,
@@ -52824,7 +52825,7 @@ IonicModule
           $ionicBody.enableClass(isAsideExposed, 'aside-open');
         });
 
-        $scope.$on('$ionicView.beforeEnter', function(ev, d){
+        $scope.$on('$ionicView.beforeEnter', function(ev, d) {
           if (d.historyId) {
             $scope.$activeHistoryId = d.historyId;
           }
@@ -52928,7 +52929,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       slider.enableSlide($scope.$eval($attrs.disableScroll) !== true);
 
       $scope.$watch('activeSlide', function(nv) {
-        if(isDefined(nv)){
+        if (isDefined(nv)) {
           slider.slide(nv);
         }
       });
@@ -52975,7 +52976,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
 
     link: function($scope, $element, $attr, slideBoxCtrl) {
       // If the pager should show, append it to the slide box
-      if($scope.$eval($scope.showPager) !== false) {
+      if ($scope.$eval($scope.showPager) !== false) {
         var childScope = $scope.$new();
         var pager = jqLite('<ion-pager></ion-pager>');
         $element.append(pager);
@@ -52992,7 +52993,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       element.addClass('slider-slide');
       return function($scope, $element, $attr) {
       };
-    },
+    }
   };
 })
 
@@ -53006,8 +53007,8 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       var selectPage = function(index) {
         var children = $element[0].children;
         var length = children.length;
-        for(var i = 0; i < length; i++) {
-          if(i == index) {
+        for (var i = 0; i < length; i++) {
+          if (i == index) {
             children[i].classList.add('active');
           } else {
             children[i].classList.remove('active');
@@ -53655,7 +53656,7 @@ function($timeout, $ionicConfig) {
         }
       });
 
-      if(attr.toggleClass) {
+      if (attr.toggleClass) {
         element[0].getElementsByTagName('label')[0].classList.add(attr.toggleClass);
       }
 
