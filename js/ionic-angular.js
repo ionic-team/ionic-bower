@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-995
+ * Ionic, v1.0.0-beta.14-nightly-996
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3382,12 +3382,12 @@ IonicModule
  *   var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
  *
  *   $scope.popover = $ionicPopover.fromTemplate(template, {
- *     scope: $scope,
+ *     scope: $scope
  *   });
  *
  *   // .fromTemplateUrl() method
  *   $ionicPopover.fromTemplateUrl('my-popover.html', {
- *     scope: $scope,
+ *     scope: $scope
  *   }).then(function(popover) {
  *     $scope.popover = popover;
  *   });
