@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-999
+ * Ionic, v1.0.0-beta.14-nightly-1000
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11895,12 +11895,20 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
     '</div>',
 
     link: function($scope, $element, $attr, slideBoxCtrl) {
-      // If the pager should show, append it to the slide box
-      if ($scope.$eval($scope.showPager) !== false) {
-        var childScope = $scope.$new();
-        var pager = jqLite('<ion-pager></ion-pager>');
-        $element.append(pager);
-        $compile(pager)(childScope);
+      $attr.$observe('showPager', function(show) {
+        show = $scope.$eval(show);
+        getPager().toggleClass('hide', !show);
+      });
+
+      var pager;
+      function getPager() {
+        if (!pager) {
+          var childScope = $scope.$new();
+          pager = jqLite('<ion-pager></ion-pager>');
+          $element.append(pager);
+          pager = $compile(pager)(childScope);
+        }
+        return pager;
       }
     }
   };
