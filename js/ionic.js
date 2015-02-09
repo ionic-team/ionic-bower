@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1009
+ * Ionic, v1.0.0-beta.14-nightly-1010
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1009';
+window.ionic.version = '1.0.0-beta.14-nightly-1010';
 
 (function (ionic) {
 
@@ -4752,7 +4752,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     self.touchEnd = function(e) {
       if (!self.__isDown) return;
 
-      self.doTouchEnd(e.timeStamp);
+      self.doTouchEnd(e, e.timeStamp);
       self.__isDown = false;
       self.__hasStarted = false;
       self.__isSelectable = true;
@@ -4824,7 +4824,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
           return;
         }
 
-        self.doTouchEnd(e.timeStamp);
+        self.doTouchEnd(e, e.timeStamp);
 
         mousedown = false;
       };
@@ -5589,6 +5589,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
   doTouchStart: function(touches, timeStamp) {
     var self = this;
 
+    // remember if the deceleration was just stopped
+    self.__decStopped = !!(self.__isDecelerating || self.__isAnimating);
+
     self.hintResize();
 
     if (timeStamp instanceof Date) {
@@ -5706,6 +5709,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
     // Are we already is dragging mode?
     if (self.__isDragging) {
+        self.__decStopped = false;
 
       // Compute move distance
       var moveX = currentTouchLeft - self.__lastTouchLeft;
@@ -5871,7 +5875,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
   /**
    * Touch end handler for scrolling support
    */
-  doTouchEnd: function(timeStamp) {
+  doTouchEnd: function(e, timeStamp) {
     if (timeStamp instanceof Date) {
       timeStamp = timeStamp.valueOf();
     }
@@ -5941,6 +5945,13 @@ ionic.views.Scroll = ionic.views.View.inherit({
       } else if ((timeStamp - self.__lastTouchMove) > 100) {
         self.__scrollingComplete();
       }
+
+    } else if (self.__decStopped) {
+      // the deceleration was stopped
+      // user flicked the scroll fast, and stop dragging, then did a touchstart to stop the srolling
+      // tell the touchend event code to do nothing, we don't want to actually send a click
+      e.isTapHandled = true;
+      self.__decStopped = false;
     }
 
     // If this was a slower move it is per default non decelerated, but this
