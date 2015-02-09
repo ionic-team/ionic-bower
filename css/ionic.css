@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1011
+ * Ionic, v1.0.0-beta.14-nightly-1012
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2732,6 +2732,9 @@ ion-infinite-scroll {
 
 .has-tabs, .bar-footer.has-tabs {
   bottom: 49px; }
+  .has-tabs.pane, .bar-footer.has-tabs.pane {
+    bottom: 49px;
+    height: auto; }
 
 .has-footer.has-tabs {
   bottom: 93px; }
