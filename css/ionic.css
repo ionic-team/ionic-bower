@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1018
+ * Ionic, v1.0.0-beta.14-nightly-1019
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5550,9 +5550,33 @@ a.item-content {
   .spinner svg {
     width: 28px;
     height: 28px; }
-  .spinner.spinner-inverse {
+  .spinner.spinner-light {
     stroke: #fff;
     fill: #fff; }
+  .spinner.spinner-stable {
+    stroke: #f8f8f8;
+    fill: #f8f8f8; }
+  .spinner.spinner-positive {
+    stroke: #387ef5;
+    fill: #387ef5; }
+  .spinner.spinner-calm {
+    stroke: #11c1f3;
+    fill: #11c1f3; }
+  .spinner.spinner-balanced {
+    stroke: #33cd5f;
+    fill: #33cd5f; }
+  .spinner.spinner-assertive {
+    stroke: #ef473a;
+    fill: #ef473a; }
+  .spinner.spinner-energized {
+    stroke: #ffc900;
+    fill: #ffc900; }
+  .spinner.spinner-royal {
+    stroke: #886aea;
+    fill: #886aea; }
+  .spinner.spinner-dark {
+    stroke: #444;
+    fill: #444; }
 
 .spinner-android {
   stroke: #4b8bf4; }
@@ -5563,9 +5587,9 @@ a.item-content {
 .spinner-spiral .stop1 {
   stop-color: #fff;
   stop-opacity: 0; }
-.spinner-spiral.spinner-inverse .stop1 {
-  stop-color: #000; }
-.spinner-spiral.spinner-inverse .stop2 {
+.spinner-spiral.spinner-light .stop1 {
+  stop-color: #444; }
+.spinner-spiral.spinner-light .stop2 {
   stop-color: #fff; }
 
 /**
