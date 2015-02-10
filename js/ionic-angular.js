@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1012
+ * Ionic, v1.0.0-beta.14-nightly-1013
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6005,7 +6005,7 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     ionic.DomUtil.cachedAttr(containerEle, 'nav-bar', isActive ? 'active' : 'cached');
 
     var alignTitle = $attrs.alignTitle || $ionicConfig.navBar.alignTitle();
-    var headerBarEle = jqLite('<ion-header-bar>').addClass($attrs.class).attr('align-title', alignTitle);
+    var headerBarEle = jqLite('<ion-header-bar>').addClass($attrs['class']).attr('align-title', alignTitle);
     if (isDefined($attrs.noTapScroll)) headerBarEle.attr('no-tap-scroll', $attrs.noTapScroll);
     var titleEle = jqLite('<div class="title title-' + alignTitle + '">');
     var navEle = {};
