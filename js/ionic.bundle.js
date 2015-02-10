@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1013
+ * Ionic, v1.0.0-beta.14-nightly-1016
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1013';
+window.ionic.version = '1.0.0-beta.14-nightly-1016';
 
 (function (ionic) {
 
@@ -41094,7 +41094,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1013
+ * Ionic, v1.0.0-beta.14-nightly-1016
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -41700,6 +41700,7 @@ IonicModule
   '$parse',
   '$rootScope',
 function($cacheFactory, $parse, $rootScope) {
+  var ONE_PX_TRANSPARENT_IMG_SRC = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   function hideWithTransform(element) {
     element.css(ionic.CSS.TRANSFORM, 'translate3d(-2000px,-2000px,0)');
   }
@@ -41710,6 +41711,7 @@ function($cacheFactory, $parse, $rootScope) {
     this.transcludeFn = options.transcludeFn;
     this.transcludeParent = options.transcludeParent;
     this.element = options.element;
+    this.shouldRefreshImages = options.shouldRefreshImages;
 
     this.keyExpr = options.keyExpr;
     this.listExpr = options.listExpr;
@@ -41756,8 +41758,9 @@ function($cacheFactory, $parse, $rootScope) {
       var item = {};
 
       item.scope = this.scope.$new();
-      this.transcludeFn(item.scope, function(clone) {
-        item.element = clone;
+      this.transcludeFn(item.scope, function(el) {
+        item.element = el;
+        item.images = el[0].getElementsByTagName('img');
       });
       this.transcludeParent.append(item.element);
 
@@ -41799,6 +41802,7 @@ function($cacheFactory, $parse, $rootScope) {
         //We changed the scope, so digest if needed
         if (!$rootScope.$$phase) {
           item.scope.$digest();
+          this.shouldRefreshImages && refreshImages(item.images);
         }
       }
       this.attachedItems[index] = item;
@@ -41847,7 +41851,18 @@ function($cacheFactory, $parse, $rootScope) {
   };
 
   return CollectionRepeatDataSource;
+
+  function refreshImages(imgNodes) {
+    var i, len, img, src;
+    for (i = 0, len = imgNodes.length; i < len; i++) {
+      img = imgNodes[i];
+      src = img.src;
+      img.src = ONE_PX_TRANSPARENT_IMG_SRC;
+      img.src = src;
+    }
+  }
 }]);
+
 
 
 IonicModule
@@ -41864,6 +41879,9 @@ function($rootScope, $timeout) {
     this.dataSource = options.dataSource;
     this.element = options.element;
     this.scrollView = options.scrollView;
+
+    this.bufferSize = options.bufferSize || 2;
+    this.bufferItems = Math.max(this.bufferSize * 10, 50);
 
     this.isVertical = !!this.scrollView.options.scrollingY;
     this.renderedItems = {};
@@ -41926,6 +41944,7 @@ function($rootScope, $timeout) {
       };
     }
   }
+
 
   CollectionRepeatManager.prototype = {
     destroy: function() {
@@ -42092,13 +42111,14 @@ function($rootScope, $timeout) {
       }
       return i;
     },
+
     /*
      * render: Figure out the scroll position, the index matching it, and then tell
      * the data source to render the correct items into the DOM.
      */
     render: function(shouldRedrawAll) {
-      var self = this;
       var i;
+      var self = this;
       var isOutOfBounds = (this.currentIndex >= this.dataSource.getLength());
       // We want to remove all the items and redraw everything if we're out of bounds
       // or a flag is passed in.
@@ -42111,57 +42131,37 @@ function($rootScope, $timeout) {
       }
 
       var rect;
+      // The bottom of the viewport
       var scrollValue = this.scrollValue();
-      // Scroll size = how many pixels are visible in the scroller at one time
-      var scrollSize = this.scrollSize();
-      // We take the current scroll value and add it to the scrollSize to get
-      // what scrollValue the current visible scroll area ends at.
-      var scrollSizeEnd = scrollSize + scrollValue;
+      var viewportBottom = scrollValue + this.scrollSize();
+
       // Get the new start index for scrolling, based on the current scrollValue and
       // the most recent known index
       var startIndex = this.getIndexForScrollValue(this.currentIndex, scrollValue);
 
-      // If we aren't on the first item, add one row of items before so that when the user is
-      // scrolling up he sees the previous item
-      var renderStartIndex = Math.max(startIndex - 1, 0);
-      // Keep adding items to the 'extra row above' until we get to a new row.
-      // This is for the case where there are multiple items on one row above
-      // the current item; we want to keep adding items above until
-      // a new row is reached.
-      while (renderStartIndex > 0 &&
-         (rect = this.dimensions[renderStartIndex]) &&
-         rect.primaryPos === this.dimensions[startIndex - 1].primaryPos) {
-        renderStartIndex--;
-      }
+      // Add two extra rows above the visible area
+      renderStartIndex = this.addRowsToIndex(startIndex, -this.bufferSize);
 
       // Keep rendering items, adding them until we are past the end of the visible scroll area
       i = renderStartIndex;
-      while ((rect = this.dimensions[i]) && (rect.primaryPos - rect.primarySize < scrollSizeEnd)) {
-        doRender(i, rect);
+      while ((rect = this.dimensions[i]) && (rect.primaryPos - rect.primarySize < viewportBottom) &&
+            this.dimensions[i + 1]) {
         i++;
       }
-      // Render two extra items at the end as a buffer
-      if ( (rect = self.dimensions[i]) ) doRender(i++, rect);
-      if ( (rect = self.dimensions[i]) ) doRender(i, rect);
 
-      var renderEndIndex = i;
+      var renderEndIndex = this.addRowsToIndex(i, this.bufferSize);
+
+      for (i = renderStartIndex; i <= renderEndIndex; i++) {
+        rect = this.dimensions[i];
+        self.renderItem(i, rect.primaryPos - self.beforeSize, rect.secondaryPos);
+      }
 
       // Remove any items that were rendered and aren't visible anymore
-      for (var renderIndex in this.renderedItems) {
-        if (renderIndex < renderStartIndex || renderIndex > renderEndIndex) {
-          this.removeItem(renderIndex);
-        }
+      for (i in this.renderedItems) {
+        if (i < renderStartIndex || i > renderEndIndex) this.removeItem(i);
       }
 
       this.setCurrentIndex(startIndex);
-
-      function doRender(dataIndex, rect) {
-        if (dataIndex < self.dataSource.dataStartIndex) {
-          // do nothing
-        } else {
-          self.renderItem(dataIndex, rect.primaryPos - self.beforeSize, rect.secondaryPos);
-        }
-      }
     },
     renderItem: function(dataIndex, primaryPos, secondaryPos) {
       // Attach an item, and set its transform position to the required value
@@ -42203,6 +42203,27 @@ function($rootScope, $timeout) {
         this.dataSource.detachItem(item);
         delete this.renderedItems[dataIndex];
       }
+    },
+    /*
+     * Given an index, how many items do we have to change to get `rowDelta` number of rows up or down?
+     * Eg if we are at index 0 and there are 2 items on the first row and 3 items on the second row,
+     * to move forward two rows we have to go to index 5.
+     * In that case, addRowsToIndex(dim, 0, 2) == 5.
+     */
+    addRowsToIndex: function(index, rowDelta) {
+      var dimensions = this.dimensions;
+      var direction = rowDelta > 0 ? 1 : -1;
+      var rect;
+      var positionOfRow;
+      rowDelta = Math.abs(rowDelta);
+      do {
+        positionOfRow = dimensions[index] && dimensions[index].primaryPos;
+        while ((rect = dimensions[index]) && rect.primaryPos === positionOfRow &&
+               dimensions[index + direction]) {
+          index += direction;
+        }
+      } while (rowDelta--);
+      return index;
     }
   };
 
@@ -49800,6 +49821,9 @@ IonicModule
  *
  * @param {expression} collection-item-width The width of the repeated element.  Can be a number (in pixels) or a percentage.
  * @param {expression} collection-item-height The height of the repeated element.  Can be a number (in pixels), or a percentage.
+ * @param {number=} collection-buffer-size The number of rows (or columns in a vertical scroll view) to load above and below the visible items. Default 2. This is good to set higher if you have lots of images to preload. Warning: the larger the buffer size, the worse performance will be. After ten or so you will see a difference.
+ * @param {boolean=} collection-refresh-images Whether to force images to refresh their `src` when an item's element is recycled. If provided, this stops problems with images still showing their old src when item's elements are recycled.
+ * If set to true, this comes with a small performance loss. Default false.
  *
  */
 var COLLECTION_REPEAT_SCROLLVIEW_XY_ERROR = "Cannot create a collection-repeat within a scrollView that is scrollable on both x and y axis.  Choose either x direction or y direction.";
@@ -49874,12 +49898,15 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         listExpr: listExpr,
         trackByExpr: trackByExpr,
         heightGetter: heightGetter,
-        widthGetter: widthGetter
+        widthGetter: widthGetter,
+        shouldRefreshImages: angular.isDefined($attr.collectionRefreshImages) &&
+          $attr.collectionRefreshImages !== 'false'
       });
       var collectionRepeatManager = new $collectionRepeatManager({
         dataSource: dataSource,
         element: scrollCtrl.$element,
-        scrollView: scrollCtrl.scrollView
+        scrollView: scrollCtrl.scrollView,
+        bufferSize: parseInt($attr.collectionBufferSize)
       });
 
       var listExprParsed = $parse(listExpr);
