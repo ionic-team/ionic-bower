@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1016
+ * Ionic, v1.0.0-beta.14-nightly-1017
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1016';
+window.ionic.version = '1.0.0-beta.14-nightly-1017';
 
 (function (ionic) {
 
@@ -1714,7 +1714,7 @@ window.ionic.version = '1.0.0-beta.14-nightly-1016';
     defaults: {
       // set 0 for unlimited, but this can conflict with transform
       swipe_max_touches  : 1,
-      swipe_velocity     : 0.7
+      swipe_velocity     : 0.4
     },
     handler: function swipeGesture(ev, inst) {
       if(ev.eventType == ionic.Gestures.EVENT_END) {
@@ -1770,6 +1770,15 @@ window.ionic.version = '1.0.0-beta.14-nightly-1016';
     },
     triggered: false,
     handler: function dragGesture(ev, inst) {
+
+      if (ev.srcEvent.type == 'touchstart' || ev.srcEvent.type == 'touchend') {
+        this.preventedFirstMove = false;
+
+      } else if (!this.preventedFirstMove && ev.srcEvent.type == 'touchmove') {
+        ev.srcEvent.preventDefault();
+        this.preventedFirstMove = true;
+      }
+
       // current gesture isnt drag, but dragged is true
       // this means an other gesture is busy. now call dragend
       if(ionic.Gestures.detection.current.name != this.name && this.triggered) {
@@ -41094,7 +41103,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1016
+ * Ionic, v1.0.0-beta.14-nightly-1017
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
