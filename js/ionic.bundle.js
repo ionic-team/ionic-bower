@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1021
+ * Ionic, v1.0.0-beta.14-nightly-1022
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1021';
+window.ionic.version = '1.0.0-beta.14-nightly-1022';
 
 (function (ionic) {
 
@@ -41103,7 +41103,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1021
+ * Ionic, v1.0.0-beta.14-nightly-1022
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42671,7 +42671,10 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           if (hist.stack[x].viewId == viewId) {
             action = 'dupNav';
             direction = DIRECTION_NONE;
-            hist.stack[x - 1].forwardViewId = viewHistory.forwardView = null;
+            if (x > 0) {
+              hist.stack[x - 1].forwardViewId = null;
+            }
+            viewHistory.forwardView = null;
             viewHistory.currentView.index = viewHistory.backView.index;
             viewHistory.currentView.backViewId = viewHistory.backView.backViewId;
             viewHistory.backView = getBackView(viewHistory.backView);
