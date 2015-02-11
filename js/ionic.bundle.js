@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1022
+ * Ionic, v1.0.0-beta.14-nightly-1023
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1022';
+window.ionic.version = '1.0.0-beta.14-nightly-1023';
 
 (function (ionic) {
 
@@ -2720,24 +2720,19 @@ ionic.tap = {
     ionic.requestAnimationFrame(function() {
       var focusInput = container.querySelector(':focus');
       if (ionic.tap.isTextInput(focusInput)) {
-        var clonedInput = focusInput.parentElement.querySelector('.cloned-text-input');
-        if (!clonedInput) {
-          clonedInput = document.createElement(focusInput.tagName);
-          clonedInput.placeholder = focusInput.placeholder;
-          clonedInput.type = focusInput.type;
-          clonedInput.value = focusInput.value;
-          clonedInput.style = focusInput.style;
-          clonedInput.className = focusInput.className;
-          clonedInput.classList.add('cloned-text-input');
-          clonedInput.readOnly = true;
-          if (focusInput.isContentEditable) {
-            clonedInput.contentEditable = focusInput.contentEditable;
-            clonedInput.innerHTML = focusInput.innerHTML;
-          }
-          focusInput.parentElement.insertBefore(clonedInput, focusInput);
-          focusInput.style.top = focusInput.offsetTop;
-          focusInput.classList.add('previous-input-focus');
+        var clonedInput = focusInput.cloneNode(true);
+        
+        clonedInput.value = focusInput.value;
+        clonedInput.classList.add('cloned-text-input');
+        clonedInput.readOnly = true;
+        if (focusInput.isContentEditable) {
+          clonedInput.contentEditable = focusInput.contentEditable;
+          clonedInput.innerHTML = focusInput.innerHTML;
         }
+        focusInput.parentElement.insertBefore(clonedInput, focusInput);
+        focusInput.classList.add('previous-input-focus');
+
+        clonedInput.scrollTop = focusInput.scrollTop;
       }
     });
   },
@@ -41103,7 +41098,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1022
+ * Ionic, v1.0.0-beta.14-nightly-1023
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
