@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1020
+ * Ionic, v1.0.0-beta.14-nightly-1021
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4953,9 +4953,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
         },
 
         render: function(registerData, callback) {
-          // disconnect the leaving scope before reconnecting or creating a scope for the entering view
-          leavingEle && ionic.Utils.disconnectScope(leavingEle.scope());
-
           if (alreadyInDom) {
             // it was already found in the DOM, just reconnect the scope
             ionic.Utils.reconnectScope(enteringEle.scope());
@@ -6625,9 +6622,13 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         if (viewElement.data(DATA_DESTROY_ELE) || viewElement.data(DATA_NO_CACHE)) {
           // this element shouldn't stay cached
           $ionicViewSwitcher.destroyViewEle(viewElement);
+
         } else {
           // keep in the DOM, mark as cached
           navViewAttr(viewElement, VIEW_STATUS_CACHED);
+
+          // disconnect the leaving scope
+          ionic.Utils.disconnectScope(viewElement.scope());
         }
       }
     }
