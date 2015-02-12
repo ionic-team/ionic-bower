@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1029
+ * Ionic, v1.0.0-beta.14-nightly-1030
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1029';
+window.ionic.version = '1.0.0-beta.14-nightly-1030';
 
 (function (ionic) {
 
@@ -585,10 +585,10 @@ window.ionic.version = '1.0.0-beta.14-nightly-1029';
      * @param {ionic.Gesture} gesture The gesture that should be removed.
      * @param {string} eventType The gesture event to remove the listener for.
      * @param {function(e)} callback The listener to remove.
-     
+
      */
     offGesture: function(gesture, type, callback) {
-      gesture.off(type, callback);
+      gesture && gesture.off(type, callback);
     },
 
     handlePopState: function(event) {}
@@ -41121,7 +41121,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1029
+ * Ionic, v1.0.0-beta.14-nightly-1030
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
