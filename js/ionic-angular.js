@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1026
+ * Ionic, v1.0.0-beta.14-nightly-1028
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4310,10 +4310,18 @@ IonicModule
   /**
    * @ngdoc method
    * @name $ionicScrollDelegate#freezeScroll
-   * @description Does not allow the scrollView to scroll in either x or y.
+   * @description Does not allow this scroll view to scroll either x or y.
+   * @param {boolean=} shouldFreeze Should this scroll view be prevented from scrolling or not.
    * @returns {object} If the scroll view is being prevented from scrolling or not.
    */
   'freezeScroll',
+  /**
+   * @ngdoc method
+   * @name $ionicScrollDelegate#freezeAllScrolls
+   * @description Does not allow any of the app's scroll views to scroll either x or y.
+   * @param {boolean=} shouldFreeze Should all app scrolls be prevented from scrolling or not.
+   */
+  'freezeAllScrolls',
   /**
    * @ngdoc method
    * @name $ionicScrollDelegate#getScrollView
@@ -6506,7 +6514,14 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     $element.data('$uiView', viewData);
 
     var deregisterInstance = $ionicNavViewDelegate._registerInstance(self, $attrs.delegateHandle);
-    $scope.$on('$destroy', deregisterInstance);
+    $scope.$on('$destroy', function() {
+      deregisterInstance();
+
+      // ensure no scrolls have been left frozen
+      if (self.isSwipeFreeze) {
+        $ionicScrollDelegate.freezeAllScrolls(false);
+      }
+    });
 
     $scope.$on('$ionicHistory.deselect', self.cacheCleanup);
 
@@ -6637,6 +6652,11 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     }
 
     navSwipeAttr('');
+
+    // ensure no scrolls have been left frozen
+    if (self.isSwipeFreeze) {
+      $ionicScrollDelegate.freezeAllScrolls(false);
+    }
   };
 
 
@@ -6764,7 +6784,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
       if (!windowWidth) windowWidth = window.innerWidth;
 
-      freezeScrolls(true);
+      self.isSwipeFreeze = $ionicScrollDelegate.freezeAllScrolls(true);
 
       var registerData = {
         direction: 'back'
@@ -6848,7 +6868,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
       windowWidth = viewTransition = dragPoints = null;
 
-      freezeScrolls(false);
+      self.isSwipeFreeze = $ionicScrollDelegate.freezeAllScrolls(false);
     }
 
     function getDragX(ev) {
@@ -6868,13 +6888,6 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
       self.element = viewTransition = associatedNavBarCtrl = null;
     });
   };
-
-
-  function freezeScrolls(freeze) {
-    forEach($ionicScrollDelegate._instances, function(instance) {
-      instance.freezeScroll(freeze);
-    });
-  }
 
 
   function navSwipeAttr(val) {
@@ -7371,9 +7384,12 @@ function($scope,
     });
   };
 
-  self.freezeScroll = function(shouldFreeze) {
-    if (arguments.length) scrollView.options.freeze = shouldFreeze;
-    return scrollView.options.freeze;
+  self.freezeScroll = scrollView.freeze;
+
+  self.freezeAllScrolls = function(shouldFreeze) {
+    for (var i = 0; i < $ionicScrollDelegate._instances.length; i++) {
+      $ionicScrollDelegate._instances[x].freezeScroll(shouldFreeze);
+    }
   };
 
 
@@ -10198,15 +10214,16 @@ function($timeout) {
     controller: '$ionicList',
     compile: function($element, $attr) {
       var listEl = jqLite('<div class="list">')
-        .append( $element.contents() )
+        .append($element.contents())
         .addClass($attr.type);
+
       $element.append(listEl);
 
       return function($scope, $element, $attrs, ctrls) {
         var listCtrl = ctrls[0];
         var scrollCtrl = ctrls[1];
 
-        //Wait for child elements to render...
+        // Wait for child elements to render...
         $timeout(init);
 
         function init() {
@@ -10218,9 +10235,9 @@ function($timeout) {
             onReorder: function(el, oldIndex, newIndex) {
               var itemScope = jqLite(el).scope();
               if (itemScope && itemScope.$onReorder) {
-                //Make sure onReorder is called in apply cycle,
-                //but also make sure it has no conflicts by doing
-                //$evalAsync
+                // Make sure onReorder is called in apply cycle,
+                // but also make sure it has no conflicts by doing
+                // $evalAsync
                 $timeout(function() {
                   itemScope.$onReorder(oldIndex, newIndex);
                 });
@@ -10232,7 +10249,7 @@ function($timeout) {
           });
 
           $scope.$on('$destroy', function() {
-            if(listView) {
+            if (listView) {
               listView.deregister && listView.deregister();
               listView = null;
             }
