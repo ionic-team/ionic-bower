@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1032
+ * Ionic, v1.0.0-beta.14-nightly-1033
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1032';
+window.ionic.version = '1.0.0-beta.14-nightly-1033';
 
 (function (ionic) {
 
@@ -41121,7 +41121,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1032
+ * Ionic, v1.0.0-beta.14-nightly-1033
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -50296,7 +50296,7 @@ IonicModule
 }]);
 
 
-var GESTURE_DIRECTIVES = 'onHold onTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeDown onSwipeLeft'.split(' ');
+var GESTURE_DIRECTIVES = 'onHold onTap onDoubleTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeDown onSwipeLeft'.split(' ');
 
 GESTURE_DIRECTIVES.forEach(function(name) {
   IonicModule.directive(name, gestureDirective(name));
@@ -50332,6 +50332,22 @@ GESTURE_DIRECTIVES.forEach(function(name) {
  * @usage
  * ```html
  * <button on-tap="onTap()" class="button">Test</button>
+ * ```
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name onDoubleTap
+ * @module ionic
+ * @restrict A
+ *
+ * @description
+ * Double tap touch at a location.
+ *
+ * @usage
+ * ```html
+ * <button on-double-tap="onDoubleTap()" class="button">Test</button>
  * ```
  */
 
