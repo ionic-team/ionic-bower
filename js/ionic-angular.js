@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1030
+ * Ionic, v1.0.0-beta.14-nightly-1031
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12269,6 +12269,8 @@ IonicModule
  * @param {expression=} on-select Called when this tab is selected.
  * @param {expression=} on-deselect Called when this tab is deselected.
  * @param {expression=} ng-click By default, the tab will be selected on click. If ngClick is set, it will not.  You can explicitly switch tabs using {@link ionic.service:$ionicTabsDelegate#select $ionicTabsDelegate.select()}.
+ * @param {expression=} hidden Whether the tab is to be hidden or not.
+ * @param {expression=} disabled Whether the tab is to be disabled or not.
  */
 IonicModule
 .directive('ionTab', [
@@ -12301,6 +12303,7 @@ function($compile, $ionicConfig, $ionicBind, $ionicViewSwitcher) {
         attrStr('badge', attr.badge) +
         attrStr('badge-style', attr.badgeStyle) +
         attrStr('hidden', attr.hidden) +
+        attrStr('disabled', attr.disabled) +
         attrStr('class', attr['class']) +
         '></ion-tab-nav>';
 
@@ -12444,7 +12447,7 @@ IonicModule
     require: ['^ionTabs', '^ionTab'],
     template:
     '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge, \'tab-hidden\':isHidden()}" ' +
-      ' class="tab-item">' +
+      ' ng-disabled="disabled()" class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
       '<i class="icon {{getIconOff()}}" ng-if="getIconOff() && !isTabActive()"></i>' +
@@ -12457,6 +12460,7 @@ IonicModule
       iconOff: '@',
       badge: '=',
       hidden: '@',
+      disabled: '&',
       badgeStyle: '@',
       'class': '@'
     },
