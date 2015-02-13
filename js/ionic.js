@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1037
+ * Ionic, v1.0.0-beta.14-nightly-1038
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1037';
+window.ionic.version = '1.0.0-beta.14-nightly-1038';
 
 (function (ionic) {
 
@@ -2418,8 +2418,6 @@ window.ionic.version = '1.0.0-beta.14-nightly-1037';
     windowLoadListenderAttached = true;
     window.addEventListener("load", onWindowLoad, false);
   }
-
-  window.addEventListener("load", onWindowLoad, false);
 
   function onPlatformReady() {
     // the device is all set to go, init our own stuff then fire off our event
