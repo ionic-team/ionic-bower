@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1035
+ * Ionic, v1.0.0-beta.14-nightly-1036
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1035';
+window.ionic.version = '1.0.0-beta.14-nightly-1036';
 
 (function (ionic) {
 
@@ -41121,7 +41121,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1035
+ * Ionic, v1.0.0-beta.14-nightly-1036
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42611,7 +42611,8 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
               // the forward has a history
               for (x = tmp.stack.length - 1; x >= forwardView.index; x--) {
                 // starting from the end destroy all forwards in this history from this point
-                tmp.stack[x].destroy();
+                var stack_x = tmp.stack[x];
+                stack_x && stack_x.destroy && stack_x.destroy();
                 tmp.stack.splice(x);
               }
               historyId = forwardView.historyId;
