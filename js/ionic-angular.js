@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1039
+ * Ionic, v1.0.0-beta.14-nightly-1040
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7389,7 +7389,7 @@ function($scope,
 
   self.freezeAllScrolls = function(shouldFreeze) {
     for (var i = 0; i < $ionicScrollDelegate._instances.length; i++) {
-      $ionicScrollDelegate._instances[x].freezeScroll(shouldFreeze);
+      $ionicScrollDelegate._instances[i].freezeScroll(shouldFreeze);
     }
   };
 
@@ -7416,7 +7416,8 @@ IonicModule
   '$ionicPlatform',
   '$ionicBody',
   '$ionicHistory',
-function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $ionicHistory) {
+  '$ionicScrollDelegate',
+function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $ionicHistory, $ionicScrollDelegate) {
   var self = this;
   var rightShowing, leftShowing, isDragging;
   var startX, lastX, offsetX, isAsideExposed;
@@ -7558,7 +7559,19 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     // add the CSS class "menu-open" if the percentage does not
     // equal 0, otherwise remove the class from the body element
     $ionicBody.enableClass((percentage !== 0), 'menu-open');
+
+    freezeAllScrolls(false);
   };
+
+  function freezeAllScrolls(shouldFreeze) {
+    if (shouldFreeze && !self.isScrollFreeze) {
+      $ionicScrollDelegate.freezeAllScrolls(shouldFreeze);
+
+    } else if (!shouldFreeze && self.isScrollFreeze) {
+      $ionicScrollDelegate.freezeAllScrolls(false);
+    }
+    self.isScrollFreeze = shouldFreeze;
+  }
 
   /**
    * Open the menu the given pixel amount.
@@ -7707,6 +7720,8 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   // End a drag with the given event
   self._endDrag = function(e) {
+    freezeAllScrolls(false);
+
     if (isAsideExposed) return;
 
     if (isDragging) {
@@ -7744,6 +7759,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
     if (isDragging) {
       self.openAmount(offsetX + (lastX - startX));
+      freezeAllScrolls(true);
     }
   };
 
@@ -7825,6 +7841,9 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
       self.content.element = null;
       self.content = null;
     }
+
+    // ensure scrolls are unfrozen
+    freezeAllScrolls(false);
   });
 
   self.initialize({
