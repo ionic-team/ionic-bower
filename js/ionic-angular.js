@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1034
+ * Ionic, v1.0.0-beta.14-nightly-1035
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2381,14 +2381,14 @@ IonicModule
     }
 
     function enter(ctrlA, ctrlB, step) {
-      if (!ctrlA) return;
+      if (!ctrlA || !ctrlB) return;
       var titleX = (ctrlA.titleTextX() + ctrlA.titleWidth()) * (1 - step);
       var backTextX = (ctrlB && (ctrlB.titleTextX() - ctrlA.backButtonTextLeft()) * (1 - step)) || 0;
       setStyles(ctrlA, step, titleX, backTextX);
     }
 
     function leave(ctrlA, ctrlB, step) {
-      if (!ctrlA) return;
+      if (!ctrlA || !ctrlB) return;
       var titleX = (-(ctrlA.titleTextX() - ctrlB.backButtonTextLeft()) - (ctrlA.titleLeftRight())) * step;
       setStyles(ctrlA, 1 - step, titleX, 0);
     }
