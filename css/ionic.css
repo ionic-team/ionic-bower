@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1041
+ * Ionic, v1.0.0-beta.14-nightly-1042
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2595,6 +2595,9 @@ body.grade-b, body.grade-c {
   display: block;
   overflow: hidden;
   margin-top: -1px; }
+
+body:not(.platform-webview) .scroll-content::-webkit-scrollbar {
+  display: none; }
 
 /**
  * Scroll is the scroll view component available for complex and custom
