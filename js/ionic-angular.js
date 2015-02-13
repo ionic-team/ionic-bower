@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1040
+ * Ionic, v1.0.0-beta.14-nightly-1041
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7157,14 +7157,14 @@ IonicModule
       ionic.on('touchmove', handleTouchmove, scrollChild);
       ionic.on('touchend', handleTouchend, scrollChild);
       ionic.on('scroll', handleScroll, scrollParent);
+
+      // cleanup when done
+      $scope.$on('$destroy', destroy);
     };
 
-
-    $scope.$on('$destroy', destroy);
-
     function destroy() {
-      ionic.off('dragdown', handleTouchmove, scrollChild);
-      ionic.off('dragend', handleTouchend, scrollChild);
+      ionic.off('touchmove', handleTouchmove, scrollChild);
+      ionic.off('touchend', handleTouchend, scrollChild);
       ionic.off('scroll', handleScroll, scrollParent);
       scrollParent = null;
       scrollChild = null;
