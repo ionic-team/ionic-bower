@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1042
+ * Ionic, v1.0.0-beta.14-nightly-1053
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5177,6 +5177,12 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
               if (step == 'after') {
                 scope.$emit('$ionicView.leave', leavingData);
               }
+            }
+
+          } else if (scope && leavingData && leavingData.viewId) {
+            scope.$emit('$ionicNavView.' + step + 'Leave', leavingData);
+            if (step == 'after') {
+              scope.$emit('$ionicNavView.leave', leavingData);
             }
           }
         },
@@ -12623,6 +12629,18 @@ function($ionicTabsDelegate, $ionicConfig, $ionicHistory) {
           $scope.$hasTabs = !isTabsTop && !isHidden;
           $scope.$hasTabsTop = isTabsTop && !isHidden;
         });
+
+        function emitLifecycleEvent(ev, data) {
+          ev.stopPropagation();
+          var selectedTab = tabsCtrl.selectedTab();
+          if (selectedTab) {
+            selectedTab.$emit(ev.name.replace('NavView', 'View'), data);
+          }
+        }
+
+        $scope.$on('$ionicNavView.beforeLeave', emitLifecycleEvent);
+        $scope.$on('$ionicNavView.afterLeave', emitLifecycleEvent);
+        $scope.$on('$ionicNavView.leave', emitLifecycleEvent);
 
         $scope.$on('$destroy', function() {
           // variable to inform child tabs that they're all being blown away
