@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1054
+ * Ionic, v1.0.0-beta.14-nightly-1056
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12552,7 +12552,7 @@ IonicModule
  * @module ionic
  * @delegate ionic.service:$ionicTabsDelegate
  * @restrict E
- * @codepen KbrzJ
+ * @codepen odqCz
  *
  * @description
  * Powers a multi-tabbed interface with a Tab Bar and a set of "pages" that can be tabbed
