@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1060
+ * Ionic, v1.0.0-beta.14-nightly-1064
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1060';
+window.ionic.version = '1.0.0-beta.14-nightly-1064';
 
 (function (ionic) {
 
@@ -41122,7 +41122,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1060
+ * Ionic, v1.0.0-beta.14-nightly-1064
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -51643,7 +51643,7 @@ IonicModule
  * </ion-nav-bar>
  * ```
  *
- * With custom inner markup and custom click action, using {@link ionic.service:$ionicNavBarDelegate}:
+ * With custom inner markup and custom click action, using {@link ionic.service:$ionicHistory}:
  *
  * ```html
  * <ion-nav-bar ng-controller="MyCtrl">
@@ -51654,9 +51654,9 @@ IonicModule
  * </ion-nav-bar>
  * ```
  * ```js
- * function MyCtrl($scope, $ionicNavBarDelegate) {
+ * function MyCtrl($scope, $ionicHistory) {
  *   $scope.myGoBack = function() {
- *     $ionicNavBarDelegate.back();
+ *     $ionicHistory.goBack();
  *   };
  * }
  * ```
