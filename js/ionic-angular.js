@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1075
+ * Ionic, v1.0.0-beta.14-nightly-1076
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8134,7 +8134,6 @@ IonicModule
  * @restrict A
  * @name collectionRepeat
  * @module ionic
- * @description
  * @codepen mFygh
  * @description
  * `collection-repeat` allows an app to show huge lists of items much more performantly than
