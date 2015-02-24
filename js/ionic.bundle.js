@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1068
+ * Ionic, v1.0.0-beta.14-nightly-1069
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1068';
+window.ionic.version = '1.0.0-beta.14-nightly-1069';
 
 (function (ionic) {
 
@@ -41121,7 +41121,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1068
+ * Ionic, v1.0.0-beta.14-nightly-1069
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49759,6 +49759,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
           item = itemsShownMap[i];
           delete itemsShownMap[i];
           itemsLeaving.push(item);
+          item.scope.$broadcast('$collectionRepeatChange');
           item.isShown = false;
         }
       }
@@ -50967,6 +50968,7 @@ var ITEM_TPL_CONTENT =
 */
 IonicModule
 .directive('ionItem', function() {
+      var nextId = 0;
   return {
     restrict: 'E',
     controller: ['$scope', '$element', function($scope, $element) {
@@ -51001,19 +51003,12 @@ IonicModule
           return $attrs.target || '_self';
         };
 
-        $scope.$on('$ionic.disconnectScope', cleanupDragOp);
-
-        function cleanupDragOp() {
-          // lazily fetch list parent controller
-          listCtrl || (listCtrl = $element.controller('ionList'));
-          if (!listCtrl || !listCtrl.listView) return;
-
-          var lastDragOp = listCtrl.listView._lastDragOp || {};
-          if (lastDragOp.item === $element[0]) {
-            listCtrl.listView.clearDragEffects(true);
-          }
+        var content = $element[0].querySelector('.item-content');
+        if (content) {
+          $scope.$on('$collectionRepeatChange', function() {
+            content && (content.style[ionic.CSS.TRANSFORM] = 'translate3d(0,0,0)');
+          });
         }
-
       };
 
     }
