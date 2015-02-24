@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1072
+ * Ionic, v1.0.0-beta.14-nightly-1075
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8145,11 +8145,14 @@ IonicModule
  * This means that on a phone screen that can fit eight items, only the eight items matching
  * the current scroll position will be rendered.
  *
- * **Basics**:
+ * **The Basics**:
  *
  * - The data given to collection-repeat must be an array.
  * - If the `item-height` and `item-width` attributes are not supplied, it will be assumed that
  *   every item in the list's dimensions are the same as the first item's dimensions.
+ * - Don't use angular one-time binding (`::`) with collection-repeat. The scope of each item is
+ *   assigned new data and re-digested as you scroll. Bindings need to update, and one-time bindings
+ *   won't.
  *
  * **Performance Tips**:
  *
@@ -8216,13 +8219,11 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
     priority: 1000,
     transclude: 'element',
     $$tlb: true,
-    require: ['^$ionicScroll', '^?ionNavView'],
+    require: '^$ionicScroll',
     link: postLink
   };
 
-  function postLink(scope, element, attr, ctrls, transclude) {
-    var scrollCtrl = ctrls[0];
-    var navViewCtrl = ctrls[1];
+  function postLink(scope, element, attr, scrollCtrl, transclude) {
     var scrollView = scrollCtrl.scrollView;
     var node = element[0];
     var containerNode = angular.element('<div class="collection-repeat-container">')[0];
@@ -8320,15 +8321,10 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
       repeatManager && repeatManager.destroy();
       repeatManager = null;
     });
-    navViewCtrl && navViewCtrl.scope.$on('$ionicView.afterEnter', function() {
-      if (refreshDimensions.queued) {
-        refreshDimensions();
-      }
-    });
 
     // Make sure this resize actually changed the size of the screen
     function validateResize() {
-      var h = window.innerHeight || screen.height, w = window.innerWidth || screen.width;
+      var h = element[0].offsetHeight, w = element[0].offsetWidth;
       if (w && h && (validateResize.height !== h || validateResize.width !== w)) {
         refreshDimensions();
       }
@@ -8336,11 +8332,6 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
       validateResize.width = w;
     }
     function refreshDimensions() {
-      // If we're disconnected, don't refresh the dimensions. But mark that we need to once
-      // the scope reconnects.
-      if (scope.$$disconnected) return (refreshDimensions.queued = true);
-      refreshDimensions.queued = false;
-
       if (heightData.computed || widthData.computed) {
         computeStyleDimensions();
       }
