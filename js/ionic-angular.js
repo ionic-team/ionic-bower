@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1076
+ * Ionic, v1.0.0-beta.14-nightly-1081
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8211,8 +8211,8 @@ var ONE_PX_TRANSPARENT_IMG_SRC = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP//
 var WIDTH_HEIGHT_REGEX = /height:.*?px;\s*width:.*?px/;
 var DEFAULT_RENDER_BUFFER = 10;
 
-CollectionRepeatDirective.$inject = ['$ionicCollectionManager', '$parse', '$window'];
-function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
+CollectionRepeatDirective.$inject = ['$ionicCollectionManager', '$parse', '$window', '$$rAF'];
+function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$rAF) {
   return {
     restrict: 'A',
     priority: 1000,
@@ -8303,6 +8303,7 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
       scrollView.__content.appendChild(afterItemsContainer[0]);
     }
 
+    $$rAF(refreshDimensions);
     scrollCtrl.$element.one('scroll.init', refreshDimensions);
 
     var onWindowResize = ionic.animationFrameThrottle(validateResize);
@@ -8323,12 +8324,12 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
 
     // Make sure this resize actually changed the size of the screen
     function validateResize() {
-      var h = element[0].offsetHeight, w = element[0].offsetWidth;
+      var h = scrollView.__clientHeight, w = scrollView.__clientWidth;
       if (w && h && (validateResize.height !== h || validateResize.width !== w)) {
+        validateResize.height = h;
+        validateResize.width = w;
         refreshDimensions();
       }
-      validateResize.height = h;
-      validateResize.width = w;
     }
     function refreshDimensions() {
       if (heightData.computed || widthData.computed) {
@@ -8428,6 +8429,7 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window) {
           computedStyleNode = clone[0];
         });
       }
+      computedStyleScope[keyExpr] = ($parse(listExpr)(scope) || [])[0];
       containerNode.appendChild(computedStyleNode);
 
       var style = $window.getComputedStyle(computedStyleNode);
@@ -8577,6 +8579,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       isDataReady = true;
       if (isLayoutReady && isDataReady) {
         forceRerender();
+        setTimeout(angular.bind(scrollView, scrollView.resize));
       }
     };
 
@@ -9015,7 +9018,6 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
         oldScrollValue = scrollValue;
         oldRenderStartIndex = renderStartIndex;
       };
-
     }
 
 
@@ -11766,6 +11768,7 @@ function($timeout, $ionicGesture, $window) {
               $element[0].style.width = '';
               content.offsetX = 0;
             }
+            ionic.trigger('resize', null, window);
           }),
           setMarginRight: ionic.animationFrameThrottle(function(amount) {
             if (amount) {
