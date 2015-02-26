@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1091
+ * Ionic, v1.0.0-beta.14-nightly-1093
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2121,7 +2121,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
   var loaderInstance;
   //default values
   var deregisterBackAction = noop;
-  var deregisterStateListener = noop;
+  var deregisterStateListener1 = noop;
+  var deregisterStateListener2 = noop;
   var loadingShowDelay = $q.when();
 
   return {
@@ -2242,9 +2243,11 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     options = extend({}, $ionicLoadingConfig || {}, options || {});
     var delay = options.delay || options.showDelay || 0;
 
-    deregisterStateListener();
+    deregisterStateListener1();
+    deregisterStateListener2();
     if (options.hideOnStateChange) {
-      deregisterStateListener = $rootScope.$on('$stateChangeSuccess', hideLoader);
+      deregisterStateListener1 = $rootScope.$on('$stateChangeSuccess', hideLoader);
+      deregisterStateListener2 = $rootScope.$on('$stateChangeError', hideLoader);
     }
 
     //If loading.show() was called previously, cancel it and show with our new options
@@ -2268,7 +2271,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
   }
 
   function hideLoader() {
-    deregisterStateListener();
+    deregisterStateListener1();
+    deregisterStateListener2();
     $timeout.cancel(loadingShowDelay);
     getLoader().then(function(loader) {
       loader.hide();
