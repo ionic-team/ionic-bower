@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1081
+ * Ionic, v1.0.0-beta.14-nightly-1090
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6708,7 +6708,6 @@ IonicModule
   '$document',
   '$ionicScrollDelegate',
   '$ionicHistory',
-  '$controller',
 function($scope,
          scrollViewOptions,
          $timeout,
@@ -6716,8 +6715,7 @@ function($scope,
          $location,
          $document,
          $ionicScrollDelegate,
-         $ionicHistory,
-         $controller) {
+         $ionicHistory) {
 
   var self = this;
   // for testing
@@ -7172,6 +7170,10 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
   self.exposeAside = function(shouldExposeAside) {
     if (!(self.left && self.left.isEnabled) && !(self.right && self.right.isEnabled)) return;
     self.close();
+    //Trigger a resize if it changed
+    if (isAsideExposed !== shouldExposeAside) {
+      ionic.trigger('resize', null, window);
+    }
     isAsideExposed = shouldExposeAside;
     if (self.left && self.left.isEnabled) {
       // set the left marget width if it should be exposed
@@ -8134,7 +8136,7 @@ IonicModule
  * @restrict A
  * @name collectionRepeat
  * @module ionic
- * @codepen mFygh
+ * @codepen 7ec1ec58f2489ab8f359fa1a0fe89c15
  * @description
  * `collection-repeat` allows an app to show huge lists of items much more performantly than
  * `ng-repeat`.
@@ -8160,7 +8162,7 @@ IonicModule
  *   if possible, lower the number of unique images. Check out [this codepen]().
  *
  * @usage
- * #### Basic Item List (codepen)
+ * #### Basic Item List ([codepen](http://codepen.io/ionic/pen/0c2c35a34a8b18ad4d793fef0b081693))
  * ```html
  * <ion-content>
  *   <ion-item collection-repeat="item in items">
@@ -8169,7 +8171,7 @@ IonicModule
  * </ion-content>
  * ```
  *
- * #### Grid of Images (codepen)
+ * #### Grid of Images ([codepen])
  * ```html
  * <ion-content>
  *   <img collection-repeat="photo in photos"
@@ -8233,7 +8235,8 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
                       "an xy scrollView.");
     }
 
-    var match = attr.collectionRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+    var repeatExpr = attr.collectionRepeat;
+    var match = repeatExpr.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
     if (!match) {
       throw new Error("collection-repeat expected expression in form of '_item_ in " +
                       "_collection_[ track by _id_]' but got '" + attr.collectionRepeat + "'.");
@@ -8338,12 +8341,22 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
 
       if (heightData.computed) {
         heightData.value = computedStyleDimensions.height;
+        if (!heightData.value) {
+          throw new Error('collection-repeat tried to compute the height of repeated elements "' +
+            repeatExpr + '", but was unable to. Please provide the "item-height" attribute. ' +
+            'http://ionicframework.com/docs/api/directive/collectionRepeat/');
+        }
       } else if (!heightData.dynamic && heightData.getValue) {
         // If it's a constant with a getter (eg percent), we just refresh .value after resize
         heightData.value = heightData.getValue();
       }
       if (widthData.computed) {
         widthData.value = computedStyleDimensions.width;
+        if (!widthData.value) {
+          throw new Error('collection-repeat tried to compute the width of repeated elements "' +
+            repeatExpr + '", but was unable to. Please provide the "item-width" attribute. ' +
+            'http://ionicframework.com/docs/api/directive/collectionRepeat/');
+        }
       } else if (!widthData.dynamic && widthData.getValue) {
         // If it's a constant with a getter (eg percent), we just refresh .value after resize
         widthData.value = widthData.getValue();
@@ -8379,16 +8392,18 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
       } catch(e) {
         // If the parse fails and the value has `px` or `%` in it, surround the attr in
         // quotes, to attempt to let the user provide a simple `attr="100%"` or `attr="100px"`
-        if (attrValue.indexOf('%') !== -1 || attrValue.indexOf('px') !== -1) {
+        if (attrValue.trim().match(/\d+(px|%)$/)) {
           attrValue = '"' + attrValue + '"';
         }
         parsedValue = $parse(attrValue);
       }
 
+      var withoutQuotes = attrValue.replace(/(\'|\"|px|%)/g, '').trim();
+      var isConstant = withoutQuotes.length && !/([a-zA-Z]|\$|:|\?)/.test(withoutQuotes);
       dimensionData.attrValue = attrValue;
 
       // If it's a constant, it's either a percent or just a constant pixel number.
-      if (parsedValue.constant) {
+      if (isConstant) {
         var intValue = parseInt(parsedValue());
 
         // For percents, store the percent getter on .getValue()
@@ -8648,10 +8663,13 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       // one frame, causing visible jank.
       // DON'T call any other functions inside this loop unless it's vital.
       for (i = renderStartIndex; i <= renderEndIndex; i++) {
-        // If the item at this index is already shown, skip
-        if (i >= data.length || itemsShownMap[i] && !forceRerender) continue;
+        // We only go forward with render if the index is in data, the item isn't already shown,
+        // or forceRerender is on.
+        if (i >= data.length || (itemsShownMap[i] && !forceRerender)) continue;
 
-        item = itemsShownMap[i] || (itemsShownMap[i] = getNextItem());
+        item = itemsShownMap[i] || (itemsShownMap[i] = itemsLeaving.length ? itemsLeaving.pop() :
+                                    itemsPool.length ? itemsPool.shift() :
+                                    new RepeatItem());
         itemsEntering.push(item);
         item.isShown = true;
 
@@ -8736,13 +8754,13 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
 
       $$rAF(function process() {
         if( (len = itemsEntering.length) ) {
-          var count = Math.floor(len / 1.5) || 1;
           var rootScopePhase = $rootScope.$$phase;
+          var count = Math.floor(len / 1.25) || 1;
           while (count && itemsEntering.length) {
             item = itemsEntering.pop();
             if (item.isShown) {
               count--;
-              if (!$rootScope.$$phase) item.scope.$digest();
+              if (!rootScopePhase) item.scope.$digest();
             }
           }
           $$rAF(process);
@@ -8755,7 +8773,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
     function RepeatItem() {
       var self = this;
       this.scope = scope.$new();
-      this.id = 'item_'+ (nextItemId++);
+      this.id = 'item'+ (nextItemId++);
       transclude(this.scope, function(clone) {
         self.element = clone;
         self.element.data('$$collectionRepeatItem', self);
@@ -8813,7 +8831,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
 
     function GridViewType() {
       this.getEstimatedSecondaryPos = function(index) {
-        return (index % this.estimatedItemsAcross) * this.estimatedPrimarySize;
+        return (index % this.estimatedItemsAcross) * this.estimatedSecondarySize;
       };
       this.getEstimatedPrimaryPos = function(index) {
         return Math.floor(index / this.estimatedItemsAcross) * this.estimatedPrimarySize;
@@ -8879,6 +8897,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       var calculateDimensions = isGridView ? calculateDimensionsGrid : calculateDimensionsList;
       var dimensionsIndex;
       var dimensions = [];
+
 
       // Get the dimensions at index. {width, height, left, top}.
       // We start with no dimensions calculated, then any time dimensions are asked for at an
