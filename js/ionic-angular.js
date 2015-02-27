@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1093
+ * Ionic, v1.0.0-beta.14-nightly-1095
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2947,8 +2947,9 @@ function($ionicModal, $ionicPosition, $document, $window) {
     }
 
     // If the popover when popped down stretches past bottom of screen,
-    // make it pop up
-    if (buttonOffset.top + buttonOffset.height + popoverHeight > bodyHeight) {
+    // make it pop up if there's room above
+    if (buttonOffset.top + buttonOffset.height + popoverHeight > bodyHeight &&
+        buttonOffset.top - popoverHeight > 0) {
       popoverCSS.top = buttonOffset.top - popoverHeight;
       popoverEle.addClass('popover-bottom');
     } else {
