@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1095
+ * Ionic, v1.0.0-beta.14-nightly-1097
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1095';
+window.ionic.version = '1.0.0-beta.14-nightly-1097';
 
 (function (ionic) {
 
@@ -41122,7 +41122,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1095
+ * Ionic, v1.0.0-beta.14-nightly-1097
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49296,7 +49296,7 @@ IonicModule
  * </ion-content>
  * ```
  *
- * #### Grid of Images ([codepen])
+ * #### Grid of Images ([codepen](http://codepen.io/ionic/pen/5515d4efd9d66f780e96787387f41664))
  * ```html
  * <ion-content>
  *   <img collection-repeat="photo in photos"
@@ -49306,12 +49306,16 @@ IonicModule
  * </ion-content>
  * ```
  *
- * #### Horizontal Scroller, Dynamic Item Width (codepen)
+ * #### Horizontal Scroller, Dynamic Item Width ([codepen](http://codepen.io/ionic/pen/67cc56b349124a349acb57a0740e030e))
  * ```html
- * <ion-content direction="x">
- *   <img collection-repeat="photo in photos"
- *     item-width="getWidth(photo)"
- *     item-height="100%">
+ * <ion-content>
+ *   <h2>Available Kittens:</h2>
+ *   <ion-scroll direction="x" class="available-scroller">
+ *     <div class="photo" collection-repeat="photo in main.photos"
+ *        item-height="250" item-width="photo.width + 30">
+ *        <img ng-src="{{photo.src}}">
+ *     </div>
+ *   </ion-scroll>
  * </ion-content>
  * ```
  *
