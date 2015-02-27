@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1097
+ * Ionic, v1.0.0-beta.14-nightly-1098
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5633,11 +5633,11 @@ input, button, select, textarea {
     -webkit-border-radius: 0;
     border-radius: 0;
     -webkit-box-flex: 1;
-    -webkit-flex: 1 0 220px;
+    -webkit-flex: 1 220px;
     -moz-box-flex: 1;
-    -moz-flex: 1 0 220px;
-    -ms-flex: 1 0 220px;
-    flex: 1 0 220px;
+    -moz-flex: 1 220px;
+    -ms-flex: 1 220px;
+    flex: 1 220px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -5721,12 +5721,6 @@ input, button, select, textarea {
   margin-left: 10.66667px; }
 
 .input-label {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 0 100px;
-  -moz-box-flex: 1;
-  -moz-flex: 1 0 100px;
-  -ms-flex: 1 0 100px;
-  flex: 1 0 100px;
   display: table;
   padding: 7px 10px 7px 0px;
   max-width: 200px;
