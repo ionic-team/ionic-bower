@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1101
+ * Ionic, v1.0.0-beta.14-nightly-1102
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1101';
+window.ionic.version = '1.0.0-beta.14-nightly-1102';
 
 (function (ionic) {
 
@@ -41122,7 +41122,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1101
+ * Ionic, v1.0.0-beta.14-nightly-1102
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49275,7 +49275,7 @@ IonicModule
  *
  * - The data given to collection-repeat must be an array.
  * - If the `item-height` and `item-width` attributes are not supplied, it will be assumed that
- *   every item in the list's dimensions are the same as the first item's dimensions.
+ *   every item in the list has the same dimensions as the first item.
  * - Don't use angular one-time binding (`::`) with collection-repeat. The scope of each item is
  *   assigned new data and re-digested as you scroll. Bindings need to update, and one-time bindings
  *   won't.
@@ -49694,9 +49694,9 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       // Get the size of every element AFTER the repeater. We have to get the margin before and
       // after the first/last element to fix a browser bug with getComputedStyle() not counting
       // the first/last child's margins into height.
-      var style = getComputedStyle(afterItemsNode);
-      var firstStyle = getComputedStyle(afterItemsNode.firstElementChild);
-      var lastStyle = getComputedStyle(afterItemsNode.lastElementChild);
+      var style = getComputedStyle(afterItemsNode) || {};
+      var firstStyle = afterItemsNode.firstElementChild && getComputedStyle(afterItemsNode.firstElementChild) || {};
+      var lastStyle = afterItemsNode.lastElementChild && getComputedStyle(afterItemsNode.lastElementChild) || {};
       repeaterAfterSize = (parseInt(style[isVertical ? 'height' : 'width']) || 0) +
         (firstStyle && parseInt(firstStyle[isVertical ? 'marginTop' : 'marginLeft']) || 0) +
         (lastStyle && parseInt(lastStyle[isVertical ? 'marginBottom' : 'marginRight']) || 0);
