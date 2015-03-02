@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1098
+ * Ionic, v1.0.0-beta.14-nightly-1099
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8164,7 +8164,7 @@ IonicModule
  *
  * - The iOS webview has a performance bottleneck when switching out `<img src>` attributes.
  *   To increase performance of images on iOS, cache your images in advance and,
- *   if possible, lower the number of unique images. Check out [this codepen]().
+ *   if possible, lower the number of unique images. We're working on [a solution](https://github.com/driftyco/ionic/issues/3194).
  *
  * @usage
  * #### Basic Item List ([codepen](http://codepen.io/ionic/pen/0c2c35a34a8b18ad4d793fef0b081693))
@@ -8220,7 +8220,7 @@ IonicModule
 
 var ONE_PX_TRANSPARENT_IMG_SRC = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 var WIDTH_HEIGHT_REGEX = /height:.*?px;\s*width:.*?px/;
-var DEFAULT_RENDER_BUFFER = 10;
+var DEFAULT_RENDER_BUFFER = 2;
 
 CollectionRepeatDirective.$inject = ['$ionicCollectionManager', '$parse', '$window', '$$rAF'];
 function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$rAF) {
@@ -8591,8 +8591,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       // Create the pool of items for reuse, setting the size to (estimatedItemsOnScreen) * 2,
       // plus the size of the renderBuffer.
       if (!isLayoutReady) {
-        var poolSize = 2 * view.scrollPrimarySize /
-          view.estimatedPrimarySize * view.estimatedItemsAcross + (renderBuffer * 2);
+        var poolSize = Math.max(20, renderBuffer * 3);
         for (var i = 0; i < poolSize; i++) {
           itemsPool.push(new RepeatItem());
         }
