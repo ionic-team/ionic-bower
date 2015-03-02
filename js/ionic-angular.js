@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1100
+ * Ionic, v1.0.0-beta.14-nightly-1101
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8205,8 +8205,10 @@ IonicModule
  *   For example: `album in artist.albums` or `album in artist.albums | orderBy:'name'`.
  * @param {expression=} item-width The width of the repeated element. The expression must return
  *   a number (pixels) or a percentage. Defaults to the width of the first item in the list.
+ *   (previously named collection-item-width)
  * @param {expression=} item-height The height of the repeated element. The expression must return
  *   a number (pixels) or a percentage. Defaults to the height of the first item in the list.
+ *   (previously named collection-item-height)
  * @param {number=} item-render-buffer The number of items to load before and after the visible
  *   items in the list. Default 3. Tip: set this higher if you have lots of images to preload, but
  *   don't set it too high or you'll see performance loss.
