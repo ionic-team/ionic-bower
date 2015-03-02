@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1099
+ * Ionic, v1.0.0-beta.14-nightly-1100
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7409,8 +7409,9 @@ a.button {
 
 .collection-repeat-after-container {
   z-index: 0;
-  display: block; }
-  .collection-repeat-after-container.vertical {
+  display: block;
+  /* when scrolling horizontally, make sure the after container doesn't take up 100% width */ }
+  .collection-repeat-after-container.horizontal {
     display: inline-block; }
 
 /**
