@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1111
+ * Ionic, v1.0.0-beta.14-nightly-1112
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8372,13 +8372,13 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
           "but got a " + typeof value);
       }
 
-      if (newValue.length) {
-        // Wait for this digest to end before refreshing everything.
-        $timeout(function() {
-          getRepeatManager().refreshData(newValue);
+      // Wait for this digest to end before refreshing everything.
+      $timeout(function() {
+        if (newValue.length) {
           refreshDimensions();
-        }, 0, false);
-      }
+        }
+        getRepeatManager().refreshData(newValue);
+      }, 0, false);
     });
 
     // Make sure this resize actually changed the size of the screen
@@ -8728,7 +8728,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
         if (item.secondarySize !== dim.secondarySize || item.primarySize !== dim.primarySize) {
           item.node.style.cssText = item.node.style.cssText
             .replace(WIDTH_HEIGHT_REGEX, WIDTH_HEIGHT_TEMPLATE_STR
-              .replace(PRIMARY, 1 + (item.primarySize = dim.primarySize))
+              .replace(PRIMARY, (item.primarySize = dim.primarySize) + 1)
               .replace(SECONDARY, (item.secondarySize = dim.secondarySize))
             );
         }
