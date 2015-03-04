@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1110
+ * Ionic, v1.0.0-beta.14-nightly-1111
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-beta.14-nightly-1110';
+window.ionic.version = '1.0.0-beta.14-nightly-1111';
 
 (function (ionic) {
 
@@ -41132,7 +41132,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1110
+ * Ionic, v1.0.0-beta.14-nightly-1111
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47001,6 +47001,11 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
   };
 
 
+  self.hasTabsTop = function(isTabsTop) {
+    $element[isTabsTop ? 'addClass' : 'removeClass']('nav-bar-tabs-top');
+  };
+
+
   // DEPRECATED, as of v1.0.0-beta14 -------
   self.changeTitle = function(val) {
     deprecatedWarning('changeTitle(val)', 'title(val)');
@@ -47129,6 +47134,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     });
 
     $scope.$on('$ionicHistory.deselect', self.cacheCleanup);
+    $scope.$on('$ionicTabs.top', onTabsTop);
 
     ionic.Platform.ready(function() {
       if (ionic.Platform.isWebView() && $ionicConfig.views.swipeBackEnabled()) {
@@ -47497,6 +47503,12 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
   function navSwipeAttr(val) {
     ionic.DomUtil.cachedAttr($element, 'nav-swipe', val);
+  }
+
+
+  function onTabsTop(ev, isTabsTop) {
+    var associatedNavBarCtrl = getAssociatedNavBarCtrl();
+    associatedNavBarCtrl && associatedNavBarCtrl.hasTabsTop(isTabsTop);
   }
 
 
@@ -53849,6 +53861,7 @@ function($ionicTabsDelegate, $ionicConfig, $ionicHistory) {
           var isHidden = value.indexOf('tabs-item-hide') !== -1;
           $scope.$hasTabs = !isTabsTop && !isHidden;
           $scope.$hasTabsTop = isTabsTop && !isHidden;
+          $scope.$emit('$ionicTabs.top', $scope.$hasTabsTop);
         });
 
         function emitLifecycleEvent(ev, data) {
