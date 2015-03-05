@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.14-nightly-1112
+ * Ionic, v1.0.0-beta.14-nightly-1113
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8374,10 +8374,8 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
 
       // Wait for this digest to end before refreshing everything.
       $timeout(function() {
-        if (newValue.length) {
-          refreshDimensions();
-        }
         getRepeatManager().refreshData(newValue);
+        if (newValue.length) refreshDimensions();
       }, 0, false);
     });
 
@@ -8642,8 +8640,8 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
 
       isDataReady = true;
       if (isLayoutReady && isDataReady) {
+        scrollView.resize();
         forceRerender();
-        setTimeout(angular.bind(scrollView, scrollView.resize));
       }
     };
 
