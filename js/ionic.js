@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1120
+ * Ionic, v1.0.0-rc.0-nightly-1121
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1120';
+window.ionic.version = '1.0.0-rc.0-nightly-1121';
 
 (function (ionic) {
 
@@ -3402,7 +3402,7 @@ ionic.DomUtil.ready(function() {
       }
       var parent = scope.$parent;
       scope.$$disconnected = true;
-      scope.$broadcast('$ionic.disconnectScope');
+      scope.$broadcast('$ionic.disconnectScope', scope);
 
       // See Scope.$destroy
       if (parent.$$childHead === scope) {
@@ -3431,7 +3431,7 @@ ionic.DomUtil.ready(function() {
       }
       var parent = scope.$parent;
       scope.$$disconnected = false;
-      scope.$broadcast('$ionic.reconnectScope');
+      scope.$broadcast('$ionic.reconnectScope', scope);
       // See Scope.$new for this logic...
       scope.$$prevSibling = parent.$$childTail;
       if (parent.$$childHead) {
