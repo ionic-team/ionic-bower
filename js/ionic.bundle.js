@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1122
+ * Ionic, v1.0.0-rc.0-nightly-1127
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1122';
+window.ionic.version = '1.0.0-rc.0-nightly-1127';
 
 (function (ionic) {
 
@@ -2700,12 +2700,20 @@ ionic.tap = {
     return !!ele &&
            (ele.tagName == 'TEXTAREA' ||
             ele.contentEditable === 'true' ||
-            (ele.tagName == 'INPUT' && !(/^(radio|checkbox|range|file|submit|reset)$/i).test(ele.type)));
+            (ele.tagName == 'INPUT' && !(/^(radio|checkbox|range|file|submit|reset|color|image|button)$/i).test(ele.type)));
   },
 
   isDateInput: function(ele) {
     return !!ele &&
             (ele.tagName == 'INPUT' && (/^(date|time|datetime-local|month|week)$/i).test(ele.type));
+  },
+
+  isKeyboardElement: function(ele) {
+    if ( !ionic.Platform.isIOS() || ionic.Platform.isIPad() ) {
+      return ionic.tap.isTextInput(ele) && !ionic.tap.isDateInput(ele);
+    } else {
+      return ionic.tap.isTextInput(ele) || ( !!ele && ele.tagName == "SELECT");
+    }
   },
 
   isLabelWithTextInput: function(ele) {
@@ -2719,7 +2727,7 @@ ionic.tap = {
     return ionic.tap.isTextInput(ele) || ionic.tap.isLabelWithTextInput(ele);
   },
 
-  cloneFocusedInput: function(container, scrollIntance) {
+  cloneFocusedInput: function(container) {
     if (ionic.tap.hasCheckedClone) return;
     ionic.tap.hasCheckedClone = true;
 
@@ -2727,7 +2735,7 @@ ionic.tap = {
       var focusInput = container.querySelector(':focus');
       if (ionic.tap.isTextInput(focusInput)) {
         var clonedInput = focusInput.cloneNode(true);
-        
+
         clonedInput.value = focusInput.value;
         clonedInput.classList.add('cloned-text-input');
         clonedInput.readOnly = true;
@@ -2745,7 +2753,7 @@ ionic.tap = {
 
   hasCheckedClone: false,
 
-  removeClonedInputs: function(container, scrollIntance) {
+  removeClonedInputs: function(container) {
     ionic.tap.hasCheckedClone = false;
 
     ionic.requestAnimationFrame(function() {
@@ -3047,7 +3055,7 @@ function tapFocusOutActive() {
 
 function tapFocusIn(e) {
   // Because a text input doesn't preventDefault (so the caret still works) there's a chance
-  // that it's mousedown event 300ms later will change the focus to another element after
+  // that its mousedown event 300ms later will change the focus to another element after
   // the keyboard shows up.
 
   if (tapEnabledTouchEvents &&
@@ -3613,8 +3621,9 @@ function keyboardNativeShow(e) {
 }
 
 function keyboardBrowserFocusIn(e) {
-  if( !e.target || e.target.readOnly || !ionic.tap.isTextInput(e.target) || ionic.tap.isDateInput(e.target) || !keyboardIsWithinScroll(e.target) ) return;
+  if( !e.target || e.target.readOnly || !ionic.tap.isKeyboardElement(e.target) || !keyboardIsWithinScroll(e.target) ) return;
 
+  //console.log("keyboardBrowserFocusIn");
   document.addEventListener('keydown', keyboardOnKeyDown, false);
 
   document.body.scrollTop = 0;
@@ -3631,7 +3640,7 @@ function keyboardSetShow(e) {
 
   keyboardFocusInTimer = setTimeout(function(){
     if ( keyboardLastShow + 350 > Date.now() ) return;
-    void 0;
+    //console.log('keyboardSetShow');
     keyboardLastShow = Date.now();
     var keyboardHeight;
     var elementBounds = keyboardActiveElement.getBoundingClientRect();
@@ -3668,7 +3677,7 @@ function keyboardShow(element, elementTop, elementBottom, viewportHeight, keyboa
 
   details.contentHeight = viewportHeight - keyboardHeight;
 
-  void 0;
+  //console.log('keyboardShow', keyboardHeight, details.contentHeight);
 
   // figure out if the element is under the keyboard
   details.isElementUnderKeyboard = (details.elementBottom > details.contentHeight);
@@ -41132,7 +41141,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1122
+ * Ionic, v1.0.0-rc.0-nightly-1127
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
