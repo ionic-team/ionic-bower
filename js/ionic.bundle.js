@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1141
+ * Ionic, v1.0.0-rc.0-nightly-1142
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1141';
+window.ionic.version = '1.0.0-rc.0-nightly-1142';
 
 (function (ionic) {
 
@@ -2389,11 +2389,6 @@ window.ionic.version = '1.0.0-rc.0-nightly-1141';
       ionic.DomUtil.ready(function() {
         // run this only when or if the DOM is ready
         requestAnimationFrame(function() {
-          // fixing pane height before we adjust this
-          var panes = document.getElementsByClassName('pane');
-          for (var i = 0; i < panes.length; i++) {
-            panes[i].style.height = panes[i].offsetHeight + "px";
-          }
           if (self.isFullScreen) {
             document.body.classList.add('fullscreen');
           } else {
@@ -41143,7 +41138,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1141
+ * Ionic, v1.0.0-rc.0-nightly-1142
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
