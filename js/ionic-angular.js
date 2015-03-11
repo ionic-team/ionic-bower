@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1138
+ * Ionic, v1.0.0-rc.0-nightly-1139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8647,6 +8647,18 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
         repeaterBeforeSize += current[isVertical ? 'offsetTop' : 'offsetLeft'];
       } while( ionic.DomUtil.contains(scrollView.__content, current = current.offsetParent) );
 
+      var containerPrevNode = containerNode.previousElementSibling;
+      var beforeStyle = containerPrevNode ?  $window.getComputedStyle(containerPrevNode) : {};
+      var beforeMargin = parseInt(beforeStyle[isVertical ? 'marginBottom' : 'marginRight'] || 0);
+
+      // Because we position the collection container with position: relative, it doesn't take
+      // into account where to position itself relative to the previous element's marginBottom.
+      // To compensate, we translate the container up by the previous element's margin.
+      containerNode.style[ionic.CSS.TRANSFORM] = TRANSLATE_TEMPLATE_STR
+        .replace(PRIMARY, -beforeMargin)
+        .replace(SECONDARY, 0);
+      repeaterBeforeSize -= beforeMargin;
+
       if (!scrollView.__clientHeight || !scrollView.__clientWidth) {
         scrollView.__clientWidth = scrollView.__container.clientWidth;
         scrollView.__clientHeight = scrollView.__container.clientHeight;
@@ -8818,27 +8830,19 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
 
     function digestEnteringItems() {
       var item;
-      var scope;
-      var len;
       if (digestEnteringItems.running) return;
       digestEnteringItems.running = true;
 
       $$rAF(function process() {
-        if( (len = itemsEntering.length) ) {
-          var rootScopePhase = $rootScope.$$phase;
-          var count = Math.floor(len / 1.25) || 1;
-          while (count && itemsEntering.length) {
-            item = itemsEntering.pop();
-            if (item.isShown) {
-              count--;
-              if (!rootScopePhase) item.scope.$digest();
-              item.scope.$broadcast('$collectionRepeatLeave');
-            }
+        var rootScopePhase = $rootScope.$$phase;
+        while (itemsEntering.length) {
+          item = itemsEntering.pop();
+          if (item.isShown) {
+            if (!rootScopePhase) item.scope.$digest();
+            item.scope.$broadcast('$collectionRepeatLeave');
           }
-          $$rAF(process);
-        } else {
-          digestEnteringItems.running = false;
         }
+        digestEnteringItems.running = false;
       });
     }
 
@@ -9967,12 +9971,13 @@ IonicModule
         var content = $element[0].querySelector('.item-content');
         if (content) {
           $scope.$on('$collectionRepeatLeave', function() {
-            if (content) {
+            if (content && content.$$ionicOptionsOpen) {
               content.style[ionic.CSS.TRANSFORM] = '';
               content.style[ionic.CSS.TRANSITION] = 'none';
               $$rAF(function() {
                 content.style[ionic.CSS.TRANSITION] = '';
               });
+              content.$$ionicOptionsOpen = false;
             }
           });
         }

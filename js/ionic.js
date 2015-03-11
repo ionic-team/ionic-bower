@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1138
+ * Ionic, v1.0.0-rc.0-nightly-1139
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1138';
+window.ionic.version = '1.0.0-rc.0-nightly-1139';
 
 (function (ionic) {
 
@@ -6546,6 +6546,8 @@ ionic.scroll = {
         // Calculate the new X position, capped at the top of the buttons
         newX = Math.min(-buttonsWidth, -buttonsWidth + (((e.gesture.deltaX + buttonsWidth) * 0.4)));
       }
+
+      this._currentDrag.content.$$ionicOptionsOpen = newX !== 0;
 
       this._currentDrag.content.style[ionic.CSS.TRANSFORM] = 'translate3d(' + newX + 'px, 0, 0)';
       this._currentDrag.content.style[ionic.CSS.TRANSITION] = 'none';
