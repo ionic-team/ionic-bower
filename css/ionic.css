@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1130
+ * Ionic, v1.0.0-rc.0-nightly-1131
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2900,7 +2900,11 @@ a.subdued {
   transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
   position: absolute;
   bottom: 0;
-  width: 100%; }
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 500px;
+  margin: auto; }
 
 .action-sheet-up {
   -webkit-transform: translate3d(0, 0, 0);
