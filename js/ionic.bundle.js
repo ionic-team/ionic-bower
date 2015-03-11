@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1137
+ * Ionic, v1.0.0-rc.0-nightly-1138
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1137';
+window.ionic.version = '1.0.0-rc.0-nightly-1138';
 
 (function (ionic) {
 
@@ -41141,7 +41141,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1137
+ * Ionic, v1.0.0-rc.0-nightly-1138
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47931,8 +47931,7 @@ function($scope,
   }
 
   var resize = angular.bind(scrollView, scrollView.resize);
-  ionic.on('resize', resize, $window);
-
+  angular.element($window).on('resize', resize);
 
   var scrollFunc = function(e) {
     var detail = (e.originalEvent || e).detail || {};
@@ -47948,8 +47947,7 @@ function($scope,
   $scope.$on('$destroy', function() {
     deregisterInstance();
     scrollView && scrollView.__cleanup && scrollView.__cleanup();
-    ionic.off('resize', resize, $window);
-    $window.removeEventListener('resize', resize);
+    angular.element($window).off('resize', resize);
     $element.off('scroll', scrollFunc);
     scrollView = self.scrollView = scrollViewOptions = self._scrollViewOptions = scrollViewOptions.el = self._scrollViewOptions.el = $element = self.$element = element = null;
   });
@@ -48346,10 +48344,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
   self.exposeAside = function(shouldExposeAside) {
     if (!(self.left && self.left.isEnabled) && !(self.right && self.right.isEnabled)) return;
     self.close();
-    //Trigger a resize if it changed
-    if (isAsideExposed !== shouldExposeAside) {
-      ionic.trigger('resize', null, window);
-    }
+
     isAsideExposed = shouldExposeAside;
     if (self.left && self.left.isEnabled) {
       // set the left marget width if it should be exposed
@@ -49448,11 +49443,9 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
 
     initDimensions();
 
-    var debouncedRefreshDimensions = ionic.animationFrameThrottle(refreshDimensions);
-    var debouncedOnResize = ionic.animationFrameThrottle(validateResize);
-
     // Dimensions are refreshed on resize or data change.
-    angular.element($window).on('resize', debouncedOnResize);
+    angular.element($window).on('resize', validateResize);
+    var unlistenToExposeAside = $rootScope.$on('$ionicExposeAside', validateResize);
     $timeout(refreshDimensions, 0, false);
 
     scope.$watchCollection(listGetter, function(newValue) {
@@ -49470,7 +49463,8 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
     });
 
     scope.$on('$destroy', function() {
-      angular.element($window).off('resize', debouncedOnResize);
+      angular.element($window).off('resize', validateResize);
+      unlistenToExposeAside();
 
       computedStyleNode && computedStyleNode.parentNode &&
         computedStyleNode.parentNode.removeChild(computedStyleNode);
@@ -49609,8 +49603,8 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
         parsedValue = $parse(attrValue);
       }
 
-      var withoutQuotes = attrValue.replace(/(\'|\"|px|%)/g, '').trim();
-      var isConstant = withoutQuotes.length && !/([a-zA-Z]|\$|:|\?)/.test(withoutQuotes);
+      var constantAttrValue = attrValue.replace(/(\'|\"|px|%)/g, '').trim();
+      var isConstant = constantAttrValue.length && !/([a-zA-Z]|\$|:|\?)/.test(constantAttrValue);
       dimensionData.attrValue = attrValue;
 
       // If it's a constant, it's either a percent or just a constant pixel number.
@@ -49869,7 +49863,6 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
           delete itemsShownMap[i];
           itemsLeaving.push(item);
           item.isShown = false;
-          item.scope.$broadcast('$collectionRepeatChange');
         }
       }
 
@@ -49978,6 +49971,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
             if (item.isShown) {
               count--;
               if (!rootScopePhase) item.scope.$digest();
+              item.scope.$broadcast('$collectionRepeatLeave');
             }
           }
           $$rAF(process);
@@ -51073,7 +51067,7 @@ var ITEM_TPL_CONTENT =
 * ```
 */
 IonicModule
-.directive('ionItem', function() {
+.directive('ionItem', ['$$rAF', function($$rAF) {
       var nextId = 0;
   return {
     restrict: 'E',
@@ -51111,15 +51105,21 @@ IonicModule
 
         var content = $element[0].querySelector('.item-content');
         if (content) {
-          $scope.$on('$collectionRepeatChange', function() {
-            content && (content.style[ionic.CSS.TRANSFORM] = 'translate3d(0,0,0)');
+          $scope.$on('$collectionRepeatLeave', function() {
+            if (content) {
+              content.style[ionic.CSS.TRANSFORM] = '';
+              content.style[ionic.CSS.TRANSITION] = 'none';
+              $$rAF(function() {
+                content.style[ionic.CSS.TRANSITION] = '';
+              });
+            }
           });
         }
       };
 
     }
   };
-});
+}]);
 
 var ITEM_TPL_DELETE_BUTTON =
   '<div class="item-left-edit item-delete enable-pointer-events">' +
@@ -51156,7 +51156,7 @@ IonicModule
 .directive('ionDeleteButton', function() {
   return {
     restrict: 'E',
-    require: ['^ionItem', '^?ionList'],
+    require: ['^^ionItem', '^?ionList'],
     //Run before anything else, so we can move it before other directives process
     //its location (eg ngIf relies on the location of the directive in the dom)
     priority: Number.MAX_VALUE,
@@ -51171,8 +51171,13 @@ IonicModule
         container.append($element);
         itemCtrl.$element.append(container).addClass('item-left-editable');
 
-        if (listCtrl && listCtrl.showDelete()) {
-          container.addClass('visible active');
+        init();
+        $scope.$on('$ionic.reconnectScope', init);
+        function init() {
+          listCtrl = listCtrl || $element.controller('ionList');
+          if (listCtrl && listCtrl.showDelete()) {
+            container.addClass('visible active');
+          }
         }
       };
     }
@@ -52998,7 +53003,6 @@ function($timeout, $ionicGesture, $window) {
               $element[0].style.width = '';
               content.offsetX = 0;
             }
-            ionic.trigger('resize', null, window);
           }),
           setMarginRight: ionic.animationFrameThrottle(function(amount) {
             if (amount) {
