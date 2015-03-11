@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1133
+ * Ionic, v1.0.0-rc.0-nightly-1135
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1133';
+window.ionic.version = '1.0.0-rc.0-nightly-1135';
 
 (function (ionic) {
 
@@ -2344,7 +2344,7 @@ window.ionic.version = '1.0.0-rc.0-nightly-1133';
     /**
      * @ngdoc method
      * @name ionic.Platform#showStatusBar
-     * @description Shows or hides the device status bar (in Cordova).
+     * @description Shows or hides the device status bar (in Cordova). Requires `cordova plugin add org.apache.cordova.statusbar`
      * @param {boolean} shouldShow Whether or not to show the status bar.
      */
     showStatusBar: function(val) {
@@ -2371,7 +2371,7 @@ window.ionic.version = '1.0.0-rc.0-nightly-1133';
      * @name ionic.Platform#fullScreen
      * @description
      * Sets whether the app is fullscreen or not (in Cordova).
-     * @param {boolean=} showFullScreen Whether or not to set the app to fullscreen. Defaults to true.
+     * @param {boolean=} showFullScreen Whether or not to set the app to fullscreen. Defaults to true. Requires `cordova plugin add org.apache.cordova.statusbar`
      * @param {boolean=} showStatusBar Whether or not to show the device's status bar. Defaults to false.
      */
     fullScreen: function(showFullScreen, showStatusBar) {
