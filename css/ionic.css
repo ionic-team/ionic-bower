@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1136
+ * Ionic, v1.0.0-rc.0-nightly-1137
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3226,6 +3226,8 @@ a.subdued {
     right: 5px;
     bottom: 5px; }
 
+.platform-android .nav-bar-has-subheader .bar {
+  border-bottom: 0; }
 .platform-android .bar .back-button .icon:before {
   font-size: 24px; }
 .platform-android .bar .title {

@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1136
+ * Ionic, v1.0.0-rc.0-nightly-1137
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5888,6 +5888,9 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
     $element[isTabsTop ? 'addClass' : 'removeClass']('nav-bar-tabs-top');
   };
 
+  self.hasBarSubheader = function(isBarSubheader) {
+    $element[isBarSubheader ? 'addClass' : 'removeClass']('nav-bar-has-subheader');
+  };
 
   // DEPRECATED, as of v1.0.0-beta14 -------
   self.changeTitle = function(val) {
@@ -6018,6 +6021,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
     $scope.$on('$ionicHistory.deselect', self.cacheCleanup);
     $scope.$on('$ionicTabs.top', onTabsTop);
+    $scope.$on('$ionicSubheader', onBarSubheader);
 
     ionic.Platform.ready(function() {
       if (ionic.Platform.isWebView() && $ionicConfig.views.swipeBackEnabled()) {
@@ -6394,6 +6398,10 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     associatedNavBarCtrl && associatedNavBarCtrl.hasTabsTop(isTabsTop);
   }
 
+  function onBarSubheader(ev, isBarSubheader) {
+    var associatedNavBarCtrl = getAssociatedNavBarCtrl();
+    associatedNavBarCtrl && associatedNavBarCtrl.hasBarSubheader(isBarSubheader);
+  }
 
   function getAssociatedNavBarCtrl() {
     if (navBarDelegate) {
@@ -9752,6 +9760,7 @@ function headerFooterBarDirective(isHeader) {
               var isSubheader = value.indexOf('bar-subheader') !== -1;
               $scope.$hasHeader = isShown && !isSubheader;
               $scope.$hasSubheader = isShown && isSubheader;
+              $scope.$emit('$ionicSubheader', $scope.$hasSubheader);
             });
             $scope.$on('$destroy', function() {
               delete $scope.$hasHeader;
