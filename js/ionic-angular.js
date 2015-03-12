@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1146
+ * Ionic, v1.0.0-rc.0-nightly-1147
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8325,13 +8325,21 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
 
     var afterItemsContainer = initAfterItemsContainer();
 
+    var changeValidator = makeChangeValidator();
     initDimensions();
 
     // Dimensions are refreshed on resize or data change.
-    angular.element($window).on('resize', validateResize);
     scrollCtrl.$element.on('scroll.resize', refreshDimensions);
-    var unlistenToExposeAside = $rootScope.$on('$ionicExposeAside', validateResize);
+
+    angular.element($window).on('resize', onResize);
+    var unlistenToExposeAside = $rootScope.$on('$ionicExposeAside', onResize);
     $timeout(refreshDimensions, 0, false);
+
+    function onResize() {
+      if (changeValidator.resizeRequiresRefresh(scrollView.__clientWidth, scrollView.__clientHeight)) {
+        refreshDimensions();
+      }
+    }
 
     scope.$watchCollection(listGetter, function(newValue) {
       data = newValue || (newValue = []);
@@ -8339,16 +8347,15 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
         throw new Error("collection-repeat expected an array for '" + listExpr + "', " +
           "but got a " + typeof value);
       }
-
       // Wait for this digest to end before refreshing everything.
       scope.$$postDigest(function() {
-        getRepeatManager().refreshData(newValue);
-        refreshDimensions();
+        getRepeatManager().setData(data);
+        if (changeValidator.dataChangeRequiresRefresh(data)) refreshDimensions();
       });
     });
 
     scope.$on('$destroy', function() {
-      angular.element($window).off('resize', validateResize);
+      angular.element($window).off('resize', onResize);
       unlistenToExposeAside();
       scrollCtrl.$element && scrollCtrl.$element.off('scroll.resize', refreshDimensions);
 
@@ -8360,6 +8367,32 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
       repeatManager && repeatManager.destroy();
       repeatManager = null;
     });
+
+    function makeChangeValidator() {
+      var self;
+      return (self = {
+        dataLength: 0,
+        width: 0,
+        height: 0,
+        resizeRequiresRefresh: function(newWidth, newHeight) {
+          var requiresRefresh = self.dataLength &&
+            newWidth && newWidth !== self.width &&
+            newHeight && newHeight !== self.height;
+
+          self.width = newWidth;
+          self.height = newHeight;
+
+          return !!requiresRefresh;
+        },
+        dataChangeRequiresRefresh: function(newData) {
+          var requiresRefresh = newData.length > 0 || newData.length < self.dataLength;
+
+          self.dataLength = newData.length;
+
+          return !!requiresRefresh;
+        }
+      });
+    }
 
     function getRepeatManager() {
       return repeatManager || (repeatManager = new $ionicCollectionManager({
@@ -8429,23 +8462,14 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
       }
     }
 
-    // Make sure this resize actually changed the size of the screen
-    function validateResize() {
-      var h = scrollView.__clientHeight, w = scrollView.__clientWidth;
-      if (w && h && (validateResize.height !== h || validateResize.width !== w)) {
-        validateResize.height = h;
-        validateResize.width = w;
-        refreshDimensions();
-      }
-    }
     function refreshDimensions() {
-      if (!data.length) return;
+      var hasData = data.length > 0;
 
-      if (heightData.computed || widthData.computed) {
+      if (hasData && (heightData.computed || widthData.computed)) {
         computeStyleDimensions();
       }
 
-      if (heightData.computed) {
+      if (hasData && heightData.computed) {
         heightData.value = computedStyleDimensions.height;
         if (!heightData.value) {
           throw new Error('collection-repeat tried to compute the height of repeated elements "' +
@@ -8456,7 +8480,8 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
         // If it's a constant with a getter (eg percent), we just refresh .value after resize
         heightData.value = heightData.getValue();
       }
-      if (widthData.computed) {
+
+      if (hasData && widthData.computed) {
         widthData.value = computedStyleDimensions.width;
         if (!widthData.value) {
           throw new Error('collection-repeat tried to compute the width of repeated elements "' +
@@ -8714,7 +8739,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
       }
     };
 
-    this.refreshData = function(newData) {
+    this.setData = function(newData) {
       data = newData;
       (view.onRefreshData || angular.noop)();
       isDataReady = true;
