@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1143
+ * Ionic, v1.0.0-rc.0-nightly-1144
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1143';
+window.ionic.version = '1.0.0-rc.0-nightly-1144';
 
 (function (ionic) {
 
@@ -3154,7 +3154,7 @@ ionic.DomUtil.ready(function() {
 
         for (var x = 0; x < 6; x++) {
           if (!ele || ele.nodeType !== 1) break;
-          if (eleToActivate && ele.classList.contains('item')) {
+          if (eleToActivate && ele.classList && ele.classList.contains('item')) {
             eleToActivate = ele;
             break;
           }
@@ -3167,7 +3167,7 @@ ionic.DomUtil.ready(function() {
             break;
           }
           // no sense climbing past these
-          if (ele.tagName == 'ION-CONTENT' || ele.classList.contains('pane') || ele.tagName == 'BODY') {
+          if (ele.tagName == 'ION-CONTENT' || (ele.classList && ele.classList.contains('pane')) || ele.tagName == 'BODY') {
             break;
           }
           ele = ele.parentElement;
@@ -41138,7 +41138,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1143
+ * Ionic, v1.0.0-rc.0-nightly-1144
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
