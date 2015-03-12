@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1145
+ * Ionic, v1.0.0-rc.0-nightly-1146
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1145';
+window.ionic.version = '1.0.0-rc.0-nightly-1146';
 
 (function (ionic) {
 
@@ -41138,7 +41138,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1145
+ * Ionic, v1.0.0-rc.0-nightly-1146
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49465,6 +49465,7 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
 
     // Dimensions are refreshed on resize or data change.
     angular.element($window).on('resize', validateResize);
+    scrollCtrl.$element.on('scroll.resize', refreshDimensions);
     var unlistenToExposeAside = $rootScope.$on('$ionicExposeAside', validateResize);
     $timeout(refreshDimensions, 0, false);
 
@@ -49485,6 +49486,7 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', validateResize);
       unlistenToExposeAside();
+      scrollCtrl.$element && scrollCtrl.$element.off('scroll.resize', refreshDimensions);
 
       computedStyleNode && computedStyleNode.parentNode &&
         computedStyleNode.parentNode.removeChild(computedStyleNode);
