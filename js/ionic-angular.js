@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1142
+ * Ionic, v1.0.0-rc.0-nightly-1143
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10641,8 +10641,9 @@ IonicModule
     replace: true,
     controller: [function() {}],
     template: '<div class="modal-backdrop">' +
+                '<div class="modal-backdrop-bg"></div>' +
                 '<div class="modal-wrapper" ng-transclude></div>' +
-                '</div>'
+              '</div>'
   };
 }]);
 
