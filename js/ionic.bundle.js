@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1149
+ * Ionic, v1.0.0-rc.0-nightly-1150
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.0-nightly-1149';
+window.ionic.version = '1.0.0-rc.0-nightly-1150';
 
 (function (ionic) {
 
@@ -41138,7 +41138,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.0-nightly-1149
+ * Ionic, v1.0.0-rc.0-nightly-1150
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49510,16 +49510,19 @@ function CollectionRepeatDirective($ionicCollectionManager, $parse, $window, $$r
         dataLength: 0,
         width: 0,
         height: 0,
+        // A resize triggers a refresh only if we have data, the scrollView has size,
+        // and the size has changed.
         resizeRequiresRefresh: function(newWidth, newHeight) {
-          var requiresRefresh = self.dataLength &&
-            newWidth && newWidth !== self.width &&
-            newHeight && newHeight !== self.height;
+          var requiresRefresh = self.dataLength && newWidth && newHeight &&
+            (newWidth !== self.width || newHeight !== self.height);
 
           self.width = newWidth;
           self.height = newHeight;
 
           return !!requiresRefresh;
         },
+        // A change in data only triggers a refresh if the data has length, or if the data's
+        // length is less than before.
         dataChangeRequiresRefresh: function(newData) {
           var requiresRefresh = newData.length > 0 || newData.length < self.dataLength;
 
