@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.1-nightly-1152
+ * Ionic, v1.0.0-rc.1-nightly-1153
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.1-nightly-1152';
+window.ionic.version = '1.0.0-rc.1-nightly-1153';
 
 (function (ionic) {
 
@@ -2991,7 +2991,7 @@ function tapEnableTouchEvents() {
   clearTimeout(tapMouseResetTimer);
   tapMouseResetTimer = setTimeout(function() {
     tapEnabledTouchEvents = false;
-  }, 2000);
+  }, 600);
 }
 
 function tapIgnoreEvent(e) {
@@ -41138,7 +41138,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.1-nightly-1152
+ * Ionic, v1.0.0-rc.1-nightly-1153
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
