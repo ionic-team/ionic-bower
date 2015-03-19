@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.1-nightly-1153
+ * Ionic, v1.0.0-rc.1-nightly-1154
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.1-nightly-1153';
+window.ionic.version = '1.0.0-rc.1-nightly-1154';
 
 (function (ionic) {
 
@@ -1774,16 +1774,19 @@ window.ionic.version = '1.0.0-rc.1-nightly-1153';
       drag_lock_to_axis       : false,
       // drag lock only kicks in when distance > drag_lock_min_distance
       // This way, locking occurs only when the distance has become large enough to reliably determine the direction
-      drag_lock_min_distance : 25
+      drag_lock_min_distance : 25,
+      // prevent default if the gesture is going the given direction
+      prevent_default_directions : []
     },
     triggered: false,
     handler: function dragGesture(ev, inst) {
-
       if (ev.srcEvent.type == 'touchstart' || ev.srcEvent.type == 'touchend') {
         this.preventedFirstMove = false;
 
       } else if (!this.preventedFirstMove && ev.srcEvent.type == 'touchmove') {
-        ev.srcEvent.preventDefault();
+        if (inst.options.prevent_default_directions.indexOf(ev.direction) != -1) {
+          ev.srcEvent.preventDefault();
+        }
         this.preventedFirstMove = true;
       }
 
@@ -6808,13 +6811,19 @@ ionic.scroll = {
       self.onRefreshOpening = opts.onRefreshOpening || function() {};
       self.onRefreshHolding = opts.onRefreshHolding || function() {};
 
+      var gestureOpts = {};
+      // don't prevent native scrolling
+      if (ionic.DomUtil.getParentOrSelfWithClass(self.el,'overflow-scroll')) {
+        gestureOpts.prevent_default_directions = ['left','right'];
+      }
+
       window.ionic.onGesture('release', function(e) {
         self._handleEndDrag(e);
-      }, self.el);
+      }, self.el, gestureOpts);
 
       window.ionic.onGesture('drag', function(e) {
         self._handleDrag(e);
-      }, self.el);
+      }, self.el, gestureOpts);
       // Start the drag states
       self._initDrag();
     },
@@ -41138,7 +41147,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.1-nightly-1153
+ * Ionic, v1.0.0-rc.1-nightly-1154
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -53087,6 +53096,9 @@ function($timeout, $ionicGesture, $window) {
 
         // add gesture handlers
         var gestureOpts = { stop_browser_behavior: false };
+        if (ionic.DomUtil.getParentOrSelfWithClass($element[0],'overflow-scroll')) {
+          gestureOpts.prevent_default_directions = ['left','right'];
+        }
         var contentTapGesture = $ionicGesture.on('tap', onContentTap, $element, gestureOpts);
         var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element, gestureOpts);
         var dragLeftGesture = $ionicGesture.on('dragleft', onDragX, $element, gestureOpts);
