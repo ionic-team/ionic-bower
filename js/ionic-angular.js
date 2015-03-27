@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.1-nightly-1162
+ * Ionic, v1.0.0-rc.1-nightly-1163
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11552,6 +11552,7 @@ IonicModule
  * of the refresher.
  * @param {expression=} on-pulling Called when the user starts to pull down
  * on the refresher.
+ * @param {string=} pulling-text The text to display while the user is pulling down.
  * @param {string=} pulling-icon The icon to display while the user is pulling down.
  * Default: 'ion-android-arrow-down'.
  * @param {string=} spinner The {@link ionic.directive:ionSpinner} icon to display
