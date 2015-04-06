@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1178
+ * Ionic, v1.0.0-rc.2-nightly-1179
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5747,13 +5747,24 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
         navBarTransition.direction = 'back';
         navBarTransition.run(step);
       },
-      cancel: function(shouldAnimate, speed) {
+      cancel: function(shouldAnimate, speed, cancelData) {
         navSwipeAttr(speed);
         navBarAttr(leavingHeaderBar, 'active');
         navBarAttr(enteringHeaderBar, 'cached');
         navBarTransition.shouldAnimate = shouldAnimate;
         navBarTransition.run(0);
         self.activeTransition = navBarTransition = null;
+
+        var runApply;
+        if (cancelData.showBar !== self.showBar()) {
+          self.showBar(cancelData.showBar);
+        }
+        if (cancelData.showBackButton !== self.showBackButton()) {
+          self.showBackButton(cancelData.showBackButton);
+        }
+        if (runApply) {
+          $scope.$apply();
+        }
       },
       complete: function(shouldAnimate, speed) {
         navSwipeAttr(speed);
@@ -5848,10 +5859,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
    * to show.
    */
   self.showBackButton = function(shouldShow) {
-    for (var x = 0; x < headerBars.length; x++) {
-      headerBars[x].controller().showNavBack(!!shouldShow);
+    if (arguments.length) {
+      for (var x = 0; x < headerBars.length; x++) {
+        headerBars[x].controller().showNavBack(!!shouldShow);
+      }
+      $scope.$isBackButtonShown = !!shouldShow;
     }
-    $scope.$isBackButtonShown = !!shouldShow;
     return $scope.$isBackButtonShown;
   };
 
@@ -5863,7 +5876,12 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
    */
   self.showActiveBackButton = function(shouldShow) {
     var headerBar = getOnScreenHeaderBar();
-    headerBar && headerBar.controller().showBack(shouldShow);
+    if (headerBar) {
+      if (arguments.length) {
+        return headerBar.controller().showBack(shouldShow);
+      }
+      return headerBar.controller().showBack();
+    }
   };
 
 
@@ -6257,13 +6275,25 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
    */
   self.showBackButton = function(shouldShow) {
     var associatedNavBarCtrl = getAssociatedNavBarCtrl();
-    associatedNavBarCtrl && associatedNavBarCtrl.showActiveBackButton(shouldShow);
+    if (associatedNavBarCtrl) {
+      if (arguments.length) {
+        return associatedNavBarCtrl.showActiveBackButton(shouldShow);
+      }
+      return associatedNavBarCtrl.showActiveBackButton();
+    }
+    return true;
   };
 
 
   self.showBar = function(val) {
     var associatedNavBarCtrl = getAssociatedNavBarCtrl();
-    associatedNavBarCtrl && associatedNavBarCtrl.showBar(val);
+    if (associatedNavBarCtrl) {
+      if (arguments.length) {
+        return associatedNavBarCtrl.showBar(val);
+      }
+      return associatedNavBarCtrl.showBar();
+    }
+    return true;
   };
 
 
@@ -6288,6 +6318,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     var viewTransition, associatedNavBarCtrl, backView;
     var deregDragStart, deregDrag, deregRelease;
     var windowWidth, startDragX, dragPoints;
+    var cancelData = {};
 
     function onDragStart(ev) {
       if (!isPrimary) return;
@@ -6308,6 +6339,11 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
       };
 
       dragPoints = [];
+
+      cancelData = {
+        showBar: self.showBar(),
+        showBackButton: self.showBackButton()
+      };
 
       var switcher = $ionicViewSwitcher.create(self, registerData, backView, $ionicHistory.currentView(), true, false);
       switcher.loadViewElements(registerData);
@@ -6365,16 +6401,18 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         disableAnimation = (releaseSwipeCompletion < 0.03 || releaseSwipeCompletion > 0.97);
 
         if (isSwipingRight && (releaseSwipeCompletion > 0.5 || velocity > 0.1)) {
+          // complete view transition on release
           var speed = (velocity > 0.5 || velocity < 0.05 || releaseX > windowWidth - 45) ? 'fast' : 'slow';
           navSwipeAttr(disableAnimation ? '' : speed);
           backView.go();
           associatedNavBarCtrl && associatedNavBarCtrl.activeTransition && associatedNavBarCtrl.activeTransition.complete(!disableAnimation, speed);
 
         } else {
+          // cancel view transition on release
           navSwipeAttr(disableAnimation ? '' : 'fast');
           disableRenderStartViewId = null;
           viewTransition.cancel(!disableAnimation);
-          associatedNavBarCtrl && associatedNavBarCtrl.activeTransition && associatedNavBarCtrl.activeTransition.cancel(!disableAnimation, 'fast');
+          associatedNavBarCtrl && associatedNavBarCtrl.activeTransition && associatedNavBarCtrl.activeTransition.cancel(!disableAnimation, 'fast', cancelData);
           disableAnimation = null;
         }
 
