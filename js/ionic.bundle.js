@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1185
+ * Ionic, v1.0.0-rc.2-nightly-1186
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.2-nightly-1185';
+window.ionic.version = '1.0.0-rc.2-nightly-1186';
 
 (function (ionic) {
 
@@ -41496,7 +41496,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1185
+ * Ionic, v1.0.0-rc.2-nightly-1186
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
