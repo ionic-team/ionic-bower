@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1187
+ * Ionic, v1.0.0-rc.2-nightly-1192
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4305,7 +4305,6 @@ ion-tabs.tabs-color-active-dark .tab-item {
     right: 20%;
     bottom: 20%;
     left: 20%;
-    overflow: visible;
     min-height: 240px;
     width: 60%; }
   .modal.ng-leave-active {
