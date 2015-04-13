@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1192
+ * Ionic, v1.0.0-rc.2-nightly-1193
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.2-nightly-1192';
+window.ionic.version = '1.0.0-rc.2-nightly-1193';
 
 (function (ionic) {
 
@@ -5037,7 +5037,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
 
             //update scroll view
             self.resize();
-          })
+          });
         }
 
         self.isShrunkForKeyboard = true;
@@ -8279,6 +8279,7 @@ ionic.views.Slider = ionic.views.View.inherit({
             translate(index+1, delta.x + slidePos[index+1], 0);
           }
 
+          options.onDrag && options.onDrag();
         }
 
       },
@@ -8369,6 +8370,7 @@ ionic.views.Slider = ionic.views.View.inherit({
           document.removeEventListener('mouseup', events, false);
         }
 
+        options.onDragEnd && options.onDragEnd();
       },
       transitionEnd: function(event) {
 
@@ -41903,7 +41905,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1192
+ * Ionic, v1.0.0-rc.2-nightly-1193
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54139,7 +54141,8 @@ IonicModule
   '$compile',
   '$ionicSlideBoxDelegate',
   '$ionicHistory',
-function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
+  '$ionicScrollDelegate',
+function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $ionicScrollDelegate) {
   return {
     restrict: 'E',
     replace: true,
@@ -54179,8 +54182,24 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
           $scope.activeSlide = slideIndex;
           // Try to trigger a digest
           $timeout(function() {});
+        },
+        onDrag: function() {
+          freezeAllScrolls(true);
+        },
+        onDragEnd: function() {
+          freezeAllScrolls(false);
         }
       });
+
+      function freezeAllScrolls(shouldFreeze) {
+        if (shouldFreeze && !_this.isScrollFreeze) {
+          $ionicScrollDelegate.freezeAllScrolls(shouldFreeze);
+
+        } else if (!shouldFreeze && _this.isScrollFreeze) {
+          $ionicScrollDelegate.freezeAllScrolls(false);
+        }
+        _this.isScrollFreeze = shouldFreeze;
+      }
 
       slider.enableSlide($scope.$eval($attrs.disableScroll) !== true);
 

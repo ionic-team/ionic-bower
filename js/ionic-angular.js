@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.2-nightly-1192
+ * Ionic, v1.0.0-rc.2-nightly-1193
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12238,7 +12238,8 @@ IonicModule
   '$compile',
   '$ionicSlideBoxDelegate',
   '$ionicHistory',
-function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
+  '$ionicScrollDelegate',
+function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $ionicScrollDelegate) {
   return {
     restrict: 'E',
     replace: true,
@@ -12278,8 +12279,24 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
           $scope.activeSlide = slideIndex;
           // Try to trigger a digest
           $timeout(function() {});
+        },
+        onDrag: function() {
+          freezeAllScrolls(true);
+        },
+        onDragEnd: function() {
+          freezeAllScrolls(false);
         }
       });
+
+      function freezeAllScrolls(shouldFreeze) {
+        if (shouldFreeze && !_this.isScrollFreeze) {
+          $ionicScrollDelegate.freezeAllScrolls(shouldFreeze);
+
+        } else if (!shouldFreeze && _this.isScrollFreeze) {
+          $ionicScrollDelegate.freezeAllScrolls(false);
+        }
+        _this.isScrollFreeze = shouldFreeze;
+      }
 
       slider.enableSlide($scope.$eval($attrs.disableScroll) !== true);
 
