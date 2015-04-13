@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1205
+ * Ionic, v1.0.0-rc.3-nightly-1206
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1205';
+window.ionic.version = '1.0.0-rc.3-nightly-1206';
 
 (function (ionic) {
 
@@ -8004,17 +8004,17 @@ ionic.views.Slider = ionic.views.View.inherit({
       options.slidesChanged && options.slidesChanged();
     }
 
-    function prev() {
+    function prev(slideSpeed) {
 
-      if (options.continuous) slide(index-1);
-      else if (index) slide(index-1);
+      if (options.continuous) slide(index-1, slideSpeed);
+      else if (index) slide(index-1, slideSpeed);
 
     }
 
-    function next() {
+    function next(slideSpeed) {
 
-      if (options.continuous) slide(index+1);
-      else if (index < slides.length - 1) slide(index+1);
+      if (options.continuous) slide(index+1, slideSpeed);
+      else if (index < slides.length - 1) slide(index+1, slideSpeed);
 
     }
 
