@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1204
+ * Ionic, v1.0.0-rc.3-nightly-1205
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1204';
+window.ionic.version = '1.0.0-rc.3-nightly-1205';
 
 (function (ionic) {
 
@@ -8462,17 +8462,8 @@ ionic.views.Slider = ionic.views.View.inherit({
       element.style.width = '';
       element.style.left = '';
 
-      // reset slides
-      var pos = slides.length;
-      while(pos--) {
-
-        var slide = slides[pos];
-        slide.style.width = '';
-        slide.style.left = '';
-
-        if (browser.transitions) translate(pos, 0, 0);
-
-      }
+      // reset slides so no refs are held on to
+      slides && (slides.length = 0);
 
       // removed event listeners
       if (browser.addEventListener) {
@@ -41905,7 +41896,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1204
+ * Ionic, v1.0.0-rc.3-nightly-1205
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54250,7 +54241,10 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $ionicScroll
           return $ionicHistory.isActiveScope($scope);
         }
       );
-      $scope.$on('$destroy', deregisterInstance);
+      $scope.$on('$destroy', function() {
+        deregisterInstance();
+        slider.kill();
+      });
 
       this.slidesCount = function() {
         return slider.slidesCount();
