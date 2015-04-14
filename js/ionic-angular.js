@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1208
+ * Ionic, v1.0.0-rc.3-nightly-1210
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9494,8 +9494,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
  * For a complete side menu example, see the
  * {@link ionic.directive:ionSideMenus} documentation.
  */
-IonicModule
-.directive('exposeAsideWhen', ['$window', function($window) {
+IonicModule.directive('exposeAsideWhen', ['$window', '$timeout', function($window, $timeout) {
   return {
     restrict: 'A',
     require: '^ionSideMenus',
@@ -9516,7 +9515,7 @@ IonicModule
         $scope.$apply(checkAsideExpose);
       }, 300, false);
 
-      checkAsideExpose();
+      $scope.$evalAsync(checkAsideExpose);
 
       ionic.on('resize', onResize, $window);
 
