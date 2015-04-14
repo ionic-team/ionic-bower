@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1210
+ * Ionic, v1.0.0-rc.3-nightly-1211
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6948,7 +6948,7 @@ function($scope,
   };
 
   self.resize = function() {
-    return $timeout(resize).then(function() {
+    return $timeout(resize, 0, false).then(function() {
       $element && $element.triggerHandler('scroll.resize');
     });
   };
