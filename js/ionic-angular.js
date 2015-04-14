@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1212
+ * Ionic, v1.0.0-rc.3-nightly-1214
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -9325,7 +9325,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
  * @param {string=} start-x Initial horizontal scroll position. Default 0.
  * @param {string=} start-y Initial vertical scroll position. Default 0.
  * @param {expression=} on-scroll Expression to evaluate when the content is scrolled.
- * @param {expression=} on-scroll-complete Expression to evaluate when a scroll action completes.
+ * @param {expression=} on-scroll-complete Expression to evaluate when a scroll action completes. Has access to 'scrollLeft' and 'scrollTop' locals.
  * @param {boolean=} has-bouncing Whether to allow scrolling to bounce past the edges
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {number=} scroll-event-interval Number of milliseconds between each firing of the 'on-scroll' expression. Default 10.
@@ -9344,6 +9344,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
     priority: 800,
     compile: function(element, attr) {
       var innerElement;
+      var scrollCtrl;
 
       element.addClass('scroll-content ionic-scroll');
 
@@ -9428,17 +9429,12 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
               scrollingX: $scope.direction.indexOf('x') >= 0,
               scrollingY: $scope.direction.indexOf('y') >= 0,
               scrollEventInterval: parseInt($scope.scrollEventInterval, 10) || 10,
-              scrollingComplete: function() {
-                $scope.$onScrollComplete({
-                  scrollTop: this.__scrollTop,
-                  scrollLeft: this.__scrollLeft
-                });
-              }
+              scrollingComplete: onScrollComplete
             };
           }
 
           // init scroll controller with appropriate options
-          $controller('$ionicScroll', {
+          scrollCtrl = $controller('$ionicScroll', {
             $scope: $scope,
             scrollViewOptions: scrollViewOptions
           });
@@ -9451,6 +9447,13 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
             innerElement = null;
             $element = null;
             attr.$$element = null;
+          });
+        }
+
+        function onScrollComplete() {
+          $scope.$onScrollComplete({
+            scrollTop: scrollCtrl.scrollView.__scrollTop,
+            scrollLeft: scrollCtrl.scrollView.__scrollLeft
           });
         }
 
