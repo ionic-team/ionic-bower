@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1224
+ * Ionic, v1.0.0-rc.3-nightly-1226
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10049,10 +10049,6 @@ IonicModule
   };
 }]);
 
-var ITEM_TPL_CONTENT_ANCHOR =
-  '<a class="item-content" ng-href="{{$href()}}" target="{{$target()}}"></a>';
-var ITEM_TPL_CONTENT =
-  '<div class="item-content"></div>';
 /**
 * @ngdoc directive
 * @name ionItem
@@ -10096,11 +10092,20 @@ IonicModule
         /ion-(delete|option|reorder)-button/i.test($element.html());
 
       if (isComplexItem) {
-        var innerElement = jqLite(isAnchor ? ITEM_TPL_CONTENT_ANCHOR : ITEM_TPL_CONTENT);
+        var innerElement = jqLite(isAnchor ? '<a></a>' : '<div></div>');
+        innerElement.addClass('item-content');
+
+        if (isDefined($attrs.href) || isDefined($attrs.ngHref)) {
+          innerElement.attr('ng-href', '{{$href()}}');
+          if (isDefined($attrs.target)) {
+            innerElement.attr('target', '{{$target()}}');
+          }
+        }
+
         innerElement.append($element.contents());
 
-        $element.append(innerElement);
-        $element.addClass('item item-complex');
+        $element.addClass('item item-complex')
+                .append(innerElement);
       } else {
         $element.addClass('item');
       }
@@ -10110,7 +10115,7 @@ IonicModule
           return $attrs.href || $attrs.ngHref;
         };
         $scope.$target = function() {
-          return $attrs.target || '_self';
+          return $attrs.target;
         };
 
         var content = $element[0].querySelector('.item-content');
