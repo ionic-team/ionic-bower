@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1227
+ * Ionic, v1.0.0-rc.3-nightly-1228
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6569,6 +6569,12 @@ IonicModule
       //if this is a new drag, keep track of where we start
       if (startY === null) {
         startY = parseInt(e.touches[0].screenY, 10);
+      }
+
+      // kitkat fix for touchcancel events http://updates.html5rocks.com/2014/05/A-More-Compatible-Smoother-Touch
+      if (ionic.Platform.isAndroid() && ionic.Platform.version() === 4.4 && scrollParent.scrollTop === 0) {
+        isDragging = true;
+        e.preventDefault();
       }
 
       // how far have we dragged so far?
