@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1232
+ * Ionic, v1.0.0-rc.3-nightly-1233
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5297,7 +5297,10 @@ function($scope, $attrs, $element, $timeout) {
     });
     $timeout(function() {
       if (self.jsScrolling) self.scrollView.resize();
-      self.checkBounds();
+      // only check bounds again immediately if the page isn't cached (scroll el has height)
+      if (self.scrollView.__container && self.scrollView.__container.offsetHeight > 0) {
+        self.checkBounds();
+      }
     }, 30, false);
     self.isLoading = false;
   }
@@ -5368,6 +5371,9 @@ function($scope, $attrs, $element, $timeout) {
     maximum * (1 - parseFloat(distance) / 100) :
     maximum - parseFloat(distance);
   }
+
+  //for testing
+  self.__finishInfiniteScroll = finishInfiniteScroll;
 
 }]);
 
