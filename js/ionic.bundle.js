@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1231
+ * Ionic, v1.0.0-rc.3-nightly-1232
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1231';
+window.ionic.version = '1.0.0-rc.3-nightly-1232';
 
 (function (ionic) {
 
@@ -41847,7 +41847,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1231
+ * Ionic, v1.0.0-rc.3-nightly-1232
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -42807,7 +42807,8 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           stateId: currentStateId,
           stateName: this.currentStateName(),
           stateParams: getCurrentStateParams(),
-          url: url
+          url: url,
+          canSwipeBack: canSwipeBack(ele, viewLocals)
         });
 
         // add the new view to this history's stack
@@ -43163,6 +43164,16 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
 
   function isAbstractTag(ele) {
     return ele && ele.length && /ion-side-menus|ion-tabs/i.test(ele[0].tagName);
+  }
+
+  function canSwipeBack(ele, viewLocals) {
+    if (viewLocals && viewLocals.$$state && viewLocals.$$state.self.canSwipeBack === false) {
+      return false;
+    }
+    if (ele && ele.attr('can-swipe-back') === 'false') {
+      return false;
+    }
+    return true;
   }
 
 }])
@@ -48179,7 +48190,9 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
       backView = $ionicHistory.backView();
 
-      if (!backView || backView.historyId !== $ionicHistory.currentView().historyId) return;
+      var currentView = $ionicHistory.currentView();
+
+      if (!backView || backView.historyId !== currentView.historyId || currentView.canSwipeBack === false) return;
 
       if (!windowWidth) windowWidth = window.innerWidth;
 
@@ -48196,7 +48209,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
         showBackButton: self.showBackButton()
       };
 
-      var switcher = $ionicViewSwitcher.create(self, registerData, backView, $ionicHistory.currentView(), true, false);
+      var switcher = $ionicViewSwitcher.create(self, registerData, backView, currentView, true, false);
       switcher.loadViewElements(registerData);
       switcher.render(registerData);
 
@@ -55025,6 +55038,9 @@ function($timeout, $ionicConfig) {
  * @param {boolean=} cache-view If this view should be allowed to be cached or not.
  * Please see the _Caching_ section in {@link ionic.directive:ionNavView} for
  * more info. Default `true`
+ * @param {boolean=} can-swipe-back If this view should be allowed to use the swipe to go back gesture or not.
+ * This does not enable the swipe to go back feature if it is not available for the platform it's running
+ * from, or there isn't a previous view. Default `true`
  * @param {boolean=} hide-back-button Whether to hide the back button on the parent
  * {@link ionic.directive:ionNavBar} by default.
  * @param {boolean=} hide-nav-bar Whether to hide the parent
