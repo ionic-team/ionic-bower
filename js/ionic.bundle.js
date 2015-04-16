@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1228
+ * Ionic, v1.0.0-rc.3-nightly-1229
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1228';
+window.ionic.version = '1.0.0-rc.3-nightly-1229';
 
 (function (ionic) {
 
@@ -41847,7 +41847,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1228
+ * Ionic, v1.0.0-rc.3-nightly-1229
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -45189,84 +45189,79 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
       buttons: []
     }, options || {});
 
-    var popupPromise = $ionicTemplateLoader.compile({
-      template: POPUP_TPL,
-      scope: options.scope && options.scope.$new(),
-      appendTo: $ionicBody.get()
-    });
-    var contentPromise = options.templateUrl ?
-      $ionicTemplateLoader.load(options.templateUrl) :
-      $q.when(options.template || options.content || '');
+    var self = {};
+    self.scope = (options.scope || $rootScope).$new();
+    self.element = jqLite(POPUP_TPL);
+    self.responseDeferred = $q.defer();
 
-    return $q.all([popupPromise, contentPromise]).then(function(results) {
-      var self = results[0];
-      var content = results[1];
-      var responseDeferred = $q.defer();
+    $ionicBody.get().appendChild(self.element[0]);
+    $compile(self.element)(self.scope);
 
-      self.responseDeferred = responseDeferred;
+    extend(self.scope, {
+      title: options.title,
+      buttons: options.buttons,
+      subTitle: options.subTitle,
+      cssClass: options.cssClass,
+      $buttonTapped: function(button, event) {
+        var result = (button.onTap || noop)(event);
+        event = event.originalEvent || event; //jquery events
 
-      //Can't ng-bind-html for popup-body because it can be insecure html
-      //(eg an input in case of prompt)
-      var body = jqLite(self.element[0].querySelector('.popup-body'));
-      if (content) {
-        body.html(content);
-        $compile(body.contents())(self.scope);
-      } else {
-        body.remove();
-      }
-
-      extend(self.scope, {
-        title: options.title,
-        buttons: options.buttons,
-        subTitle: options.subTitle,
-        cssClass: options.cssClass,
-        $buttonTapped: function(button, event) {
-          var result = (button.onTap || noop)(event);
-          event = event.originalEvent || event; //jquery events
-
-          if (!event.defaultPrevented) {
-            responseDeferred.resolve(result);
-          }
+        if (!event.defaultPrevented) {
+          self.responseDeferred.resolve(result);
         }
+      }
+    });
+
+    $q.when(
+      options.templateUrl ?
+      $ionicTemplateLoader.load(options.templateUrl) :
+        (options.template || options.content || '')
+    ).then(function(template) {
+      var popupBody = jqLite(self.element[0].querySelector('.popup-body'));
+      if (template) {
+        popupBody.html(template);
+        $compile(popupBody.contents())(self.scope);
+      } else {
+        popupBody.remove();
+      }
+    });
+
+    self.show = function() {
+      if (self.isShown || self.removed) return;
+
+      self.isShown = true;
+      ionic.requestAnimationFrame(function() {
+        //if hidden while waiting for raf, don't show
+        if (!self.isShown) return;
+
+        self.element.removeClass('popup-hidden');
+        self.element.addClass('popup-showing active');
+        focusInput(self.element);
+      });
+    };
+
+    self.hide = function(callback) {
+      callback = callback || noop;
+      if (!self.isShown) return callback();
+
+      self.isShown = false;
+      self.element.removeClass('active');
+      self.element.addClass('popup-hidden');
+      $timeout(callback, 250, false);
+    };
+
+    self.remove = function() {
+      if (self.removed) return;
+
+      self.hide(function() {
+        self.element.remove();
+        self.scope.$destroy();
       });
 
-      self.show = function() {
-        if (self.isShown || self.removed) return;
+      self.removed = true;
+    };
 
-        self.isShown = true;
-        ionic.requestAnimationFrame(function() {
-          //if hidden while waiting for raf, don't show
-          if (!self.isShown) return;
-
-          self.element.removeClass('popup-hidden');
-          self.element.addClass('popup-showing active');
-          focusInput(self.element);
-        });
-      };
-
-      self.hide = function(callback) {
-        callback = callback || noop;
-        if (!self.isShown) return callback();
-
-        self.isShown = false;
-        self.element.removeClass('active');
-        self.element.addClass('popup-hidden');
-        $timeout(callback, 250);
-      };
-
-      self.remove = function() {
-        if (self.removed) return;
-
-        self.hide(function() {
-          self.element.remove();
-          self.scope.$destroy();
-        });
-
-        self.removed = true;
-      };
-
-      return self;
-    });
+    return self;
   }
 
   function onHardwareBackButton() {
@@ -45275,69 +45270,62 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
   }
 
   function showPopup(options) {
-    var resultDeferred;
-    var popupPromise = $ionicPopup._createPopup(options);
+    var popup = $ionicPopup._createPopup(options);
+    var showDelay = 0;
 
     if (popupStack.length > 0) {
       popupStack[popupStack.length - 1].hide();
-      resultDeferred = $timeout(doShowPopup, config.stackPushDelay);
+      showDelay = config.stackPushDelay;
     } else {
       //Add popup-open & backdrop if this is first popup
       $ionicBody.addClass('popup-open');
-      void 0;
       $ionicBackdrop.retain();
       //only show the backdrop on the first popup
       $ionicPopup._backButtonActionDone = $ionicPlatform.registerBackButtonAction(
         onHardwareBackButton,
         IONIC_BACK_PRIORITY.popup
       );
-      resultDeferred = doShowPopup();
     }
 
-    resultDeferred.close = function popupClose(result) {
-      popupPromise.then(function(popup) {
-        if (!popup.removed) popup.responseDeferred.resolve(result);
-      });
+    // Expose a 'close' method on the returned promise
+    popup.responseDeferred.promise.close = function popupClose(result) {
+      if (!popup.removed) popup.responseDeferred.resolve(result);
     };
+    //DEPRECATED: notify the promise with an object with a close method
+    popup.responseDeferred.notify({ close: popup.responseDeferred.close });
 
-    return resultDeferred;
+    doShow();
 
-    function doShowPopup() {
-      return popupPromise.then(function(popup) {
-        popupStack.push(popup);
-        popup.show();
+    return popup.responseDeferred.promise;
 
-        //DEPRECATED: notify the promise with an object with a close method
-        popup.responseDeferred.notify({
-          close: resultDeferred.close
-        });
+    function doShow() {
+      popupStack.push(popup);
+      $timeout(popup.show, showDelay, false);
 
-        return popup.responseDeferred.promise.then(function(result) {
-          var index = popupStack.indexOf(popup);
-          if (index !== -1) {
-            popupStack.splice(index, 1);
-          }
-          popup.remove();
+      popup.responseDeferred.promise.then(function(result) {
+        var index = popupStack.indexOf(popup);
+        if (index !== -1) {
+          popupStack.splice(index, 1);
+        }
+
+        if (popupStack.length > 0) {
+          popupStack[popupStack.length - 1].show();
+        } else {
           $ionicBackdrop.release();
+          //Remove popup-open & backdrop if this is last popup
+          $timeout(function() {
+            // wait to remove this due to a 300ms delay native
+            // click which would trigging whatever was underneath this
+            if (!popupStack.length) {
+              $ionicBody.removeClass('popup-open');
+            }
+          }, 400, false);
+          ($ionicPopup._backButtonActionDone || noop)();
+        }
 
-          if (popupStack.length > 0) {
-            popupStack[popupStack.length - 1].show();
-          } else {
-            //Remove popup-open & backdrop if this is last popup
-            $timeout(function() {
-              // wait to remove this due to a 300ms delay native
-              // click which would trigging whatever was underneath this
-              if (!popupStack.length) {
-                $ionicBody.removeClass('popup-open');
-              }
-            }, 400, false);
+        popup.remove();
 
-            ($ionicPopup._backButtonActionDone || noop)();
-          }
-
-          return result;
-        });
-
+        return result;
       });
 
     }
