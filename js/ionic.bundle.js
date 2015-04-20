@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1234
+ * Ionic, v1.0.0-rc.3-nightly-1235
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1234';
+window.ionic.version = '1.0.0-rc.3-nightly-1235';
 
 (function (ionic) {
 
@@ -5003,6 +5003,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
             // D - A or B - A if D > B       D - A             max(0, D - B)
             scrollViewOffsetHeight = scrollViewOffsetHeight - keyboardOffset;
             container.style.height = scrollViewOffsetHeight + "px";
+            container.style.overflow = "visible";
 
             //update scroll view
             self.resize();
@@ -5068,6 +5069,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       if ( self.isShrunkForKeyboard ) {
         self.isShrunkForKeyboard = false;
         container.style.height = "";
+        container.style.overflow = "";
       }
       self.resize();
     };
@@ -41847,7 +41849,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1234
+ * Ionic, v1.0.0-rc.3-nightly-1235
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
