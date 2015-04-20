@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1235
+ * Ionic, v1.0.0-rc.3-nightly-1236
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.3-nightly-1235';
+window.ionic.version = '1.0.0-rc.3-nightly-1236';
 
 (function (ionic) {
 
@@ -41849,7 +41849,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.3-nightly-1235
+ * Ionic, v1.0.0-rc.3-nightly-1236
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -52030,6 +52030,11 @@ var ITEM_TPL_DELETE_BUTTON =
 */
 IonicModule
 .directive('ionDeleteButton', function() {
+
+  function stopPropagation(ev) {
+    ev.stopPropagation();
+  }
+
   return {
     restrict: 'E',
     require: ['^^ionItem', '^?ionList'],
@@ -52046,6 +52051,9 @@ IonicModule
         var container = jqLite(ITEM_TPL_DELETE_BUTTON);
         container.append($element);
         itemCtrl.$element.append(container).addClass('item-left-editable');
+
+        //Don't bubble click up to main .item
+        $element.on('click', stopPropagation);
 
         init();
         $scope.$on('$ionic.reconnectScope', init);
