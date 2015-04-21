@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1239
+ * Ionic, v1.0.0-rc.4-nightly-1240
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2389,6 +2389,10 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
         return $$q.when();
       }
 
+      // on iOS, clicks will sometimes bleed through/ghost click on underlying
+      // elements
+      $ionicClickBlock.show(600);
+
       var modalEl = jqLite(self.modalEl);
 
       self.el.classList.remove('hide');
@@ -2416,7 +2420,6 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
         };
         ionic.on('resize', self._onWindowResize, window);
       }
-
 
       modalEl.addClass('ng-enter active')
              .removeClass('ng-leave ng-leave-active');
