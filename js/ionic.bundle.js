@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1240
+ * Ionic, v1.0.0-rc.4-nightly-1241
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.4-nightly-1240';
+window.ionic.version = '1.0.0-rc.4-nightly-1241';
 
 (function (ionic) {
 
@@ -41899,7 +41899,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1240
+ * Ionic, v1.0.0-rc.4-nightly-1241
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49752,7 +49752,11 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     var spinnerName, spinner;
 
     this.init = function() {
-      spinnerName = $attrs.icon || ionic.Platform.platform();
+      var override = null;
+      if (ionic.Platform.platform() === 'windowsphone') {
+        override = 'android';
+      }
+      spinnerName = $attrs.icon || override || ionic.Platform.platform();
       spinner = spinners[spinnerName];
       if (!spinner) {
         spinnerName = 'ios';
