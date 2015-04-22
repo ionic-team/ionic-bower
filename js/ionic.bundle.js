@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1244
+ * Ionic, v1.0.0-rc.4-nightly-1246
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.4-nightly-1244';
+window.ionic.version = '1.0.0-rc.4-nightly-1246';
 
 (function (ionic) {
 
@@ -41899,7 +41899,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1244
+ * Ionic, v1.0.0-rc.4-nightly-1246
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -52833,7 +52833,7 @@ IonicModule
       }
 
       if (!tAttrs.ngClick) {
-        buttonEle.setAttribute('ng-click', '$ionicGoBack($event)');
+        buttonEle.setAttribute('ng-click', '$ionicGoBack()');
       }
 
       buttonEle.className = 'button back-button hide buttons ' + (tElement.attr('class') || '');
