@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1242
+ * Ionic, v1.0.0-rc.4-nightly-1243
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1160,9 +1160,45 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
     /**
      * @ngdoc method
      * @name $ionicHistory#goBack
+     * @param {number=} backCount Optional negative integer setting how many views to go
+     * back. By default it'll go back one view by using the value `-1`. To go back two
+     * views you would use `-2`. If the number goes farther back than the number of views
+     * in the current history's stack then it'll go to the first view in the current history's
+     * stack. If the number is zero or greater then it'll do nothing. It also does not
+     * cross history stacks, meaning it can only go as far back as the current history.
      * @description Navigates the app to the back view, if a back view exists.
      */
-    goBack: function() {
+    goBack: function(backCount) {
+      if (isDefined(backCount) && backCount !== -1) {
+        if (backCount > -1) return;
+
+        var currentHistory = viewHistory.histories[this.currentHistoryId()];
+        var newCursor = currentHistory.cursor + backCount + 1;
+        if (newCursor < 1) {
+          newCursor = 1;
+        }
+
+        currentHistory.cursor = newCursor;
+        setNavViews(currentHistory.stack[newCursor].viewId);
+
+        var cursor = newCursor - 1;
+        var clearStateIds = [];
+        var fwdView = getViewById(currentHistory.stack[cursor].forwardViewId);
+        while (fwdView) {
+          clearStateIds.push(fwdView.stateId || fwdView.viewId);
+          cursor++;
+          if (cursor >= currentHistory.stack.length) break;
+          fwdView = getViewById(currentHistory.stack[cursor].forwardViewId);
+        }
+
+        var self = this;
+        if (clearStateIds.length) {
+          $timeout(function() {
+            self.clearCache(clearStateIds);
+          }, 600);
+        }
+      }
+
       viewHistory.backView && viewHistory.backView.go();
     },
 
@@ -1217,10 +1253,10 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * @description Removes all cached views within every {@link ionic.directive:ionNavView}.
      * This both removes the view element from the DOM, and destroy it's scope.
      */
-    clearCache: function() {
+    clearCache: function(stateIds) {
       $timeout(function() {
         $ionicNavViewDelegate._instances.forEach(function(instance) {
-          instance.clearCache();
+          instance.clearCache(stateIds);
         });
       });
     },
@@ -1379,8 +1415,8 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
     }
   });
 
-  $rootScope.$ionicGoBack = function() {
-    $ionicHistory.goBack();
+  $rootScope.$ionicGoBack = function(backCount) {
+    $ionicHistory.goBack(backCount);
   };
 
   // Set the document title when a new view is shown
@@ -6234,18 +6270,32 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
   };
 
 
-  self.clearCache = function() {
+  self.clearCache = function(stateIds) {
     var viewElements = $element.children();
-    var viewElement, viewScope;
+    var viewElement, viewScope, x, l, y, eleIdentifier;
 
-    for (var x = 0, l = viewElements.length; x < l; x++) {
+    for (x = 0, l = viewElements.length; x < l; x++) {
       viewElement = viewElements.eq(x);
+
+      if (stateIds) {
+        eleIdentifier = viewElement.data(DATA_ELE_IDENTIFIER);
+
+        for (y = 0; y < stateIds.length; y++) {
+          if (eleIdentifier === stateIds[y]) {
+            $ionicViewSwitcher.destroyViewEle(viewElement);
+          }
+        }
+        continue;
+      }
+
       if (navViewAttr(viewElement) == VIEW_STATUS_CACHED) {
         $ionicViewSwitcher.destroyViewEle(viewElement);
+
       } else if (navViewAttr(viewElement) == VIEW_STATUS_ACTIVE) {
         viewScope = viewElement.scope();
         viewScope && viewScope.$broadcast('$ionicView.clearCache');
       }
+
     }
   };
 
