@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1250
+ * Ionic, v1.0.0-rc.4-nightly-1251
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.4-nightly-1250';
+window.ionic.version = '1.0.0-rc.4-nightly-1251';
 
 (function (ionic) {
 
@@ -41899,7 +41899,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.4-nightly-1250
+ * Ionic, v1.0.0-rc.4-nightly-1251
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -43687,6 +43687,14 @@ IonicModule
       position: 'top'
     }
 
+  });
+
+  // Windows Phone
+  // -------------------------
+  setPlatformConfig('windowsphone', {
+    scrolling: {
+      jsScrolling: false
+    }
   });
 
 
