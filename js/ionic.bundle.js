@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1272
+ * Ionic, v1.0.0-rc.5-nightly-1274
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.5-nightly-1272';
+window.ionic.version = '1.0.0-rc.5-nightly-1274';
 
 (function (ionic) {
 
@@ -41912,7 +41912,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1272
+ * Ionic, v1.0.0-rc.5-nightly-1274
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54125,9 +54125,9 @@ IonicModule
  * - {@link ionic.directive:exposeAsideWhen}
  *
  * @usage
- * To use side menus, add an `<ion-side-menus>` parent element,
- * an `<ion-side-menu-content>` for the center content,
- * and one or more `<ion-side-menu>` directives.
+ * To use side menus, add an `<ion-side-menus>` parent element. This will encompass all pages that have a
+ * side menu, and have at least 2 child elements: 1 `<ion-side-menu-content>` for the center content,
+ * and one or more `<ion-side-menu>` directives for each side menu(left/right) that you wish to place.
  *
  * ```html
  * <ion-side-menus>
@@ -54142,6 +54142,10 @@ IonicModule
  *   <!-- Right menu -->
  *   <ion-side-menu side="right">
  *   </ion-side-menu>
+ *
+ *   <ion-side-menu-content>
+ *   <!-- Main content, usually <ion-nav-view> -->
+ *   </ion-side-menu-content>
  * </ion-side-menus>
  * ```
  * ```js
