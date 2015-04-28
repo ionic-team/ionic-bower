@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1271
+ * Ionic, v1.0.0-rc.5-nightly-1272
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8323,7 +8323,9 @@ IonicModule
         'ng-disabled': attr.ngDisabled,
         'ng-true-value': attr.ngTrueValue,
         'ng-false-value': attr.ngFalseValue,
-        'ng-change': attr.ngChange
+        'ng-change': attr.ngChange,
+        'ng-required': attr.ngRequired,
+        'required': attr.required
       }, function(value, name) {
         if (isDefined(value)) {
           input.attr(name, value);
@@ -11655,7 +11657,9 @@ IonicModule
           'ng-value': attr.ngValue,
           'ng-model': attr.ngModel,
           'ng-disabled': attr.ngDisabled,
-          'ng-change': attr.ngChange
+          'ng-change': attr.ngChange,
+          'ng-required': attr.ngRequired,
+          'required': attr.required
       }, function(value, name) {
         if (isDefined(value)) {
             input.attr(name, value);
@@ -13142,7 +13146,9 @@ function($timeout, $ionicConfig) {
         'ng-disabled': attr.ngDisabled,
         'ng-true-value': attr.ngTrueValue,
         'ng-false-value': attr.ngFalseValue,
-        'ng-change': attr.ngChange
+        'ng-change': attr.ngChange,
+        'ng-required': attr.ngRequired,
+        'required': attr.required
       }, function(value, name) {
         if (isDefined(value)) {
           input.attr(name, value);
