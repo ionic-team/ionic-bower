@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1275
+ * Ionic, v1.0.0-rc.5-nightly-1276
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1795,9 +1795,9 @@ IonicModule
   // Windows Phone
   // -------------------------
   setPlatformConfig('windowsphone', {
-    scrolling: {
-      jsScrolling: false
-    }
+    //scrolling: {
+    //  jsScrolling: false
+    //}
   });
 
 
