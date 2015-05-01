@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1277
+ * Ionic, v1.0.0-rc.5-nightly-1278
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1534,6 +1534,15 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * instance. Basically, any forward views are reset each time. Set this config to `true` to have
  * forward views cached and not reset on each load.
  * @param {boolean} value
+ * @returns {boolean}
+ */
+
+/**
+ * @ngdoc method
+ * @name $ionicConfigProvider#scrolling.jsScrolling
+ * @description  Whether to use JS or Native scrolling. Defaults to JS scrolling. Setting this to
+ * `false` has the same effect as setting each `ion-content` to have `overflow-scroll='true'`.
+ * @param {boolean} value Defaults to `true`
  * @returns {boolean}
  */
 
@@ -9365,7 +9374,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
  * of the content.  Defaults to true on iOS, false on Android.
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
- * Ionic scroll.
+ * Ionic scroll. See {@link ionic.provider:$ionicConfigProvider} to set this as the global default.
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default true.
  * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {string=} start-x Initial horizontal scroll position. Default 0.
