@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1287
+ * Ionic, v1.0.0-rc.5-nightly-1288
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2078,7 +2078,7 @@ IonicModule
 // running-cordova-apps-on-windows-and-windows-phone-8-1-using-ionic-angularjs-and-other-frameworks.aspx
 .config(['$compileProvider', function($compileProvider) {
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|tel|ftp|mailto|file|ghttps?|ms-appx|x-wmapp0):/);
-  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|tel|ftp|file|ms-appx|x-wmapp0):|data:image\//);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|tel|ftp|file|blob|ms-appx|x-wmapp0):|data:image\//);
 }]);
 
 
