@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1289
+ * Ionic, v1.0.0-rc.5-nightly-1291
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.5-nightly-1289';
+window.ionic.version = '1.0.0-rc.5-nightly-1291';
 
 (function (ionic) {
 
@@ -41912,7 +41912,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1289
+ * Ionic, v1.0.0-rc.5-nightly-1291
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -47273,7 +47273,8 @@ function($scope, $attrs, $element, $timeout) {
     $timeout(function() {
       if (self.jsScrolling) self.scrollView.resize();
       // only check bounds again immediately if the page isn't cached (scroll el has height)
-      if (self.scrollView.__container && self.scrollView.__container.offsetHeight > 0) {
+      if ((self.jsScrolling && self.scrollView.__container && self.scrollView.__container.offsetHeight > 0) ||
+      !self.jsScrolling) {
         self.checkBounds();
       }
     }, 30, false);
