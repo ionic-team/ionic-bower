@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1292
+ * Ionic, v1.0.0-rc.5-nightly-1293
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-rc.5-nightly-1292';
+window.ionic.version = '1.0.0-rc.5-nightly-1293';
 
 (function (ionic) {
 
@@ -41912,7 +41912,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-rc.5-nightly-1292
+ * Ionic, v1.0.0-rc.5-nightly-1293
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -49942,7 +49942,7 @@ function($scope, $element, $ionicHistory) {
       self.deselect(tab);
       //Try to select a new tab if we're removing a tab
       if (self.tabs.length === 1) {
-        //do nothing if there are no other tabs to select
+        //Do nothing if there are no other tabs to select
       } else {
         //Select previous tab if it's the last tab, else select next tab
         var newTabIndex = tabIndex === self.tabs.length - 1 ? tabIndex - 1 : tabIndex + 1;
