@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-nightly-1357
+ * Ionic, v1.0.0-nightly-1373
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-nightly-1357';
+window.ionic.version = '1.0.0-nightly-1373';
 
 (function (ionic) {
 
@@ -1777,7 +1777,9 @@ window.ionic.version = '1.0.0-nightly-1357';
         this.preventedFirstMove = false;
 
       } else if (!this.preventedFirstMove && ev.srcEvent.type == 'touchmove') {
-        if (inst.options.prevent_default_directions.indexOf(ev.direction) != -1) {
+        // Prevent gestures that are not intended for this event handler from firing subsequent times
+        if (inst.options.prevent_default_directions.length === 0
+            || inst.options.prevent_default_directions.indexOf(ev.direction) != -1) {
           ev.srcEvent.preventDefault();
         }
         this.preventedFirstMove = true;
@@ -3478,6 +3480,20 @@ ionic.DomUtil.ready(function() {
  *   <div id="google-map"></div>
  * </div>
  * ```
+ *
+ * Note: For performance reasons, elements will not be hidden for 400ms after the start of the `native.keyboardshow` event
+ * from the Ionic Keyboard plugin. If you would like them to disappear immediately, you could do something
+ * like:
+ *
+ * ```js
+ *   window.addEventListener('native.keyboardshow', function(){
+ *     document.body.classList.add('keyboard-open');
+ *   });
+ * ```
+ * This adds the same `keyboard-open` class that is normally added by Ionic 400ms after the keyboard
+ * opens. However, bear in mind that adding this class to the body immediately may cause jank in any
+ * animations on Android that occur when the keyboard opens (for example, scrolling any obscured inputs into view).
+ *
  * ----------
  *
  * ### Plugin Usage
