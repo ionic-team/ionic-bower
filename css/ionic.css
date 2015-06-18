@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-nightly-1373
+ * Ionic, v1.0.0-nightly-1389
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4103,6 +4103,13 @@ ion-tabs.tabs-color-active-dark .tab-item {
       -ms-transition: color 0.2s ease;
       -o-transition: color 0.2s ease;
       transition: color 0.2s ease; }
+  .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.tab-item-active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.active i, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated .tab-title, .tabs-top.tabs-striped:not(.tabs-icon-left):not(.tabs-icon-top) .tab-item.activated i {
+    display: block;
+    margin-top: -1px; }
+  .tabs-top.tabs-striped.tabs-icon-left .tab-item {
+    margin-top: 1px; }
+    .tabs-top.tabs-striped.tabs-icon-left .tab-item.tab-item-active .tab-title, .tabs-top.tabs-striped.tabs-icon-left .tab-item.tab-item-active i, .tabs-top.tabs-striped.tabs-icon-left .tab-item.active .tab-title, .tabs-top.tabs-striped.tabs-icon-left .tab-item.active i, .tabs-top.tabs-striped.tabs-icon-left .tab-item.activated .tab-title, .tabs-top.tabs-striped.tabs-icon-left .tab-item.activated i {
+      margin-top: -0.1em; }
 
 /* Allow parent element to have tabs-top */
 /* If you change this, change platform.scss as well */
@@ -4158,11 +4165,11 @@ ion-tabs.tabs-color-active-dark .tab-item {
 
 .tabs-icon-left.tabs .tab-item, .tabs-icon-left > .tabs .tab-item, .tabs-icon-right.tabs .tab-item, .tabs-icon-right > .tabs .tab-item {
   font-size: 10px; }
-  .tabs-icon-left.tabs .tab-item .icon, .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .icon {
+  .tabs-icon-left.tabs .tab-item .icon, .tabs-icon-left.tabs .tab-item .tab-title, .tabs-icon-left > .tabs .tab-item .icon, .tabs-icon-left > .tabs .tab-item .tab-title, .tabs-icon-right.tabs .tab-item .icon, .tabs-icon-right.tabs .tab-item .tab-title, .tabs-icon-right > .tabs .tab-item .icon, .tabs-icon-right > .tabs .tab-item .tab-title {
     display: inline-block;
     vertical-align: top;
     margin-top: -0.1em; }
-    .tabs-icon-left.tabs .tab-item .icon:before, .tabs-icon-left > .tabs .tab-item .icon:before, .tabs-icon-right.tabs .tab-item .icon:before, .tabs-icon-right > .tabs .tab-item .icon:before {
+    .tabs-icon-left.tabs .tab-item .icon:before, .tabs-icon-left.tabs .tab-item .tab-title:before, .tabs-icon-left > .tabs .tab-item .icon:before, .tabs-icon-left > .tabs .tab-item .tab-title:before, .tabs-icon-right.tabs .tab-item .icon:before, .tabs-icon-right.tabs .tab-item .tab-title:before, .tabs-icon-right > .tabs .tab-item .icon:before, .tabs-icon-right > .tabs .tab-item .tab-title:before {
       font-size: 24px;
       line-height: 49px; }
 
