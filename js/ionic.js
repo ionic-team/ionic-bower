@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-nightly-1389
+ * Ionic, v1.0.0-nightly-1390
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-nightly-1389';
+window.ionic.version = '1.0.0-nightly-1390';
 
 (function (ionic) {
 
@@ -2730,7 +2730,7 @@ ionic.tap = {
 
     ionic.requestAnimationFrame(function() {
       var focusInput = container.querySelector(':focus');
-      if (ionic.tap.isTextInput(focusInput)) {
+      if (ionic.tap.isTextInput(focusInput) && !ionic.tap.isDateInput(focusInput)) {
         var clonedInput = focusInput.cloneNode(true);
 
         clonedInput.value = focusInput.value;
