@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-nightly-1395
+ * Ionic, v1.0.0-nightly-1410
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.0-nightly-1395';
+window.ionic.version = '1.0.0-nightly-1410';
 
 (function (ionic) {
 
@@ -5345,7 +5345,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
     container.removeEventListener('touchmove', self.touchMoveBubble);
     document.removeEventListener('touchmove', self.touchMove);
     document.removeEventListener('touchend', self.touchEnd);
-    document.removeEventListener('touchcancel', self.touchCancel);
+    document.removeEventListener('touchcancel', self.touchEnd);
 
     container.removeEventListener("pointerdown", self.touchStart);
     container.removeEventListener("pointermove", self.touchMoveBubble);
