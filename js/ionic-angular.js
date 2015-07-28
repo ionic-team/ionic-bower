@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1417
+ * Ionic, v1.0.1-nightly-1466
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4979,7 +4979,7 @@ function($provide) {
     //found nearest to body's scrollTop is set to scroll to an element
     //with that ID.
     $location.hash = function(value) {
-      if (isDefined(value)) {
+      if (isDefined(value) && value.length > 0) {
         $timeout(function() {
           var scroll = document.querySelector('.scroll-content');
           if (scroll) {
@@ -9424,7 +9424,7 @@ function RepeatManagerFactory($rootScope, $window, $$rAF) {
  * @param {string=} direction Which way to scroll. 'x' or 'y' or 'xy'. Default 'y'.
  * @param {boolean=} locking Whether to lock scrolling in one direction at a time. Useful to set to false when zoomed in or scrolling in two directions. Default true.
  * @param {boolean=} padding Whether to add padding to the content.
- * of the content.  Defaults to true on iOS, false on Android.
+ * Defaults to true on iOS, false on Android.
  * @param {boolean=} scroll Whether to allow scrolling of content.  Defaults to true.
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll. See {@link ionic.provider:$ionicConfigProvider} to set this as the global default.
@@ -12555,6 +12555,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $ionicScroll
       }
 
       $attr.$observe('showPager', function(show) {
+        if (show === undefined) return;
         show = $scope.$eval(show);
         getPager().toggleClass('hide', !show);
       });
