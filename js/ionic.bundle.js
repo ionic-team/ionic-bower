@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1466
+ * Ionic, v1.0.1-nightly-1475
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.1-nightly-1466';
+window.ionic.version = '1.0.1-nightly-1475';
 
 (function (ionic) {
 
@@ -45859,7 +45859,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1466
+ * Ionic, v1.0.1-nightly-1475
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -56738,9 +56738,20 @@ function($timeout) {
  * ```html
  * <a menu-close href="#/home" class="item">Home</a>
  * ```
+ *
+ * Note that if your destination state uses a resolve and that resolve asyncronously
+ * takes longer than a standard transition (300ms), you'll need to set the
+ * `nextViewOptions` manually as your resolve completes.
+ *
+ * ```JS
+ * $ionicHistory.nextViewOptions({
+ *  historyRoot: true,
+ *  disableAnimate: true,
+ *  expire: 300
+ * });
  */
 IonicModule
-.directive('menuClose', ['$ionicHistory', function($ionicHistory) {
+.directive('menuClose', ['$ionicHistory', '$timeout', function($ionicHistory, $timeout) {
   return {
     restrict: 'AC',
     link: function($scope, $element) {
@@ -56752,6 +56763,15 @@ IonicModule
             disableAnimate: true,
             expire: 300
           });
+          // if no transition in 300ms, reset nextViewOptions
+          // the expire should take care of it, but will be cancelled in some
+          // cases. This directive is an exception to the rules of history.js
+          $timeout( function() {
+            $ionicHistory.nextViewOptions({
+              historyRoot: false,
+              disableAnimate: false
+            });
+          }, 300);
           sideMenuCtrl.close();
         }
       });
