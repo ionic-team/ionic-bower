@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1475
+ * Ionic, v1.0.1-nightly-1479
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12346,21 +12346,18 @@ IonicModule
  *
  * ```html
  * <ion-side-menus>
- *   <!-- Center content -->
- *   <ion-side-menu-content ng-controller="ContentController">
- *   </ion-side-menu-content>
- *
  *   <!-- Left menu -->
  *   <ion-side-menu side="left">
- *   </ion-side-menu>
- *
- *   <!-- Right menu -->
- *   <ion-side-menu side="right">
  *   </ion-side-menu>
  *
  *   <ion-side-menu-content>
  *   <!-- Main content, usually <ion-nav-view> -->
  *   </ion-side-menu-content>
+ *
+ *   <!-- Right menu -->
+ *   <ion-side-menu side="right">
+ *   </ion-side-menu>
+ *
  * </ion-side-menus>
  * ```
  * ```js
