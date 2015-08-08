@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1479
+ * Ionic, v1.0.1-nightly-1480
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1251,11 +1251,12 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
     /**
      * @ngdoc method
      * @name $ionicHistory#clearCache
+	 * @return promise
      * @description Removes all cached views within every {@link ionic.directive:ionNavView}.
      * This both removes the view element from the DOM, and destroy it's scope.
      */
     clearCache: function(stateIds) {
-      $timeout(function() {
+      return $timeout(function() {
         $ionicNavViewDelegate._instances.forEach(function(instance) {
           instance.clearCache(stateIds);
         });
