@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1480
+ * Ionic, v1.0.1-nightly-1488
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12446,7 +12446,7 @@ IonicModule
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box. Accepts expressions via `show-pager="{{shouldShow()}}"`. Defaults to true.
  * @param {expression=} pager-click Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.
  * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an '$index' variable.
- * @param {expression=} active-slide Model to bind the current slide to.
+ * @param {expression=} active-slide Model to bind the current slide index to.
  */
 IonicModule
 .directive('ionSlideBox', [
