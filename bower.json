@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "1.0.1-nightly-1488",
+  "version": "1.0.1-nightly-1491",
   "codename": "vanadium-vaquita",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -29,9 +29,9 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "angular": "1.3.13",
-    "angular-animate": "1.3.13",
-    "angular-sanitize": "1.3.13",
+    "angular": "1.4.3",
+    "angular-animate": "1.4.3",
+    "angular-sanitize": "1.4.3",
     "angular-ui-router": "0.2.13"
   }
 }
