@@ -9,7 +9,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1492
+ * Ionic, v1.0.1-nightly-1500
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.0.1-nightly-1492';
+window.ionic.version = '1.0.1-nightly-1500';
 
 (function (ionic) {
 
@@ -45859,7 +45859,7 @@ angular.module('ui.router.state')
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.1-nightly-1492
+ * Ionic, v1.0.1-nightly-1500
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -56744,7 +56744,7 @@ function($timeout) {
  * takes longer than a standard transition (300ms), you'll need to set the
  * `nextViewOptions` manually as your resolve completes.
  *
- * ```JS
+ * ```js
  * $ionicHistory.nextViewOptions({
  *  historyRoot: true,
  *  disableAnimate: true,
