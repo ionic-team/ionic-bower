@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.0-nightly-1552
+ * Ionic, v1.1.0-nightly-1553
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12294,7 +12294,8 @@ IonicModule
 
     compile: function(element, attr) {
       if (attr.icon) {
-        element.children().eq(2).removeClass('ion-checkmark').addClass(attr.icon);
+        var iconElm = element.find('i');
+        iconElm.removeClass('ion-checkmark').addClass(attr.icon);
       }
 
       var input = element.find('input');
