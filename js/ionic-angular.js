@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.0-nightly-1555
+ * Ionic, v1.1.0-nightly-1557
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -14,7 +14,7 @@
 
 (function() {
 /* eslint no-unused-vars:0 */
-var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router']),
+var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router', 'ngIOS9UIWebViewPatch']),
   extend = angular.extend,
   forEach = angular.forEach,
   isDefined = angular.isDefined,
@@ -4953,23 +4953,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 }]);
 
 /**
- * @private
- * Parts of Ionic requires that $scope data is attached to the element.
- * We do not want to disable adding $scope data to the $element when
- * $compileProvider.debugInfoEnabled(false) is used.
- */
-IonicModule.config(['$provide', function($provide) {
-  $provide.decorator('$compile', ['$delegate', function($compile) {
-     $compile.$$addScopeInfo = function $$addScopeInfo($element, scope, isolated, noTemplate) {
-       var dataName = isolated ? (noTemplate ? '$isolateScopeNoTemplate' : '$isolateScope') : '$scope';
-       $element.data(dataName, scope);
-     };
-     return $compile;
-  }]);
-}]);
-
-/**
- * ================  angular-ios9-uiwebview.patch.js v1.1.0-rc.2 ================
+ * ==================  angular-ios9-uiwebview.patch.js v1.1.0 ==================
  *
  * This patch works around iOS9 UIWebView regression that causes infinite digest
  * errors in Angular.
@@ -4979,6 +4963,18 @@ IonicModule.config(['$provide', function($provide) {
  *
  * To apply this patch load/bundle this file with your application and add a
  * dependency on the "ngIOS9Patch" module to your main app module.
+ *
+ * For example:
+ *
+ * ```
+ * angular.module('myApp', ['ngRoute'])`
+ * ```
+ *
+ * becomes
+ *
+ * ```
+ * angular.module('myApp', ['ngRoute', 'ngIOS9UIWebViewPatch'])
+ * ```
  *
  *
  * More info:
@@ -4992,7 +4988,7 @@ IonicModule.config(['$provide', function($provide) {
  * License: MIT
  */
 
-IonicModule.config(function($provide) {
+angular.module('ngIOS9UIWebViewPatch', ['ng']).config(function($provide) {
   $provide.decorator('$browser', ['$delegate', '$window', function($delegate, $window) {
 
     if (isIOS9UIWebView($window.navigator.userAgent)) {
@@ -5029,6 +5025,22 @@ IonicModule.config(function($provide) {
     }
   }]);
 });
+
+/**
+ * @private
+ * Parts of Ionic requires that $scope data is attached to the element.
+ * We do not want to disable adding $scope data to the $element when
+ * $compileProvider.debugInfoEnabled(false) is used.
+ */
+IonicModule.config(['$provide', function($provide) {
+  $provide.decorator('$compile', ['$delegate', function($compile) {
+     $compile.$$addScopeInfo = function $$addScopeInfo($element, scope, isolated, noTemplate) {
+       var dataName = isolated ? (noTemplate ? '$isolateScopeNoTemplate' : '$isolateScope') : '$scope';
+       $element.data(dataName, scope);
+     };
+     return $compile;
+  }]);
+}]);
 
 /**
  * @private
