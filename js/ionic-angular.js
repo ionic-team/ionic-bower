@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.0-nightly-1572
+ * Ionic, v1.1.0-nightly-1573
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4953,7 +4953,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 }]);
 
 /**
- * ==================  angular-ios9-uiwebview.patch.js v1.1.0 ==================
+ * ==================  angular-ios9-uiwebview.patch.js v1.1.1 ==================
  *
  * This patch works around iOS9 UIWebView regression that causes infinite digest
  * errors in Angular.
@@ -4962,7 +4962,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
  * have the workaround baked in.
  *
  * To apply this patch load/bundle this file with your application and add a
- * dependency on the "ngIOS9Patch" module to your main app module.
+ * dependency on the "ngIOS9UIWebViewPatch" module to your main app module.
  *
  * For example:
  *
@@ -4989,8 +4989,9 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
  */
 
 angular.module('ngIOS9UIWebViewPatch', ['ng']).config(['$provide', function($provide) {
+  'use strict';
+
   $provide.decorator('$browser', ['$delegate', '$window', function($delegate, $window) {
-    'use strict';
 
     if (isIOS9UIWebView($window.navigator.userAgent)) {
       return applyIOS9Shim($delegate);
