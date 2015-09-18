@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.0-nightly-1565
+ * Ionic, v1.1.0-nightly-1572
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4990,6 +4990,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
 angular.module('ngIOS9UIWebViewPatch', ['ng']).config(['$provide', function($provide) {
   $provide.decorator('$browser', ['$delegate', '$window', function($delegate, $window) {
+    'use strict';
 
     if (isIOS9UIWebView($window.navigator.userAgent)) {
       return applyIOS9Shim($delegate);
