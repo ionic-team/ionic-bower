@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1640
+ * Ionic, v1.1.1-nightly-1641
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1640';
+window.ionic.version = '1.1.1-nightly-1641';
 
 (function (ionic) {
 
@@ -45864,7 +45864,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1640
+ * Ionic, v1.1.1-nightly-1641
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -56199,7 +56199,7 @@ IonicModule
 * Creates a list-item that can easily be swiped,
 * deleted, reordered, edited, and more.
 *
-* See {@link ionic.directive:ionList} for a complete example & explanation.
+* See {@link ionic.directive:ionList} for a complete example and explanation.
 *
 * Can be assigned any item class name. See the
 * [list CSS documentation](/docs/components/#list).
