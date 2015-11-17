@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1641
+ * Ionic, v1.1.1-nightly-1646
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10337,7 +10337,7 @@ IonicModule
 * Creates a list-item that can easily be swiped,
 * deleted, reordered, edited, and more.
 *
-* See {@link ionic.directive:ionList} for a complete example and explanation.
+* See {@link ionic.directive:ionList} for a complete example & explanation.
 *
 * Can be assigned any item class name. See the
 * [list CSS documentation](/docs/components/#list).
@@ -11825,7 +11825,7 @@ IonicModule
  * @description
  * The radio directive is no different than the HTML radio input, except it's styled differently.
  *
- * Radio behaves like any [AngularJS radio](http://docs.angularjs.org/api/ng/input/input[radio]).
+ * Radio behaves like [AngularJS radio](http://docs.angularjs.org/api/ng/input/input[radio]).
  *
  * @usage
  * ```html
