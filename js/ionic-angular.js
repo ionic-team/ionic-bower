@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1649
+ * Ionic, v1.1.1-nightly-1653
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5590,7 +5590,7 @@ function($scope, $attrs, $element, $timeout) {
  *
  * @usage
  *
- * ````html
+ * ```html
  * <ion-content ng-controller="MyCtrl">
  *   <button class="button" ng-click="showDeleteButtons()"></button>
  *   <ion-list>
