@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "1.1.1-nightly-1693",
+  "version": "1.1.1-nightly-1694",
   "codename": "yttrium-yeti",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -12,8 +12,7 @@
   "main": [
     "css/ionic.css",
     "fonts/*",
-    "js/ionic.js",
-    "js/ionic-angular.js"
+    "js/ionic.bundle.js"
   ],
   "keywords": [
     "mobile",
