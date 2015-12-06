@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1689
+ * Ionic, v1.1.1-nightly-1691
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7628,6 +7628,9 @@ input:checked + .checkbox-icon:after {
   background-size: 99% 2px;
   background-repeat: no-repeat;
   -webkit-appearance: none; }
+  .range input::-moz-focus-outer {
+    /* hide the focus outline in Firefox */
+    border: 0; }
   .range input::-webkit-slider-thumb {
     position: relative;
     width: 28px;
