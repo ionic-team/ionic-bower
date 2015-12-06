@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1691
+ * Ionic, v1.1.1-nightly-1693
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4662,7 +4662,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
           if (renderStart && renderEnd) {
             // CSS "auto" transitioned, not manually transitioned
             // wait a frame so the styles apply before auto transitioning
-            $timeout(onReflow, 16);
+            ionic.requestAnimationFrame(onReflow);
 
           } else if (!renderEnd) {
             // just the start of a manual transition
