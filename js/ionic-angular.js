@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1687
+ * Ionic, v1.1.1-nightly-1688
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10982,7 +10982,7 @@ function($timeout) {
  * <a menu-close href="#/home" class="item">Home</a>
  * ```
  *
- * Note that if your destination state uses a resolve and that resolve asyncronously
+ * Note that if your destination state uses a resolve and that resolve asynchronously
  * takes longer than a standard transition (300ms), you'll need to set the
  * `nextViewOptions` manually as your resolve completes.
  *
@@ -10992,6 +10992,7 @@ function($timeout) {
  *  disableAnimate: true,
  *  expire: 300
  * });
+ * ```
  */
 IonicModule
 .directive('menuClose', ['$ionicHistory', '$timeout', function($ionicHistory, $timeout) {
