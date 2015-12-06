@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1697
+ * Ionic, v1.1.1-nightly-1698
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4228,7 +4228,16 @@ IonicModule
    * @name $ionicTabsDelegate#selectedIndex
    * @returns `number` The index of the selected tab, or -1.
    */
-  'selectedIndex'
+  'selectedIndex',
+  /**
+   * @ngdoc method
+   * @name $ionicTabsDelegate#showBar
+   * @description
+   * Set/get whether the {@link ionic.directive:ionTabs} is shown
+   * @param {boolean} show Whether to show the bar.
+   * @returns {boolean} Whether the bar is shown.
+   */
+  'showBar',
   /**
    * @ngdoc method
    * @name $ionicTabsDelegate#$getByHandle
@@ -8154,6 +8163,7 @@ function($scope, $element, $ionicHistory) {
   var selectedTab = null;
   var previousSelectedTab = null;
   var selectedTabIndex;
+  var isVisible = true;
   self.tabs = [];
 
   self.selectedIndex = function() {
@@ -8260,6 +8270,17 @@ function($scope, $element, $ionicHistory) {
     return false;
   };
 
+  self.showBar = function (show) {
+    if (arguments.length) {
+      if (show) {
+        $element.removeClass('tabs-item-hide');
+      } else {
+        $element.addClass('tabs-item-hide');
+      }
+      isVisible = !!show;
+    }
+    return isVisible;
+  };
 }]);
 
 IonicModule
