@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1685
+ * Ionic, v1.1.1-nightly-1687
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1685';
+window.ionic.version = '1.1.1-nightly-1687';
 
 (function (ionic) {
 
@@ -1628,7 +1628,7 @@ window.ionic.version = '1.1.1-nightly-1685';
     index: 10,
     defaults: {
       hold_timeout: 500,
-      hold_threshold: 1
+      hold_threshold: 9
     },
     timer: null,
     handler: function holdGesture(ev, inst) {
@@ -8188,6 +8188,11 @@ ionic.views.Slider = ionic.views.View.inherit({
 
       // do nothing if already on requested slide
       if (index == to) return;
+
+      if (!slides) {
+        index = to;
+        return;
+      }
 
       if (browser.transitions) {
 
@@ -45864,7 +45869,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1685
+ * Ionic, v1.1.1-nightly-1687
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
