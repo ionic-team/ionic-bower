@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1682
+ * Ionic, v1.1.1-nightly-1683
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3440,8 +3440,10 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      *   cssClass: '', // String, The custom CSS class name
      *   subTitle: '', // String (optional). The sub-title of the popup.
      *   template: '', // String (optional). The html template to place in the popup body.
-     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
+     *   templateUrl: '', // String (optional). The URL of an html template to place in the popup body.
      *   inputType: // String (default: 'text'). The type of input to use
+     *   defaultText: // String (default: ''). The initial value placed into the input.
+     *   maxLength: // Integer (default: null). Specify a maxlength attribute for the input.
      *   inputPlaceholder: // String (default: ''). A placeholder to use for the input.
      *   cancelText: // String (default: 'Cancel'. The text of the Cancel button.
      *   cancelType: // String (default: 'button-default'). The type of the Cancel button.
@@ -3653,14 +3655,21 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
   function showPrompt(opts) {
     var scope = $rootScope.$new(true);
     scope.data = {};
+    scope.data.fieldtype = opts.inputType ? opts.inputType : 'text';
+    scope.data.response = opts.defaultText ? opts.defaultText : '';
+    scope.data.placeholder = opts.inputPlaceholder ? opts.inputPlaceholder : '';
+    scope.data.maxlength = opts.maxLength ? parseInt(opts.maxLength) : '';
     var text = '';
     if (opts.template && /<[a-z][\s\S]*>/i.test(opts.template) === false) {
       text = '<span>' + opts.template + '</span>';
       delete opts.template;
     }
     return showPopup(extend({
-      template: text + '<input ng-model="data.response" type="' + (opts.inputType || 'text') +
-        '" placeholder="' + (opts.inputPlaceholder || '') + '">',
+      template: text + '<input ng-model="data.response" '
+        + 'type="{{ data.fieldtype }}"'
+        + 'maxlength="{{ data.maxlength }}"'
+        + 'placeholder="{{ data.placeholder }}"'
+        + '>',
       scope: scope,
       buttons: [{
         text: opts.cancelText || 'Cancel',
