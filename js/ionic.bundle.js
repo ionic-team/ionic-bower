@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1653
+ * Ionic, v1.1.1-nightly-1680
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1653';
+window.ionic.version = '1.1.1-nightly-1680';
 
 (function (ionic) {
 
@@ -45864,7 +45864,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1653
+ * Ionic, v1.1.1-nightly-1680
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -50581,10 +50581,6 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             $timeout.cancel(enteringEle.data(DATA_FALLBACK_TIMER));
             leavingEle && $timeout.cancel(leavingEle.data(DATA_FALLBACK_TIMER));
 
-            // emit that the views have finished transitioning
-            // each parent nav-view will update which views are active and cached
-            switcher.emit('after', enteringData, leavingData);
-
             // resolve that this one transition (there could be many w/ nested views)
             deferred && deferred.resolve(navViewCtrl);
 
@@ -50592,6 +50588,10 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             // transition promises should be added to the services array of promises
             if (transitionId === transitionCounter) {
               $q.all(transitionPromises).then(ionicViewSwitcher.transitionEnd);
+
+              // emit that the views have finished transitioning
+              // each parent nav-view will update which views are active and cached
+              switcher.emit('after', enteringData, leavingData);
               switcher.cleanup(enteringData);
             }
 
@@ -50599,6 +50599,7 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
             $ionicNavBarDelegate._instances.forEach(function(instance) {
               instance.triggerTransitionEnd();
             });
+
 
             // remove any references that could cause memory issues
             nextTransition = nextDirection = enteringView = leavingView = enteringEle = leavingEle = null;
