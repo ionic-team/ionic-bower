@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1698
+ * Ionic, v1.1.1-nightly-1747
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1698';
+window.ionic.version = '1.1.1-nightly-1747';
 
 (function (ionic) {
 
@@ -2268,12 +2268,12 @@ window.ionic.version = '1.1.1-nightly-1698';
         platformName = n.toLowerCase();
       } else if (getParameterByName('ionicplatform')) {
         platformName = getParameterByName('ionicplatform');
+      } else if (self.ua.indexOf('Windows Phone') > -1) {
+        platformName = WINDOWS_PHONE;
       } else if (self.ua.indexOf('Android') > 0) {
         platformName = ANDROID;
       } else if (/iPhone|iPad|iPod/.test(self.ua)) {
         platformName = IOS;
-      } else if (self.ua.indexOf('Windows Phone') > -1) {
-        platformName = WINDOWS_PHONE;
       } else {
         platformName = self.navigator.platform && navigator.platform.toLowerCase().split(' ')[0] || '';
       }
@@ -2412,7 +2412,19 @@ window.ionic.version = '1.1.1-nightly-1698';
   var platformName = null, // just the name, like iOS or Android
   platformVersion = null, // a float of the major and minor, like 7.1
   readyCallbacks = [],
-  windowLoadListenderAttached;
+  windowLoadListenderAttached,
+  platformReadyTimer = 2000; // How long to wait for platform ready before emitting a warning
+
+  verifyPlatformReady();
+
+  // Warn the user if deviceready did not fire in a reasonable amount of time, and how to fix it.
+  function verifyPlatformReady() {
+    setTimeout(function() {
+      if(!self.isReady) {
+        void 0;
+      }
+    }, platformReadyTimer);
+  }
 
   // setup listeners to know when the device is ready to go
   function onWindowLoad() {
@@ -2452,7 +2464,7 @@ window.ionic.version = '1.1.1-nightly-1698';
     });
   }
 
-})(this, document, ionic);
+})(window, document, ionic);
 
 (function(document, ionic) {
   'use strict';
@@ -2481,6 +2493,9 @@ window.ionic.version = '1.1.1-nightly-1698';
         break;
       }
     }
+
+    // Fallback in case the keys don't exist at all
+    ionic.CSS.TRANSITION = ionic.CSS.TRANSITION || 'transition';
 
     // The only prefix we care about is webkit for transitions.
     var isWebkit = ionic.CSS.TRANSITION.indexOf('webkit') > -1;
@@ -2710,6 +2725,11 @@ ionic.tap = {
             (ele.tagName == 'INPUT' && (/^(date|time|datetime-local|month|week)$/i).test(ele.type));
   },
 
+  isVideo: function(ele) {
+    return !!ele &&
+            (ele.tagName == 'VIDEO');
+  },
+
   isKeyboardElement: function(ele) {
     if ( !ionic.Platform.isIOS() || ionic.Platform.isIPad() ) {
       return ionic.tap.isTextInput(ele) && !ionic.tap.isDateInput(ele);
@@ -2797,7 +2817,7 @@ ionic.tap = {
     if (ele && ele.nodeType === 1) {
       var element = ele;
       while (element) {
-        if ((element.dataset ? element.dataset.tapDisabled : element.getAttribute('data-tap-disabled')) == 'true') {
+        if ((element.dataset ? element.dataset.tapDisabled : element.getAttribute && element.getAttribute('data-tap-disabled')) == 'true') {
           return true;
         }
         element = element.parentElement;
@@ -2896,11 +2916,13 @@ function tapMouseDown(e) {
     void 0;
     e.stopPropagation();
 
-    if ((!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) && !(/^(select|option)$/i).test(e.target.tagName)) {
+    if ((!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) && !isSelectOrOption(e.target.tagName) && !ionic.tap.isVideo(e.target)) {
       // If you preventDefault on a text input then you cannot move its text caret/cursor.
       // Allow through only the text input default. However, without preventDefault on an
       // input the 300ms delay can change focus on inputs after the keyboard shows up.
       // The focusin event handles the chance of focus changing after the keyboard shows.
+      // Windows Phone - if you preventDefault on a video element then you cannot operate
+      // its native controls.
       e.preventDefault();
     }
 
@@ -2922,7 +2944,7 @@ function tapMouseUp(e) {
     return false;
   }
 
-  if (tapIgnoreEvent(e) || (/^(select|option)$/i).test(e.target.tagName)) return false;
+  if (tapIgnoreEvent(e) || isSelectOrOption(e.target.tagName)) return false;
 
   if (!tapHasPointerMoved(e)) {
     tapClick(e);
@@ -2977,7 +2999,7 @@ function tapTouchEnd(e) {
   if (!tapHasPointerMoved(e)) {
     tapClick(e);
 
-    if ((/^(select|option)$/i).test(e.target.tagName)) {
+    if (isSelectOrOption(e.target.tagName)) {
       e.preventDefault();
     }
   }
@@ -3012,6 +3034,10 @@ function tapEnableTouchEvents() {
 function tapIgnoreEvent(e) {
   if (e.isTapHandled) return true;
   e.isTapHandled = true;
+
+  if(ionic.tap.isElementTapDisabled(e.target)) {
+    return true;
+  }
 
   if (ionic.scroll.isScrolling && ionic.tap.containsOrIsTextInput(e.target)) {
     e.preventDefault();
@@ -3134,6 +3160,10 @@ function tapTargetElement(ele) {
     }
   }
   return ele;
+}
+
+function isSelectOrOption(tagName){
+  return (/^(select|option)$/i).test(tagName);
 }
 
 ionic.DomUtil.ready(function() {
@@ -3557,6 +3587,12 @@ var keyboardLandscapeViewportHeight = 0;
 var keyboardActiveElement;
 
 /**
+ * The previously focused input used to reset keyboard after focusing on a
+ * new non-keyboard element
+ */
+var lastKeyboardActiveElement;
+
+/**
  * The scroll view containing the currently focused input.
  */
 var scrollView;
@@ -3772,6 +3808,9 @@ function keyboardFocusIn(e) {
       e.target.readOnly ||
       !ionic.tap.isKeyboardElement(e.target) ||
       !(scrollView = ionic.DomUtil.getParentWithClass(e.target, SCROLL_CONTAINER_CSS))) {
+    if (keyboardActiveElement) {
+        lastKeyboardActiveElement = keyboardActiveElement;
+    }
     keyboardActiveElement = null;
     return;
   }
@@ -4007,9 +4046,9 @@ function keyboardHide() {
   ionic.keyboard.isOpen = false;
   ionic.keyboard.isClosing = false;
 
-  if (keyboardActiveElement) {
+  if (keyboardActiveElement || lastKeyboardActiveElement) {
     ionic.trigger('resetScrollView', {
-      target: keyboardActiveElement
+      target: keyboardActiveElement || lastKeyboardActiveElement
     }, true);
   }
 
@@ -4033,6 +4072,7 @@ function keyboardHide() {
   }
 
   keyboardActiveElement = null;
+  lastKeyboardActiveElement = null;
 }
 
 /**
@@ -4620,7 +4660,7 @@ var zyngaCore = { effect: {} };
       return id;
     }
   };
-})(this);
+})(window);
 
 /*
  * Scroller
@@ -5275,6 +5315,7 @@ ionic.views.Scroll = ionic.views.View.inherit({
       document.addEventListener("touchmove", self.touchMove, false);
       document.addEventListener("touchend", self.touchEnd, false);
       document.addEventListener("touchcancel", self.touchEnd, false);
+      document.addEventListener("wheel", self.mouseWheel, false);
 
     } else if (window.navigator.pointerEnabled) {
       // Pointer Events
@@ -6891,6 +6932,16 @@ ionic.scroll = {
       self.__maxScrollTop = Math.max((self.__contentHeight) - self.__clientHeight, 0);
       self.__maxScrollLeft = Math.max((self.__contentWidth) - self.__clientWidth, 0);
 
+      if(options.startY >= 0 || options.startX >= 0) {
+        ionic.requestAnimationFrame(function() {
+          self.el.scrollTop = options.startY || 0;
+          self.el.scrollLeft = options.startX || 0;
+
+          self.__scrollTop = self.el.scrollTop;
+          self.__scrollLeft = self.el.scrollLeft;
+        });
+      }
+
       self.options = {
 
         freeze: false,
@@ -7332,7 +7383,6 @@ ionic.scroll = {
   });
 
 })(ionic);
-
 
 (function(ionic) {
 'use strict';
@@ -8441,15 +8491,24 @@ ionic.views.Slider = ionic.views.View.inherit({
             translate(circle(index + 1), delta.x + slidePos[circle(index + 1)], 0);
 
           } else {
-
-            delta.x =
-              delta.x /
-                ( (!index && delta.x > 0 ||         // if first slide and sliding left
-                  index == slides.length - 1 &&     // or if last slide and sliding right
-                  delta.x < 0                       // and if sliding at all
-                ) ?
-                ( Math.abs(delta.x) / width + 1 )      // determine resistance level
-                : 1 );                                 // no resistance if false
+            // If the slider bounces, do the bounce!
+            if(options.bouncing) {
+              delta.x =
+               delta.x /
+                 ( (!index && delta.x > 0 ||         // if first slide and sliding left
+                   index == slides.length - 1 &&     // or if last slide and sliding right
+                   delta.x < 0                       // and if sliding at all
+                 ) ?
+                 ( Math.abs(delta.x) / width + 1 )      // determine resistance level
+                 : 1 );                                 // no resistance if false
+             } else {
+               if(width * index - delta.x < 0) {               //We are trying scroll past left boundary
+                 delta.x = Math.min(delta.x, width * index);  //Set delta.x so we don't go past left screen
+               }
+               if(Math.abs(delta.x) > width * (slides.length - index - 1)){         //We are trying to scroll past right bondary
+                 delta.x = Math.max( -width * (slides.length - index - 1), delta.x);  //Set delta.x so we don't go past right screen
+               }
+             }
 
             // translate 1:1
             translate(index - 1, delta.x + slidePos[index - 1], 0);

@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1698
+ * Ionic, v1.1.1-nightly-1747
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3516,6 +3516,9 @@ ion-infinite-scroll {
     bottom: 49px;
     height: auto; }
 
+.bar-subfooter.has-tabs {
+  bottom: 93px; }
+
 .has-footer.has-tabs {
   bottom: 93px; }
 
@@ -3683,6 +3686,11 @@ address {
   margin-bottom: 20px;
   font-style: normal;
   line-height: 1.42857; }
+
+a {
+  color: #387ef5; }
+  a:hover {
+    color: #0b56d6; }
 
 a.subdued {
   padding-right: 10px;
@@ -3994,7 +4002,7 @@ a.subdued {
       text-align: right; }
   .bar .title a {
     color: inherit; }
-  .bar .button {
+  .bar .button, .bar button {
     z-index: 1;
     padding: 0 8px;
     min-width: initial;
@@ -4003,32 +4011,33 @@ a.subdued {
     font-size: 13px;
     line-height: 32px; }
     .bar .button.button-icon:before,
-    .bar .button .icon:before, .bar .button.icon:before, .bar .button.icon-left:before, .bar .button.icon-right:before {
+    .bar .button .icon:before, .bar .button.icon:before, .bar .button.icon-left:before, .bar .button.icon-right:before, .bar button.button-icon:before,
+    .bar button .icon:before, .bar button.icon:before, .bar button.icon-left:before, .bar button.icon-right:before {
       padding-right: 2px;
       padding-left: 2px;
       font-size: 20px;
       line-height: 32px; }
-    .bar .button.button-icon {
+    .bar .button.button-icon, .bar button.button-icon {
       font-size: 17px; }
-      .bar .button.button-icon .icon:before, .bar .button.button-icon:before, .bar .button.button-icon.icon-left:before, .bar .button.button-icon.icon-right:before {
+      .bar .button.button-icon .icon:before, .bar .button.button-icon:before, .bar .button.button-icon.icon-left:before, .bar .button.button-icon.icon-right:before, .bar button.button-icon .icon:before, .bar button.button-icon:before, .bar button.button-icon.icon-left:before, .bar button.button-icon.icon-right:before {
         vertical-align: top;
         font-size: 32px;
         line-height: 32px; }
-    .bar .button.button-clear {
+    .bar .button.button-clear, .bar button.button-clear {
       padding-right: 2px;
       padding-left: 2px;
       font-weight: 300;
       font-size: 17px; }
-      .bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before {
+      .bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before, .bar button.button-clear .icon:before, .bar button.button-clear.icon:before, .bar button.button-clear.icon-left:before, .bar button.button-clear.icon-right:before {
         font-size: 32px;
         line-height: 32px; }
-    .bar .button.back-button {
+    .bar .button.back-button, .bar button.back-button {
       display: block;
       margin-right: 5px;
       padding: 0;
       white-space: nowrap;
       font-weight: 400; }
-    .bar .button.back-button.active, .bar .button.back-button.activated {
+    .bar .button.back-button.active, .bar .button.back-button.activated, .bar button.back-button.active, .bar button.back-button.activated {
       opacity: 0.2; }
   .bar .button-bar > .button,
   .bar .buttons > .button {
@@ -5446,7 +5455,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
 
 @media (min-width: 680px) {
   .popover {
-    width: 360px; } }
+    width: 360px;
+    margin-left: -180px; } }
 
 /**
  * Popups
@@ -7015,6 +7025,14 @@ textarea {
   overflow: hidden;
   height: 46px; }
 
+.item-select.item-stacked-label select {
+  position: relative;
+  padding: 0px;
+  max-width: 90%;
+  direction: ltr;
+  white-space: pre-wrap;
+  margin: -3px; }
+
 .item-floating-label {
   display: block;
   background-color: transparent;
@@ -7067,6 +7085,10 @@ input[type="color"] {
 .platform-android input[type="time"],
 .platform-android input[type="week"] {
   padding-top: 8px; }
+
+.platform-ios textarea,
+.platform-android textarea {
+  text-indent: -3px; }
 
 .item-input input,
 .item-input textarea {
@@ -7328,6 +7350,9 @@ input:checked + .checkbox-icon:before {
   left: 25%;
   width: 13px;
   height: 7px; }
+
+.platform-android .item-checkbox-right .checkbox-square .checkbox-icon::after {
+  top: 31%; }
 
 .grade-c .checkbox input:after,
 .grade-c .checkbox-icon:after {
@@ -8335,6 +8360,8 @@ a.button {
   .button-bar > .button:last-child {
     border-right-width: 1px;
     border-radius: 0px 2px 2px 0px; }
+  .button-bar > .button:only-child {
+    border-radius: 2px; }
 
 .button-bar > .button-small:before,
 .button-bar > .button-small .icon:before {
@@ -8509,6 +8536,15 @@ a.button {
   flex: 0 0 33.3333%;
   max-width: 33.3333%; }
 
+.col-40 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 40%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 40%;
+  -ms-flex: 0 0 40%;
+  flex: 0 0 40%;
+  max-width: 40%; }
+
 .col-50 {
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 50%;
@@ -8517,6 +8553,15 @@ a.button {
   -ms-flex: 0 0 50%;
   flex: 0 0 50%;
   max-width: 50%; }
+
+.col-60 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 60%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 60%;
+  -ms-flex: 0 0 60%;
+  flex: 0 0 60%;
+  max-width: 60%; }
 
 .col-66, .col-67 {
   -webkit-box-flex: 0;
