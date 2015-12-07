@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1760
+ * Ionic, v1.1.1-nightly-1761
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3476,6 +3476,7 @@ ion-infinite-scroll {
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
   top: 0;
   right: 0;
   bottom: 0;
