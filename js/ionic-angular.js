@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1748
+ * Ionic, v1.1.1-nightly-1749
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7604,7 +7604,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     self.close();
 
     isAsideExposed = shouldExposeAside;
-    if((self.left && self.left.isEnabled) && (self.right && self.right.isEnabled)) {
+    if ((self.left && self.left.isEnabled) && (self.right && self.right.isEnabled)) {
       void 0;
       self.content.setMarginLeftAndRight(isAsideExposed ? self.left.width : 0, isAsideExposed ? self.right.width : 0);
     } else if (self.left && self.left.isEnabled) {
@@ -12457,7 +12457,7 @@ function($timeout, $ionicGesture, $window) {
 
             var amount = amountLeft + amountRight;
 
-            if(amount > 0) {
+            if (amount > 0) {
               $element[0].style[ionic.CSS.TRANSFORM] = 'translate3d(' + amountLeft + 'px,0,0)';
               $element[0].style.width = ($window.innerWidth - amount) + 'px';
               content.offsetX = amountLeft;
