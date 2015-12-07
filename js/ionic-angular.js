@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1764
+ * Ionic, v1.1.1-nightly-1765
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7701,7 +7701,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     var menuEnabled = enableMenuWithBackViews ? true : !backView;
     if (!menuEnabled) {
       var currentView = $ionicHistory.currentView() || {};
-      return backView.historyId !== currentView.historyId;
+      return (dragIsWithinBounds && (backView.historyId !== currentView.historyId));
     }
 
     return ($scope.dragContent || self.isOpen()) &&
