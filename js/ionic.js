@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1790
+ * Ionic, v1.1.1-nightly-1791
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1790';
+window.ionic.version = '1.1.1-nightly-1791';
 
 (function (ionic) {
 
@@ -2029,6 +2029,7 @@ window.ionic.version = '1.1.1-nightly-1790';
   var IOS = 'ios';
   var ANDROID = 'android';
   var WINDOWS_PHONE = 'windowsphone';
+  var EDGE = 'edge';
   var requestAnimationFrame = ionic.requestAnimationFrame;
 
   /**
@@ -2248,6 +2249,14 @@ window.ionic.version = '1.1.1-nightly-1790';
     isWindowsPhone: function() {
       return self.is(WINDOWS_PHONE);
     },
+    /**
+     * @ngdoc method
+     * @name ionic.Platform#isEdge
+     * @returns {boolean} Whether we are running on MS Edge/Windows 10 (inc. Phone)
+     */
+    isEdge: function() {
+      return self.is(EDGE);
+    },
 
     /**
      * @ngdoc method
@@ -2268,6 +2277,8 @@ window.ionic.version = '1.1.1-nightly-1790';
         platformName = n.toLowerCase();
       } else if (getParameterByName('ionicplatform')) {
         platformName = getParameterByName('ionicplatform');
+      } else if (self.ua.indexOf('Edge') > -1) {
+        platformName = EDGE;
       } else if (self.ua.indexOf('Windows Phone') > -1) {
         platformName = WINDOWS_PHONE;
       } else if (self.ua.indexOf('Android') > 0) {
@@ -2916,7 +2927,8 @@ function tapMouseDown(e) {
     void 0;
     e.stopPropagation();
 
-    if ((!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) && !isSelectOrOption(e.target.tagName) && !ionic.tap.isVideo(e.target)) {
+    if (!ionic.Platform.isEdge() && (!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) &&
+      !isSelectOrOption(e.target.tagName) && !ionic.tap.isVideo(e.target)) {
       // If you preventDefault on a text input then you cannot move its text caret/cursor.
       // Allow through only the text input default. However, without preventDefault on an
       // input the 300ms delay can change focus on inputs after the keyboard shows up.
