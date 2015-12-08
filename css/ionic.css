@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1793
+ * Ionic, v1.1.1-nightly-1794
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3690,8 +3690,6 @@ address {
 
 a {
   color: #387ef5; }
-  a:hover {
-    color: #0b56d6; }
 
 a.subdued {
   padding-right: 10px;
