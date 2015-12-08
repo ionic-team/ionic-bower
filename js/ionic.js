@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1786
+ * Ionic, v1.1.1-nightly-1790
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1786';
+window.ionic.version = '1.1.1-nightly-1790';
 
 (function (ionic) {
 
@@ -2675,7 +2675,7 @@ ionic.tap = {
     if (window.navigator.pointerEnabled) {
       tapEventListener('pointerdown');
       tapEventListener('pointerup');
-      tapEventListener('pointcancel');
+      tapEventListener('pointercancel');
       tapTouchMoveListener = 'pointermove';
 
     } else if (window.navigator.msPointerEnabled) {
