@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1816
+ * Ionic, v1.1.1-nightly-1817
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1816';
+window.ionic.version = '1.1.1-nightly-1817';
 
 (function (ionic) {
 
@@ -50179,7 +50179,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1816
+ * Ionic, v1.1.1-nightly-1817
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63174,15 +63174,15 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  * @usage
  * ```html
  * <ion-slides on-slide-changed="slideHasChanged($index)">
- *   <ion-slide>
+ *   <ion-slide-page>
  *     <div class="box blue"><h1>BLUE</h1></div>
- *   </ion-slide>
- *   <ion-slide>
+ *   </ion-slide-page>
+ *   <ion-slide-page>
  *     <div class="box yellow"><h1>YELLOW</h1></div>
- *   </ion-slide>
- *   <ion-slide>
+ *   </ion-slide-page>
+ *   <ion-slide-page>
  *     <div class="box pink"><h1>PINK</h1></div>
- *   </ion-slide>
+ *   </ion-slide-page>
  * </ion-slides>
  * ```
  *
