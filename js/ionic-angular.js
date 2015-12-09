@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1794
+ * Ionic, v1.1.1-nightly-1808
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -12751,6 +12751,8 @@ IonicModule
  * @ngdoc directive
  * @name ionSlideBox
  * @module ionic
+ * @deprecated will be removed in the next Ionic release in favor of the new ion-slides component.
+ * Don't depend on the internal behavior of this widget.
  * @delegate ionic.service:$ionicSlideBoxDelegate
  * @restrict E
  * @description
@@ -12935,7 +12937,7 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
 .directive('ionSlide', function() {
   return {
     restrict: 'E',
-    require: '^ionSlideBox',
+    require: '?^ionSlideBox',
     compile: function(element) {
       element.addClass('slider-slide');
     }
@@ -12976,6 +12978,109 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
   };
 
 });
+
+
+/**
+ * @ngdoc directive
+ * @name ionSlides
+ * @module ionic
+ * @delegate ionic.service:$ionicSlideBoxDelegate
+ * @restrict E
+ * @description
+ * The Slides component is a powerful multi-page container where each page can be swiped or dragged between.
+ *
+ * Note: this is a new version of the Ionic Slide Box based on the [Swiper](http://www.idangero.us/swiper/#.Vmc1J-ODFBc) widget from
+ * [idangerous](http://www.idangero.us/).
+ *
+ * ![SlideBox](http://ionicframework.com.s3.amazonaws.com/docs/controllers/slideBox.gif)
+ *
+ * @usage
+ * ```html
+ * <ion-slides on-slide-changed="slideHasChanged($index)">
+ *   <ion-slide>
+ *     <div class="box blue"><h1>BLUE</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box yellow"><h1>YELLOW</h1></div>
+ *   </ion-slide>
+ *   <ion-slide>
+ *     <div class="box pink"><h1>PINK</h1></div>
+ *   </ion-slide>
+ * </ion-slides>
+ * ```
+ *
+ * @param {string=} delegate-handle The handle used to identify this slideBox
+ * with {@link ionic.service:$ionicSlideBoxDelegate}.
+ * @param {object=} options to pass to the widget. See the full ist here: [http://www.idangero.us/swiper/api/](http://www.idangero.us/swiper/api/)
+ */
+IonicModule
+.directive('ionSlides', [
+  '$animate',
+  '$timeout',
+function($animate, $timeout) {
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      options: '='
+    },
+    template: '<div class="swiper-container">' +
+      '<div class="swiper-wrapper" ng-transclude>' +
+      '</div>' +
+        '<div ng-hide="!showPager" class="swiper-pagination"></div>' +
+      '</div>',
+    controller: ['$scope', '$element', function($scope, $element) {
+      var _this = this;
+
+      this.update = function() {
+        $timeout(function() {
+          _this.__slider.update();
+
+          // Don't allow pager to show with > 10 slides
+          if (_this.__slider.slides.length > 10) {
+            $scope.showPager = false;
+          }
+        });
+      };
+
+      var options = $scope.options || {};
+
+      var newOptions = angular.extend({
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        lazyLoading: true,
+        preloadImages: false
+      }, options);
+
+      $timeout(function() {
+        var slider = new ionic.views.Swiper($element.children()[0], newOptions);
+
+        _this.__slider = slider;
+
+        $scope.$on('$destroy', function() {
+          slider.destroy();
+        });
+      });
+
+    }],
+
+
+    link: function($scope, $element) {
+      $scope.showPager = true;
+      // Disable ngAnimate for slidebox and its children
+      $animate.enabled(false, $element);
+    }
+  };
+}])
+.directive('ionSlidePage', [function() {
+  return {
+    restrict: 'E',
+    require: '?^ionSlides',
+    transclude: true,
+    replace: true,
+    template: '<div class="swiper-slide" ng-transclude></div>'
+  };
+}]);
 
 /**
 * @ngdoc directive
@@ -13559,6 +13664,34 @@ function($ionicTabsDelegate, $ionicConfig) {
           tabsCtrl.select(0);
         }
       }
+    }
+  };
+}]);
+
+/**
+* @ngdoc directive
+* @name ionTitle
+* @module ionic
+* @restrict E
+*
+* Used for titles in header and nav bars. New in 1.2
+*
+* Identical to <div class="title"> but with future compatibility for Ionic 2
+*
+* @usage
+*
+* ```html
+* <ion-nav-bar>
+*   <ion-title>Hello</ion-title>
+* <ion-nav-bar>
+* ```
+*/
+IonicModule
+.directive('ionTitle', [function() {
+  return {
+    restrict: 'E',
+    compile: function(element) {
+      element.addClass('title');
     }
   };
 }]);
