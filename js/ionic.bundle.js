@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1817
+ * Ionic, v1.1.1-nightly-1818
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1817';
+window.ionic.version = '1.1.1-nightly-1818';
 
 (function (ionic) {
 
@@ -7143,6 +7143,13 @@ ionic.scroll = {
         self.resize();
         return;
       }
+
+      var oldOverflowX = self.el.style.overflowX;
+      var oldOverflowY = self.el.style.overflowY;
+
+      self.el.style.overflowY = 'hidden';
+      self.el.style.overflowX = 'hidden';
+
       animateScroll(top, left);
 
       function animateScroll(Y, X) {
@@ -7154,6 +7161,8 @@ ionic.scroll = {
           fromX = self.el.scrollLeft;
 
         if (fromY === Y && fromX === X) {
+          self.el.style.overflowX = oldOverflowX;
+          self.el.style.overflowY = oldOverflowY;
           self.resize();
           return; /* Prevent scrolling to the Y point if already there */
         }
@@ -7184,6 +7193,8 @@ ionic.scroll = {
           } else {
             // done
             ionic.tap.removeClonedInputs(self.__container, self);
+            self.el.style.overflowX = oldOverflowX;
+            self.el.style.overflowY = oldOverflowY;
             self.resize();
           }
         }
@@ -50179,7 +50190,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1817
+ * Ionic, v1.1.1-nightly-1818
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
