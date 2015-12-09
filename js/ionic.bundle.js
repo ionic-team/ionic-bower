@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1811
+ * Ionic, v1.1.1-nightly-1813
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1811';
+window.ionic.version = '1.1.1-nightly-1813';
 
 (function (ionic) {
 
@@ -9661,7 +9661,6 @@ ionic.views.Slider = ionic.views.View.inherit({
         s.updateClasses = function () {
             s.slides.removeClass(s.params.slideActiveClass + ' ' + s.params.slideNextClass + ' ' + s.params.slidePrevClass);
             var activeSlide = s.slides.eq(s.activeIndex);
-            void 0;
             // Active classes
             activeSlide.addClass(s.params.slideActiveClass);
             activeSlide.next('.' + s.params.slideClass).addClass(s.params.slideNextClass);
@@ -10833,7 +10832,6 @@ ionic.views.Slider = ionic.views.View.inherit({
           ===========================*/
         // Create looped slides
         s.createLoop = function () {
-          void 0;
             // Remove duplicated slides
             s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass).remove();
 
@@ -50181,7 +50179,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1811
+ * Ionic, v1.1.1-nightly-1813
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63214,12 +63212,21 @@ function($animate, $timeout) {
       this.update = function() {
         $timeout(function() {
           _this.__slider.update();
+          _this.__slider.createLoop();
 
           // Don't allow pager to show with > 10 slides
           if (_this.__slider.slides.length > 10) {
             $scope.showPager = false;
           }
         });
+      };
+
+      this.rapidUpdate = ionic.debounce(function() {
+        _this.update();
+      }, 50);
+
+      this.getSlider = function() {
+        return _this.__slider;
       };
 
       var options = $scope.options || {};
@@ -63257,7 +63264,10 @@ function($animate, $timeout) {
     require: '?^ionSlides',
     transclude: true,
     replace: true,
-    template: '<div class="swiper-slide" ng-transclude></div>'
+    template: '<div class="swiper-slide" ng-transclude></div>',
+    link: function($scope, $element, $attr, ionSlidesCtrl) {
+      ionSlidesCtrl.rapidUpdate();
+    }
   };
 }]);
 
