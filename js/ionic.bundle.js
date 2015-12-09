@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1814
+ * Ionic, v1.1.1-nightly-1816
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1814';
+window.ionic.version = '1.1.1-nightly-1816';
 
 (function (ionic) {
 
@@ -2438,7 +2438,7 @@ window.ionic.version = '1.1.1-nightly-1814';
   // Warn the user if deviceready did not fire in a reasonable amount of time, and how to fix it.
   function verifyPlatformReady() {
     setTimeout(function() {
-      if(!self.isReady) {
+      if(!self.isReady && self.isWebView()) {
         void 0;
       }
     }, platformReadyTimer);
@@ -50179,7 +50179,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1814
+ * Ionic, v1.1.1-nightly-1816
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
