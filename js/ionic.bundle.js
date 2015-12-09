@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1813
+ * Ionic, v1.1.1-nightly-1814
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1813';
+window.ionic.version = '1.1.1-nightly-1814';
 
 (function (ionic) {
 
@@ -50179,7 +50179,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1813
+ * Ionic, v1.1.1-nightly-1814
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63199,7 +63199,8 @@ function($animate, $timeout) {
     restrict: 'E',
     transclude: true,
     scope: {
-      options: '='
+      options: '=',
+      slider: '='
     },
     template: '<div class="swiper-container">' +
       '<div class="swiper-wrapper" ng-transclude>' +
@@ -63242,6 +63243,7 @@ function($animate, $timeout) {
         var slider = new ionic.views.Swiper($element.children()[0], newOptions);
 
         _this.__slider = slider;
+        $scope.slider = _this.__slider;
 
         $scope.$on('$destroy', function() {
           slider.destroy();
