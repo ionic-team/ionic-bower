@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1818
+ * Ionic, v1.1.1-nightly-1819
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.1.1-nightly-1818';
+window.ionic.version = '1.1.1-nightly-1819';
 
 (function (ionic) {
 
@@ -50190,7 +50190,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1818
+ * Ionic, v1.1.1-nightly-1819
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -62464,18 +62464,21 @@ IonicModule
   '$timeout',
   '$controller',
   '$ionicBind',
-function($timeout, $controller, $ionicBind) {
+  '$ionicConfig',
+function($timeout, $controller, $ionicBind, $ionicConfig) {
   return {
     restrict: 'E',
     scope: true,
     controller: function() {},
-    compile: function(element) {
+    compile: function(element, attr) {
       element.addClass('scroll-view ionic-scroll');
 
       //We cannot transclude here because it breaks element.data() inheritance on compile
       var innerElement = jqLite('<div class="scroll"></div>');
       innerElement.append(element.contents());
       element.append(innerElement);
+
+      var nativeScrolling = attr.overflowScroll !== "false" && (attr.overflowScroll === "true" || !$ionicConfig.scrolling.jsScrolling());
 
       return { pre: prelink };
       function prelink($scope, $element, $attr) {
@@ -62504,6 +62507,12 @@ function($timeout, $controller, $ionicBind) {
         if (!$scope.direction) { $scope.direction = 'y'; }
         var isPaging = $scope.$eval($scope.paging) === true;
 
+        if(nativeScrolling) {
+          $element.addClass('overflow-scroll');
+        }
+
+        $element.addClass('scroll-' + $scope.direction);
+
         var scrollViewOptions = {
           el: $element[0],
           delegateHandle: $attr.delegateHandle,
@@ -62517,8 +62526,10 @@ function($timeout, $controller, $ionicBind) {
           zooming: $scope.$eval($scope.zooming) === true,
           maxZoom: $scope.$eval($scope.maxZoom) || 3,
           minZoom: $scope.$eval($scope.minZoom) || 0.5,
-          preventDefault: true
+          preventDefault: true,
+          nativeScrolling: nativeScrolling
         };
+
         if (isPaging) {
           scrollViewOptions.speedMultiplier = 0.8;
           scrollViewOptions.bouncing = false;

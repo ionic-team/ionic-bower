@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.1.1-nightly-1818
+ * Ionic, v1.1.1-nightly-1819
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3370,6 +3370,17 @@ body.grade-c {
   display: block;
   overflow: hidden;
   margin-top: -1px; }
+  .scroll-view.overflow-scroll {
+    position: relative; }
+  .scroll-view.scroll-x {
+    overflow-x: scroll;
+    overflow-y: hidden; }
+  .scroll-view.scroll-y {
+    overflow-x: hidden;
+    overflow-y: scroll; }
+  .scroll-view.scroll-xy {
+    overflow-x: scroll;
+    overflow-y: scroll; }
 
 /**
  * Scroll is the scroll view component available for complex and custom
