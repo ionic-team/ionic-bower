@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1828
+ * Ionic, v1.2.0-nightly-1829
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.0-nightly-1828';
+window.ionic.version = '1.2.0-nightly-1829';
 
 (function (ionic) {
 
@@ -50190,7 +50190,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1828
+ * Ionic, v1.2.0-nightly-1829
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -56996,6 +56996,15 @@ IonicModule
       $onPulling: '&onPulling'
     });
 
+    function handleMousedown(e) {
+      e.touches = e.touches || [{
+        screenX: e.screenX,
+        screenY: e.screenY
+      }];
+      // Mouse needs this
+      startY = parseInt(e.touches[0].screenY, 10);
+    }
+
     function handleTouchend() {
       // if this wasn't an overscroll, get out immediately
       if (!canOverscroll && !isDragging) {
@@ -57026,6 +57035,11 @@ IonicModule
     }
 
     function handleTouchmove(e) {
+      e.touches = e.touches || [{
+        screenX: e.screenX,
+        screenY: e.screenY
+      }];
+
       // if multitouch or regular scroll event, get out immediately
       if (!canOverscroll || e.touches.length > 1) {
         return;
@@ -57206,6 +57220,9 @@ IonicModule
 
       ionic.on('touchmove', handleTouchmove, scrollChild);
       ionic.on('touchend', handleTouchend, scrollChild);
+      ionic.on('mousedown', handleMousedown, scrollChild);
+      ionic.on('mousemove', handleTouchmove, scrollChild);
+      ionic.on('mouseup', handleTouchend, scrollChild);
       ionic.on('scroll', handleScroll, scrollParent);
 
       // cleanup when done
@@ -57215,6 +57232,9 @@ IonicModule
     function destroy() {
       ionic.off('touchmove', handleTouchmove, scrollChild);
       ionic.off('touchend', handleTouchend, scrollChild);
+      ionic.off('mousedown', handleMousedown, scrollChild);
+      ionic.off('mousemove', handleTouchmove, scrollChild);
+      ionic.off('mouseup', handleTouchend, scrollChild);
       ionic.off('scroll', handleScroll, scrollParent);
       scrollParent = null;
       scrollChild = null;
