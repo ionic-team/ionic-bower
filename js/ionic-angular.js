@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1838
+ * Ionic, v1.2.0-nightly-1839
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1731,8 +1731,7 @@ IonicModule
       toggle: PLATFORM
     },
     scrolling: {
-      jsScrolling: PLATFORM,
-      disableBodyBounce: PLATFORM
+      jsScrolling: PLATFORM
     },
     spinner: {
       icon: PLATFORM
@@ -1781,8 +1780,7 @@ IonicModule
     },
 
     scrolling: {
-      jsScrolling: false,
-      disableBodyBounce: false
+      jsScrolling: false
     },
 
     spinner: {
@@ -1797,18 +1795,14 @@ IonicModule
     templates: {
       maxPrefetch: 30
     }
+
   });
 
 
 
   // iOS (it is the default already)
   // -------------------------
-  setPlatformConfig('ios', {
-    scrolling: {
-      jsScrolling: false,
-      disableBodyBounce: true
-    }
-  });
+  setPlatformConfig('ios', {});
 
 
 
@@ -9739,8 +9733,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
               delegateHandle: attr.delegateHandle,
               startX: $scope.$eval($scope.startX) || 0,
               startY: $scope.$eval($scope.startY) || 0,
-              nativeScrolling: true,
-              disableBodyBounce: $ionicConfig.scrolling.disableBodyBounce()
+              nativeScrolling: true
             };
 
           } else {
