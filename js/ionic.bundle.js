@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1837
+ * Ionic, v1.2.0-nightly-1838
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.0-nightly-1837';
+window.ionic.version = '1.2.0-nightly-1838';
 
 (function (ionic) {
 
@@ -7375,6 +7375,26 @@ ionic.scroll = {
         self.resize();
       };
 
+      var startY = 0;
+      var curY = 0;
+      var height = 0;
+      self.handleWindowTouchStart = function(e) {
+        startY = e.touches ? e.touches[0].screenY : e.screenY;
+        height = self.el.offsetHeight;
+      };
+
+      self.handleWindowTouchMove = function(e) {
+        curY = e.touches ? e.touches[0].screenY : e.screenY;
+
+				var atTop = (startY <= curY && self.el.scrollTop === 0);
+				var atBottom = (startY >= curY && self.el.scrollHeight - self.el.scrollTop === height);
+
+        if(atTop || atBottom) {
+          // Disable body bounce
+          e.preventDefault();
+        }
+      };
+
       container.addEventListener('scroll', self.onScroll);
 
       //Broadcasted when keyboard is shown on some platforms.
@@ -7387,6 +7407,12 @@ ionic.scroll = {
       // Since we can only resize scroll views that are currently visible, just resize
       // the current scroll view when the keyboard is closed.
       document.addEventListener('resetScrollView', self.resetScrollView);
+
+      if(self.options.disableBodyBounce && !ionic.Platform.isWebView()) {
+        window.addEventListener('touchstart', self.handleWindowTouchStart);
+        window.addEventListener('touchmove', self.handleWindowTouchMove);
+      }
+
     },
 
     __cleanup: function() {
@@ -7398,6 +7424,11 @@ ionic.scroll = {
 
       container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
       container.removeEventListener('resetScrollView', self.resetScrollView);
+
+      if(self.options.disableBodyBounce && !ionic.Platform.isWebView()) {
+        window.removeEventListener('touchstart', self.handleWindowTouchStart);
+        window.removeEventListener('touchmove', self.handleWindowTouchMove);
+      }
 
       ionic.tap.removeClonedInputs(container, self);
 
@@ -50209,7 +50240,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1837
+ * Ionic, v1.2.0-nightly-1838
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -51938,7 +51969,8 @@ IonicModule
       toggle: PLATFORM
     },
     scrolling: {
-      jsScrolling: PLATFORM
+      jsScrolling: PLATFORM,
+      disableBodyBounce: PLATFORM
     },
     spinner: {
       icon: PLATFORM
@@ -51987,7 +52019,8 @@ IonicModule
     },
 
     scrolling: {
-      jsScrolling: false
+      jsScrolling: false,
+      disableBodyBounce: false
     },
 
     spinner: {
@@ -52002,14 +52035,18 @@ IonicModule
     templates: {
       maxPrefetch: 30
     }
-
   });
 
 
 
   // iOS (it is the default already)
   // -------------------------
-  setPlatformConfig('ios', {});
+  setPlatformConfig('ios', {
+    scrolling: {
+      jsScrolling: false,
+      disableBodyBounce: true
+    }
+  });
 
 
 
@@ -59940,7 +59977,8 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
               delegateHandle: attr.delegateHandle,
               startX: $scope.$eval($scope.startX) || 0,
               startY: $scope.$eval($scope.startY) || 0,
-              nativeScrolling: true
+              nativeScrolling: true,
+              disableBodyBounce: $ionicConfig.scrolling.disableBodyBounce()
             };
 
           } else {
