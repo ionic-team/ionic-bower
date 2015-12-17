@@ -1,6 +1,6 @@
 {
   "name": "ionic",
-  "version": "1.2.0-nightly-1844",
+  "version": "1.2.0-nightly-1845",
   "codename": "zirconium-zeren",
   "homepage": "https://github.com/driftyco/ionic",
   "authors": [
@@ -12,7 +12,8 @@
   "main": [
     "css/ionic.css",
     "fonts/*",
-    "js/ionic.bundle.js"
+    "js/ionic.js",
+    "js/ionic-angular.js"
   ],
   "keywords": [
     "mobile",
