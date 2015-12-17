@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1852
+ * Ionic, v1.2.0-nightly-1853
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6874,8 +6874,6 @@ IonicModule
       // if we've dragged up and back down in to native scroll territory
       if (deltaY - dragOffset <= 0 || scrollParent.scrollTop !== 0) {
 
-        void 0;
-
         if (isOverscrolling) {
           isOverscrolling = false;
           setScrollLock(false);
@@ -6892,7 +6890,6 @@ IonicModule
         return;
 
       } else if (deltaY > 0 && scrollParent.scrollTop === 0 && !isOverscrolling) {
-        void 0;
         // starting overscroll, but drag started below scrollTop 0, so we need to offset the position
         dragOffset = deltaY;
       }
