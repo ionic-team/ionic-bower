@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1860
+ * Ionic, v1.2.0-nightly-1862
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2556,6 +2556,13 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
 
       return $timeout(function() {
         if (!self._isShown) return;
+        self.$el.on('touchmove', function(e) {
+          //Don't allow scrolling while open by dragging on backdrop
+          var isInScroll = ionic.DomUtil.getParentOrSelfWithClass(e.target, 'scroll');
+          if(!isInScroll) {
+            e.preventDefault();
+          }
+        });
         //After animating in, allow hide on backdrop click
         self.$el.on('click', function(e) {
           if (self.backdropClickToClose && e.target === self.el && stack.isHighest(self)) {
