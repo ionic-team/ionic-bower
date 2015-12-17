@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1846
+ * Ionic, v1.2.0-nightly-1847
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.0-nightly-1846';
+window.ionic.version = '1.2.0-nightly-1847';
 
 (function (ionic) {
 
@@ -6927,7 +6927,7 @@ ionic.scroll = {
 
 (function(ionic) {
   var NOOP = function() {};
-  var depreciated = function(name) {
+  var deprecated = function(name) {
     void 0;
   };
   ionic.views.ScrollNative = ionic.views.View.inherit({
@@ -6993,10 +6993,10 @@ ionic.scroll = {
     },
 
     /**  Methods not used in native scrolling */
-    __callback: function() { depreciated('__callback'); },
-    zoomTo: function() { depreciated('zoomTo'); },
-    zoomBy: function() { depreciated('zoomBy'); },
-    activatePullToRefresh: function() { depreciated('activatePullToRefresh'); },
+    __callback: function() { deprecated('__callback'); },
+    zoomTo: function() { deprecated('zoomTo'); },
+    zoomBy: function() { deprecated('zoomBy'); },
+    activatePullToRefresh: function() { deprecated('activatePullToRefresh'); },
 
     /**
      * Returns the scroll position and zooming values
