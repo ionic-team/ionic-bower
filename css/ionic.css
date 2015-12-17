@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1845
+ * Ionic, v1.2.0-nightly-1846
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -7687,9 +7687,6 @@ input[type="color"] {
 .platform-android input[type="time"],
 .platform-android input[type="week"] {
   padding-top: 8px; }
-
-.platform-ios textarea {
-  text-indent: -3px; }
 
 .item-input input,
 .item-input textarea {
