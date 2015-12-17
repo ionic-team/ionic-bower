@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1847
+ * Ionic, v1.2.0-nightly-1848
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.0-nightly-1847';
+window.ionic.version = '1.2.0-nightly-1848';
 
 (function (ionic) {
 
@@ -50209,7 +50209,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.0-nightly-1847
+ * Ionic, v1.2.0-nightly-1848
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -57022,7 +57022,7 @@ IonicModule
         screenY: e.screenY
       }];
       // Mouse needs this
-      startY = parseInt(e.touches[0].screenY, 10);
+      startY = Math.floor(e.touches[0].screenY);
     }
 
     function handleTouchend() {
@@ -57066,7 +57066,7 @@ IonicModule
       }
       //if this is a new drag, keep track of where we start
       if (startY === null) {
-        startY = parseInt(e.touches[0].screenY, 10);
+        startY = Math.floor(e.touches[0].screenY);
       }
 
       // kitkat fix for touchcancel events http://updates.html5rocks.com/2014/05/A-More-Compatible-Smoother-Touch
@@ -57076,7 +57076,7 @@ IonicModule
       }
 
       // how far have we dragged so far?
-      deltaY = parseInt(e.touches[0].screenY, 10) - startY;
+      deltaY = Math.floor(e.touches[0].screenY) - startY;
 
       // if we've dragged up and back down in to native scroll territory
       if (deltaY - dragOffset <= 0 || scrollParent.scrollTop !== 0) {
@@ -57087,7 +57087,7 @@ IonicModule
         }
 
         if (isDragging) {
-          nativescroll(scrollParent, parseInt(deltaY - dragOffset, 10) * -1);
+          nativescroll(scrollParent, Math.floor(deltaY - dragOffset) * -1);
         }
 
         // if we're not at overscroll 0 yet, 0 out
@@ -57112,7 +57112,7 @@ IonicModule
 
       isDragging = true;
       // overscroll according to the user's drag so far
-      overscroll(parseInt((deltaY - dragOffset) / 3, 10));
+      overscroll(Math.floor((deltaY - dragOffset) / 3));
 
       // update the icon accordingly
       if (!activated && lastOverscroll > ptrThreshold) {
@@ -57208,7 +57208,7 @@ IonicModule
           // fraction based on the easing method
           easedT = easeOutCubic(time);
 
-        overscroll(parseInt((easedT * (Y - from)) + from, 10));
+        overscroll(Math.floor((easedT * (Y - from)) + from));
 
         if (time < 1) {
           ionic.requestAnimationFrame(scroll);
