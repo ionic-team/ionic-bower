@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1874
+ * Ionic, v1.2.1-nightly-1875
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1874';
+window.ionic.version = '1.2.1-nightly-1875';
 
 (function (ionic) {
 
@@ -50213,7 +50213,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1874
+ * Ionic, v1.2.1-nightly-1875
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -62888,9 +62888,7 @@ function($timeout, $ionicGesture, $window) {
 
         // add gesture handlers
         var gestureOpts = { stop_browser_behavior: false };
-        if (ionic.DomUtil.getParentOrSelfWithClass($element[0], 'overflow-scroll')) {
-          gestureOpts.prevent_default_directions = ['left', 'right'];
-        }
+        gestureOpts.prevent_default_directions = ['left', 'right'];
         var contentTapGesture = $ionicGesture.on('tap', onContentTap, $element, gestureOpts);
         var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element, gestureOpts);
         var dragLeftGesture = $ionicGesture.on('dragleft', onDragX, $element, gestureOpts);
