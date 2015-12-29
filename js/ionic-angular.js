@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1875
+ * Ionic, v1.2.1-nightly-1877
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -13102,6 +13102,10 @@ function($animate, $timeout) {
 
       this.update = function() {
         $timeout(function() {
+          if (!_this.__slider) {
+            return;
+          }
+
           _this.__slider.update();
           if (_this._options.loop) {
             _this.__slider.createLoop();
