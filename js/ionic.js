@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1878
+ * Ionic, v1.2.1-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1878';
+window.ionic.version = '1.2.1-nightly-1887';
 
 (function (ionic) {
 
@@ -2486,6 +2486,8 @@ window.ionic.version = '1.2.1-nightly-1878';
   ionic.CSS.TRANSITION = [];
   ionic.CSS.TRANSFORM = [];
 
+  ionic.EVENTS = {};
+
   (function() {
 
     // transform
@@ -2519,6 +2521,30 @@ window.ionic.version = '1.2.1-nightly-1878';
 
     // To be sure transitionend works everywhere, include *both* the webkit and non-webkit events
     ionic.CSS.TRANSITIONEND = (isWebkit ? 'webkitTransitionEnd ' : '') + 'transitionend';
+  })();
+
+  (function() {
+      var touchStartEvent = 'touchstart';
+      var touchMoveEvent = 'touchmove';
+      var touchEndEvent = 'touchend';
+      var touchCancelEvent = 'touchcancel';
+
+      if (window.navigator.pointerEnabled) {
+        touchStartEvent = 'pointerdown';
+        touchMoveEvent = 'pointermove';
+        touchEndEvent = 'pointerup';
+        touchCancelEvent = 'pointercancel';
+      } else if (window.navigator.msPointerEnabled) {
+        touchStartEvent = 'MSPointerDown';
+        touchMoveEvent = 'MSPointerMove';
+        touchEndEvent = 'MSPointerUp';
+        touchCancelEvent = 'MSPointerCancel';
+      }
+
+      ionic.EVENTS.touchstart = touchStartEvent;
+      ionic.EVENTS.touchmove = touchMoveEvent;
+      ionic.EVENTS.touchend = touchEndEvent;
+      ionic.EVENTS.touchcancel = touchCancelEvent;
   })();
 
   // classList polyfill for them older Androids
@@ -4857,6 +4883,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
       return self.options.freeze;
     };
 
+    // We can just use the standard freeze pop in our mouth
+    self.freezeShut = self.freeze;
+
     self.setScrollStart = function() {
       ionic.scroll.isScrolling = Math.abs(ionic.scroll.lastTop - self.__scrollTop) > 1;
       clearTimeout(self.scrollTimer);
@@ -6939,6 +6968,8 @@ ionic.scroll = {
       var self = this;
       self.__container = self.el = options.el;
       self.__content = options.el.firstElementChild;
+      // Whether scrolling is frozen or not
+      self.__frozen = false;
       self.isNative = true;
 
       self.__scrollTop = self.el.scrollTop;
@@ -6990,7 +7021,13 @@ ionic.scroll = {
         }, 80);
       };
 
-      self.freeze = NOOP;
+      self.freeze = function(shouldFreeze) {
+        self.__frozen = shouldFreeze;
+      };
+      // A more powerful freeze pop that dominates all other freeze pops
+      self.freezeShut = function(shouldFreezeShut) {
+        self.__frozenShut = shouldFreezeShut;
+      };
 
       self.__initEventHandlers();
     },
@@ -7372,11 +7409,22 @@ ionic.scroll = {
         self.resize();
       };
 
+      self.handleTouchMove = function(e) {
+        if(self.__frozenShut) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      };
+
       container.addEventListener('scroll', self.onScroll);
 
       //Broadcasted when keyboard is shown on some platforms.
       //See js/utils/keyboard.js
       container.addEventListener('scrollChildIntoView', self.scrollChildIntoView);
+
+      container.addEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
+      container.addEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
 
       // Listen on document because container may not have had the last
       // keyboardActiveElement, for example after closing a modal with a focused
@@ -7395,6 +7443,9 @@ ionic.scroll = {
 
       container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
       container.removeEventListener('resetScrollView', self.resetScrollView);
+
+      container.removeEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
+      container.removeEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
 
       ionic.tap.removeClonedInputs(container, self);
 
@@ -8812,7 +8863,7 @@ ionic.views.Slider = ionic.views.View.inherit({
     /*===========================
     Swiper
     ===========================*/
-    var Swiper = function (container, params) {
+    var Swiper = function (container, params, _scope, $compile) {
 
         if (!(this instanceof Swiper)) return new Swiper(container, params);
 
@@ -9210,9 +9261,6 @@ ionic.views.Slider = ionic.views.View.inherit({
 
         // Velocity
         s.velocity = 0;
-
-        // Remove duplicated slides
-        var $compile = angular.element(s.wrapper).injector().get('$compile');
 
         /*=========================
           Locks, unlocks

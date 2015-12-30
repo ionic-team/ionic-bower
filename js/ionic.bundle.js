@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1878
+ * Ionic, v1.2.1-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1878';
+window.ionic.version = '1.2.1-nightly-1887';
 
 (function (ionic) {
 
@@ -2493,6 +2493,8 @@ window.ionic.version = '1.2.1-nightly-1878';
   ionic.CSS.TRANSITION = [];
   ionic.CSS.TRANSFORM = [];
 
+  ionic.EVENTS = {};
+
   (function() {
 
     // transform
@@ -2526,6 +2528,30 @@ window.ionic.version = '1.2.1-nightly-1878';
 
     // To be sure transitionend works everywhere, include *both* the webkit and non-webkit events
     ionic.CSS.TRANSITIONEND = (isWebkit ? 'webkitTransitionEnd ' : '') + 'transitionend';
+  })();
+
+  (function() {
+      var touchStartEvent = 'touchstart';
+      var touchMoveEvent = 'touchmove';
+      var touchEndEvent = 'touchend';
+      var touchCancelEvent = 'touchcancel';
+
+      if (window.navigator.pointerEnabled) {
+        touchStartEvent = 'pointerdown';
+        touchMoveEvent = 'pointermove';
+        touchEndEvent = 'pointerup';
+        touchCancelEvent = 'pointercancel';
+      } else if (window.navigator.msPointerEnabled) {
+        touchStartEvent = 'MSPointerDown';
+        touchMoveEvent = 'MSPointerMove';
+        touchEndEvent = 'MSPointerUp';
+        touchCancelEvent = 'MSPointerCancel';
+      }
+
+      ionic.EVENTS.touchstart = touchStartEvent;
+      ionic.EVENTS.touchmove = touchMoveEvent;
+      ionic.EVENTS.touchend = touchEndEvent;
+      ionic.EVENTS.touchcancel = touchCancelEvent;
   })();
 
   // classList polyfill for them older Androids
@@ -4864,6 +4890,9 @@ ionic.views.Scroll = ionic.views.View.inherit({
       return self.options.freeze;
     };
 
+    // We can just use the standard freeze pop in our mouth
+    self.freezeShut = self.freeze;
+
     self.setScrollStart = function() {
       ionic.scroll.isScrolling = Math.abs(ionic.scroll.lastTop - self.__scrollTop) > 1;
       clearTimeout(self.scrollTimer);
@@ -6946,6 +6975,8 @@ ionic.scroll = {
       var self = this;
       self.__container = self.el = options.el;
       self.__content = options.el.firstElementChild;
+      // Whether scrolling is frozen or not
+      self.__frozen = false;
       self.isNative = true;
 
       self.__scrollTop = self.el.scrollTop;
@@ -6997,7 +7028,13 @@ ionic.scroll = {
         }, 80);
       };
 
-      self.freeze = NOOP;
+      self.freeze = function(shouldFreeze) {
+        self.__frozen = shouldFreeze;
+      };
+      // A more powerful freeze pop that dominates all other freeze pops
+      self.freezeShut = function(shouldFreezeShut) {
+        self.__frozenShut = shouldFreezeShut;
+      };
 
       self.__initEventHandlers();
     },
@@ -7379,11 +7416,22 @@ ionic.scroll = {
         self.resize();
       };
 
+      self.handleTouchMove = function(e) {
+        if(self.__frozenShut) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      };
+
       container.addEventListener('scroll', self.onScroll);
 
       //Broadcasted when keyboard is shown on some platforms.
       //See js/utils/keyboard.js
       container.addEventListener('scrollChildIntoView', self.scrollChildIntoView);
+
+      container.addEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
+      container.addEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
 
       // Listen on document because container may not have had the last
       // keyboardActiveElement, for example after closing a modal with a focused
@@ -7402,6 +7450,9 @@ ionic.scroll = {
 
       container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
       container.removeEventListener('resetScrollView', self.resetScrollView);
+
+      container.removeEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
+      container.removeEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
 
       ionic.tap.removeClonedInputs(container, self);
 
@@ -8819,7 +8870,7 @@ ionic.views.Slider = ionic.views.View.inherit({
     /*===========================
     Swiper
     ===========================*/
-    var Swiper = function (container, params) {
+    var Swiper = function (container, params, _scope, $compile) {
 
         if (!(this instanceof Swiper)) return new Swiper(container, params);
 
@@ -9217,9 +9268,6 @@ ionic.views.Slider = ionic.views.View.inherit({
 
         // Velocity
         s.velocity = 0;
-
-        // Remove duplicated slides
-        var $compile = angular.element(s.wrapper).injector().get('$compile');
 
         /*=========================
           Locks, unlocks
@@ -50213,7 +50261,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1878
+ * Ionic, v1.2.1-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -52770,7 +52818,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
         self.$el.on('touchmove', function(e) {
           //Don't allow scrolling while open by dragging on backdrop
           var isInScroll = ionic.DomUtil.getParentOrSelfWithClass(e.target, 'scroll');
-          if(!isInScroll) {
+          if (!isInScroll) {
             e.preventDefault();
           }
         });
@@ -57072,7 +57120,7 @@ IonicModule
       }];
 
       // Force mouse events to have had a down event first
-      if(!startY && e.type == 'mousemove') {
+      if (!startY && e.type == 'mousemove') {
         return;
       }
 
@@ -57539,6 +57587,7 @@ function($scope,
   };
 
   self.freezeScroll = scrollView.freeze;
+  self.freezeScrollShut = scrollView.freezeShut;
 
   self.freezeAllScrolls = function(shouldFreeze) {
     for (var i = 0; i < $ionicScrollDelegate._instances.length; i++) {
@@ -57720,9 +57769,10 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     // equal 0, otherwise remove the class from the body element
     $ionicBody.enableClass((percentage !== 0), 'menu-open');
 
-    freezeAllScrolls(false);
+    self.content.setCanScroll(percentage == 0);
   };
 
+  /*
   function freezeAllScrolls(shouldFreeze) {
     if (shouldFreeze && !self.isScrollFreeze) {
       $ionicScrollDelegate.freezeAllScrolls(shouldFreeze);
@@ -57732,6 +57782,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     }
     self.isScrollFreeze = shouldFreeze;
   }
+  */
 
   /**
    * Open the menu the given pixel amount.
@@ -57865,7 +57916,6 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
     isAsideExposed = shouldExposeAside;
     if ((self.left && self.left.isEnabled) && (self.right && self.right.isEnabled)) {
-      void 0;
       self.content.setMarginLeftAndRight(isAsideExposed ? self.left.width : 0, isAsideExposed ? self.right.width : 0);
     } else if (self.left && self.left.isEnabled) {
       // set the left marget width if it should be exposed
@@ -57883,8 +57933,6 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
   // End a drag with the given event
   self._endDrag = function(e) {
-    freezeAllScrolls(false);
-
     if (isAsideExposed) return;
 
     if (isDragging) {
@@ -57922,7 +57970,7 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
     if (isDragging) {
       self.openAmount(offsetX + (lastX - startX));
-      freezeAllScrolls(true);
+      //self.content.setCanScroll(false);
     }
   };
 
@@ -58001,12 +58049,10 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
     deregisterBackButtonAction();
     self.$scope = null;
     if (self.content) {
+      self.content.setCanScroll(true);
       self.content.element = null;
       self.content = null;
     }
-
-    // ensure scrolls are unfrozen
-    freezeAllScrolls(false);
   });
 
   self.initialize({
@@ -59998,6 +60044,8 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
             $scope: $scope,
             scrollViewOptions: scrollViewOptions
           });
+
+          $scope.scrollCtrl = scrollCtrl;
 
           $scope.$on('$destroy', function() {
             if (scrollViewOptions) {
@@ -62821,6 +62869,22 @@ function($timeout, $ionicGesture, $window) {
           element: element[0],
           onDrag: function() {},
           endDrag: function() {},
+          setCanScroll: function(canScroll) {
+            var c = $element[0].querySelector('.scroll');
+
+            if (!c) {
+              return;
+            }
+
+            var content = angular.element(c.parentElement);
+            if (!content) {
+              return;
+            }
+
+            // freeze our scroll container if we have one
+            var scrollScope = content.scope();
+            scrollScope.scrollCtrl && scrollScope.scrollCtrl.freezeScrollShut(!canScroll);
+          },
           getTranslateX: function() {
             return $scope.sideMenuContentTranslateX || 0;
           },
@@ -63295,7 +63359,8 @@ IonicModule
 .directive('ionSlides', [
   '$animate',
   '$timeout',
-function($animate, $timeout) {
+  '$compile',
+function($animate, $timeout, $compile) {
   return {
     restrict: 'E',
     transclude: true,
@@ -63349,7 +63414,7 @@ function($animate, $timeout) {
       this._options = newOptions;
 
       $timeout(function() {
-        var slider = new ionic.views.Swiper($element.children()[0], newOptions, $scope);
+        var slider = new ionic.views.Swiper($element.children()[0], newOptions, $scope, $compile);
 
         _this.__slider = slider;
         $scope.slider = _this.__slider;

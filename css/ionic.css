@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1878
+ * Ionic, v1.2.1-nightly-1887
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5230,6 +5230,12 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .menu-open .menu-content .pane,
 .menu-open .menu-content .scroll-content {
   pointer-events: none; }
+
+.menu-open .menu-content .scroll-content .scroll {
+  pointer-events: none; }
+
+.menu-open .menu-content .scroll-content:not(.overflow-scroll) {
+  overflow: hidden; }
 
 .grade-b .menu-content,
 .grade-c .menu-content {
