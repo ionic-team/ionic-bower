@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1887
+ * Ionic, v1.2.1-nightly-1889
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1887';
+window.ionic.version = '1.2.1-nightly-1889';
 
 (function (ionic) {
 
@@ -50261,7 +50261,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1887
+ * Ionic, v1.2.1-nightly-1889
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63427,10 +63427,10 @@ function($animate, $timeout, $compile) {
     }],
 
 
-    link: function($scope, $element) {
+    link: function($scope) {
       $scope.showPager = true;
       // Disable ngAnimate for slidebox and its children
-      $animate.enabled(false, $element);
+      //$animate.enabled(false, $element);
     }
   };
 }])
