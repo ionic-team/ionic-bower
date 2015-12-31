@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1889
+ * Ionic, v1.2.1-nightly-1890
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1889';
+window.ionic.version = '1.2.1-nightly-1890';
 
 (function (ionic) {
 
@@ -7180,6 +7180,12 @@ ionic.scroll = {
       var oldOverflowX = self.el.style.overflowX;
       var oldOverflowY = self.el.style.overflowY;
 
+      clearTimeout(self.__scrollToCleanupTimeout);
+      self.__scrollToCleanupTimeout = setTimeout(function() {
+        self.el.style.overflowX = oldOverflowX;
+        self.el.style.overflowY = oldOverflowY;
+      }, 500);
+
       self.el.style.overflowY = 'hidden';
       self.el.style.overflowX = 'hidden';
 
@@ -7285,14 +7291,14 @@ ionic.scroll = {
       // save height when scroll view is shrunk so we don't need to reflow
       var scrollViewOffsetHeight;
 
+      var lastKeyboardHeight;
+
       /**
        * Shrink the scroll view when the keyboard is up if necessary and if the
        * focused input is below the bottom of the shrunk scroll view, scroll it
        * into view.
        */
       self.scrollChildIntoView = function(e) {
-        //console.log("scrollChildIntoView at: " + Date.now());
-
         // D
         var scrollBottomOffsetToTop = container.getBoundingClientRect().bottom;
         // D - A
@@ -7316,7 +7322,11 @@ ionic.scroll = {
         *  All commented calculations relative to the top of the viewport (ie E
         *  is the viewport height, not 0)
         */
-        if (!alreadyShrunk) {
+
+
+        var changedKeyboardHeight = lastKeyboardHeight && (lastKeyboardHeight !== e.detail.keyboardHeight);
+
+        if (!alreadyShrunk || changedKeyboardHeight) {
           // shrink scrollview so we can actually scroll if the input is hidden
           // if it isn't shrink so we can scroll to inputs under the keyboard
           // inset modals won't shrink on Android on their own when the keyboard appears
@@ -7327,13 +7337,15 @@ ionic.scroll = {
             var scrollBottomOffsetToBottom = e.detail.viewportHeight - scrollBottomOffsetToTop;
 
             // 0 or D - B if D > B           E - B                     E - D
-            var keyboardOffset = Math.max(0, e.detail.keyboardHeight - scrollBottomOffsetToBottom);
+            var keyboardOffset = e.detail.keyboardHeight - scrollBottomOffsetToBottom;
 
             ionic.requestAnimationFrame(function(){
               // D - A or B - A if D > B       D - A             max(0, D - B)
-              scrollViewOffsetHeight = scrollViewOffsetHeight - keyboardOffset;
+              scrollViewOffsetHeight = keyboardOffset >= 0 ? scrollViewOffsetHeight + keyboardOffset : scrollViewOffsetHeight - keyboardOffset;
+
               container.style.height = scrollViewOffsetHeight + "px";
 
+              container.classList.add('keyboard-up');
               //update scroll view
               self.resize();
             });
@@ -7341,6 +7353,8 @@ ionic.scroll = {
 
           self.isShrunkForKeyboard = true;
         }
+
+        lastKeyboardHeight = e.detail.keyboardHeight;
 
         /*
          *  _______
@@ -7405,6 +7419,12 @@ ionic.scroll = {
         if (self.isShrunkForKeyboard) {
           self.isShrunkForKeyboard = false;
           container.style.height = "";
+
+          // Read after setting this to avoid rendering issues like white boxes.
+          ionic.requestAnimationFrame(function() {
+            container.classList.remove('keyboard-up');
+          });
+
         }
         self.resize();
       };
