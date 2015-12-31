@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.1-nightly-1897
+ * Ionic, v1.2.1-nightly-1898
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -18,7 +18,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.1-nightly-1897';
+window.ionic.version = '1.2.1-nightly-1898';
 
 (function (ionic) {
 
@@ -2041,6 +2041,7 @@ window.ionic.version = '1.2.1-nightly-1897';
   var ANDROID = 'android';
   var WINDOWS_PHONE = 'windowsphone';
   var EDGE = 'edge';
+  var CROSSWALK = 'crosswalk';
   var requestAnimationFrame = ionic.requestAnimationFrame;
 
   /**
@@ -2267,6 +2268,10 @@ window.ionic.version = '1.2.1-nightly-1897';
      */
     isEdge: function() {
       return self.is(EDGE);
+    },
+
+    isCrosswalk: function() {
+      return self.is(CROSSWALK);
     },
 
     /**
