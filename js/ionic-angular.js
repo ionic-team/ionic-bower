@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.2-nightly-1902
+ * Ionic, v1.2.3-nightly-1905
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10567,7 +10567,7 @@ IonicModule
 * ```
 */
 IonicModule
-.directive('ionLabel', ['$timeout', function($timeout) {
+.directive('ionLabel', [function() {
   return {
     restrict: 'E',
     require: '?^ionInput',
@@ -10590,9 +10590,7 @@ IonicModule
           ionInputCtrl.setInputAriaLabeledBy(id);
 
           $element.on('click', function() {
-            $timeout(function() {
-              ionInputCtrl.focus();
-            });
+            ionInputCtrl.focus();
           });
         }
       };
