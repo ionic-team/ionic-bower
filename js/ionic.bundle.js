@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1925
+ * Ionic, v1.2.4-nightly-1929
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-1925';
+window.ionic.version = '1.2.4-nightly-1929';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1925
+ * Ionic, v1.2.4-nightly-1929
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -52719,6 +52719,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
  * @ngdoc service
  * @name $ionicModal
  * @module ionic
+ * @codepen gblny
  * @description
  *
  * Related: {@link ionic.controller:ionicModal ionicModal controller}.
@@ -63191,6 +63192,7 @@ IonicModule
  * @ngdoc directive
  * @name ionSlideBox
  * @module ionic
+ * @codepen AjgEB
  * @deprecated will be removed in the next Ionic release in favor of the new ion-slides component.
  * Don't depend on the internal behavior of this widget.
  * @delegate ionic.service:$ionicSlideBoxDelegate
@@ -63198,7 +63200,6 @@ IonicModule
  * @description
  * The Slide Box is a multi-page container where each page can be swiped or dragged between:
  *
- * ![SlideBox](http://ionicframework.com.s3.amazonaws.com/docs/controllers/slideBox.gif)
  *
  * @usage
  * ```html
