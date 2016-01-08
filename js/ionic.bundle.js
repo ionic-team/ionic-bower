@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1929
+ * Ionic, v1.2.4-nightly-1931
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-1929';
+window.ionic.version = '1.2.4-nightly-1931';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1929
+ * Ionic, v1.2.4-nightly-1931
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -60218,13 +60218,17 @@ IonicModule.directive('exposeAsideWhen', ['$window', function($window) {
     require: '^ionSideMenus',
     link: function($scope, $element, $attr, sideMenuCtrl) {
 
-      // Setup a match media query listener that triggers a ui change only when a change
-      // in media matching status occurs
-      var mq = $attr.exposeAsideWhen == 'large' ? '(min-width:768px)' : $attr.exposeAsideWhen;
-      var mql = $window.matchMedia(mq);
-      mql.addListener(function() {
+      var prevInnerWidth = $window.innerWidth;
+      var prevInnerHeight = $window.innerHeight;
+
+      ionic.on('resize', function() {
+        if (prevInnerWidth === $window.innerWidth && prevInnerHeight === $window.innerHeight) {
+          return;
+        }
+        prevInnerWidth = $window.innerWidth;
+        prevInnerHeight = $window.innerHeight;
         onResize();
-      });
+      }, $window);
 
       function checkAsideExpose() {
         var mq = $attr.exposeAsideWhen == 'large' ? '(min-width:768px)' : $attr.exposeAsideWhen;
