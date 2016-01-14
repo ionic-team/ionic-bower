@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1962
+ * Ionic, v1.2.4-nightly-1967
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2423,7 +2423,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
  *   $scope.closeModal = function() {
  *     $scope.modal.hide();
  *   };
- *   //Cleanup the modal when we're done with it!
+ *   // Cleanup the modal when we're done with it!
  *   $scope.$on('$destroy', function() {
  *     $scope.modal.remove();
  *   });
