@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1934
+ * Ionic, v1.2.4-nightly-1949
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-1934';
+window.ionic.version = '1.2.4-nightly-1949';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1934
+ * Ionic, v1.2.4-nightly-1949
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63441,7 +63441,7 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  *
  * @usage
  * ```html
- * <ion-slides on-slide-changed="slideHasChanged($index)">
+ * <ion-slides  options="options" slider="data.slider">
  *   <ion-slide-page>
  *     <div class="box blue"><h1>BLUE</h1></div>
  *   </ion-slide-page>
@@ -63454,9 +63454,18 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  * </ion-slides>
  * ```
  *
- * @param {string=} delegate-handle The handle used to identify this slideBox
- * with {@link ionic.service:$ionicSlideBoxDelegate}.
- * @param {object=} options to pass to the widget. See the full ist here: [http://www.idangero.us/swiper/api/](http://www.idangero.us/swiper/api/)
+ * ```js
+ * $scope.options = {
+ *   loop: false,
+ *   effect: fade,
+ *   speed: 500,
+ * }
+ * $scope.data = {};
+ * $scope.$watch('data.slider', function(nv, ov) {
+ *   $scope.slider = $scope.data.slider;
+ * })
+ * ```
+ *
  */
 IonicModule
 .directive('ionSlides', [
