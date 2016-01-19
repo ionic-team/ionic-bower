@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-1998
+ * Ionic, v1.2.4-nightly-2003
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6237,6 +6237,12 @@ button.item.item-button-right {
     min-height: 34px;
     font-size: 18px;
     line-height: 32px; }
+
+.item-button-left.item-button-right .button:first-child {
+  right: auto; }
+
+.item-button-left.item-button-right .button:last-child {
+  left: auto; }
 
 .item-avatar,
 .item-avatar .item-content,
