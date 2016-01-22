@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2052
+ * Ionic, v1.2.4-nightly-2053
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2052';
+window.ionic.version = '1.2.4-nightly-2053';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2052
+ * Ionic, v1.2.4-nightly-2053
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63499,9 +63499,16 @@ function($animate, $timeout, $compile) {
             _this.__slider.createLoop();
           }
 
+          var slidesLength = _this.__slider.slides.length;
+
           // Don't allow pager to show with > 10 slides
-          if (_this.__slider.slides.length > 10) {
+          if (slidesLength > 10) {
             $scope.showPager = false;
+          }
+
+          // When slide index is greater than total then slide to last index
+          if (_this.__slider.activeIndex > slidesLength - 1) {
+            _this.__slider.slideTo(slidesLength - 1);
           }
         });
       };
@@ -63555,6 +63562,10 @@ function($animate, $timeout, $compile) {
     template: '<div class="swiper-slide" ng-transclude></div>',
     link: function($scope, $element, $attr, ionSlidesCtrl) {
       ionSlidesCtrl.rapidUpdate();
+
+      $scope.$on('$destroy', function() {
+        ionSlidesCtrl.rapidUpdate();
+      });
     }
   };
 }]);
