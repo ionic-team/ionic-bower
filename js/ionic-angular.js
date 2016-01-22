@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2026
+ * Ionic, v1.2.4-nightly-2052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -13010,7 +13010,7 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
 
     link: function($scope, $element, $attr) {
       // Disable ngAnimate for slidebox and its children
-      $animate.enabled(false, $element);
+      $animate.enabled($element, false);
 
       // if showPager is undefined, show the pager
       if (!isDefined($attr.showPager)) {

@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2026
+ * Ionic, v1.2.4-nightly-2052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2026';
+window.ionic.version = '1.2.4-nightly-2052';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2026
+ * Ionic, v1.2.4-nightly-2052
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -63352,7 +63352,7 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
 
     link: function($scope, $element, $attr) {
       // Disable ngAnimate for slidebox and its children
-      $animate.enabled(false, $element);
+      $animate.enabled($element, false);
 
       // if showPager is undefined, show the pager
       if (!isDefined($attr.showPager)) {
