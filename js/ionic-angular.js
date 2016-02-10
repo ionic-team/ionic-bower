@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2253
+ * Ionic, v1.2.4-nightly-2332
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -13199,6 +13199,7 @@ function($animate, $timeout, $compile) {
 
         $scope.$on('$destroy', function() {
           slider.destroy();
+          _this.__slider = null;
         });
       });
 
