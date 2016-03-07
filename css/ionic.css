@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2613
+ * Ionic, v1.2.4-nightly-2696
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -5942,7 +5942,7 @@ button.item.item-complex {
 .item-radio .item-content {
   position: relative;
   z-index: 2;
-  padding: 16px 16px 16px 16px;
+  padding: 16px 49px 16px 16px;
   border: none;
   background-color: #fff; }
 
