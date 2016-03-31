@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2825
+ * Ionic, v1.2.4-nightly-2826
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11959,6 +11959,9 @@ IonicModule
  *
  * <iframe width="560" height="315" src="//www.youtube.com/embed/dqJRoh8MnBo"
  * frameborder="0" allowfullscreen></iframe>
+ *
+ * Note: We do not recommend using [resolve](https://github.com/angular-ui/ui-router/wiki#resolve)
+ * of AngularUI Router. The recommended approach is to execute any logic needed before beginning the state transition.
  *
  * @param {string=} name A view name. The name should be unique amongst the other views in the
  * same state. You can have views of the same name that live in different states. For more
