@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2813
+ * Ionic, v1.2.4-nightly-2825
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2813';
+window.ionic.version = '1.2.4-nightly-2825';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2813
+ * Ionic, v1.2.4-nightly-2825
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -64374,6 +64374,28 @@ function($timeout, $ionicConfig) {
  * removed from the DOM.</td>
  *  </tr>
  * </table>
+ *
+ * ## LifeCycle Event Usage
+ *
+ * Below is an example of how to listen to life cycle events and
+ * access state parameter data
+ *
+ * ```js
+ * $scope.$on("$ionicView.beforeEnter", function(event, data){
+ *    // handle event
+ *    console.log("State Params: ", data.stateParams);
+ * });
+ *
+ * $scope.$on("$ionicView.enter", function(event, data){
+ *    // handle event
+ *    console.log("State Params: ", data.stateParams);
+ * });
+ *
+ * $scope.$on("$ionicView.afterEnter", function(event, data){
+ *    // handle event
+ *    console.log("State Params: ", data.stateParams);
+ * });
+ * ```
  *
  * ## Caching
  *
