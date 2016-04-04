@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2826
+ * Ionic, v1.2.4-nightly-2853
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -945,6 +945,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
             direction = DIRECTION_FORWARD;
 
           } else if (currentView.historyId !== hist.historyId) {
+            // DB: this is a new view in a different tab
             direction = DIRECTION_ENTER;
 
             tmp = getHistoryById(currentView.historyId);
@@ -974,7 +975,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           viewId: viewId,
           index: hist.stack.length,
           historyId: hist.historyId,
-          backViewId: (currentView && currentView.viewId ? currentView.viewId : null),
+          backViewId: (currentView && currentView.viewId && (currentView.historyId === hist.historyId || currentView.historyId === hist.parentHistoryId) ? currentView.viewId : null),
           forwardViewId: null,
           stateId: currentStateId,
           stateName: this.currentStateName(),
