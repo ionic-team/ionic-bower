@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2877
+ * Ionic, v1.2.4-nightly-2882
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2877';
+window.ionic.version = '1.2.4-nightly-2882';
 
 (function (ionic) {
 
@@ -50344,7 +50344,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2877
+ * Ionic, v1.2.4-nightly-2882
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -51901,6 +51901,16 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * @param {boolean} value
  * @returns {boolean}
  */
+
+ /**
+  * @ngdoc method
+  * @name $ionicConfigProvider#views.swipeBackEnabled
+  * @description  By default on iOS devices, swipe to go back functionality is enabled by default.
+  * This method can be used to disable it globally, or on a per-view basis.
+  * Note: This functionality is only supported on iOS.
+  * @param {boolean} value
+  * @returns {boolean}
+  */
 
 /**
  * @ngdoc method
@@ -56680,9 +56690,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     $scope.$on('$ionicTabs.leave', onTabsLeave);
 
     ionic.Platform.ready(function() {
-      if (ionic.Platform.isWebView() && $ionicConfig.views.swipeBackEnabled()) {
-        self.initSwipeBack();
-      }
+      self.initSwipeBack();
     });
 
     return viewData;
@@ -56972,6 +56980,10 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
 
     function onDragStart(ev) {
       if (!isPrimary) return;
+
+      if (!$ionicConfig.views.swipeBackEnabled() || !ionic.Platform.isIOS() ) {
+        return;
+      }
 
       startDragX = getDragX(ev);
       if (startDragX > swipeBackHitWidth) return;
