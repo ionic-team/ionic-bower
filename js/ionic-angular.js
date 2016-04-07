@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2882
+ * Ionic, v1.2.4-nightly-2890
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6348,7 +6348,9 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     $scope.$on('$ionicTabs.leave', onTabsLeave);
 
     ionic.Platform.ready(function() {
-      self.initSwipeBack();
+      if ( ionic.Platform.isWebView() && ionic.Platform.isIOS() ) {
+          self.initSwipeBack();
+      }
     });
 
     return viewData;
@@ -6637,11 +6639,8 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     var cancelData = {};
 
     function onDragStart(ev) {
-      if (!isPrimary) return;
+      if (!isPrimary || !$ionicConfig.views.swipeBackEnabled() ) return;
 
-      if (!$ionicConfig.views.swipeBackEnabled() || !ionic.Platform.isIOS() ) {
-        return;
-      }
 
       startDragX = getDragX(ev);
       if (startDragX > swipeBackHitWidth) return;
