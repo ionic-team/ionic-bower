@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2932
+ * Ionic, v1.2.4-nightly-2933
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8421,6 +8421,8 @@ function($scope, $element, $ionicHistory) {
           uiSref: tab.uiSref
         });
       }
+
+      $scope.$broadcast("tabSelected", { selectedTab: tab, selectedTabIndex: tabIndex});
     }
   };
 
@@ -13670,11 +13672,10 @@ IonicModule
     replace: true,
     require: ['^ionTabs', '^ionTab'],
     template:
-    '<a ng-class="{\'tab-item-active\': isTabActive(), \'has-badge\':badge, \'tab-hidden\':isHidden()}" ' +
+    '<a ng-class="{\'has-badge\':badge, \'tab-hidden\':isHidden()}" ' +
       ' ng-disabled="disabled()" class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
-      '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
-      '<i class="icon {{getIconOff()}}" ng-if="getIconOff() && !isTabActive()"></i>' +
+      '<i class="icon"></i>' +
       '<span class="tab-title" ng-bind-html="title"></span>' +
     '</a>',
     scope: {
@@ -13722,6 +13723,36 @@ IonicModule
       $scope.isTabActive = function() {
         return tabsCtrl.selectedTab() === tabCtrl.$scope;
       };
+
+      $scope.$watch("icon", function() {
+        styleTab();
+      });
+
+      $scope.$watch("iconOff", function() {
+        styleTab();
+      });
+
+      $scope.$watch("iconOn", function() {
+        styleTab();
+      });
+
+      function styleTab() {
+        // check if tab if active
+        if ( tabsCtrl.selectedTab() === tabCtrl.$scope ) {
+          $element.addClass('tab-item-active');
+          $element.find('i').removeClass($scope.getIconOff());
+          $element.find('i').addClass($scope.getIconOn());
+        }
+        else {
+          $element.removeClass('tab-item-active');
+          $element.find('i').removeClass($scope.getIconOn());
+          $element.find('i').addClass($scope.getIconOff());
+        }
+      }
+
+      $scope.$on("tabSelected", styleTab);
+
+      styleTab();
     }
   };
 }]);
