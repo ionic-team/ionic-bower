@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2897
+ * Ionic, v1.2.4-nightly-2932
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -6297,7 +6297,8 @@ IonicModule
   '$ionicViewSwitcher',
   '$ionicConfig',
   '$ionicScrollDelegate',
-function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, $ionicNavViewDelegate, $ionicHistory, $ionicViewSwitcher, $ionicConfig, $ionicScrollDelegate) {
+  '$ionicSideMenuDelegate',
+function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, $ionicNavViewDelegate, $ionicHistory, $ionicViewSwitcher, $ionicConfig, $ionicScrollDelegate, $ionicSideMenuDelegate) {
 
   var DATA_ELE_IDENTIFIER = '$eleId';
   var DATA_DESTROY_ELE = '$destroyEle';
@@ -6639,7 +6640,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
     var cancelData = {};
 
     function onDragStart(ev) {
-      if (!isPrimary || !$ionicConfig.views.swipeBackEnabled() ) return;
+      if (!isPrimary || !$ionicConfig.views.swipeBackEnabled() || $ionicSideMenuDelegate.isOpenRight() ) return;
 
 
       startDragX = getDragX(ev);
@@ -7102,13 +7103,17 @@ IonicModule
     };
 
     function destroy() {
-      ionic.off(touchStartEvent, handleTouchstart, scrollChild);
-      ionic.off(touchMoveEvent, handleTouchmove, scrollChild);
-      ionic.off(touchEndEvent, handleTouchend, scrollChild);
-      ionic.off('mousedown', handleMousedown, scrollChild);
-      ionic.off('mousemove', handleTouchmove, scrollChild);
-      ionic.off('mouseup', handleTouchend, scrollChild);
-      ionic.off('scroll', handleScroll, scrollParent);
+      if ( scrollChild ) {
+        ionic.off(touchStartEvent, handleTouchstart, scrollChild);
+        ionic.off(touchMoveEvent, handleTouchmove, scrollChild);
+        ionic.off(touchEndEvent, handleTouchend, scrollChild);
+        ionic.off('mousedown', handleMousedown, scrollChild);
+        ionic.off('mousemove', handleTouchmove, scrollChild);
+        ionic.off('mouseup', handleTouchend, scrollChild);
+      }
+      if ( scrollParent ) {
+        ionic.off('scroll', handleScroll, scrollParent);
+      }
       scrollParent = null;
       scrollChild = null;
     }
@@ -7260,8 +7265,17 @@ function($scope,
     deregisterInstance();
     scrollView && scrollView.__cleanup && scrollView.__cleanup();
     angular.element($window).off('resize', resize);
-    $element.off('scroll', scrollFunc);
-    scrollView = self.scrollView = scrollViewOptions = self._scrollViewOptions = scrollViewOptions.el = self._scrollViewOptions.el = $element = self.$element = element = null;
+    if ( $element ) {
+      $element.off('scroll', scrollFunc);
+    }
+    if ( self._scrollViewOptions ) {
+      self._scrollViewOptions.el = null;
+    }
+    if ( scrollViewOptions ) {
+        scrollViewOptions.el = null;
+    }
+
+    scrollView = self.scrollView = scrollViewOptions = self._scrollViewOptions = element = self.$element = $element = null;
   });
 
   $timeout(function() {
