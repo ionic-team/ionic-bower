@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2933
+ * Ionic, v1.2.4-nightly-2959
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2933';
+window.ionic.version = '1.2.4-nightly-2959';
 
 (function (ionic) {
 
@@ -2113,6 +2113,11 @@ window.ionic.version = '1.2.4-nightly-2933';
      * @returns {string} What grade the current platform is.
      */
     grade: null,
+    /**
+     * @ngdoc property
+     * @name ionic.Platform#ua
+     * @returns {string} What User Agent is.
+     */
     ua: navigator.userAgent,
 
     /**
@@ -53129,7 +53134,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2933
+ * Ionic, v1.2.4-nightly-2959
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
