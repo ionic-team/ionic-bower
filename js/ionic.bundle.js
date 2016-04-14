@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2959
+ * Ionic, v1.2.4-nightly-2983
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2959';
+window.ionic.version = '1.2.4-nightly-2983';
 
 (function (ionic) {
 
@@ -10989,14 +10989,35 @@ ionic.views.Slider = ionic.views.View.inherit({
             }
             s.observers = [];
         };
+
+        s.updateLoop = function(){
+          // this is an Ionic custom function
+          var duplicates = s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass);
+          var slides = s.wrapper.children('.' + s.params.slideClass);
+          for ( var i = 0; i < duplicates.length; i++ ){
+            var duplicate = duplicates[i];
+            var swiperSlideIndex = angular.element(duplicate).attr("data-swiper-slide-index");
+            // loop through each slide
+            for ( var j = 0; i < slides.length; j++ ){
+              // if it's not a duplicate, and the data swiper slide index matches the duplicate value
+              var slide = slides[j]
+              if ( !angular.element(slide).hasClass(s.params.slideDuplicateClass) && angular.element(slide).attr("data-swiper-slide-index") === swiperSlideIndex ){
+                // sweet, it's a match
+                duplicate.innerHTML = slide.innerHTML;
+                break;
+              }
+            }
+          }
+        }
         /*=========================
           Loop
           ===========================*/
         // Create looped slides
         s.createLoop = function () {
-
-            var toRemove = s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass);
-            angular.element(toRemove).remove();
+          //console.log("Slider create loop method");
+            //var toRemove = s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass);
+            //angular.element(toRemove).remove();
+            s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass).remove();
 
             var slides = s.wrapper.children('.' + s.params.slideClass);
 
@@ -11016,24 +11037,26 @@ ionic.views.Slider = ionic.views.View.inherit({
                 slide.attr('data-swiper-slide-index', index);
             });
             for (i = 0; i < appendSlides.length; i++) {
-              newNode = angular.element(appendSlides[i]).clone().addClass(s.params.slideDuplicateClass);
+              /*newNode = angular.element(appendSlides[i]).clone().addClass(s.params.slideDuplicateClass);
               newNode.removeAttr('ng-transclude');
               newNode.removeAttr('ng-repeat');
               scope = angular.element(appendSlides[i]).scope();
               newNode = $compile(newNode)(scope);
               angular.element(s.wrapper).append(newNode);
-                //s.wrapper.append($(appendSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
+                */
+                s.wrapper.append($(appendSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
             }
             for (i = prependSlides.length - 1; i >= 0; i--) {
-                //s.wrapper.prepend($(prependSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
+              s.wrapper.prepend($(prependSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
 
-              newNode = angular.element(prependSlides[i]).clone().addClass(s.params.slideDuplicateClass);
+              /*newNode = angular.element(prependSlides[i]).clone().addClass(s.params.slideDuplicateClass);
               newNode.removeAttr('ng-transclude');
               newNode.removeAttr('ng-repeat');
 
               scope = angular.element(prependSlides[i]).scope();
               newNode = $compile(newNode)(scope);
               angular.element(s.wrapper).prepend(newNode);
+              */
             }
         };
         s.destroyLoop = function () {
@@ -53134,7 +53157,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2959
+ * Ionic, v1.2.4-nightly-2983
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -55701,6 +55724,7 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
         self.el.classList.add('active');
         self.scope.$broadcast('$ionicHeader.align');
         self.scope.$broadcast('$ionicFooter.align');
+        self.scope.$broadcast('$ionic.modalPresented');
       }, 20);
 
       return $timeout(function() {
@@ -55743,6 +55767,8 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
         if (self._isShown) return;
         modalEl.addClass('ng-leave-active')
                .removeClass('ng-enter ng-enter-active active');
+
+        self.scope.$broadcast('$ionic.modalRemoved');
       }, 20, false);
 
       self.$el.off('click');
@@ -66310,6 +66336,11 @@ function($animate, $timeout, $compile) {
       '</div>',
     controller: ['$scope', '$element', function($scope, $element) {
       var _this = this;
+      var _watchHandler = null;
+      var _enterHandler = null;
+      var _afterLeaveHandler = null;
+      var _modalRemovedHandler = null;
+      var _modalPresentedHandler = null;
 
       this.update = function() {
         $timeout(function() {
@@ -66340,6 +66371,52 @@ function($animate, $timeout, $compile) {
         _this.update();
       }, 50);
 
+      this.updateLoop = ionic.debounce(function() {
+        if ( _this._options.loop ) {
+          _this.__slider.updateLoop();
+        }
+      }, 50);
+
+      this.watchForChanges = function() {
+        if ( !_watchHandler ) {
+          // if we're not already watching, start watching
+          _watchHandler = $scope.$watch(function() {
+            void 0;
+            _this.updateLoop();
+          });
+        }
+      };
+
+      this.stopWatching = function() {
+        if ( _watchHandler ) {
+          void 0;
+          _watchHandler();
+          _watchHandler = null;
+        }
+      };
+
+      this.cleanUpEventHandlers = function() {
+        if ( _enterHandler ) {
+          _enterHandler();
+          _enterHandler = null;
+        }
+
+        if ( _afterLeaveHandler ) {
+          _afterLeaveHandler();
+          _afterLeaveHandler = null;
+        }
+
+        if ( _modalRemovedHandler ) {
+          _modalRemovedHandler();
+          _modalRemovedHandler = null;
+        }
+
+        if ( _modalPresentedHandler ) {
+          _modalPresentedHandler();
+          _modalPresentedHandler = null;
+        }
+      };
+
       this.getSlider = function() {
         return _this.__slider;
       };
@@ -66364,11 +66441,32 @@ function($animate, $timeout, $compile) {
         $scope.$on('$destroy', function() {
           slider.destroy();
           _this.__slider = null;
+          _this.stopWatching();
+          _this.cleanUpEventHandlers();
+
         });
+
+        _this.watchForChanges();
+
+        _enterHandler = $scope.$on("$ionicView.enter", function() {
+          _this.watchForChanges();
+        });
+
+        _afterLeaveHandler = $scope.$on("$ionicView.afterLeave", function() {
+          _this.stopWatching();
+        });
+
+        _modalRemovedHandler = $scope.$on("$ionic.modalRemoved", function() {
+          _this.stopWatching();
+        });
+
+        _modalPresentedHandler = $scope.$on("$ionic.modalPresented", function() {
+          _this.watchForChanges();
+        });
+
       });
 
     }],
-
 
     link: function($scope) {
       $scope.showPager = true;
