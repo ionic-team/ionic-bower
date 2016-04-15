@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2990
+ * Ionic, v1.2.4-nightly-2994
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -1416,6 +1416,10 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
       return false;
     }
     if (ele && ele.attr('can-swipe-back') === 'false') {
+      return false;
+    }
+    var eleChild = ele.find('ion-view');
+    if (eleChild && eleChild.attr('can-swipe-back') === 'false') {
       return false;
     }
     return true;
