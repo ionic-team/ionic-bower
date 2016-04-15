@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2994
+ * Ionic, v1.2.4-nightly-2998
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -13305,7 +13305,7 @@ function($animate, $timeout, $compile) {
       var options = $scope.options || {};
 
       var newOptions = angular.extend({
-        pagination: '.swiper-pagination',
+        pagination: $element.children().children()[1],
         paginationClickable: true,
         lazyLoading: true,
         preloadImages: false
