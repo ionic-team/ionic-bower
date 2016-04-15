@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2988
+ * Ionic, v1.2.4-nightly-2989
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-2988';
+window.ionic.version = '1.2.4-nightly-2989';
 
 (function (ionic) {
 
@@ -53157,7 +53157,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2988
+ * Ionic, v1.2.4-nightly-2989
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54382,7 +54382,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * @description Remove the previous view from the history completely, including the
      * cached element and scope (if they exist).
      */
-    removeBackView: function () {
+    removeBackView: function() {
       var self = this;
       var currentHistory = viewHistory.histories[this.currentHistoryId()];
       var currentCursor = currentHistory.cursor;
