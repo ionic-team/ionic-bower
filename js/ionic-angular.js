@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-2989
+ * Ionic, v1.2.4-nightly-2990
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -8219,7 +8219,8 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
   var animations = {
 
     android: function(ele) {
-      var self = this;
+      // Note that this is called as a function, not a constructor.
+      var self = {};
 
       this.stop = false;
 
