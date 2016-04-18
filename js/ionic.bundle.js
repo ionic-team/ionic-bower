@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-3008
+ * Ionic, v1.2.4-nightly-3027
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.2.4-nightly-3008';
+window.ionic.version = '1.2.4-nightly-3027';
 
 (function (ionic) {
 
@@ -53157,7 +53157,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.2.4-nightly-3008
+ * Ionic, v1.2.4-nightly-3027
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -55831,10 +55831,24 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
      * @returns {promise} A promise which is resolved when the modal is finished animating out.
      */
     remove: function() {
-      var self = this;
+      var self = this,
+          deferred, promise;
       self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.removed', self);
 
-      return self.hide().then(function() {
+      // Only hide modal, when it is actually shown!
+      // The hide function shows a click-block-div for a split second, because on iOS,
+      // clicks will sometimes bleed through/ghost click on underlying elements.
+      // However, this will make the app unresponsive for short amount of time.
+      // We don't want that, if the modal window is already hidden.
+      if (self._isShown) {
+        promise = self.hide();
+      } else {
+        deferred = $$q.defer();
+        deferred.resolve();
+        promise = deferred.promise;
+      }
+
+      return promise.then(function() {
         self.scope.$destroy();
         self.$el.remove();
       });
