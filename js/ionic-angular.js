@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3086
+ * Ionic, v1.3.0-nightly-3113
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -3048,6 +3048,11 @@ IonicModule
           var q = $q.defer();
 
           ionic.Platform.ready(function() {
+
+            window.addEventListener('statusTap', function() {
+              $ionicScrollDelegate.scrollTop(true);
+            });
+
             q.resolve();
             cb && cb();
           });
@@ -3055,10 +3060,6 @@ IonicModule
           return q.promise;
         }
       };
-
-      window.addEventListener('statusTap', function() {
-        $ionicScrollDelegate.scrollTop(true);
-      });
 
       return self;
     }]
