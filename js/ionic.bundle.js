@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3123
+ * Ionic, v1.3.0-nightly-3125
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.0-nightly-3123';
+window.ionic.version = '1.3.0-nightly-3125';
 
 (function (ionic) {
 
@@ -53157,7 +53157,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3123
+ * Ionic, v1.3.0-nightly-3125
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -66953,10 +66953,10 @@ IonicModule
     replace: true,
     require: ['^ionTabs', '^ionTab'],
     template:
-    '<a ng-class="{\'has-badge\':badge, \'tab-hidden\':isHidden()}" ' +
+    '<a ng-class="{\'has-badge\':badge, \'tab-hidden\':isHidden(), \'tab-item-active\': isTabActive()}" ' +
       ' ng-disabled="disabled()" class="tab-item">' +
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
-      '<i class="icon"></i>' +
+      '<i class="icon {{getIcon()}}" ng-if="getIcon()"></i>' +
       '<span class="tab-title" ng-bind-html="title"></span>' +
     '</a>',
     scope: {
@@ -67005,35 +67005,16 @@ IonicModule
         return tabsCtrl.selectedTab() === tabCtrl.$scope;
       };
 
-      $scope.$watch("icon", function() {
-        styleTab();
-      });
-
-      $scope.$watch("iconOff", function() {
-        styleTab();
-      });
-
-      $scope.$watch("iconOn", function() {
-        styleTab();
-      });
-
-      function styleTab() {
-        // check if tab if active
+      $scope.getIcon = function() {
         if ( tabsCtrl.selectedTab() === tabCtrl.$scope ) {
-          $element.addClass('tab-item-active');
-          $element.find('i').removeClass($scope.getIconOff());
-          $element.find('i').addClass($scope.getIconOn());
+          // active
+          return $scope.iconOn || $scope.icon;
         }
         else {
-          $element.removeClass('tab-item-active');
-          $element.find('i').removeClass($scope.getIconOn());
-          $element.find('i').addClass($scope.getIconOff());
+          // inactive
+          return $scope.iconOff || $scope.icon;
         }
-      }
-
-      $scope.$on("tabSelected", styleTab);
-
-      styleTab();
+      };
     }
   };
 }]);
