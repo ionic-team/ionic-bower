@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3127
+ * Ionic, v1.3.0-nightly-3134
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.0-nightly-3127';
+window.ionic.version = '1.3.0-nightly-3134';
 
 (function (ionic) {
 
@@ -53157,7 +53157,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3127
+ * Ionic, v1.3.0-nightly-3134
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54052,6 +54052,16 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
         // it's back view would be better represented using the current view as its back view
         tmp = getViewById(switchToView.backViewId);
         if (tmp && switchToView.historyId !== tmp.historyId) {
+          // the new view is being removed from it's old position in the history and being placed at the top,
+          // so we need to update any views that reference it as a backview, otherwise there will be infinitely loops
+          var viewIds = Object.keys(viewHistory.views);
+          viewIds.forEach(function(viewId) {
+            var view = viewHistory.views[viewId];
+            if ( view.backViewId === switchToView.viewId ) {
+              view.backViewId = null;
+            }
+          });
+
           hist.stack[hist.cursor].backViewId = currentView.viewId;
         }
 
@@ -54130,7 +54140,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           viewId: viewId,
           index: hist.stack.length,
           historyId: hist.historyId,
-          backViewId: (currentView && currentView.viewId && (currentView.historyId === hist.historyId || currentView.historyId === hist.parentHistoryId) ? currentView.viewId : null),
+          backViewId: (currentView && currentView.viewId ? currentView.viewId : null),
           forwardViewId: null,
           stateId: currentStateId,
           stateName: this.currentStateName(),
