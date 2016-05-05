@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3134
+ * Ionic, v1.3.0-nightly-3186
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.0-nightly-3134';
+window.ionic.version = '1.3.0-nightly-3186';
 
 (function (ionic) {
 
@@ -2884,7 +2884,7 @@ ionic.tap = {
     if (ele && ele.nodeType === 1) {
       var element = ele;
       while (element) {
-        if ((element.dataset ? element.dataset.tapDisabled : element.getAttribute && element.getAttribute('data-tap-disabled')) == 'true') {
+        if (element.getAttribute && element.getAttribute('data-tap-disabled') == 'true') {
           return true;
         }
         element = element.parentElement;
@@ -10756,6 +10756,11 @@ ionic.views.Slider = ionic.views.View.inherit({
                 s.emit('onTransitionStart', s);
                 if (s.activeIndex !== s.previousIndex) {
                     s.emit('onSlideChangeStart', s);
+                    _scope.$emit("$ionicSlides.slideChangeStart", {
+                      slider: s,
+                      activeIndex: s.getSlideDataIndex(s.activeIndex),
+                      previousIndex: s.getSlideDataIndex(s.previousIndex)
+                    });
                     if (s.activeIndex > s.previousIndex) {
                         s.emit('onSlideNextStart', s);
                     }
@@ -10775,6 +10780,11 @@ ionic.views.Slider = ionic.views.View.inherit({
                 s.emit('onTransitionEnd', s);
                 if (s.activeIndex !== s.previousIndex) {
                     s.emit('onSlideChangeEnd', s);
+                    _scope.$emit("$ionicSlides.slideChangeEnd", {
+                      slider: s,
+                      activeIndex: s.getSlideDataIndex(s.activeIndex),
+                      previousIndex: s.getSlideDataIndex(s.previousIndex)
+                    });
                     if (s.activeIndex > s.previousIndex) {
                         s.emit('onSlideNextEnd', s);
                     }
@@ -10991,24 +11001,38 @@ ionic.views.Slider = ionic.views.View.inherit({
         };
 
         s.updateLoop = function(){
-          // this is an Ionic custom function
-          var duplicates = s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass);
-          var slides = s.wrapper.children('.' + s.params.slideClass);
-          for ( var i = 0; i < duplicates.length; i++ ){
-            var duplicate = duplicates[i];
-            var swiperSlideIndex = angular.element(duplicate).attr("data-swiper-slide-index");
-            // loop through each slide
-            for ( var j = 0; i < slides.length; j++ ){
-              // if it's not a duplicate, and the data swiper slide index matches the duplicate value
-              var slide = slides[j]
-              if ( !angular.element(slide).hasClass(s.params.slideDuplicateClass) && angular.element(slide).attr("data-swiper-slide-index") === swiperSlideIndex ){
-                // sweet, it's a match
-                duplicate.innerHTML = slide.innerHTML;
+          var currentSlide = s.slides.eq(s.activeIndex);
+          if ( angular.element(currentSlide).hasClass(s.params.slideDuplicateClass) ){
+            // we're on a duplicate, so slide to the non-duplicate
+            var swiperSlideIndex = angular.element(currentSlide).attr("data-swiper-slide-index");
+            var slides = s.wrapper.children('.' + s.params.slideClass);
+            for ( var i = 0; i < slides.length; i++ ){
+              if ( !angular.element(slides[i]).hasClass(s.params.slideDuplicateClass) && angular.element(slides[i]).attr("data-swiper-slide-index") === swiperSlideIndex ){
+                s.slideTo(i, 0, false, true);
                 break;
               }
             }
+            // if we needed to switch slides, we did that.  So, now call the createLoop function internally
+            setTimeout(function(){
+              s.createLoop();
+            }, 50);
           }
         }
+
+        s.getSlideDataIndex = function(slideIndex){
+          // this is an Ionic custom function
+          // Swiper loops utilize duplicate DOM elements for slides when in a loop
+          // which means that we cannot rely on the actual slide index for our events
+          // because index 0 does not necessarily point to index 0
+          // and index n+1 does not necessarily point to the expected piece of data
+          // therefore, rather than using the actual slide index we should
+          // use the data index that swiper includes as an attribute on the dom elements
+          // because this is what will be meaningful to the consumer of our events
+          var slide = s.slides.eq(slideIndex);
+          var attributeIndex = angular.element(slide).attr("data-swiper-slide-index");
+          return parseInt(attributeIndex);
+        }
+
         /*=========================
           Loop
           ===========================*/
@@ -11037,26 +11061,25 @@ ionic.views.Slider = ionic.views.View.inherit({
                 slide.attr('data-swiper-slide-index', index);
             });
             for (i = 0; i < appendSlides.length; i++) {
-              /*newNode = angular.element(appendSlides[i]).clone().addClass(s.params.slideDuplicateClass);
+
+              newNode = angular.element(appendSlides[i]).clone().addClass(s.params.slideDuplicateClass);
               newNode.removeAttr('ng-transclude');
               newNode.removeAttr('ng-repeat');
               scope = angular.element(appendSlides[i]).scope();
               newNode = $compile(newNode)(scope);
               angular.element(s.wrapper).append(newNode);
-                */
-                s.wrapper.append($(appendSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
+              //s.wrapper.append($(appendSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
             }
             for (i = prependSlides.length - 1; i >= 0; i--) {
-              s.wrapper.prepend($(prependSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
+              //s.wrapper.prepend($(prependSlides[i].cloneNode(true)).addClass(s.params.slideDuplicateClass));
 
-              /*newNode = angular.element(prependSlides[i]).clone().addClass(s.params.slideDuplicateClass);
+              newNode = angular.element(prependSlides[i]).clone().addClass(s.params.slideDuplicateClass);
               newNode.removeAttr('ng-transclude');
               newNode.removeAttr('ng-repeat');
 
               scope = angular.element(prependSlides[i]).scope();
               newNode = $compile(newNode)(scope);
               angular.element(s.wrapper).prepend(newNode);
-              */
             }
         };
         s.destroyLoop = function () {
@@ -53157,7 +53180,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3134
+ * Ionic, v1.3.0-nightly-3186
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54070,7 +54093,6 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
         // create an element from the viewLocals template
         ele = $ionicViewSwitcher.createViewEle(viewLocals);
         if (this.isAbstractEle(ele, viewLocals)) {
-          void 0;
           return {
             action: 'abstractView',
             direction: DIRECTION_NONE,
@@ -54191,8 +54213,6 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           }
         }
       }
-
-      void 0;
 
       hist.cursor = viewHistory.currentView.index;
 
@@ -58051,32 +58071,67 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
 
         },
 
-        emit: function(step, enteringData, leavingData) {
-          var enteringScope = enteringEle.scope(),
-            leavingScope = leavingEle && leavingEle.scope();
+      emit: function(step, enteringData, leavingData) {
+          var enteringScope = getScopeForElement(enteringEle, enteringData);
+          var leavingScope = getScopeForElement(leavingEle, leavingData);
 
-          if (step == 'after') {
+          var prefixesAreEqual;
+
+          if ( !enteringData.viewId || enteringData.abstractView ) {
+            // it's an abstract view, so treat it accordingly
+
+            // we only get access to the leaving scope once in the transition,
+            // so dispatch all events right away if it exists
+            if ( leavingScope ) {
+              leavingScope.$emit('$ionicView.beforeLeave', leavingData);
+              leavingScope.$emit('$ionicView.leave', leavingData);
+              leavingScope.$emit('$ionicView.afterLeave', leavingData);
+              leavingScope.$broadcast('$ionicParentView.beforeLeave', leavingData);
+              leavingScope.$broadcast('$ionicParentView.leave', leavingData);
+              leavingScope.$broadcast('$ionicParentView.afterLeave', leavingData);
+            }
+          }
+          else {
+            // it's a regular view, so do the normal process
+            if (step == 'after') {
+              if (enteringScope) {
+                enteringScope.$emit('$ionicView.enter', enteringData);
+                enteringScope.$broadcast('$ionicParentView.enter', enteringData);
+              }
+
+              if (leavingScope) {
+                leavingScope.$emit('$ionicView.leave', leavingData);
+                leavingScope.$broadcast('$ionicParentView.leave', leavingData);
+              }
+              else if (enteringScope && leavingData && leavingData.viewId && enteringData.stateName !== leavingData.stateName) {
+                // we only want to dispatch this when we are doing a single-tier
+                // state change such as changing a tab, so compare the state
+                // for the same state-prefix but different suffix
+                prefixesAreEqual = compareStatePrefixes(enteringData.stateName, leavingData.stateName);
+                if ( prefixesAreEqual ) {
+                  enteringScope.$emit('$ionicNavView.leave', leavingData);
+                }
+              }
+            }
+
             if (enteringScope) {
-              enteringScope.$emit('$ionicView.enter', enteringData);
+              enteringScope.$emit('$ionicView.' + step + 'Enter', enteringData);
+              enteringScope.$broadcast('$ionicParentView.' + step + 'Enter', enteringData);
             }
 
             if (leavingScope) {
-              leavingScope.$emit('$ionicView.leave', leavingData);
+              leavingScope.$emit('$ionicView.' + step + 'Leave', leavingData);
+              leavingScope.$broadcast('$ionicParentView.' + step + 'Leave', leavingData);
 
-            } else if (enteringScope && leavingData && leavingData.viewId) {
-              enteringScope.$emit('$ionicNavView.leave', leavingData);
+            } else if (enteringScope && leavingData && leavingData.viewId && enteringData.stateName !== leavingData.stateName) {
+              // we only want to dispatch this when we are doing a single-tier
+              // state change such as changing a tab, so compare the state
+              // for the same state-prefix but different suffix
+              prefixesAreEqual = compareStatePrefixes(enteringData.stateName, leavingData.stateName);
+              if ( prefixesAreEqual ) {
+                enteringScope.$emit('$ionicNavView.' + step + 'Leave', leavingData);
+              }
             }
-          }
-
-          if (enteringScope) {
-            enteringScope.$emit('$ionicView.' + step + 'Enter', enteringData);
-          }
-
-          if (leavingScope) {
-            leavingScope.$emit('$ionicView.' + step + 'Leave', leavingData);
-
-          } else if (enteringScope && leavingData && leavingData.viewId) {
-            enteringScope.$emit('$ionicNavView.' + step + 'Leave', leavingData);
           }
         },
 
@@ -58160,6 +58215,15 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
         containerEle.innerHTML = viewLocals.$template;
         if (containerEle.children.length === 1) {
           containerEle.children[0].classList.add('pane');
+          if ( viewLocals.$$state && viewLocals.$$state.self && viewLocals.$$state.self['abstract'] ) {
+            angular.element(containerEle.children[0]).attr("abstract", "true");
+          }
+          else {
+            if ( viewLocals.$$state && viewLocals.$$state.self ) {
+              angular.element(containerEle.children[0]).attr("state", viewLocals.$$state.self.name);
+            }
+
+          }
           return jqLite(containerEle.children[0]);
         }
       }
@@ -58242,6 +58306,69 @@ function($timeout, $document, $q, $ionicClickBlock, $ionicConfig, $ionicNavBarDe
       }
       ele.remove();
     }
+  }
+
+  function compareStatePrefixes(enteringStateName, exitingStateName) {
+    var enteringStateSuffixIndex = enteringStateName.lastIndexOf('.');
+    var exitingStateSuffixIndex = exitingStateName.lastIndexOf('.');
+
+    // if either of the prefixes are empty, just return false
+    if ( enteringStateSuffixIndex < 0 || exitingStateSuffixIndex < 0 ) {
+      return false;
+    }
+
+    var enteringPrefix = enteringStateName.substring(0, enteringStateSuffixIndex);
+    var exitingPrefix = exitingStateName.substring(0, exitingStateSuffixIndex);
+
+    return enteringPrefix === exitingPrefix;
+  }
+
+  function getScopeForElement(element, stateData) {
+    if ( !element ) {
+      return null;
+    }
+    // check if it's abstract
+    var attributeValue = angular.element(element).attr("abstract");
+    var stateValue = angular.element(element).attr("state");
+
+    if ( attributeValue !== "true" ) {
+      // it's not an abstract view, so make sure the element
+      // matches the state.  Due to abstract view weirdness,
+      // sometimes it doesn't. If it doesn't, don't dispatch events
+      // so leave the scope undefined
+      if ( stateValue === stateData.stateName ) {
+        return angular.element(element).scope();
+      }
+      return null;
+    }
+    else {
+      // it is an abstract element, so look for element with the "state" attributeValue
+      // set to the name of the stateData state
+      var elements = aggregateNavViewChildren(element);
+      for ( var i = 0; i < elements.length; i++ ) {
+          var state = angular.element(elements[i]).attr("state");
+          if ( state === stateData.stateName ) {
+            stateData.abstractView = true;
+            return angular.element(elements[i]).scope();
+          }
+      }
+      // we didn't find a match, so return null
+      return null;
+    }
+  }
+
+  function aggregateNavViewChildren(element) {
+    var aggregate = [];
+    var navViews = angular.element(element).find("ion-nav-view");
+    for ( var i = 0; i < navViews.length; i++ ) {
+      var children = angular.element(navViews[i]).children();
+      var childrenAggregated = [];
+      for ( var j = 0; j < children.length; j++ ) {
+        childrenAggregated = childrenAggregated.concat(children[j]);
+      }
+      aggregate = aggregate.concat(childrenAggregated);
+    }
+    return aggregate;
   }
 
 }]);
@@ -59710,6 +59837,7 @@ function($scope, $element, $attrs, $compile, $controller, $ionicNavBarDelegate, 
       if (navViewAttr(viewElement) == VIEW_STATUS_ACTIVE) {
         viewScope = viewElement.scope();
         viewScope && viewScope.$emit(ev.name.replace('Tabs', 'View'), data);
+        viewScope && viewScope.$broadcast(ev.name.replace('Tabs', 'ParentView'), data);
         break;
       }
     }
@@ -66351,29 +66479,82 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  *
  * @usage
  * ```html
- * <ion-slides  options="options" slider="data.slider">
- *   <ion-slide-page>
- *     <div class="box blue"><h1>BLUE</h1></div>
- *   </ion-slide-page>
- *   <ion-slide-page>
- *     <div class="box yellow"><h1>YELLOW</h1></div>
- *   </ion-slide-page>
- *   <ion-slide-page>
- *     <div class="box pink"><h1>PINK</h1></div>
- *   </ion-slide-page>
- * </ion-slides>
+ * <ion-content scroll="false">
+ *   <ion-slides  options="options" slider="data.slider">
+ *     <ion-slide-page>
+ *       <div class="box blue"><h1>BLUE</h1></div>
+ *     </ion-slide-page>
+ *     <ion-slide-page>
+ *       <div class="box yellow"><h1>YELLOW</h1></div>
+ *     </ion-slide-page>
+ *     <ion-slide-page>
+ *       <div class="box pink"><h1>PINK</h1></div>
+ *     </ion-slide-page>
+ *   </ion-slides>
+ * </ion-content>
  * ```
  *
  * ```js
  * $scope.options = {
  *   loop: false,
- *   effect: fade,
+ *   effect: 'fade',
  *   speed: 500,
  * }
- * $scope.data = {};
- * $scope.$watch('data.slider', function(nv, ov) {
- *   $scope.slider = $scope.data.slider;
- * })
+ *
+ * $scope.$on("$ionicSlides.sliderInitialized", function(event, data){
+ *   // data.slider is the instance of Swiper
+ *   $scope.slider = data.slider;
+ * });
+ *
+ * $scope.$on("$ionicSlides.slideChangeStart", function(event, data){
+ *   console.log('Slide change is beginning');
+ * });
+ *
+ * $scope.$on("$ionicSlides.slideChangeEnd", function(event, data){
+ *   // note: the indexes are 0-based
+ *   $scope.activeIndex = data.activeIndex;
+ *   $scope.previousIndex = data.previousIndex;
+ * });
+ *
+ * ```
+ *
+ * ## Slide Events
+ *
+ * The slides component dispatches events when the active slide changes
+ *
+ * <table class="table">
+ *   <tr>
+ *     <td><code>$ionicSlides.slideChangeStart</code></td>
+ *     <td>This event is emitted when a slide change begins</td>
+ *   </tr>
+ *   <tr>
+ *     <td><code>$ionicSlides.slideChangeEnd</code></td>
+ *     <td>This event is emitted when a slide change completes</td>
+ *   </tr>
+ *   <tr>
+ *     <td><code>$ionicSlides.sliderInitialized</code></td>
+ *     <td>This event is emitted when the slider is initialized. It provides access to an instance of the slider.</td>
+ *   </tr>
+ * </table>
+ *
+ *
+ * ## Updating Slides Dynamically
+ * When applying data to the slider at runtime, typically everything will work as expected.
+ *
+ * In the event that the slides are looped, use the `updateLoop` method on the slider to ensure the slides update correctly.
+ *
+ * ```
+ * $scope.$on("$ionicSlides.sliderInitialized", function(event, data){
+ *   // grab an instance of the slider
+ *   $scope.slider = data.slider;
+ * });
+ *
+ * function dataChangeHandler(){
+ *   // call this function when data changes, such as an HTTP request, etc
+ *   if ( $scope.slider ){
+ *     $scope.slider.updateLoop();
+ *   }
+ * }
  * ```
  *
  */
@@ -66397,11 +66578,6 @@ function($animate, $timeout, $compile) {
       '</div>',
     controller: ['$scope', '$element', function($scope, $element) {
       var _this = this;
-      var _watchHandler = null;
-      var _enterHandler = null;
-      var _afterLeaveHandler = null;
-      var _modalRemovedHandler = null;
-      var _modalPresentedHandler = null;
 
       this.update = function() {
         $timeout(function() {
@@ -66432,52 +66608,6 @@ function($animate, $timeout, $compile) {
         _this.update();
       }, 50);
 
-      this.updateLoop = ionic.debounce(function() {
-        if ( _this._options.loop ) {
-          _this.__slider.updateLoop();
-        }
-      }, 50);
-
-      this.watchForChanges = function() {
-        if ( !_watchHandler ) {
-          // if we're not already watching, start watching
-          _watchHandler = $scope.$watch(function() {
-            void 0;
-            _this.updateLoop();
-          });
-        }
-      };
-
-      this.stopWatching = function() {
-        if ( _watchHandler ) {
-          void 0;
-          _watchHandler();
-          _watchHandler = null;
-        }
-      };
-
-      this.cleanUpEventHandlers = function() {
-        if ( _enterHandler ) {
-          _enterHandler();
-          _enterHandler = null;
-        }
-
-        if ( _afterLeaveHandler ) {
-          _afterLeaveHandler();
-          _afterLeaveHandler = null;
-        }
-
-        if ( _modalRemovedHandler ) {
-          _modalRemovedHandler();
-          _modalRemovedHandler = null;
-        }
-
-        if ( _modalPresentedHandler ) {
-          _modalPresentedHandler();
-          _modalPresentedHandler = null;
-        }
-      };
-
       this.getSlider = function() {
         return _this.__slider;
       };
@@ -66496,36 +66626,21 @@ function($animate, $timeout, $compile) {
       $timeout(function() {
         var slider = new ionic.views.Swiper($element.children()[0], newOptions, $scope, $compile);
 
+        $scope.$emit("$ionicSlides.sliderInitialized", { slider: slider });
+
         _this.__slider = slider;
         $scope.slider = _this.__slider;
 
         $scope.$on('$destroy', function() {
           slider.destroy();
           _this.__slider = null;
-          _this.stopWatching();
-          _this.cleanUpEventHandlers();
-
         });
-
-        _this.watchForChanges();
-
-        _enterHandler = $scope.$on("$ionicView.enter", function() {
-          _this.watchForChanges();
-        });
-
-        _afterLeaveHandler = $scope.$on("$ionicView.afterLeave", function() {
-          _this.stopWatching();
-        });
-
-        _modalRemovedHandler = $scope.$on("$ionic.modalRemoved", function() {
-          _this.stopWatching();
-        });
-
-        _modalPresentedHandler = $scope.$on("$ionic.modalPresented", function() {
-          _this.watchForChanges();
-        });
-
       });
+
+      $timeout(function() {
+        // if it's a loop, render the slides again just incase
+        _this.rapidUpdate();
+      }, 200);
 
     }],
 
@@ -67323,6 +67438,10 @@ function($timeout, $ionicConfig) {
  * show. Also contained is transition data, such as the transition type and
  * direction that will be or was used.
  *
+ * Life cycle events are emitted upwards from the transitioning view's scope. In some cases, it is
+ * desirable for a child/nested view to be notified of the event.
+ * For this use case, `$ionicParentView` life cycle events are broadcast downwards.
+ *
  * <table class="table">
  *  <tr>
  *   <td><code>$ionicView.loaded</code></td>
@@ -67362,6 +67481,32 @@ function($timeout, $ionicConfig) {
  *   <td><code>$ionicView.unloaded</code></td>
  *   <td>The view's controller has been destroyed and its element has been
  * removed from the DOM.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.enter</code></td>
+ *   <td>The parent view has fully entered and is now the active view.
+ * This event will fire, whether it was the first load or a cached view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.leave</code></td>
+ *   <td>The parent view has finished leaving and is no longer the
+ * active view. This event will fire, whether it is cached or destroyed.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.beforeEnter</code></td>
+ *   <td>The parent view is about to enter and become the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.beforeLeave</code></td>
+ *   <td>The parent view is about to leave and no longer be the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.afterEnter</code></td>
+ *   <td>The parent view has fully entered and is now the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicParentView.afterLeave</code></td>
+ *   <td>The parent view has finished leaving and is no longer the active view.</td>
  *  </tr>
  * </table>
  *
