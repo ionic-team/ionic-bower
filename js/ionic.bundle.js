@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3190
+ * Ionic, v1.3.0-nightly-3192
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.0-nightly-3190';
+window.ionic.version = '1.3.0-nightly-3192';
 
 (function (ionic) {
 
@@ -53180,7 +53180,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3190
+ * Ionic, v1.3.0-nightly-3192
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -58601,10 +58601,20 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
 
 
   self.titleTextWidth = function() {
-    if (!titleTextWidth) {
-      var bounds = ionic.DomUtil.getTextBounds(getEle(TITLE));
-      titleTextWidth = Math.min(bounds && bounds.width || 30);
+    var element = getEle(TITLE);
+    if ( element ) {
+      // If the element has a nav-bar-title, use that instead
+      // to calculate the width of the title
+      var children = angular.element(element).children();
+      for ( var i = 0; i < children.length; i++ ) {
+        if ( angular.element(children[i]).hasClass('nav-bar-title') ) {
+          element = children[i];
+          break;
+        }
+      }
     }
+    var bounds = ionic.DomUtil.getTextBounds(element);
+    titleTextWidth = Math.min(bounds && bounds.width || 30);
     return titleTextWidth;
   };
 
