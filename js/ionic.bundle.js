@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3193
+ * Ionic, v1.3.0-nightly-3200
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.0-nightly-3193';
+window.ionic.version = '1.3.0-nightly-3200';
 
 (function (ionic) {
 
@@ -53180,7 +53180,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3193
+ * Ionic, v1.3.0-nightly-3200
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -60323,7 +60323,7 @@ IonicModule
     }
 
     function overscroll(val) {
-      scrollChild.style[ionic.CSS.TRANSFORM] = 'translateY(' + val + 'px)';
+      scrollChild.style[ionic.CSS.TRANSFORM] = 'translate3d(0px, ' + val + 'px, 0px)';
       lastOverscroll = val;
     }
 
