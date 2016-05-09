@@ -3,7 +3,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3203
+ * Ionic, v1.3.0-nightly-3204
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -4299,12 +4299,10 @@ a.subdued {
 
 .bar-subheader {
   top: 44px;
-  display: block;
   height: 44px; }
 
 .bar-subfooter {
   bottom: 44px;
-  display: block;
   height: 44px; }
 
 .nav-bar-block {
