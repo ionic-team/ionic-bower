@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.0-nightly-3204
+ * Ionic, v1.3.0-nightly-3205
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -10457,7 +10457,7 @@ IonicModule
  *     <button class="button">Right Button</button>
  *   </div>
  * </ion-header-bar>
- * <ion-content>
+ * <ion-content class="has-header">
  *   Some content!
  * </ion-content>
  * ```
@@ -10484,7 +10484,7 @@ IonicModule
  *
  * @usage
  * ```html
- * <ion-content>
+ * <ion-content class="has-footer">
  *   Some content!
  * </ion-content>
  * <ion-footer-bar align-title="left" class="bar-assertive">
