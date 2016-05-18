@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1
+ * Ionic, v1.3.1-nightly-3259
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -13332,8 +13332,8 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  *
  * $scope.$on("$ionicSlides.slideChangeEnd", function(event, data){
  *   // note: the indexes are 0-based
- *   $scope.activeIndex = data.activeIndex;
- *   $scope.previousIndex = data.previousIndex;
+ *   $scope.activeIndex = data.slider.activeIndex;
+ *   $scope.previousIndex = data.slider.previousIndex;
  * });
  *
  * ```
