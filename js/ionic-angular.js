@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-3501
+ * Ionic, v1.3.1-nightly-3571
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -11780,7 +11780,6 @@ IonicModule
  * @param {boolean=} no-tap-scroll By default, the navbar will scroll the content
  * to the top when tapped.  Set no-tap-scroll to true to disable this behavior.
  *
- * </table><br/>
  */
 IonicModule
 .directive('ionNavBar', function() {
