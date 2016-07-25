@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-3792
+ * Ionic, v1.3.1-nightly-3955
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.1-nightly-3792';
+window.ionic.version = '1.3.1-nightly-3955';
 
 (function (ionic) {
 
@@ -7540,14 +7540,13 @@ ionic.scroll = {
       var self = this;
       var container = self.__container;
 
-      container.removeEventListener('resetScrollView', self.resetScrollView);
       container.removeEventListener('scroll', self.onScroll);
-
       container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
-      container.removeEventListener('resetScrollView', self.resetScrollView);
 
       container.removeEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
       container.removeEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
+
+      document.removeEventListener('resetScrollView', self.resetScrollView);
 
       ionic.tap.removeClonedInputs(container, self);
 
@@ -53180,7 +53179,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-3792
+ * Ionic, v1.3.1-nightly-3955
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -60947,20 +60946,15 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
     self.content.setTranslateX(amount);
 
-    if (amount >= 0) {
-      leftShowing = true;
-      rightShowing = false;
+    leftShowing = amount > 0;
+    rightShowing = amount < 0;
 
-      if (amount > 0) {
-        // Push the z-index of the right menu down
-        self.right && self.right.pushDown && self.right.pushDown();
-        // Bring the z-index of the left menu up
-        self.left && self.left.bringUp && self.left.bringUp();
-      }
+    if (amount > 0) {
+      // Push the z-index of the right menu down
+      self.right && self.right.pushDown && self.right.pushDown();
+      // Bring the z-index of the left menu up
+      self.left && self.left.bringUp && self.left.bringUp();
     } else {
-      rightShowing = true;
-      leftShowing = false;
-
       // Bring the z-index of the right menu up
       self.right && self.right.bringUp && self.right.bringUp();
       // Push the z-index of the left menu down
