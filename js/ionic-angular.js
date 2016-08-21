@@ -2,7 +2,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-3955
+ * Ionic, v1.3.1-nightly-4219
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -2659,7 +2659,9 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       }
 
       return $timeout(function() {
-        $ionicBody.removeClass(self.viewType + '-open');
+        if (!modalStack.length) {
+          $ionicBody.removeClass(self.viewType + '-open');
+        }
         self.el.classList.add('hide');
       }, self.hideDelay || 320);
     },
