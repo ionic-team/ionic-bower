@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-4219
+ * Ionic, v1.3.2
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.1-nightly-4219';
+window.ionic.version = '1.3.2';
 
 (function (ionic) {
 
@@ -3105,6 +3105,10 @@ function tapIgnoreEvent(e) {
   e.isTapHandled = true;
 
   if(ionic.tap.isElementTapDisabled(e.target)) {
+    return true;
+  }
+
+  if(e.target.tagName == 'SELECT') {
     return true;
   }
 
@@ -7008,6 +7012,8 @@ ionic.scroll = {
 
       if(options.startY >= 0 || options.startX >= 0) {
         ionic.requestAnimationFrame(function() {
+          self.__originalContainerHeight = self.el.getBoundingClientRect().height;
+
           self.el.scrollTop = options.startY || 0;
           self.el.scrollLeft = options.startX || 0;
 
@@ -53179,7 +53185,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1-nightly-4219
+ * Ionic, v1.3.2
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -55381,7 +55387,8 @@ var LOADING_TPL =
  * .controller('LoadingCtrl', function($scope, $ionicLoading) {
  *   $scope.show = function() {
  *     $ionicLoading.show({
- *       template: 'Loading...'
+ *       template: 'Loading...',
+ *       duration: 3000
  *     }).then(function(){
  *        console.log("The loading indicator is now displayed");
  *     });
@@ -56305,7 +56312,7 @@ IonicModule
  *   $scope.$on('$destroy', function() {
  *     $scope.popover.remove();
  *   });
- *   // Execute action on hide popover
+ *   // Execute action on hidden popover
  *   $scope.$on('popover.hidden', function() {
  *     // Execute action
  *   });
@@ -64242,9 +64249,9 @@ IonicModule.directive('ionOptionButton', [function() {
       return function($scope, $element, $attr, itemCtrl) {
         if (!itemCtrl.optionsContainer) {
           itemCtrl.optionsContainer = jqLite(ITEM_TPL_OPTION_BUTTONS);
-          itemCtrl.$element.append(itemCtrl.optionsContainer);
+          itemCtrl.$element.prepend(itemCtrl.optionsContainer);
         }
-        itemCtrl.optionsContainer.append($element);
+        itemCtrl.optionsContainer.prepend($element);
 
         itemCtrl.$element.addClass('item-right-editable');
 
