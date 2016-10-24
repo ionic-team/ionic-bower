@@ -233,7 +233,7 @@ function($rootScope, $compile, $animate, $timeout, $ionicTemplateLoader, $ionicP
 
 jqLite.prototype.addClass = function(cssClasses) {
   var x, y, cssClass, el, splitClasses, existingClasses;
-  if (cssClasses && cssClasses != 'ng-scope' && cssClasses != 'ng-isolate-scope') {
+  if (cssClasses && cssClasses.indexOf && cssClasses != 'ng-scope' && cssClasses != 'ng-isolate-scope') {
     for (x = 0; x < this.length; x++) {
       el = this[x];
       if (el.setAttribute) {
