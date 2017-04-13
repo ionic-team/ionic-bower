@@ -33,5 +33,6 @@
     "angular-animate": "1.5.3",
     "angular-sanitize": "1.5.3",
     "angular-ui-router": "0.2.13"
-  }
+  },
+  "ignore": {}
 }
