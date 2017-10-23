@@ -1,6 +1,6 @@
 # ionic-bower
 
-Bower repository for [Ionic Framework](http://github.com/driftyco/ionic)
+Bower repository for [Ionic Framework](http://github.com/driftyco/ionic) v1 (Ionic 2+ uses npm)
 
 ### Usage
 
