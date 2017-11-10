@@ -13,7 +13,8 @@
     "css/ionic.css",
     "fonts/*",
     "js/ionic.js",
-    "js/ionic-angular.js"
+    "js/ionic-angular.js",
+    "js/ionic.bundle.js"
   ],
   "keywords": [
     "mobile",
