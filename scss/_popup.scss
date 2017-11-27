@@ -98,7 +98,7 @@
 }
 
 .popup-open {
-  pointer-events: none;
+  pointer-events: auto;
 
   &.modal-open .modal {
     pointer-events: none;
